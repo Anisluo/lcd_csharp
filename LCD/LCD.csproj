@@ -174,11 +174,11 @@
     </Reference>
     <Reference Include="SharpDX.DXGI, Version=4.2.0.0, Culture=neutral, PublicKeyToken=b4dcf0f35e5521f1, processorArchitecture=MSIL">
       <SpecificVersion>False</SpecificVersion>
-      <HintPath>..\..\LCDV1.1.0\LCD\bin\Debug\Debug\SharpDX.DXGI.dll</HintPath>
+      <HintPath>bin\Debug\Debug\SharpDX.DXGI.dll</HintPath>
     </Reference>
     <Reference Include="SharpDX.Mathematics, Version=4.2.0.0, Culture=neutral, PublicKeyToken=b4dcf0f35e5521f1, processorArchitecture=MSIL">
       <SpecificVersion>False</SpecificVersion>
-      <HintPath>..\..\LCDV1.1.0\LCD\bin\Debug\Debug\SharpDX.Mathematics.dll</HintPath>
+      <HintPath>bin\Debug\Debug\SharpDX.Mathematics.dll</HintPath>
     </Reference>
     <Reference Include="SharpVectors.Converters.Wpf, Version=1.8.0.0, Culture=neutral, PublicKeyToken=b532964b8548be77, processorArchitecture=MSIL">
       <HintPath>..\packages\SharpVectors.1.8.0\lib\net46\SharpVectors.Converters.Wpf.dll</HintPath>

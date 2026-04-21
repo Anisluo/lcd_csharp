@@ -54,10 +54,11 @@ _tmp_docx_img/
 # Duplicate / backup source files that shouldn't have been committed
 *副本*
 *-副本*
-LCD/View/CustomTemplate-2024*.xaml
-LCD/View/CustomTemplate.xaml-2024*.cs
-LCD/View/CustomTemplate - 副本.xaml
-LCD/Managers/Manager_Plugins*(1)*.cs
+*\(1\)*
+*-2024*.cs
+*-2024*.xaml
+*.xaml-2024*.cs
+*.xaml\(1\).part
 
 # Config backups
 Config - 副本.xml
