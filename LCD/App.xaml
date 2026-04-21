@@ -12,6 +12,9 @@
                 <ResourceDictionary Source="Themes/BrushesColors.xaml" />
                 <ResourceDictionary Source="Resources/TextBoxStyles.xaml" />
                 <ResourceDictionary Source="Themes/Buttons.xaml" />
+                <!-- Phase 6: implicit modern defaults (loaded last so they
+                     win over any earlier implicit TargetType styles). -->
+                <ResourceDictionary Source="Themes/ModernDefaults.xaml" />
                 <!--<ResourceDictionary Source="/SciChart.Examples.ExternalDependencies;component/Resources/Styles/MergedResources.xaml" />-->
             </ResourceDictionary.MergedDictionaries>
             <SolidColorBrush x:Key="MyTransparent" Color="#01000000"/>
