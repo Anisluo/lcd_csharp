@@ -112,6 +112,7 @@
     <Compile Include="Models\TestRun\ResultData.cs" />
     <Compile Include="Runtime\SessionState.cs" />
     <Compile Include="Runtime\TestRunState.cs" />
+    <Compile Include="Runtime\DeviceRuntime.cs" />
     <Compile Include="Data\Axies.cs" />
     <Compile Include="Runtime\MotionRuntime.cs" />
     <Compile Include="Data\IData.cs" />

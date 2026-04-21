@@ -1,3 +1,4 @@
+using System.Windows.Documents;
 using LCD.View;
 
 namespace LCD.Data
@@ -20,5 +21,8 @@ namespace LCD.Data
         public static PGDebug PGDebug { get; set; }
         public static CamView Cam { get; set; }
         public static V110 V110 { get; set; }
+
+        /// <summary>MainWindow 的 RichTextBox 文档，用于 Project.WriteLog 追加日志行。</summary>
+        public static FlowDocument LogDocument { get; set; }
     }
 }

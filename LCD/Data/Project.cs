@@ -43,7 +43,12 @@ namespace LCD
 
         public static TestMachine testMachine { get { return UiRegistry.DeviceView == null ? null : UiRegistry.DeviceView.TestDevice; } set { if (UiRegistry.DeviceView != null) UiRegistry.DeviceView.TestDevice = value; } }
 
-        public static IPatternGenerator PG { get; set; }
+        public static IPatternGenerator PG
+        {
+            get => DeviceRuntime.PG;
+            set => DeviceRuntime.PG = value;
+        }
+
         public static LCD.Ctrl.Power power { get; set; }
 
         internal static DeviceView deviceview
@@ -155,9 +160,13 @@ namespace LCD
         }
 
         /// <summary>
-        /// 富文本格式
+        /// 富文本格式。实际存储在 UiRegistry.LogDocument。
         /// </summary>
-        public static System.Windows.Documents.FlowDocument myrichtextbox = null;
+        public static System.Windows.Documents.FlowDocument myrichtextbox
+        {
+            get => UiRegistry.LogDocument;
+            set => UiRegistry.LogDocument = value;
+        }
 
         /// <summary>
         /// 配置文件
