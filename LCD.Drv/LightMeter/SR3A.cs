@@ -6,6 +6,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using LCD.Data;
+using VisionCore;
 
 namespace LCD.Ctrl
 {
@@ -28,14 +29,14 @@ namespace LCD.Ctrl
             try
             {
                 SerialPort.Write(cmd);
-                //LogHelper.Instance.Write("光谱串口已经发送：" + cmd);
+                //Log.Info("光谱串口已经发送：" + cmd);
             }
             catch (Exception ex)
             {
-                Project.WriteLog("Sr3ar串口发送：" + cmd + "，异常：" + ex.Message);
+                Log.Info("Sr3ar串口发送：" + cmd + "，异常：" + ex.Message);
                 return false;
             }
-            Project.WriteLog("已经发送命令："+cmd);
+            Log.Info("已经发送命令："+cmd);
             return true;
         }
 
@@ -90,25 +91,29 @@ namespace LCD.Ctrl
             if (SerialPort.IsOpen) { SerialPort.Close(); }
             //serialPort.ReceiveString += ECommunacation_ReceiveString;
 
-            //设置通讯参数
-            SerialPort.PortName = Project.cfg.SR3A.comName;
-            SerialPort.BaudRate = int.Parse(Project.cfg.SR3A.bardRateText);
-            SerialPort.DataBits = int.Parse(Project.cfg.SR3A.dataBitText);
-            //serialPort.Parity = Project.cfg.SR3A.parityText;
-            switch (Project.cfg.SR3A.stopBit)
+            //设置通讯参数（由调用方通过 this.Config 注入）
+            if (Config == null)
+            {
+                Log.Error("SR3A.Init: Config 未设置，无法打开串口");
+                return;
+            }
+            SerialPort.PortName = Config.ComName;
+            SerialPort.BaudRate = Config.BaudRate;
+            SerialPort.DataBits = Config.DataBits;
+            switch (Config.StopBits)
             {
                 case 0: SerialPort.StopBits = StopBits.None; break;
                 case 1: SerialPort.StopBits = StopBits.One; break;
                 case 2: SerialPort.StopBits = StopBits.Two; break;
             }
-            switch (Project.cfg.SR3A.parity)
+            switch (Config.Parity)
             {
                 case 0: SerialPort.Parity = Parity.None; break;
                 case 1: SerialPort.Parity = Parity.Odd; break;
                 case 2: SerialPort.Parity = Parity.Even; break;
             }
 
-            LogHelper.Instance.Write($"Sr3a:[{SerialPort.PortName}][{ SerialPort.BaudRate}][{ SerialPort.DataBits}][{ SerialPort.Parity}][{Project.cfg.SR3A.stopBit}][{Project.cfg.SR3A.parity}]");
+            Log.Info($"SR3A:[{SerialPort.PortName}][{SerialPort.BaudRate}][{SerialPort.DataBits}][{SerialPort.Parity}][{Config.StopBits}][{Config.Parity}]");
 
             //SerialPort.DataReceived += SerialPort_DataReceived;
             SerialPort.DataReceived += new SerialDataReceivedEventHandler(SerialPort_DataReceived);
@@ -125,7 +130,7 @@ namespace LCD.Ctrl
             }
             catch(Exception ex)
             {
-                Project.WriteLog("错误：SR3A串口打开失败:"+ex.Message);
+                Log.Error("SR3A串口打开失败:"+ex.Message);
                 return;
             }
             //send_cmd("D0 ST\r\n");
@@ -140,7 +145,7 @@ namespace LCD.Ctrl
             str = str.Trim(new char[] { '\r', '\n' });
             if (str.Length > 0)
             {
-                Project.WriteLog(str);
+                Log.Info(str);
             }
         }
 
@@ -165,7 +170,7 @@ namespace LCD.Ctrl
             var _Str = waitString("OK", 1);
             if(_Str.Contains("OK")==false)
             {
-                Project.WriteLog("错误：通讯超时" );
+                Log.Error("通讯超时" );
                 return null;
             }
             RecStr = "";
@@ -180,7 +185,7 @@ namespace LCD.Ctrl
         {
             if (SerialPort == null || !SerialPort.IsOpen) 
             {
-                Project.WriteLog("错误：SR3A串口未打开" );
+                Log.Error("SR3A串口未打开" );
                 return false; 
             }
             RecStr = "";
@@ -188,7 +193,7 @@ namespace LCD.Ctrl
             var _Str = waitString("OK", 2);
             if(string.IsNullOrEmpty(_Str))
             {
-                Project.WriteLog("错误：收OK超时");
+                Log.Error("收OK超时");
                 return false;
             }
             RecStr = "";
@@ -233,7 +238,7 @@ namespace LCD.Ctrl
             }
             if (RecStr.Contains(signStr)==false)
             {
-                Project.WriteLog("错误：通讯超时" );
+                Log.Error("通讯超时" );
             }
                 //Console.WriteLine("DQWC-->"+ RecStr);
             return RecStr;
@@ -249,7 +254,7 @@ namespace LCD.Ctrl
             string str = waitString(sign, 60);
             if(str.Contains(sign)==false)
             {
-                Project.WriteLog("错误：通讯超时");
+                Log.Error("通讯超时");
                 return null;
             }
             m_Result = DataParser(RecStr);
@@ -265,7 +270,7 @@ namespace LCD.Ctrl
             string str = waitString(sign, 60);
             if(str.Contains(sign)==false)
             {
-                Project.WriteLog("错误：通讯超时");
+                Log.Error("通讯超时");
                 return null;
             }
             //Console.WriteLine("读取");
@@ -317,7 +322,7 @@ namespace LCD.Ctrl
             }
             catch (Exception e)
             {
-                Project.WriteLog("SR3A 未找到380光谱数据:"+e.Message );
+                Log.Warn("SR3A 未找到380光谱数据:"+e.Message );
                 return null;
             }
 
@@ -338,8 +343,8 @@ namespace LCD.Ctrl
                 }
                 catch (Exception e)
                 {
-                    Project.WriteLog("截取-->"+ datastrs[i] + $"循环次数;【{i}】");
-                    Project.WriteLog("SR3【293行】" + e.Message+$"循环次数;【{i}】");
+                    Log.Info("截取-->"+ datastrs[i] + $"循环次数;【{i}】");
+                    Log.Error("SR3A 解析异常(L293):" + e.Message+$"循环次数;【{i}】");
                     //res.Substring(Start, Cont).Trim();
                 }          
             }
@@ -383,7 +388,7 @@ namespace LCD.Ctrl
             }
         }
 
-        internal static TestMachine GetInstance()
+        public static TestMachine GetInstance()
         {
             if (m_Sr3a == null) m_Sr3a = new SR3A();
             return m_Sr3a;

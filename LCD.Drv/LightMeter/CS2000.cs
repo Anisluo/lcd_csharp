@@ -16,7 +16,7 @@ namespace LCD.Ctrl
     /// 串口
     /// </summary>
     [Category("仪器"), Description("CS2000"), DisplayName("CS2000")]
-    class CS2000 : TestMachine
+    public class CS2000 : TestMachine
     {
         /*
          *OK00,
@@ -62,27 +62,24 @@ namespace LCD.Ctrl
             {
                 SerialPort = new SerialPort();
             }
-            if(Project.cfg.CS2000 == null)
+            if (Config == null || string.IsNullOrEmpty(Config.ComName))
             {
-                return;
-            }
-            if (string.IsNullOrEmpty( Project.cfg.CS2000.comName))
-            {
+                Log.Warn("CS2000.Init: Config 未设置或 ComName 为空，跳过");
                 return;
             }
 
             if (SerialPort.IsOpen) { SerialPort.Close(); }
 
-            SerialPort.PortName = Project.cfg.CS2000.comName;
-            SerialPort.BaudRate = int.Parse(Project.cfg.CS2000.bardRateText);
-            SerialPort.DataBits = int.Parse(Project.cfg.CS2000.dataBitText);
-            switch (Project.cfg.CS2000.stopBit)
+            SerialPort.PortName = Config.ComName;
+            SerialPort.BaudRate = Config.BaudRate;
+            SerialPort.DataBits = Config.DataBits;
+            switch (Config.StopBits)
             {
                 case 0: SerialPort.StopBits = StopBits.None; break;
                 case 1: SerialPort.StopBits = StopBits.One; break;
                 case 2: SerialPort.StopBits = StopBits.Two; break;
             }
-            switch (Project.cfg.CS2000.parity)
+            switch (Config.Parity)
             {
                 case 0: SerialPort.Parity = Parity.None; break;
                 case 1: SerialPort.Parity = Parity.Odd; break;
@@ -102,7 +99,7 @@ namespace LCD.Ctrl
             }
             catch (Exception ex)
             {
-                Project.WriteLog("错误：CS2000串口打开失败:" + ex.Message);
+                Log.Error("CS2000串口打开失败:" + ex.Message);
                 return;
             }
         }
@@ -116,7 +113,7 @@ namespace LCD.Ctrl
             str = str.Trim(new char[] { '\r', '\n' });
             if (str.Length > 0)
             {
-                Project.WriteLog(str);
+                Log.Info(str);
             }
         }
 
@@ -156,8 +153,8 @@ namespace LCD.Ctrl
 
                 int _Cont= System.Text.RegularExpressions.Regex.Matches(RecStr, ",").Count;
 
-                //Project.WriteLog(_Cont.ToString());
-                //Project.WriteLog(RecStr);
+                //Log.Info(_Cont.ToString());
+                //Log.Info(RecStr);
 
                 if ((_Cont >= Cont)&&(RecStr.EndsWith(sLineBreak)))
                 {
@@ -187,7 +184,7 @@ namespace LCD.Ctrl
             var _Str = waitString("OK", 1);
             if (string.IsNullOrEmpty(_Str))
             {
-                Project.WriteLog("RMTS 0超时");
+                Log.Info("RMTS 0超时");
                 return null;
             }
             RecStr = "";
@@ -195,7 +192,7 @@ namespace LCD.Ctrl
             _Str = waitString("OK", 1);
             if (string.IsNullOrEmpty(_Str))
             {
-                Project.WriteLog("RMTS 1超时");
+                Log.Info("RMTS 1超时");
                 return null;
             }
 
@@ -241,7 +238,7 @@ namespace LCD.Ctrl
 
             if(ary.Length < 2)
             {
-                Project.WriteLog("测量失败");
+                Log.Error("测量失败");
                 return null;
             }
             //res = res.Replace("OK00", "");
@@ -274,7 +271,7 @@ namespace LCD.Ctrl
             datastrs = ary[ary.Length-1].Trim("OK00,".ToCharArray()).Split(',');
             if(datastrs.Length != 401)
             {
-                Project.WriteLog("测量失败，返回光谱数据数量错误："+datastrs.Length);
+                Log.Error("测量失败，返回光谱数据数量错误："+datastrs.Length);
                 return Result;
             }
             for (int i = 0; i < 401; i++)
@@ -295,10 +292,10 @@ namespace LCD.Ctrl
             }
             catch (Exception ex)
             {
-                Project.WriteLog("Sr3ar串口发送：" + cmd + "，异常：" + ex.Message);
+                Log.Info("Sr3ar串口发送：" + cmd + "，异常：" + ex.Message);
                 return false;
             }
-            Project.WriteLog("已经发送命令：" + cmd);
+            Log.Info("已经发送命令：" + cmd);
             return true;
         }
 
@@ -319,7 +316,7 @@ namespace LCD.Ctrl
             var _Str = waitString("OK", 1);
             if(string.IsNullOrEmpty(_Str))
             {
-                Project.WriteLog("RMTS 0超时");
+                Log.Info("RMTS 0超时");
                 return null;
             }
             RecStr = "";
@@ -328,7 +325,7 @@ namespace LCD.Ctrl
             _Str = waitString("OK", 1);
             if (string.IsNullOrEmpty(_Str))
             {
-                Project.WriteLog("RMTS 1超时");
+                Log.Info("RMTS 1超时");
                 return null;
             }
             RecStr = "";
@@ -353,7 +350,7 @@ namespace LCD.Ctrl
             var datastrs = arry[0].Split(',');            
             try
             {
-                Project.WriteLog($"延时-->{datastrs[1]}");
+                Log.Info($"延时-->{datastrs[1]}");
                 return Convert.ToInt32(datastrs[datastrs.Length - 1]);
             }
             catch
@@ -367,13 +364,13 @@ namespace LCD.Ctrl
             
             //waitString(Start, 60, Cont);
             m_Result = DataParser(waitString(Start, 20, Cont));
-            Project.WriteLog(m_Result.X.ToString());
-            Project.WriteLog(m_Result.Y.ToString());
-            Project.WriteLog(m_Result.Z.ToString());
-            Project.WriteLog(m_Result.Cx.ToString());
-            Project.WriteLog(m_Result.Cy.ToString());
-            Project.WriteLog(m_Result.Z.ToString());
-            Project.WriteLog(m_Result.u.ToString());
+            Log.Info(m_Result.X.ToString());
+            Log.Info(m_Result.Y.ToString());
+            Log.Info(m_Result.Z.ToString());
+            Log.Info(m_Result.Cx.ToString());
+            Log.Info(m_Result.Cy.ToString());
+            Log.Info(m_Result.Z.ToString());
+            Log.Info(m_Result.u.ToString());
             return m_Result;
         }
         private IData DataParser(string res)

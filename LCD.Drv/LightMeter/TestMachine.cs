@@ -1,4 +1,5 @@
 ﻿//作为全局测试类
+using LCD.Core.Models;
 using LCD.Data;
 using System;
 using VisionCore;
@@ -19,6 +20,11 @@ namespace LCD.Ctrl
         public virtual string sLineBreak { get; set; } = "\r\n";
 
         public virtual bool IsOpen { get; set; } = false;
+
+        /// <summary>
+        /// 串口通讯配置，由调用方在 Init() 前设置（解耦自 LCD.Data.Project.cfg）。
+        /// </summary>
+        public SerialBusConfig Config { get; set; }
 
 
         //机器自检

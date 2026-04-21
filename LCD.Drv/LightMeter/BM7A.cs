@@ -34,10 +34,10 @@ namespace LCD.Ctrl
             }
             catch (Exception ex)
             {
-                Project.WriteLog("Bm7a串口发送：" + cmd + "，异常：" + ex.Message);
+                Log.Error("Bm7a串口发送：" + cmd + "，异常：" + ex.Message);
                 return false;
             }
-            Project.WriteLog("Bm7a已经发送命令：" + cmd);
+            Log.Info("Bm7a已经发送命令：" + cmd);
             return true;
         }
 
@@ -79,25 +79,29 @@ namespace LCD.Ctrl
             //serialPort.ReceiveString += ECommunacation_ReceiveString;
 
 
-            //设置通讯参数
-            SerialPort.PortName = Project.cfg.BM7A.comName;
-            SerialPort.BaudRate = int.Parse(Project.cfg.BM7A.bardRateText);
-            SerialPort.DataBits = int.Parse(Project.cfg.BM7A.dataBitText);
-            //serialPort.Parity = Project.cfg.SR3A.parityText;
-            switch (Project.cfg.BM7A.stopBit)
+            //设置通讯参数（由调用方通过 this.Config 注入）
+            if (Config == null)
+            {
+                Log.Error("BM7A.Init: Config 未设置，无法打开串口");
+                return;
+            }
+            SerialPort.PortName = Config.ComName;
+            SerialPort.BaudRate = Config.BaudRate;
+            SerialPort.DataBits = Config.DataBits;
+            switch (Config.StopBits)
             {
                 case 0: SerialPort.StopBits = StopBits.None; break;
                 case 1: SerialPort.StopBits = StopBits.One; break;
                 case 2: SerialPort.StopBits = StopBits.Two; break;
             }
-            switch (Project.cfg.BM7A.parity)
+            switch (Config.Parity)
             {
                 case 0: SerialPort.Parity = Parity.None; break;
                 case 1: SerialPort.Parity = Parity.Odd; break;
                 case 2: SerialPort.Parity = Parity.Even; break;
             }
 
-            LogHelper.Instance.Write($"Bm7a:[{SerialPort.PortName}][{SerialPort.BaudRate}][{SerialPort.DataBits}][{SerialPort.Parity}][{Project.cfg.SR3A.stopBit}][{Project.cfg.SR3A.parity}]");
+            Log.Info($"BM7A:[{SerialPort.PortName}][{SerialPort.BaudRate}][{SerialPort.DataBits}][{SerialPort.Parity}][{Config.StopBits}][{Config.Parity}]");
 
             //SerialPort.DataReceived += SerialPort_DataReceived;
             SerialPort.DataReceived += new SerialDataReceivedEventHandler(SerialPort_DataReceived);
@@ -112,7 +116,7 @@ namespace LCD.Ctrl
             }
             catch (Exception ex)
             {
-                Project.WriteLog("错误：Bm7a串口打开失败:" + ex.Message);
+                Log.Error("Bm7a串口打开失败:" + ex.Message);
                 return;
             }
         }
@@ -126,7 +130,7 @@ namespace LCD.Ctrl
             str = str.Trim(new char[] { '\r', '\n' });
             if (str.Length > 0)
             {
-                Project.WriteLog(str);
+                Log.Info(str);
             }
         }
 
@@ -242,7 +246,7 @@ namespace LCD.Ctrl
             }
             catch (Exception e)
             {
-                Project.WriteLog("SR3【260行】" + e.Message);
+                Log.Error("BM7A 解析异常(L260): " + e.Message);
             }
 
 
@@ -285,7 +289,7 @@ namespace LCD.Ctrl
                 }
                 catch (Exception e)
                 {
-                    Project.WriteLog("SR3【303行】" + e.Message + $"循环次数;【{i}】");
+                    Log.Error("BM7A 解析异常(L303): " + e.Message + $"循环次数;【{i}】");
                 }
 
 
@@ -350,7 +354,7 @@ namespace LCD.Ctrl
 
         }
 
-        internal static TestMachine GetInstance()
+        public static TestMachine GetInstance()
         {
             if (m_bm7a == null) m_bm7a = new BM7A();
             return m_bm7a;

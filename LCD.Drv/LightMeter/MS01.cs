@@ -2,21 +2,15 @@
 using System.Collections.Generic;
 using System.Diagnostics;
 using System.IO.Ports;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
+using System.Threading;
 using LCD.Data;
-using Microsoft.DwayneNeed.Win32.User32;
 using NPOI.SS.UserModel;
 using NPOI.XSSF.UserModel;
-using OxyPlot;
-using SciChart.Core.Extensions;
-using SharpDX.Direct3D11;
 using VisionCore;
 
 namespace LCD.Ctrl
 {
-    internal class MS01 : TestMachine
+    public class MS01 : TestMachine
     {
         private static MS01 m_ms01;
         private string RecStr { get; set; } = "";
@@ -42,20 +36,24 @@ namespace LCD.Ctrl
                 SerialPort = new SerialPort();
             }
 
-            SerialPort.PortName = Project.cfg.MS01.comName;
-            SerialPort.BaudRate = int.Parse(Project.cfg.MS01.bardRateText);
-            SerialPort.DataBits = int.Parse(Project.cfg.MS01.dataBitText);
-            //SerialPort.Parity = Project.cfg.MS01.parityText;
+            if (Config == null)
+            {
+                Log.Error("MS01.Init: Config 未设置，无法打开串口");
+                return;
+            }
+            SerialPort.PortName = Config.ComName;
+            SerialPort.BaudRate = Config.BaudRate;
+            SerialPort.DataBits = Config.DataBits;
 
-            Project.WriteLog("MS01串口参数:"+$"[{SerialPort.PortName}][{SerialPort.BaudRate}][{SerialPort.DataBits}][{SerialPort.Parity}][{Project.cfg.MS01.stopBit}][{Project.cfg.MS01.parity}]");
+            Log.Info($"MS01:[{SerialPort.PortName}][{SerialPort.BaudRate}][{SerialPort.DataBits}][{SerialPort.Parity}][{Config.StopBits}][{Config.Parity}]");
 
-            switch (Project.cfg.MS01.stopBit)
+            switch (Config.StopBits)
             {
                 case 0: SerialPort.StopBits = StopBits.None; break;
                 case 1: SerialPort.StopBits = StopBits.One; break;
                 case 2: SerialPort.StopBits = StopBits.Two; break;
             }
-            switch (Project.cfg.MS01.parity)
+            switch (Config.Parity)
             {
                 case 0: SerialPort.Parity = Parity.None; break;
                 case 1: SerialPort.Parity = Parity.Odd; break;
@@ -74,15 +72,15 @@ namespace LCD.Ctrl
             }
             catch (Exception ex)
             {
-                Project.WriteLog("MS01串口打开失败："+ex.Message);
+                Log.Error("MS01串口打开失败:"+ex.Message);
             }
 
             if (SerialPort.IsOpen == false)
             {
-                Project.WriteLog("错误：MS01串口打开失败");
+                Log.Error("MS01串口打开失败");
                 return;
             }
-            Project.WriteLog("MS01串口打开OK");
+            Log.Info("MS01串口打开OK");
         }
 
        
@@ -91,7 +89,7 @@ namespace LCD.Ctrl
         {
             if (IsOpen==false)
             {
-                Project.WriteLog("串口没有打开");
+                Log.Warn("串口没有打开");
                 return;
             }
             if(SelfInspectionMark && AnCalibration)
@@ -170,10 +168,10 @@ namespace LCD.Ctrl
         {
             if (IsOpen == false)
             {
-                Project.WriteLog("串口没有打开");
+                Log.Warn("串口没有打开");
                 return false;
             }
-            Project.WriteLog("开始自检");
+            Log.Info("开始自检");
             Byte[] SendBuffer = HexTool.HexToByte(self_inspection);
             RecStr = "";
             SerialPort.Write(SendBuffer,0,SendBuffer.Length); 
@@ -181,12 +179,12 @@ namespace LCD.Ctrl
             if (Buffer.IndexOf("activate succeed") == -1)
             {
                 SelfInspectionMark = false;
-                Project.WriteLog($"自检指令返回超时超时时间:[50s]");
+                Log.Info($"自检指令返回超时超时时间:[50s]");
             }
             else
             {
                 SelfInspectionMark = true;
-                Project.WriteLog($"自检指令返回成功{Buffer}");
+                Log.Info($"自检指令返回成功{Buffer}");
             }
             return SelfInspectionMark;
         }
@@ -196,10 +194,10 @@ namespace LCD.Ctrl
         {
             if (IsOpen == false)
             {
-                Project.WriteLog("串口没有打开");
+                Log.Warn("串口没有打开");
                 return false;
             }
-            Project.WriteLog("开始暗场校正");
+            Log.Info("开始暗场校正");
             RecStr = "";
             Byte[] SendBuffer = HexTool.HexToByte(Calibration);
             SerialPort.Write(SendBuffer, 0, SendBuffer.Length);
@@ -207,12 +205,12 @@ namespace LCD.Ctrl
             if (BufferCalibration.IndexOf("dark field data saved") == -1)
             {
                 AnCalibration = false;
-                Project.WriteLog($"暗场校准指令返回超时超时时间:[30000ms]");           
+                Log.Info($"暗场校准指令返回超时超时时间:[30000ms]");           
             }
             else
             {
                 AnCalibration = true;
-                Project.WriteLog($"暗场校准指令返回成功{BufferCalibration}");
+                Log.Info($"暗场校准指令返回成功{BufferCalibration}");
             }
             return AnCalibration;
         }
@@ -232,22 +230,22 @@ namespace LCD.Ctrl
         {
             if (IsOpen == false) 
             {
-                Project.WriteLog("串口没有打开");
+                Log.Warn("串口没有打开");
                 return null; 
             }
             RecStr = "";
             Byte[] SendBuffer = HexTool.HexToByte(GetSpectrumArr);
             SerialPort.Write(SendBuffer, 0, SendBuffer.Length);
-            Project.WriteLog("已经发送光谱测量命令");
+            Log.Info("已经发送光谱测量命令");
             var Buffer = waitString( ",}", 60);
             if (Buffer.IndexOf(",}") == -1)
             {
-                Project.WriteLog($"获取光谱指令返回超时,超时时间:[60s]");
+                Log.Info($"获取光谱指令返回超时,超时时间:[60s]");
                 return null;
             }
             else
             {
-                Project.WriteLog("光谱数据："+Buffer);
+                Log.Info("光谱数据："+Buffer);
                 string str = Buffer;             //Write($"获取光谱指令返回成功{str}");
                 str = str.Substring(str.IndexOf("{") + 1, (str.Length - str.IndexOf("{") - 4));
                 str = str.Trim();
@@ -267,26 +265,26 @@ namespace LCD.Ctrl
                     index1 = sub.IndexOf(":");
                     if(index1<0)
                     {
-                        Project.WriteLog($"光谱指令返回错误数据");
+                        Log.Info($"光谱指令返回错误数据");
                         return null;
                     }
                     index2 = sub.IndexOf("dev[0]",index1);
                     if (index2 < 0)
                     {
-                        Project.WriteLog($"光谱指令返回错误数据");
+                        Log.Info($"光谱指令返回错误数据");
                         return null;
                     }
                     sub = sub.Substring(index1+1,index2-index1-1).Trim();
                 }
                 else
                 {
-                    Project.WriteLog($"光谱指令返回错误数据");
+                    Log.Info($"光谱指令返回错误数据");
                     return null;
                 }
                 string[] ary = sub.Split(',');
                 if(ary.Length < 9)
                 {
-                    Project.WriteLog($"光谱指令返回错误光谱数据");
+                    Log.Info($"光谱指令返回错误光谱数据");
                     return null; 
                 }
 
@@ -318,7 +316,7 @@ namespace LCD.Ctrl
                     }
                     catch (Exception ex)
                     {
-                        Project.WriteLog($"数据转化异常:【{ex.Message}】,数据源:【{str}】，异常数据【{item}】");
+                        Log.Info($"数据转化异常:【{ex.Message}】,数据源:【{str}】，异常数据【{item}】");
                     }
                     Result.SpectrumData[i] = Data;
                     i++;
@@ -350,7 +348,7 @@ namespace LCD.Ctrl
             }
         }
 
-        internal static TestMachine GetInstance()
+        public static TestMachine GetInstance()
         {
             if (m_ms01 == null) m_ms01 = new MS01();
             return m_ms01;

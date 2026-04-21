@@ -233,6 +233,7 @@ namespace LCD.Ctrl
                 if (Project.cfg.TESTMACHINE == ENUMMACHINE.BMA7)
                 {
                     Project.testMachine = Ctrl.BM7A.GetInstance();
+                    Project.testMachine.Config = Project.cfg.BM7A.ToBusConfig();
                 }
                 else if (Project.cfg.TESTMACHINE == ENUMMACHINE.BM5A)
                 {
@@ -245,14 +246,17 @@ namespace LCD.Ctrl
                 else if (Project.cfg.TESTMACHINE == ENUMMACHINE.CS2000)
                 {
                     Project.testMachine = Ctrl.CS2000.GetInstance();
+                    Project.testMachine.Config = Project.cfg.CS2000.ToBusConfig();
                 }
                 else if ((Project.cfg.TESTMACHINE == ENUMMACHINE.SR3A)|| (Project.cfg.TESTMACHINE == ENUMMACHINE.SR5A))
                 {
                     Project.testMachine = Ctrl.SR3A.GetInstance();
+                    Project.testMachine.Config = Project.cfg.SR3A.ToBusConfig();
                 }
                 else if (Project.cfg.TESTMACHINE == ENUMMACHINE.MS01)
                 {
                     Project.testMachine = Ctrl.MS01.GetInstance();
+                    Project.testMachine.Config = Project.cfg.MS01.ToBusConfig();
                     if (Project.testMachine.IsOpen == false)
                     {
                         Project.testMachine.Init();
@@ -266,6 +270,7 @@ namespace LCD.Ctrl
                 else if (Project.cfg.TESTMACHINE == ENUMMACHINE.CS2000)
                 {
                     Project.testMachine = Ctrl.CS2000.GetInstance();
+                    Project.testMachine.Config = Project.cfg.CS2000.ToBusConfig();
                 }
                 else if (Project.cfg.TESTMACHINE == ENUMMACHINE.Demo)
                 {
@@ -335,10 +340,11 @@ namespace LCD.Ctrl
 
                     switch (Project.lstInfos[i].MESTYPE)
                     {
-                        case ENUMMESSTYLE._01_POINT: 
+                        case ENUMMESSTYLE._01_POINT:
                             if((Project.cfg.TESTMACHINE == ENUMMACHINE.SR3A)||(Project.cfg.TESTMACHINE == ENUMMACHINE.SR5A))
                             {
                                 Project.testMachine = Ctrl.SR3A.GetInstance();
+                                Project.testMachine.Config = Project.cfg.SR3A.ToBusConfig();
                                 //判断一下是否已经初始化了
                                 if(Project.testMachine.IsOpen ==false)
                                 {
@@ -358,6 +364,7 @@ namespace LCD.Ctrl
                             if ((Project.cfg.TESTMACHINE == ENUMMACHINE.SR3A)|| (Project.cfg.TESTMACHINE == ENUMMACHINE.SR5A))
                             {
                                 Project.testMachine = Ctrl.SR3A.GetInstance();
+                                Project.testMachine.Config = Project.cfg.SR3A.ToBusConfig();
                                 //判断一下是否已经初始化了
                                 if (Project.testMachine.IsOpen == false)
                                 {
@@ -367,6 +374,7 @@ namespace LCD.Ctrl
                             else if(Project.cfg.TESTMACHINE == ENUMMACHINE.MS01)
                             {
                                 Project.testMachine = Ctrl.MS01.GetInstance();
+                                Project.testMachine.Config = Project.cfg.MS01.ToBusConfig();
                                 //判断一下是否已经初始化了
                                 if (Project.testMachine.IsOpen == false)
                                 {
