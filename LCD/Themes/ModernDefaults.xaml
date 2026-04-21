@@ -484,6 +484,7 @@
     </Style>
 
     <Style TargetType="DataGridRow">
+        <Setter Property="Background" Value="Transparent"/>
         <Setter Property="Foreground" Value="{StaticResource ModernTextBrush}"/>
         <Style.Triggers>
             <Trigger Property="IsMouseOver" Value="True">
@@ -491,25 +492,48 @@
             </Trigger>
             <Trigger Property="IsSelected" Value="True">
                 <Setter Property="Background" Value="{StaticResource ModernAccentSoftBrush}"/>
-                <Setter Property="Foreground" Value="{StaticResource ModernAccentBrush}"/>
             </Trigger>
         </Style.Triggers>
     </Style>
 
+    <!--
+        DataGridCell must own both Background and Foreground explicitly.
+        WPF's default DataGridCell style has a trigger that sets Foreground
+        to SystemColors.HighlightTextBrush (usually white) when IsSelected,
+        which produced white-on-white when combined with our soft accent
+        row background. Override the triggers explicitly to keep text dark.
+    -->
     <Style TargetType="DataGridCell">
+        <Setter Property="Background"      Value="Transparent"/>
+        <Setter Property="Foreground"      Value="{StaticResource ModernTextBrush}"/>
+        <Setter Property="BorderBrush"     Value="Transparent"/>
         <Setter Property="BorderThickness" Value="0"/>
         <Setter Property="Padding"         Value="10,0"/>
         <Setter Property="Template">
             <Setter.Value>
                 <ControlTemplate TargetType="DataGridCell">
-                    <Border Padding="{TemplateBinding Padding}"
-                            Background="Transparent"
+                    <Border x:Name="Bd"
+                            Padding="{TemplateBinding Padding}"
+                            Background="{TemplateBinding Background}"
+                            BorderBrush="{TemplateBinding BorderBrush}"
+                            BorderThickness="{TemplateBinding BorderThickness}"
                             SnapsToDevicePixels="True">
-                        <ContentPresenter VerticalAlignment="Center"/>
+                        <ContentPresenter VerticalAlignment="Center"
+                                          TextElement.Foreground="{TemplateBinding Foreground}"/>
                     </Border>
                 </ControlTemplate>
             </Setter.Value>
         </Setter>
+        <Style.Triggers>
+            <Trigger Property="IsSelected" Value="True">
+                <Setter Property="Background" Value="Transparent"/>
+                <Setter Property="Foreground" Value="{StaticResource ModernAccentBrush}"/>
+            </Trigger>
+            <Trigger Property="IsFocused" Value="True">
+                <Setter Property="BorderBrush"     Value="{StaticResource ModernAccentBrush}"/>
+                <Setter Property="BorderThickness" Value="0,0,0,0"/>
+            </Trigger>
+        </Style.Triggers>
     </Style>
 
     <!-- ===== ListBox / ListBoxItem ===== -->
