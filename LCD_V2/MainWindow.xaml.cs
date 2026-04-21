@@ -5,6 +5,7 @@ using System.Windows;
 using System.Windows.Controls;
 using System.Windows.Data;
 using System.Windows.Media;
+using System.Windows.Shell;
 using LCD_V2.Controls;
 using LCD_V2.Views;
 
@@ -35,6 +36,43 @@ namespace LCD_V2
             PageHost.Content = Activator.CreateInstance(item.PageType);
             PageTitle.Text = item.Title;
             PageSubtitle.Text = SubtitleFor(item.Title);
+        }
+
+        // --- custom title bar ---
+
+        private void BtnMinimize_Click(object sender, RoutedEventArgs e)
+            => SystemCommands.MinimizeWindow(this);
+
+        private void BtnMaximize_Click(object sender, RoutedEventArgs e)
+        {
+            if (WindowState == WindowState.Maximized) SystemCommands.RestoreWindow(this);
+            else                                       SystemCommands.MaximizeWindow(this);
+        }
+
+        private void BtnClose_Click(object sender, RoutedEventArgs e)
+            => SystemCommands.CloseWindow(this);
+
+        /// <summary>
+        /// When a WindowStyle=None window maximises, WPF lets it extend past the work
+        /// area by the resize-border thickness on every side. Compensate by padding
+        /// the root grid with 7px so the content stays clear of the taskbar / monitor
+        /// edge. Restore to 0 when back to normal.
+        /// </summary>
+        private void Root_StateChanged(object sender, EventArgs e)
+        {
+            RootGrid.Margin = WindowState == WindowState.Maximized
+                ? new Thickness(7)
+                : new Thickness(0);
+
+            // Toggle the max/restore icon glyph
+            if (MaxIcon != null)
+            {
+                MaxIcon.Data = WindowState == WindowState.Maximized
+                    // restore: two overlapping rectangles
+                    ? Geometry.Parse("M 0,2 L 8,2 L 8,10 L 0,10 Z M 2,0 L 10,0 L 10,8 L 8,8")
+                    // maximize: single rectangle
+                    : Geometry.Parse("M 0,0 L 10,0 L 10,10 L 0,10 Z");
+            }
         }
 
         private static string SubtitleFor(string title)

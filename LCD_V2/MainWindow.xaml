@@ -3,14 +3,96 @@
         xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
         xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+        xmlns:shell="clr-namespace:System.Windows.Shell;assembly=PresentationFramework"
         xmlns:local="clr-namespace:LCD_V2"
         xmlns:ctl="clr-namespace:LCD_V2.Controls"
         mc:Ignorable="d"
         Title="LCD 光学测试系统 V2"
         Height="820" Width="1360"
-        WindowStartupLocation="CenterScreen">
+        WindowStartupLocation="CenterScreen"
+        WindowStyle="None"
+        AllowsTransparency="False"
+        ResizeMode="CanResize"
+        Background="{StaticResource CanvasBrush}"
+        BorderBrush="#1F2937"
+        BorderThickness="1"
+        x:Name="Root"
+        StateChanged="Root_StateChanged">
 
-    <Grid>
+    <shell:WindowChrome.WindowChrome>
+        <shell:WindowChrome CaptionHeight="36"
+                            ResizeBorderThickness="6"
+                            GlassFrameThickness="0"
+                            UseAeroCaptionButtons="False"
+                            CornerRadius="0"/>
+    </shell:WindowChrome.WindowChrome>
+
+    <Grid x:Name="RootGrid">
+        <Grid.RowDefinitions>
+            <RowDefinition Height="36"/>  <!-- custom title bar -->
+            <RowDefinition Height="*"/>   <!-- body: sidebar + content -->
+        </Grid.RowDefinitions>
+
+        <!-- ═════════════════════ TITLE BAR ═════════════════════ -->
+        <Border Grid.Row="0" Background="{StaticResource TitleBarBrush}"
+                BorderBrush="#1F2937" BorderThickness="0,0,0,1">
+            <Grid>
+                <Grid.ColumnDefinitions>
+                    <ColumnDefinition Width="Auto"/>
+                    <ColumnDefinition Width="*"/>    <!-- draggable middle -->
+                    <ColumnDefinition Width="Auto"/>
+                </Grid.ColumnDefinitions>
+
+                <!-- brand + title (left) -->
+                <StackPanel Grid.Column="0" Orientation="Horizontal" VerticalAlignment="Center" Margin="12,0">
+                    <Border Width="20" Height="20"
+                            Background="{StaticResource AccentBrush}"
+                            CornerRadius="4"
+                            VerticalAlignment="Center">
+                        <TextBlock Text="L" FontSize="11" FontWeight="Bold"
+                                   Foreground="White"
+                                   HorizontalAlignment="Center" VerticalAlignment="Center"/>
+                    </Border>
+                    <TextBlock Text="LCD 光学测试系统"
+                               Foreground="{StaticResource TitleBarTextBrush}"
+                               FontSize="12" FontWeight="SemiBold"
+                               VerticalAlignment="Center"
+                               Margin="10,0,0,0"/>
+                    <Border Background="#1E293B" CornerRadius="3" Padding="5,1"
+                            Margin="8,0,0,0" VerticalAlignment="Center">
+                        <TextBlock Text="V2.0" FontSize="10"
+                                   Foreground="#94A3B8"
+                                   FontWeight="SemiBold"/>
+                    </Border>
+                </StackPanel>
+
+                <!-- caption buttons (right) -->
+                <StackPanel Grid.Column="2" Orientation="Horizontal"
+                            shell:WindowChrome.IsHitTestVisibleInChrome="True">
+                    <Button x:Name="BtnMinimize" Style="{StaticResource CaptionButton}"
+                            ToolTip="最小化" Click="BtnMinimize_Click">
+                        <Path Data="M 0,6 L 10,6"
+                              Stroke="{Binding Foreground, RelativeSource={RelativeSource AncestorType=Button}}"
+                              StrokeThickness="1.1" Width="10" Height="12"/>
+                    </Button>
+                    <Button x:Name="BtnMaximize" Style="{StaticResource CaptionButton}"
+                            ToolTip="最大化" Click="BtnMaximize_Click">
+                        <Path x:Name="MaxIcon" Data="M 0,0 L 10,0 L 10,10 L 0,10 Z"
+                              Stroke="{Binding Foreground, RelativeSource={RelativeSource AncestorType=Button}}"
+                              StrokeThickness="1.1" Fill="Transparent" Width="10" Height="10"/>
+                    </Button>
+                    <Button x:Name="BtnClose" Style="{StaticResource CaptionCloseButton}"
+                            ToolTip="关闭" Click="BtnClose_Click">
+                        <Path Data="M 0,0 L 10,10 M 10,0 L 0,10"
+                              Stroke="{Binding Foreground, RelativeSource={RelativeSource AncestorType=Button}}"
+                              StrokeThickness="1.1" Width="10" Height="10"/>
+                    </Button>
+                </StackPanel>
+            </Grid>
+        </Border>
+
+        <!-- ═════════════════════ BODY ═════════════════════ -->
+        <Grid Grid.Row="1">
         <Grid.ColumnDefinitions>
             <ColumnDefinition Width="Auto"/>  <!-- sidebar -->
             <ColumnDefinition Width="*"/>     <!-- main area -->
@@ -206,6 +288,7 @@
                     </StackPanel>
                 </Grid>
             </Border>
+        </Grid>
         </Grid>
     </Grid>
 </Window>
