@@ -65,7 +65,8 @@ namespace LCD.Ctrl
             return false;
         }
 
-        internal ECom GetECom()
+        // 跨程序集可访问（DeviceView 在 LCD，TestMachine 在 LCD.Drv，internal 不可见）
+        public ECom GetECom()
         {
             return serialPort;
         }

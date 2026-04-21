@@ -1,15 +1,12 @@
-﻿using LCD.Data;
-using System;
-using System.Collections.Generic;
+﻿using System;
 using System.ComponentModel;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
+using LCD.Data;
+using VisionCore;
 
 namespace LCD.Ctrl
 {
     [Category("仪器"), Description("DemoMachine"), DisplayName("DemoMachine")]
-    internal class DemoMachine : TestMachine
+    public class DemoMachine : TestMachine
     {
         public DemoMachine()
         {
@@ -33,7 +30,7 @@ namespace LCD.Ctrl
                 return IData.CreateNew((float)X, (float)Y, (float)Z);
             }
 
-            Project.ShowMessage(VisionCore.LogLevel.Info, "设备未连接");
+            Log.Info("设备未连接");
             return null;
         }
     }

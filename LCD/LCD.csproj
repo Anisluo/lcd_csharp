@@ -291,7 +291,6 @@
     <Compile Include="Ctrl\ADMESY_WRAPPER.cs" />
     <Compile Include="Ctrl\BM7A.cs" />
     <Compile Include="Ctrl\CS2000.cs" />
-    <Compile Include="Ctrl\DemoMachine.cs" />
     <Compile Include="Ctrl\MovCtrl.cs" />
     <Compile Include="Ctrl\MPG.cs" />
     <Compile Include="Ctrl\MS01.cs" />
@@ -299,7 +298,6 @@
     <Compile Include="Ctrl\Power.cs" />
     <Compile Include="Ctrl\ProcessCtrl.cs" />
     <Compile Include="Ctrl\SR3A.cs" />
-    <Compile Include="Ctrl\TestMachine.cs" />
     <Compile Include="Ctrl\USB2000.cs" />
     <Compile Include="dataBase\Database.cs" />
     <Compile Include="dataBase\ProjectMode.cs" />
