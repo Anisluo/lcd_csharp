@@ -77,6 +77,7 @@
     <Compile Include="LightMeter\CS2000.cs" />
     <Compile Include="LightMeter\SR3A.cs" />
     <Compile Include="LightMeter\MS01.cs" />
+    <Compile Include="Motion\MPC08EDLL.cs" />
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\LCD.Core\LCD.Core.csproj">
@@ -86,7 +87,6 @@
   </ItemGroup>
   <ItemGroup>
     <Folder Include="Camera\" />
-    <Folder Include="Motion\" />
   </ItemGroup>
   <ItemGroup>
     <None Include="packages.config" />

@@ -7,7 +7,7 @@ using System.Threading.Tasks;
 
 namespace LCD.Dll
 {
-    class MPC08EDLL
+    public class MPC08EDLL
     {
         //////////////////////////////////////////////////////////////////////////
         // 初始化函数

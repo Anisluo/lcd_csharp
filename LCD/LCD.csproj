@@ -307,7 +307,6 @@
     <Compile Include="Data\Project.cs" />
     <Compile Include="Data\XMLUtil.cs" />
     <Compile Include="Dll\CameraDll.cs" />
-    <Compile Include="Dll\MPC08EDLL.cs" />
     <Compile Include="ECom\ComControl.xaml.cs">
       <DependentUpon>ComControl.xaml</DependentUpon>
     </Compile>
