@@ -32,6 +32,200 @@
     <SolidColorBrush x:Key="ModernMutedTextBrush"  Color="#6B7280"/>
     <SolidColorBrush x:Key="ModernAltRowBrush"     Color="#F7F9FC"/>
 
+    <!-- Additional palette for redesign -->
+    <SolidColorBrush x:Key="ModernCanvasBrush"      Color="#F5F7FA"/>  <!-- app background -->
+    <SolidColorBrush x:Key="ModernCardBrush"        Color="#FFFFFF"/>  <!-- card fill -->
+    <SolidColorBrush x:Key="ModernDividerBrush"     Color="#EAEDF2"/>
+    <SolidColorBrush x:Key="ModernSuccessBrush"     Color="#2DB84D"/>
+    <SolidColorBrush x:Key="ModernSuccessSoftBrush" Color="#E9F7EC"/>
+    <SolidColorBrush x:Key="ModernDangerBrush"      Color="#DB3340"/>
+    <SolidColorBrush x:Key="ModernDangerSoftBrush"  Color="#FCEAEC"/>
+    <SolidColorBrush x:Key="ModernWarningBrush"     Color="#E9AF20"/>
+    <SolidColorBrush x:Key="ModernWarningSoftBrush" Color="#FDF5E4"/>
+
+    <!-- ===== Card: primary content container ===== -->
+    <Style x:Key="Card" TargetType="Border">
+        <Setter Property="Background"       Value="{StaticResource ModernCardBrush}"/>
+        <Setter Property="BorderBrush"      Value="{StaticResource ModernBorderBrush}"/>
+        <Setter Property="BorderThickness"  Value="1"/>
+        <Setter Property="CornerRadius"     Value="6"/>
+        <Setter Property="Padding"          Value="12"/>
+        <Setter Property="SnapsToDevicePixels" Value="True"/>
+    </Style>
+
+    <!-- ===== SectionTitle: small-caps header for panel groupings ===== -->
+    <Style x:Key="SectionTitle" TargetType="TextBlock">
+        <Setter Property="FontFamily"   Value="{StaticResource ModernFontFamily}"/>
+        <Setter Property="FontSize"     Value="11"/>
+        <Setter Property="FontWeight"   Value="SemiBold"/>
+        <Setter Property="Foreground"   Value="{StaticResource ModernMutedTextBrush}"/>
+        <Setter Property="TextOptions.TextFormattingMode" Value="Display"/>
+        <Setter Property="Margin"       Value="0,0,0,6"/>
+    </Style>
+
+    <!-- ===== MetricCard: used to show axis readouts, numeric sensors =====
+         Apply to a Border; put a StackPanel inside with two TextBlocks:
+         1) styled as "MetricLabel", 2) styled as "MetricValue".           -->
+    <Style x:Key="MetricCard" TargetType="Border">
+        <Setter Property="Background"       Value="{StaticResource ModernCardBrush}"/>
+        <Setter Property="BorderBrush"      Value="{StaticResource ModernBorderBrush}"/>
+        <Setter Property="BorderThickness"  Value="1"/>
+        <Setter Property="CornerRadius"     Value="6"/>
+        <Setter Property="Padding"          Value="10,6"/>
+        <Setter Property="MinWidth"         Value="92"/>
+        <Setter Property="SnapsToDevicePixels" Value="True"/>
+    </Style>
+
+    <Style x:Key="MetricLabel" TargetType="TextBlock">
+        <Setter Property="FontSize"   Value="10"/>
+        <Setter Property="FontWeight" Value="SemiBold"/>
+        <Setter Property="Foreground" Value="{StaticResource ModernMutedTextBrush}"/>
+        <Setter Property="TextOptions.TextFormattingMode" Value="Display"/>
+    </Style>
+
+    <Style x:Key="MetricValue" TargetType="TextBlock">
+        <Setter Property="FontSize"   Value="18"/>
+        <Setter Property="FontWeight" Value="SemiBold"/>
+        <Setter Property="Foreground" Value="{StaticResource ModernTextBrush}"/>
+        <Setter Property="TextOptions.TextFormattingMode" Value="Display"/>
+        <Setter Property="Margin"     Value="0,2,0,0"/>
+    </Style>
+
+    <!-- ===== StatusPill: for status bar items with a colored dot + label =====
+         Apply to a Border around StackPanel. Default is neutral; override
+         DotBrush via setter on inner Ellipse if needed.                    -->
+    <Style x:Key="StatusPill" TargetType="Border">
+        <Setter Property="Background"       Value="{StaticResource ModernCanvasBrush}"/>
+        <Setter Property="BorderBrush"      Value="{StaticResource ModernBorderBrush}"/>
+        <Setter Property="BorderThickness"  Value="1"/>
+        <Setter Property="CornerRadius"     Value="12"/>
+        <Setter Property="Padding"          Value="10,3"/>
+        <Setter Property="Margin"           Value="0,0,6,0"/>
+    </Style>
+
+    <!-- ===== IconActionButton: flat toolbar icon with optional label =====
+         Use as Style={StaticResource IconActionButton}                     -->
+    <Style x:Key="IconActionButton" TargetType="Button">
+        <Setter Property="Background"       Value="Transparent"/>
+        <Setter Property="BorderBrush"      Value="Transparent"/>
+        <Setter Property="BorderThickness"  Value="0"/>
+        <Setter Property="Padding"          Value="8,4"/>
+        <Setter Property="MinWidth"         Value="36"/>
+        <Setter Property="MinHeight"        Value="32"/>
+        <Setter Property="Cursor"           Value="Hand"/>
+        <Setter Property="Foreground"       Value="{StaticResource ModernMutedTextBrush}"/>
+        <Setter Property="Template">
+            <Setter.Value>
+                <ControlTemplate TargetType="Button">
+                    <Border x:Name="Bd"
+                            Background="{TemplateBinding Background}"
+                            BorderBrush="{TemplateBinding BorderBrush}"
+                            BorderThickness="{TemplateBinding BorderThickness}"
+                            CornerRadius="4"
+                            Padding="{TemplateBinding Padding}"
+                            SnapsToDevicePixels="True">
+                        <ContentPresenter HorizontalAlignment="Center" VerticalAlignment="Center"/>
+                    </Border>
+                    <ControlTemplate.Triggers>
+                        <Trigger Property="IsMouseOver" Value="True">
+                            <Setter TargetName="Bd" Property="Background" Value="{StaticResource ModernHoverBrush}"/>
+                        </Trigger>
+                        <Trigger Property="IsPressed" Value="True">
+                            <Setter TargetName="Bd" Property="Background" Value="{StaticResource ModernPressedBrush}"/>
+                        </Trigger>
+                        <Trigger Property="IsEnabled" Value="False">
+                            <Setter Property="Opacity" Value="0.5"/>
+                            <Setter Property="Cursor"  Value="Arrow"/>
+                        </Trigger>
+                    </ControlTemplate.Triggers>
+                </ControlTemplate>
+            </Setter.Value>
+        </Setter>
+    </Style>
+
+    <!-- ===== PrimaryActionButton: filled accent button (CTAs) ===== -->
+    <Style x:Key="PrimaryActionButton" TargetType="Button">
+        <Setter Property="Background"       Value="{StaticResource ModernAccentBrush}"/>
+        <Setter Property="BorderBrush"      Value="{StaticResource ModernAccentBrush}"/>
+        <Setter Property="BorderThickness"  Value="1"/>
+        <Setter Property="Foreground"       Value="White"/>
+        <Setter Property="Padding"          Value="14,6"/>
+        <Setter Property="MinHeight"        Value="30"/>
+        <Setter Property="MinWidth"         Value="84"/>
+        <Setter Property="Cursor"           Value="Hand"/>
+        <Setter Property="FontWeight"       Value="SemiBold"/>
+        <Setter Property="Template">
+            <Setter.Value>
+                <ControlTemplate TargetType="Button">
+                    <Border x:Name="Bd"
+                            Background="{TemplateBinding Background}"
+                            BorderBrush="{TemplateBinding BorderBrush}"
+                            BorderThickness="{TemplateBinding BorderThickness}"
+                            CornerRadius="4"
+                            SnapsToDevicePixels="True">
+                        <ContentPresenter HorizontalAlignment="Center" VerticalAlignment="Center" Margin="{TemplateBinding Padding}"/>
+                    </Border>
+                    <ControlTemplate.Triggers>
+                        <Trigger Property="IsMouseOver" Value="True">
+                            <Setter TargetName="Bd" Property="Background" Value="{StaticResource ModernAccentHoverBrush}"/>
+                            <Setter TargetName="Bd" Property="BorderBrush" Value="{StaticResource ModernAccentHoverBrush}"/>
+                        </Trigger>
+                        <Trigger Property="IsPressed" Value="True">
+                            <Setter TargetName="Bd" Property="Background" Value="#2856C7"/>
+                        </Trigger>
+                        <Trigger Property="IsEnabled" Value="False">
+                            <Setter Property="Opacity" Value="0.5"/>
+                        </Trigger>
+                    </ControlTemplate.Triggers>
+                </ControlTemplate>
+            </Setter.Value>
+        </Setter>
+    </Style>
+
+    <!-- ===== DangerActionButton: red filled (emergency stop etc) ===== -->
+    <Style x:Key="DangerActionButton" TargetType="Button" BasedOn="{StaticResource PrimaryActionButton}">
+        <Setter Property="Background"  Value="{StaticResource ModernDangerBrush}"/>
+        <Setter Property="BorderBrush" Value="{StaticResource ModernDangerBrush}"/>
+    </Style>
+
+    <!-- ===== SuccessActionButton: green filled (start test) ===== -->
+    <Style x:Key="SuccessActionButton" TargetType="Button" BasedOn="{StaticResource PrimaryActionButton}">
+        <Setter Property="Background"  Value="{StaticResource ModernSuccessBrush}"/>
+        <Setter Property="BorderBrush" Value="{StaticResource ModernSuccessBrush}"/>
+    </Style>
+
+    <!-- ===== CircularIconButton: round 48/56px colored buttons (run/stop) ===== -->
+    <Style x:Key="CircularIconButton" TargetType="Button">
+        <Setter Property="BorderThickness"  Value="0"/>
+        <Setter Property="Padding"          Value="10"/>
+        <Setter Property="Cursor"           Value="Hand"/>
+        <Setter Property="Template">
+            <Setter.Value>
+                <ControlTemplate TargetType="Button">
+                    <Grid>
+                        <Ellipse x:Name="Bd"
+                                 Fill="{TemplateBinding Background}"
+                                 Stroke="{TemplateBinding BorderBrush}"
+                                 StrokeThickness="{TemplateBinding BorderThickness}"
+                                 SnapsToDevicePixels="True"/>
+                        <ContentPresenter HorizontalAlignment="Center" VerticalAlignment="Center" Margin="{TemplateBinding Padding}"/>
+                    </Grid>
+                    <ControlTemplate.Triggers>
+                        <Trigger Property="IsMouseOver" Value="True">
+                            <Setter TargetName="Bd" Property="Opacity" Value="0.85"/>
+                        </Trigger>
+                        <Trigger Property="IsPressed" Value="True">
+                            <Setter TargetName="Bd" Property="Opacity" Value="0.65"/>
+                        </Trigger>
+                        <Trigger Property="IsEnabled" Value="False">
+                            <Setter Property="Opacity" Value="0.5"/>
+                        </Trigger>
+                    </ControlTemplate.Triggers>
+                </ControlTemplate>
+            </Setter.Value>
+        </Setter>
+    </Style>
+
     <!-- ===== Window ===== -->
     <Style TargetType="Window">
         <Setter Property="FontFamily" Value="{StaticResource ModernFontFamily}"/>
