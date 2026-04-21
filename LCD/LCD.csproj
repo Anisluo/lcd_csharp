@@ -296,6 +296,7 @@
     <Compile Include="dataBase\TestData.cs" />
     <Compile Include="dataBase\user_id.cs" />
     <Compile Include="Data\ComDeviceExtensions.cs" />
+    <Compile Include="Data\UiRegistry.cs" />
     <Compile Include="Data\Crit.cs" />
     <Compile Include="Data\DataViewHeaderConfig.cs" />
     <Compile Include="Data\ExcelHelper.cs" />

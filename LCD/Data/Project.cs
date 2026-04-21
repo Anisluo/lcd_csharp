@@ -41,17 +41,34 @@ namespace LCD
         public static double Vorg { get => MotionRuntime.Vorg; set => MotionRuntime.Vorg = value; }
         public static double Ballorg { get => MotionRuntime.Ballorg; set => MotionRuntime.Ballorg = value; }
 
-        public static TestMachine testMachine { get { return deviceview == null ? null : deviceview.TestDevice; } set { if (deviceview != null) deviceview.TestDevice = value; } }
+        public static TestMachine testMachine { get { return UiRegistry.DeviceView == null ? null : UiRegistry.DeviceView.TestDevice; } set { if (UiRegistry.DeviceView != null) UiRegistry.DeviceView.TestDevice = value; } }
 
         public static IPatternGenerator PG { get; set; }
         public static LCD.Ctrl.Power power { get; set; }
 
-        internal static DeviceView deviceview;
+        internal static DeviceView deviceview
+        {
+            get => UiRegistry.DeviceView;
+            set => UiRegistry.DeviceView = value;
+        }
 
-        public static PGDebug PGDebug;
+        public static PGDebug PGDebug
+        {
+            get => UiRegistry.PGDebug;
+            set => UiRegistry.PGDebug = value;
+        }
 
-        public static CamView cam = null;
-        public static V110 V110=null;
+        public static CamView cam
+        {
+            get => UiRegistry.Cam;
+            set => UiRegistry.Cam = value;
+        }
+
+        public static V110 V110
+        {
+            get => UiRegistry.V110;
+            set => UiRegistry.V110 = value;
+        }
 
         public static void ShowMessage(LogLevel logLevel, string _Str_)
         {
@@ -193,19 +210,38 @@ namespace LCD
         }
 
         /// <summary>
-        /// 结果视图
+        /// 结果视图。以下 6 个 ResutView 引用存储在 UiRegistry，以下为转发属性。
         /// </summary>
-        public static ResutView Results { get; set; }
-        /// <summary>
-        /// 光谱
-        /// </summary>
-        public static ResutView SpectrumResults { get; set; }
-
-        public static ResutView ResponseResults { get; set; }
-        public static ResutView CrossTalkResults { get; set; }
-        public static ResutView warmupResult { get; set; }
-
-        public static ResutView PowerResult { get; set; }
+        public static ResutView Results
+        {
+            get => UiRegistry.Results;
+            set => UiRegistry.Results = value;
+        }
+        public static ResutView SpectrumResults
+        {
+            get => UiRegistry.SpectrumResults;
+            set => UiRegistry.SpectrumResults = value;
+        }
+        public static ResutView ResponseResults
+        {
+            get => UiRegistry.ResponseResults;
+            set => UiRegistry.ResponseResults = value;
+        }
+        public static ResutView CrossTalkResults
+        {
+            get => UiRegistry.CrossTalkResults;
+            set => UiRegistry.CrossTalkResults = value;
+        }
+        public static ResutView warmupResult
+        {
+            get => UiRegistry.WarmupResult;
+            set => UiRegistry.WarmupResult = value;
+        }
+        public static ResutView PowerResult
+        {
+            get => UiRegistry.PowerResult;
+            set => UiRegistry.PowerResult = value;
+        }
 
         /// <summary>
         /// 项目初始化
