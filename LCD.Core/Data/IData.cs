@@ -54,7 +54,7 @@ namespace LCD.Data
 
         public double[] SpectrumData { get; set; } = new double[401];
 
-        internal static IData CreateNew(float X_, float Y_, float Z_)
+        public static IData CreateNew(float X_, float Y_, float Z_)
         {
             IData result = new IData();
             result.X = X_;

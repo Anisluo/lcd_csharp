@@ -101,7 +101,7 @@
     <Compile Include="VisionCore\Plugins\PluginsInfo.cs" />
     <Compile Include="Services\PointLayoutService.cs" />
     <Compile Include="Models\PowerReading.cs" />
-    <Compile Include="Models\ColorimetricReading.cs" />
+    <Compile Include="Data\IData.cs" />
     <Compile Include="Abstractions\IPowerSupply.cs" />
     <Compile Include="Abstractions\ILightMeter.cs" />
     <Compile Include="Abstractions\IMotionController.cs" />

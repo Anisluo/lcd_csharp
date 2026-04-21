@@ -309,7 +309,6 @@
     <Compile Include="Data\Crit.cs" />
     <Compile Include="Data\DataViewHeaderConfig.cs" />
     <Compile Include="Data\ExcelHelper.cs" />
-    <Compile Include="Data\IData.cs" />
     <Compile Include="Data\LogConfigModel.cs" />
     <Compile Include="Data\MPCData.cs" />
     <Compile Include="Data\PGSet.cs" />

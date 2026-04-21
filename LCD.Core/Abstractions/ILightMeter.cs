@@ -1,4 +1,4 @@
-using LCD.Core.Models;
+using LCD.Data;
 
 namespace LCD.Core.Abstractions
 {
@@ -6,6 +6,7 @@ namespace LCD.Core.Abstractions
     /// 光度计 / 色度计抽象。
     /// 对应 LCD.Drv 里的实现：BM7A / BM5A / BM5AS / CS2000 / SR3A / MS01 / Admesy / USB2000 / PR655。
     /// 当前实现继承自 LCD.Ctrl.TestMachine（待迁移到 LCD.Drv 时一并实现本接口）。
+    /// 测量值使用 LCD.Data.IData 作为边界 DTO（class 已迁至 LCD.Core/Data/）。
     /// </summary>
     public interface ILightMeter
     {
@@ -22,11 +23,11 @@ namespace LCD.Core.Abstractions
         /// <summary>停止一次正在进行的测量。</summary>
         void StopTest();
 
-        /// <summary>测色度（Lv + x, y 或 X, Y, Z）。</summary>
-        ColorimetricReading MeasureLxy();
+        /// <summary>测色度（Lv + Cx, Cy 或 X, Y, Z）。</summary>
+        IData MeasureLxy();
 
-        /// <summary>测光谱（返回 Spectrum / SpectrumStartNm / SpectrumStepNm）。</summary>
-        ColorimetricReading MeasureSpectrum();
+        /// <summary>测光谱（填充 IData.SpectrumData）。</summary>
+        IData MeasureSpectrum();
 
         /// <summary>通用 key-value 设置（曝光/积分时间/滤光片等）。</summary>
         bool Set(string key, string value);
