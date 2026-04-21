@@ -1,7 +1,7 @@
 using System;
 using System.Collections.Generic;
 
-namespace LCD.Services
+namespace LCD.Core.Services
 {
     public enum PointLayoutType
     {

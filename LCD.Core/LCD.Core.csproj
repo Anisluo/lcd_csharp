@@ -99,6 +99,12 @@
     <Compile Include="VisionCore\Plugins\FormBase.cs" />
     <Compile Include="VisionCore\Plugins\ObjBase.cs" />
     <Compile Include="VisionCore\Plugins\PluginsInfo.cs" />
+    <Compile Include="Services\PointLayoutService.cs" />
+  </ItemGroup>
+  <ItemGroup>
+    <Folder Include="Abstractions\" />
+    <Folder Include="Models\" />
+    <Folder Include="Tasks\" />
   </ItemGroup>
   <ItemGroup>
     <None Include="packages.config" />

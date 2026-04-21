@@ -340,7 +340,6 @@
       <DependentUpon>Lang.resx</DependentUpon>
     </Compile>
     <Compile Include="Resources\WatermarkTextBox.cs" />
-    <Compile Include="Services\PointLayoutService.cs" />
     <Compile Include="Themes\BorderElement.cs" />
     <Compile Include="Themes\IconElement.cs" />
     <Compile Include="Themes\SimplePanel.cs" />
