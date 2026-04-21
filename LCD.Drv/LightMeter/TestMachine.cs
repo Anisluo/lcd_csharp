@@ -1,4 +1,5 @@
 ﻿//作为全局测试类
+using LCD.Core.Abstractions;
 using LCD.Core.Models;
 using LCD.Data;
 using System;
@@ -7,9 +8,9 @@ using VisionCore;
 namespace LCD.Ctrl
 {
 
-    //注意此处设置为接口类
+    //光度计/色度计基类，实现 LCD.Core.Abstractions.ILightMeter
     [PropertyChanged.AddINotifyPropertyChangedInterface]
-    public class TestMachine
+    public class TestMachine : ILightMeter
     {
         protected ECom serialPort = null;
         /// <summary>
