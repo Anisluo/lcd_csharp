@@ -295,10 +295,6 @@
     <Compile Include="Ctrl\MovCtrl.cs" />
     <Compile Include="Ctrl\MPG.cs" />
     <Compile Include="Ctrl\MS01.cs" />
-    <Compile Include="Ctrl\PG.cs" />
-    <Compile Include="Ctrl\PGDLL.cs" />
-    <Compile Include="Ctrl\PGNet.cs" />
-    <Compile Include="Ctrl\PGP.cs" />
     <Compile Include="Ctrl\PointF.cs" />
     <Compile Include="Ctrl\Power.cs" />
     <Compile Include="Ctrl\ProcessCtrl.cs" />

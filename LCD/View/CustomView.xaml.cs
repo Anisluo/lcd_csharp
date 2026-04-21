@@ -76,11 +76,11 @@ namespace LCD.View
             timer.Start();
             if (Project.PG!=null)
             {
-                for (int i = 0; i < Project.PG?.PatternList.Size; i++)
+                for (int i = 0; i < Project.PG.PatternList.Count; i++)
                 {
                     InfoList infoList = new InfoList();
                     infoList.Name2 = i.ToString();
-                    infoList.Name1 = Project.PG.PatternList.ItemStrings[i].name;
+                    infoList.Name1 = Project.PG.PatternList[i];
                     list.Add(infoList);
                     mylist1.ItemsSource = list;
                 }

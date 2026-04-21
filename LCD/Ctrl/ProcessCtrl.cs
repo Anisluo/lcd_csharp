@@ -497,7 +497,7 @@ namespace LCD.Ctrl
                 ShowIndex(i);
 
 
-                PG pG = Project.PG;
+                var pG = Project.PG;
                 bool Ok = false;
                 if (pG != null)
                 {
@@ -507,7 +507,7 @@ namespace LCD.Ctrl
                         byte r = byte.Parse(TempStr[0]);
                         byte g = byte.Parse(TempStr[1]);
                         byte b = byte.Parse(TempStr[2]);
-                        Ok = pG.colorControl(r, g, b);
+                        Ok = pG.SetColor(r, g, b);
                         if (Ok)
                         {
                             Project.WriteLog("RGB切换成功");
@@ -527,7 +527,7 @@ namespace LCD.Ctrl
                     }
                     else
                     {
-                        Ok = pG.changePattern(Project.PG.PatternList.ItemStrings[int.Parse(SerialNumber)].name);
+                        Ok = pG.ChangePattern(Project.PG.PatternList[int.Parse(SerialNumber)]);
                         if (Ok)
                         {
                             Project.WriteLog("图片切换成功");
@@ -719,7 +719,7 @@ namespace LCD.Ctrl
                 ShowIndex(i);
 
 
-                PG pG = Project.PG;
+                var pG = Project.PG;
                 bool Ok=false;
                 if (pG != null)
                 {
@@ -729,7 +729,7 @@ namespace LCD.Ctrl
                         byte r = byte.Parse(TempStr[0]);
                         byte g = byte.Parse(TempStr[1]);
                         byte b = byte.Parse(TempStr[2]);
-                        Ok= pG.colorControl(r, g, b);
+                        Ok= pG.SetColor(r, g, b);
                         if (Ok)
                         {
                             Project.WriteLog("RGB切换成功");
@@ -749,7 +749,7 @@ namespace LCD.Ctrl
                     }
                     else
                     {
-                        Ok=pG.changePattern(Project.PG.PatternList.ItemStrings[int.Parse(SerialNumber)].name);
+                        Ok=pG.ChangePattern(Project.PG.PatternList[int.Parse(SerialNumber)]);
                         if (Ok)
                         {
                             Project.WriteLog("图片切换成功");

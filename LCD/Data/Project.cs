@@ -1,4 +1,5 @@
 ﻿/********************/
+using LCD.Core.Abstractions;
 using LCD.Ctrl;
 using LCD.Data;
 using LCD.dataBase;
@@ -37,7 +38,7 @@ namespace LCD
 
         public static TestMachine testMachine { get { return deviceview == null ? null : deviceview.TestDevice; } set { if (deviceview != null) deviceview.TestDevice = value; } }
 
-        public static PG PG { get; set; }
+        public static IPatternGenerator PG { get; set; }
         public static LCD.Ctrl.Power power { get; set; }
 
         internal static DeviceView deviceview;

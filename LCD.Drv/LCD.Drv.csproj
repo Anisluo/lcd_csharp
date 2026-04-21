@@ -44,6 +44,8 @@
     <Compile Include="Power\PowerM88.cs" />
     <Compile Include="Power\PowerNGI36150.cs" />
     <Compile Include="Power\PowerPld6003.cs" />
+    <Compile Include="PG\PGDLL.cs" />
+    <Compile Include="PG\PatternGeneratorNC816.cs" />
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\LCD.Core\LCD.Core.csproj">
@@ -55,7 +57,6 @@
     <Folder Include="Camera\" />
     <Folder Include="LightMeter\" />
     <Folder Include="Motion\" />
-    <Folder Include="PG\" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
 </Project>

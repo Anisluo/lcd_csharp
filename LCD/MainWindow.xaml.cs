@@ -288,17 +288,17 @@ namespace LCD
 
                     break;
                 case ENUMPG.OtherPG:
-                    Project.PG = new PG(Project.cfg.otherPG.CommunicationType);
-                    int A = Project.PG.init(Project.cfg.otherPG.SDevice.ip);
+                    Project.PG = new LCD.Drv.PG.PatternGeneratorNC816();
+                    int A = Project.PG.Initialize(Project.cfg.otherPG.SDevice.ip);
                     if (A == 1)
                     {
                         Project.WriteLog("PG连接成功");
                         try
                         {
-                            String Info = Project.PG.getDeviceInformaction();
+                            String Info = Project.PG.GetDeviceInfo();
                             Project.WriteLog(Info);
 
-                            Project.PG.getDevicePatternList();
+                            Project.PG.RefreshPatternList();
 
 
                             Project.PGDebug = new View.PGDebug();
