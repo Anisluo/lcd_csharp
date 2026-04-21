@@ -1,0 +1,211 @@
+<Window x:Class="LCD_V2.MainWindow"
+        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+        xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+        xmlns:local="clr-namespace:LCD_V2"
+        xmlns:ctl="clr-namespace:LCD_V2.Controls"
+        mc:Ignorable="d"
+        Title="LCD 光学测试系统 V2"
+        Height="820" Width="1360"
+        WindowStartupLocation="CenterScreen">
+
+    <Grid>
+        <Grid.ColumnDefinitions>
+            <ColumnDefinition Width="Auto"/>  <!-- sidebar -->
+            <ColumnDefinition Width="*"/>     <!-- main area -->
+        </Grid.ColumnDefinitions>
+
+        <!-- ═════════════════════ SIDEBAR ═════════════════════ -->
+        <Border Grid.Column="0" Style="{StaticResource Sidebar}">
+            <DockPanel>
+                <!-- Brand -->
+                <Border DockPanel.Dock="Top" Style="{StaticResource SidebarBrand}">
+                    <StackPanel Orientation="Horizontal">
+                        <Border Width="32" Height="32"
+                                Background="{StaticResource AccentBrush}"
+                                CornerRadius="8"
+                                VerticalAlignment="Center">
+                            <TextBlock Text="L" FontSize="18" FontWeight="Bold"
+                                       Foreground="White"
+                                       HorizontalAlignment="Center"
+                                       VerticalAlignment="Center"/>
+                        </Border>
+                        <StackPanel VerticalAlignment="Center" Margin="12,0,0,0">
+                            <TextBlock Text="LCD Optics"
+                                       FontSize="15" FontWeight="SemiBold"
+                                       Foreground="White"/>
+                            <TextBlock Text="V2.0"
+                                       FontSize="11"
+                                       Foreground="{StaticResource SidebarTextMutedBrush}"/>
+                        </StackPanel>
+                    </StackPanel>
+                </Border>
+
+                <!-- User pod at bottom -->
+                <Border DockPanel.Dock="Bottom" Padding="12,10"
+                        BorderBrush="#1F2937" BorderThickness="0,1,0,0">
+                    <StackPanel Orientation="Horizontal">
+                        <Border Width="32" Height="32" CornerRadius="16"
+                                Background="#374151" VerticalAlignment="Center">
+                            <Path Data="{StaticResource IconUser}"
+                                  Stroke="White" StrokeThickness="1.6"
+                                  Stretch="Uniform" Width="16" Height="16"
+                                  HorizontalAlignment="Center" VerticalAlignment="Center"/>
+                        </Border>
+                        <StackPanel VerticalAlignment="Center" Margin="10,0,0,0">
+                            <TextBlock Text="Operator"
+                                       Foreground="White" FontSize="12" FontWeight="SemiBold"/>
+                            <TextBlock Text="在线"
+                                       Foreground="{StaticResource SuccessBrush}" FontSize="11"/>
+                        </StackPanel>
+                    </StackPanel>
+                </Border>
+
+                <!-- Nav list -->
+                <ListBox x:Name="Nav"
+                         Style="{StaticResource NavList}"
+                         ItemContainerStyle="{StaticResource NavListItem}"
+                         SelectionChanged="Nav_SelectionChanged">
+                    <ListBox.ItemTemplate>
+                        <DataTemplate DataType="{x:Type ctl:NavItem}">
+                            <Grid>
+                                <Grid.ColumnDefinitions>
+                                    <ColumnDefinition Width="Auto"/>
+                                    <ColumnDefinition Width="*"/>
+                                    <ColumnDefinition Width="Auto"/>
+                                </Grid.ColumnDefinitions>
+                                <Path Grid.Column="0"
+                                      Data="{Binding Icon}"
+                                      Stretch="Uniform" Width="18" Height="18"
+                                      Fill="Transparent"
+                                      Stroke="{Binding Foreground, RelativeSource={RelativeSource AncestorType=ListBoxItem}}"
+                                      StrokeThickness="1.6"
+                                      StrokeStartLineCap="Round" StrokeEndLineCap="Round" StrokeLineJoin="Round"
+                                      VerticalAlignment="Center"/>
+                                <TextBlock Grid.Column="1" Text="{Binding Title}"
+                                           Margin="14,0,0,0"
+                                           FontSize="13"
+                                           VerticalAlignment="Center"/>
+                                <Border Grid.Column="2"
+                                        Background="{StaticResource AccentBrush}" CornerRadius="10"
+                                        Padding="6,1" VerticalAlignment="Center"
+                                        Visibility="{Binding Badge, Converter={x:Static local:NullOrEmptyToCollapsed.Instance}}">
+                                    <TextBlock Text="{Binding Badge}"
+                                               FontSize="10" FontWeight="SemiBold"
+                                               Foreground="White"/>
+                                </Border>
+                            </Grid>
+                        </DataTemplate>
+                    </ListBox.ItemTemplate>
+                </ListBox>
+            </DockPanel>
+        </Border>
+
+        <!-- ═════════════════════ MAIN AREA ═════════════════════ -->
+        <Grid Grid.Column="1">
+            <Grid.RowDefinitions>
+                <RowDefinition Height="Auto"/>  <!-- top bar -->
+                <RowDefinition Height="*"/>     <!-- page host -->
+                <RowDefinition Height="Auto"/>  <!-- status bar -->
+            </Grid.RowDefinitions>
+
+            <!-- Top bar -->
+            <Border Grid.Row="0"
+                    Background="{StaticResource SurfaceBrush}"
+                    BorderBrush="{StaticResource BorderBrush}"
+                    BorderThickness="0,0,0,1"
+                    Padding="24,14">
+                <Grid>
+                    <Grid.ColumnDefinitions>
+                        <ColumnDefinition Width="*"/>
+                        <ColumnDefinition Width="Auto"/>
+                    </Grid.ColumnDefinitions>
+
+                    <StackPanel Grid.Column="0">
+                        <TextBlock x:Name="PageTitle" Style="{StaticResource H2}" Text="Dashboard"/>
+                        <TextBlock x:Name="PageSubtitle" Style="{StaticResource BodyMuted}"
+                                   Text="实时运行状态 / 最近测试概览" Margin="0,2,0,0"/>
+                    </StackPanel>
+
+                    <StackPanel Grid.Column="1" Orientation="Horizontal" VerticalAlignment="Center">
+                        <Border Style="{StaticResource StatusPill}">
+                            <StackPanel Orientation="Horizontal">
+                                <Ellipse Width="8" Height="8" Fill="{StaticResource SuccessBrush}" VerticalAlignment="Center"/>
+                                <TextBlock Text="系统就绪" Margin="6,0,0,0" VerticalAlignment="Center"/>
+                            </StackPanel>
+                        </Border>
+                        <Button Style="{StaticResource GhostButton}" Margin="6,0,0,0" MinWidth="0" Padding="8,6">
+                            <Path Data="{StaticResource IconBell}"
+                                  Stretch="Uniform" Width="18" Height="18"
+                                  Fill="Transparent"
+                                  Stroke="{StaticResource TextMutedBrush}" StrokeThickness="1.6"
+                                  StrokeStartLineCap="Round" StrokeEndLineCap="Round" StrokeLineJoin="Round"/>
+                        </Button>
+                        <Button Content="开始测试" Style="{StaticResource PrimaryButton}" Margin="12,0,0,0"/>
+                    </StackPanel>
+                </Grid>
+            </Border>
+
+            <!-- Page host -->
+            <ContentControl Grid.Row="1" x:Name="PageHost"
+                            Padding="24"
+                            Background="{StaticResource CanvasBrush}"/>
+
+            <!-- Status bar -->
+            <Border Grid.Row="2"
+                    Background="{StaticResource SurfaceBrush}"
+                    BorderBrush="{StaticResource BorderBrush}"
+                    BorderThickness="0,1,0,0"
+                    Padding="24,6">
+                <Grid>
+                    <Grid.ColumnDefinitions>
+                        <ColumnDefinition Width="*"/>
+                        <ColumnDefinition Width="Auto"/>
+                    </Grid.ColumnDefinitions>
+                    <StackPanel Grid.Column="0" Orientation="Horizontal">
+                        <Border Style="{StaticResource StatusPill}">
+                            <StackPanel Orientation="Horizontal">
+                                <Ellipse Width="7" Height="7" Fill="{StaticResource DangerBrush}" VerticalAlignment="Center"/>
+                                <TextBlock Text="X" FontWeight="SemiBold" Margin="6,0,4,0" VerticalAlignment="Center"/>
+                                <TextBlock Text="未连接" Foreground="{StaticResource TextMutedBrush}" VerticalAlignment="Center"/>
+                            </StackPanel>
+                        </Border>
+                        <Border Style="{StaticResource StatusPill}">
+                            <StackPanel Orientation="Horizontal">
+                                <Ellipse Width="7" Height="7" Fill="{StaticResource DangerBrush}" VerticalAlignment="Center"/>
+                                <TextBlock Text="Y" FontWeight="SemiBold" Margin="6,0,4,0" VerticalAlignment="Center"/>
+                                <TextBlock Text="未连接" Foreground="{StaticResource TextMutedBrush}" VerticalAlignment="Center"/>
+                            </StackPanel>
+                        </Border>
+                        <Border Style="{StaticResource StatusPill}">
+                            <StackPanel Orientation="Horizontal">
+                                <Ellipse Width="7" Height="7" Fill="{StaticResource DangerBrush}" VerticalAlignment="Center"/>
+                                <TextBlock Text="Z" FontWeight="SemiBold" Margin="6,0,4,0" VerticalAlignment="Center"/>
+                                <TextBlock Text="未连接" Foreground="{StaticResource TextMutedBrush}" VerticalAlignment="Center"/>
+                            </StackPanel>
+                        </Border>
+                        <Border Style="{StaticResource StatusPill}">
+                            <StackPanel Orientation="Horizontal">
+                                <Ellipse Width="7" Height="7" Fill="{StaticResource DangerBrush}" VerticalAlignment="Center"/>
+                                <TextBlock Text="U" FontWeight="SemiBold" Margin="6,0,4,0" VerticalAlignment="Center"/>
+                                <TextBlock Text="未连接" Foreground="{StaticResource TextMutedBrush}" VerticalAlignment="Center"/>
+                            </StackPanel>
+                        </Border>
+                        <Border Style="{StaticResource StatusPill}">
+                            <StackPanel Orientation="Horizontal">
+                                <Ellipse Width="7" Height="7" Fill="{StaticResource DangerBrush}" VerticalAlignment="Center"/>
+                                <TextBlock Text="V" FontWeight="SemiBold" Margin="6,0,4,0" VerticalAlignment="Center"/>
+                                <TextBlock Text="未连接" Foreground="{StaticResource TextMutedBrush}" VerticalAlignment="Center"/>
+                            </StackPanel>
+                        </Border>
+                    </StackPanel>
+                    <StackPanel Grid.Column="1" Orientation="Horizontal">
+                        <TextBlock Text="测试状态" Foreground="{StaticResource TextMutedBrush}" VerticalAlignment="Center" Margin="0,0,6,0"/>
+                        <TextBlock Text="准备中" Foreground="{StaticResource AccentBrush}" FontWeight="SemiBold" VerticalAlignment="Center"/>
+                    </StackPanel>
+                </Grid>
+            </Border>
+        </Grid>
+    </Grid>
+</Window>

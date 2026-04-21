@@ -8,6 +8,8 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "LCD.Core", "LCD.Core\LCD.Co
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "LCD.Drv", "LCD.Drv\LCD.Drv.csproj", "{C818728C-AA22-46B8-9C6F-770F7D637B4A}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "LCD_V2", "LCD_V2\LCD_V2.csproj", "{7FE43E8B-CE82-43CF-A3A9-6A41BE8F17E1}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -26,6 +28,10 @@ Global
 		{C818728C-AA22-46B8-9C6F-770F7D637B4A}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{C818728C-AA22-46B8-9C6F-770F7D637B4A}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{C818728C-AA22-46B8-9C6F-770F7D637B4A}.Release|Any CPU.Build.0 = Release|Any CPU
+		{7FE43E8B-CE82-43CF-A3A9-6A41BE8F17E1}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{7FE43E8B-CE82-43CF-A3A9-6A41BE8F17E1}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{7FE43E8B-CE82-43CF-A3A9-6A41BE8F17E1}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{7FE43E8B-CE82-43CF-A3A9-6A41BE8F17E1}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

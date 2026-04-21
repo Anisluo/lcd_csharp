@@ -1,0 +1,35 @@
+<!-- Feather-style line icons as Geometry; stroke-based, 24x24 viewbox.
+     Usage:  <Path Data="{StaticResource IconHome}" ... Stretch="Uniform"/>
+     Geometries drawn with both Fill-able and Stroke-able shapes simplified.
+-->
+<ResourceDictionary xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+                    xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml">
+
+    <!-- home -->
+    <Geometry x:Key="IconHome">M 3,11 L 12,3 L 21,11 L 21,20 L 14,20 L 14,14 L 10,14 L 10,20 L 3,20 Z</Geometry>
+    <!-- grid (templates) -->
+    <Geometry x:Key="IconGrid">M 3,3 L 10,3 L 10,10 L 3,10 Z M 14,3 L 21,3 L 21,10 L 14,10 Z M 3,14 L 10,14 L 10,21 L 3,21 Z M 14,14 L 21,14 L 21,21 L 14,21 Z</Geometry>
+    <!-- chart (results) -->
+    <Geometry x:Key="IconChart">M 3,3 L 3,21 L 21,21 M 7,15 L 11,11 L 14,14 L 20,8</Geometry>
+    <!-- devices (cpu) -->
+    <Geometry x:Key="IconDevices">M 6,4 L 18,4 C 19,4 20,5 20,6 L 20,18 C 20,19 19,20 18,20 L 6,20 C 5,20 4,19 4,18 L 4,6 C 4,5 5,4 6,4 Z M 9,9 L 15,9 L 15,15 L 9,15 Z M 12,1 L 12,4 M 12,20 L 12,23 M 1,12 L 4,12 M 20,12 L 23,12</Geometry>
+    <!-- terminal (logs) -->
+    <Geometry x:Key="IconLogs">M 3,4 L 21,4 C 22,4 22,5 22,5 L 22,19 C 22,20 22,20 21,20 L 3,20 C 2,20 2,20 2,19 L 2,5 C 2,5 2,4 3,4 Z M 5,8 L 9,12 L 5,16 M 11,16 L 17,16</Geometry>
+    <!-- gear (settings) -->
+    <Geometry x:Key="IconSettings">M 12,8 C 14.2,8 16,9.8 16,12 C 16,14.2 14.2,16 12,16 C 9.8,16 8,14.2 8,12 C 8,9.8 9.8,8 12,8 Z M 19.4,13.2 L 21,14 L 19,17.5 L 17.2,16.9 C 16.8,17.3 16.3,17.6 15.7,17.8 L 15.4,19.8 L 11.6,19.8 L 11.3,17.8 C 10.7,17.6 10.2,17.3 9.8,16.9 L 8,17.5 L 6,14 L 7.6,13.2 C 7.5,12.8 7.5,12.4 7.5,12 C 7.5,11.6 7.5,11.2 7.6,10.8 L 6,10 L 8,6.5 L 9.8,7.1 C 10.2,6.7 10.7,6.4 11.3,6.2 L 11.6,4.2 L 15.4,4.2 L 15.7,6.2 C 16.3,6.4 16.8,6.7 17.2,7.1 L 19,6.5 L 21,10 L 19.4,10.8 C 19.5,11.2 19.5,11.6 19.5,12 C 19.5,12.4 19.5,12.8 19.4,13.2 Z</Geometry>
+    <!-- play -->
+    <Geometry x:Key="IconPlay">M 7,4 L 20,12 L 7,20 Z</Geometry>
+    <!-- stop square -->
+    <Geometry x:Key="IconStop">M 5,5 L 19,5 L 19,19 L 5,19 Z</Geometry>
+    <!-- user -->
+    <Geometry x:Key="IconUser">M 12,12 C 14.8,12 17,9.8 17,7 C 17,4.2 14.8,2 12,2 C 9.2,2 7,4.2 7,7 C 7,9.8 9.2,12 12,12 Z M 3,22 C 3,17 7,14 12,14 C 17,14 21,17 21,22</Geometry>
+    <!-- bell -->
+    <Geometry x:Key="IconBell">M 12,2 C 15.3,2 18,4.7 18,8 L 18,13 L 20,16 L 4,16 L 6,13 L 6,8 C 6,4.7 8.7,2 12,2 Z M 10,19 C 10,20.1 10.9,21 12,21 C 13.1,21 14,20.1 14,19</Geometry>
+
+    <!-- arrows -->
+    <Geometry x:Key="IconArrowUp">M 12,4 L 12,20 M 6,10 L 12,4 L 18,10</Geometry>
+    <Geometry x:Key="IconArrowDown">M 12,20 L 12,4 M 6,14 L 12,20 L 18,14</Geometry>
+    <Geometry x:Key="IconArrowLeft">M 4,12 L 20,12 M 10,6 L 4,12 L 10,18</Geometry>
+    <Geometry x:Key="IconArrowRight">M 20,12 L 4,12 M 14,6 L 20,12 L 14,18</Geometry>
+
+</ResourceDictionary>
