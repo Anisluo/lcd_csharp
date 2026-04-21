@@ -23,32 +23,22 @@
         </Grid.RowDefinitions>
 
         <!-- ============================ TOP BAR ============================ -->
-        <Border Grid.Row="0" Style="{StaticResource Card}" Padding="12,6" Margin="0,0,0,8">
+        <Border Grid.Row="0" Style="{StaticResource Card}" Padding="8,4" Margin="0,0,0,8">
             <Grid>
                 <Grid.ColumnDefinitions>
-                    <ColumnDefinition Width="Auto"/>
                     <ColumnDefinition Width="Auto"/>
                     <ColumnDefinition Width="*"/>
                     <ColumnDefinition Width="Auto"/>
                 </Grid.ColumnDefinitions>
 
-                <!-- Logo + title -->
-                <StackPanel Grid.Column="0" Orientation="Horizontal" VerticalAlignment="Center" Margin="0,0,16,0">
-                    <Image Source="/icon.png" Width="24" Height="24" Margin="0,0,8,0"/>
-                    <TextBlock Text="{Binding [AppName], Source={x:Static local:LanguageManager.Instance}}"
-                               FontSize="15" FontWeight="SemiBold"
-                               Foreground="{StaticResource ModernTextBrush}"
-                               VerticalAlignment="Center"/>
-                </StackPanel>
-
-                <!-- Menu -->
-                <Menu Grid.Column="1" Background="Transparent" VerticalAlignment="Center">
-                    <MenuItem Header="{Binding [FileF], Source={x:Static local:LanguageManager.Instance}}">
+                <!-- Menu (left) — the OS title bar already shows the app name, no need to duplicate -->
+                <Menu Grid.Column="0" Background="Transparent" VerticalAlignment="Center">
+                    <MenuItem Style="{StaticResource TopLevelMenuItem}" Header="{Binding [FileF], Source={x:Static local:LanguageManager.Instance}}">
                         <MenuItem Header="{Binding [Open], Source={x:Static local:LanguageManager.Instance}}" Click="Open_OnClick"/>
                         <MenuItem Header="{Binding [Close], Source={x:Static local:LanguageManager.Instance}}" Click="Close_Click"/>
                         <MenuItem Header="{Binding [History], Source={x:Static local:LanguageManager.Instance}}" Click="OnBnClickedHistory"/>
                     </MenuItem>
-                    <MenuItem x:Name="MenuPara" Header="{Binding [ParaP], Source={x:Static local:LanguageManager.Instance}}">
+                    <MenuItem x:Name="MenuPara" Style="{StaticResource TopLevelMenuItem}" Header="{Binding [ParaP], Source={x:Static local:LanguageManager.Instance}}">
                         <MenuItem Header="{Binding [DeviceSet], Source={x:Static local:LanguageManager.Instance}}" Click="OnBnClickedDevice"/>
                         <MenuItem Name="Viewangle" Header="{Binding [ViewpointSw], Source={x:Static local:LanguageManager.Instance}}" Click="OnBnClickedFdl"/>
                         <MenuItem Name="MPcItemMenuItem" Header="{Binding [PlatformSet], Source={x:Static local:LanguageManager.Instance}}" Click="OnBnClickMPC"/>
@@ -63,7 +53,7 @@
                         <MenuItem Header="{Binding [LoadingPos], Source={x:Static local:LanguageManager.Instance}}" Click="MenuItem_OnClickup"/>
                         <MenuItem Header="{Binding [MoveDebug], Source={x:Static local:LanguageManager.Instance}}" Click="MenuItem_OnClickDebug"/>
                     </MenuItem>
-                    <MenuItem Header="{Binding [Helph], Source={x:Static local:LanguageManager.Instance}}">
+                    <MenuItem Style="{StaticResource TopLevelMenuItem}" Header="{Binding [Helph], Source={x:Static local:LanguageManager.Instance}}">
                         <MenuItem Header="{Binding [LangSet], Source={x:Static local:LanguageManager.Instance}}" Click="OnBtnLangSelect"/>
                         <MenuItem Header="{Binding [OpManual], Source={x:Static local:LanguageManager.Instance}}"/>
                         <MenuItem Header="{Binding [DeviceSelfCheck], Source={x:Static local:LanguageManager.Instance}}" Click="OnBnClickedSelfCheck"/>
@@ -71,7 +61,7 @@
                 </Menu>
 
                 <!-- Right-side action toolbar -->
-                <StackPanel Grid.Column="3" Orientation="Horizontal" VerticalAlignment="Center">
+                <StackPanel Grid.Column="2" Orientation="Horizontal" VerticalAlignment="Center">
                     <Button Style="{StaticResource IconActionButton}" ToolTip="{Binding [User], Source={x:Static local:LanguageManager.Instance}}" Click="OnBnClickedSwitchUser">
                         <svgc:SvgViewbox Source="Image\user.svg" Width="18" Height="18" IsHitTestVisible="False"/>
                     </Button>
@@ -263,104 +253,101 @@
                             <ColumnDefinition Width="Auto"/>      <!-- Power panel -->
                         </Grid.ColumnDefinitions>
 
-                        <!-- XY motion pad -->
-                        <StackPanel Grid.Column="0" Margin="0,0,16,0">
-                            <TextBlock Style="{StaticResource SectionTitle}" Text="XY 移动"/>
-                            <Grid>
-                                <Grid.RowDefinitions>
-                                    <RowDefinition Height="Auto"/>
-                                    <RowDefinition Height="Auto"/>
-                                    <RowDefinition Height="Auto"/>
-                                    <RowDefinition Height="Auto"/>
-                                </Grid.RowDefinitions>
-                                <Grid.ColumnDefinitions>
-                                    <ColumnDefinition Width="Auto"/>
-                                    <ColumnDefinition Width="Auto"/>
-                                    <ColumnDefinition Width="Auto"/>
-                                </Grid.ColumnDefinitions>
-                                <Button x:Name="btnUP"    Grid.Row="0" Grid.Column="1" Style="{StaticResource IconActionButton}" Width="36" Height="36" Margin="2">
-                                    <svgc:SvgViewbox Source="Image\up.svg"        Width="18" Height="18" IsHitTestVisible="False"/>
-                                </Button>
-                                <Button x:Name="btnIn"    Grid.Row="0" Grid.Column="2" Style="{StaticResource IconActionButton}" Width="36" Height="36" Margin="2" ToolTip="Z In">
-                                    <svgc:SvgViewbox Source="Image\sort-up.svg"   Width="18" Height="18" IsHitTestVisible="False"/>
-                                </Button>
-                                <Button x:Name="btnLeft"  Grid.Row="1" Grid.Column="0" Style="{StaticResource IconActionButton}" Width="36" Height="36" Margin="2">
-                                    <svgc:SvgViewbox Source="Image\left.svg"      Width="18" Height="18" IsHitTestVisible="False"/>
-                                </Button>
-                                <Button x:Name="btnZero"  Grid.Row="1" Grid.Column="1" Style="{StaticResource IconActionButton}" Width="36" Height="36" Margin="2" Click="btnO_Click">
-                                    <svgc:SvgViewbox Source="Image\zero.svg"      Width="18" Height="18" IsHitTestVisible="False"/>
-                                </Button>
-                                <Button x:Name="btnRight" Grid.Row="1" Grid.Column="2" Style="{StaticResource IconActionButton}" Width="36" Height="36" Margin="2">
-                                    <svgc:SvgViewbox Source="Image\right.svg"     Width="18" Height="18" IsHitTestVisible="False"/>
-                                </Button>
-                                <Button x:Name="btnDown"  Grid.Row="2" Grid.Column="1" Style="{StaticResource IconActionButton}" Width="36" Height="36" Margin="2">
-                                    <svgc:SvgViewbox Source="Image\down.svg"      Width="18" Height="18" IsHitTestVisible="False"/>
-                                </Button>
-                                <Button x:Name="btnOut"   Grid.Row="2" Grid.Column="2" Style="{StaticResource IconActionButton}" Width="36" Height="36" Margin="2" ToolTip="Z Out">
-                                    <svgc:SvgViewbox Source="Image\sort-down.svg" Width="18" Height="18" IsHitTestVisible="False"/>
-                                </Button>
-                                <StackPanel Grid.Row="3" Grid.ColumnSpan="3" Orientation="Horizontal" HorizontalAlignment="Center" Margin="0,4,0,0">
-                                    <ToggleButton x:Name="SpeelLow_1"    Click="OnBnClickedSpeedLow_1"    Width="24" Height="24" Margin="1" Background="Transparent" BorderBrush="Transparent">
-                                        <svgc:SvgViewbox Source="Image\speed1.svg" IsHitTestVisible="False"/>
-                                    </ToggleButton>
-                                    <ToggleButton x:Name="SpeedMedium_1" Click="OnBnClickedSpeedMedium_1" Width="24" Height="24" Margin="1" Background="Transparent" BorderBrush="Transparent">
-                                        <svgc:SvgViewbox Source="Image\speed2.svg" IsHitTestVisible="False"/>
-                                    </ToggleButton>
-                                    <ToggleButton x:Name="SpeedHigh_1"   Click="OnBnClickedSpeedHigh_1"   Width="24" Height="24" Margin="1" Background="Transparent" BorderBrush="Transparent">
-                                        <svgc:SvgViewbox Source="Image\speed3.svg" IsHitTestVisible="False"/>
-                                    </ToggleButton>
+                        <!-- XY motion pad (+ separate Z column on the right) -->
+                        <StackPanel Grid.Column="0" Margin="0,0,20,0">
+                            <TextBlock Style="{StaticResource SectionTitle}" Text="XY / Z 移动"/>
+                            <StackPanel Orientation="Horizontal">
+                                <!-- XY directional pad (3x3) -->
+                                <Grid>
+                                    <Grid.RowDefinitions>
+                                        <RowDefinition Height="Auto"/>
+                                        <RowDefinition Height="Auto"/>
+                                        <RowDefinition Height="Auto"/>
+                                    </Grid.RowDefinitions>
+                                    <Grid.ColumnDefinitions>
+                                        <ColumnDefinition Width="Auto"/>
+                                        <ColumnDefinition Width="Auto"/>
+                                        <ColumnDefinition Width="Auto"/>
+                                    </Grid.ColumnDefinitions>
+                                    <Button x:Name="btnUP"    Grid.Row="0" Grid.Column="1" Style="{StaticResource IconActionButton}" Width="34" Height="32" Margin="1">
+                                        <svgc:SvgViewbox Source="Image\up.svg"   Width="16" Height="16" IsHitTestVisible="False"/>
+                                    </Button>
+                                    <Button x:Name="btnLeft"  Grid.Row="1" Grid.Column="0" Style="{StaticResource IconActionButton}" Width="34" Height="32" Margin="1">
+                                        <svgc:SvgViewbox Source="Image\left.svg" Width="16" Height="16" IsHitTestVisible="False"/>
+                                    </Button>
+                                    <Button x:Name="btnZero"  Grid.Row="1" Grid.Column="1" Style="{StaticResource IconActionButton}" Width="34" Height="32" Margin="1" Click="btnO_Click" ToolTip="原点">
+                                        <svgc:SvgViewbox Source="Image\zero.svg" Width="16" Height="16" IsHitTestVisible="False"/>
+                                    </Button>
+                                    <Button x:Name="btnRight" Grid.Row="1" Grid.Column="2" Style="{StaticResource IconActionButton}" Width="34" Height="32" Margin="1">
+                                        <svgc:SvgViewbox Source="Image\right.svg" Width="16" Height="16" IsHitTestVisible="False"/>
+                                    </Button>
+                                    <Button x:Name="btnDown"  Grid.Row="2" Grid.Column="1" Style="{StaticResource IconActionButton}" Width="34" Height="32" Margin="1">
+                                        <svgc:SvgViewbox Source="Image\down.svg"  Width="16" Height="16" IsHitTestVisible="False"/>
+                                    </Button>
+                                </Grid>
+                                <!-- Z column -->
+                                <StackPanel Margin="8,0,0,0" VerticalAlignment="Center">
+                                    <Button x:Name="btnIn"  Style="{StaticResource IconActionButton}" Width="34" Height="32" Margin="0,0,0,2" ToolTip="Z 轴 上">
+                                        <svgc:SvgViewbox Source="Image\sort-up.svg"   Width="16" Height="16" IsHitTestVisible="False"/>
+                                    </Button>
+                                    <Button x:Name="btnOut" Style="{StaticResource IconActionButton}" Width="34" Height="32" ToolTip="Z 轴 下">
+                                        <svgc:SvgViewbox Source="Image\sort-down.svg" Width="16" Height="16" IsHitTestVisible="False"/>
+                                    </Button>
                                 </StackPanel>
-                            </Grid>
+                            </StackPanel>
+                            <StackPanel Orientation="Horizontal" HorizontalAlignment="Center" Margin="0,6,0,0">
+                                <ToggleButton x:Name="SpeelLow_1"    Style="{StaticResource SpeedToggle}" Click="OnBnClickedSpeedLow_1"    ToolTip="低速">
+                                    <svgc:SvgViewbox Source="Image\speed1.svg" IsHitTestVisible="False"/>
+                                </ToggleButton>
+                                <ToggleButton x:Name="SpeedMedium_1" Style="{StaticResource SpeedToggle}" Click="OnBnClickedSpeedMedium_1" ToolTip="中速">
+                                    <svgc:SvgViewbox Source="Image\speed2.svg" IsHitTestVisible="False"/>
+                                </ToggleButton>
+                                <ToggleButton x:Name="SpeedHigh_1"   Style="{StaticResource SpeedToggle}" Click="OnBnClickedSpeedHigh_1"   ToolTip="高速">
+                                    <svgc:SvgViewbox Source="Image\speed3.svg" IsHitTestVisible="False"/>
+                                </ToggleButton>
+                            </StackPanel>
                         </StackPanel>
 
                         <!-- UV rotation pad -->
-                        <StackPanel Grid.Column="1" Margin="0,0,16,0">
+                        <StackPanel Grid.Column="1" Margin="0,0,20,0">
                             <TextBlock Style="{StaticResource SectionTitle}" Text="UV 旋转"/>
-                            <Grid>
-                                <Grid.RowDefinitions>
-                                    <RowDefinition Height="Auto"/>
-                                    <RowDefinition Height="Auto"/>
-                                    <RowDefinition Height="Auto"/>
-                                    <RowDefinition Height="Auto"/>
-                                </Grid.RowDefinitions>
-                                <Grid.ColumnDefinitions>
-                                    <ColumnDefinition Width="Auto"/>
-                                    <ColumnDefinition Width="Auto"/>
-                                </Grid.ColumnDefinitions>
-                                <Button x:Name="btnULeft"  Grid.Row="0" Grid.Column="0" Style="{StaticResource IconActionButton}" Width="36" Height="36" Margin="2"
-                                        MouseDown="URotatLeft_MouseDown" MouseUp="URotatLeft_MouseUp">
-                                    <svgc:SvgViewbox Source="Image\acrotate.svg"    Width="18" Height="18" IsHitTestVisible="False"/>
+                            <UniformGrid Rows="2" Columns="2">
+                                <Button x:Name="btnULeft"  Style="{StaticResource IconActionButton}" Width="34" Height="32" Margin="1"
+                                        MouseDown="URotatLeft_MouseDown"  MouseUp="URotatLeft_MouseUp">
+                                    <svgc:SvgViewbox Source="Image\acrotate.svg"     Width="16" Height="16" IsHitTestVisible="False"/>
                                 </Button>
-                                <Button x:Name="btnURight" Grid.Row="0" Grid.Column="1" Style="{StaticResource IconActionButton}" Width="36" Height="36" Margin="2"
+                                <Button x:Name="btnURight" Style="{StaticResource IconActionButton}" Width="34" Height="32" Margin="1"
                                         MouseDown="URotatRight_MouseDown" MouseUp="URotatRight_MouseUp">
-                                    <svgc:SvgViewbox Source="Image\cwrotate.svg"    Width="18" Height="18" IsHitTestVisible="False"/>
+                                    <svgc:SvgViewbox Source="Image\cwrotate.svg"     Width="16" Height="16" IsHitTestVisible="False"/>
                                 </Button>
-                                <Button x:Name="btnVRight" Grid.Row="1" Grid.Column="0" Style="{StaticResource IconActionButton}" Width="36" Height="36" Margin="2"
+                                <Button x:Name="btnVRight" Style="{StaticResource IconActionButton}" Width="34" Height="32" Margin="1"
                                         MouseDown="VRotatRight_MouseDown" MouseUp="VRotatRight_MouseUp">
-                                    <svgc:SvgViewbox Source="Image\rotate-left.svg" Width="18" Height="18" IsHitTestVisible="False"/>
+                                    <svgc:SvgViewbox Source="Image\rotate-left.svg"  Width="16" Height="16" IsHitTestVisible="False"/>
                                 </Button>
-                                <Button x:Name="btnVLeft"  Grid.Row="1" Grid.Column="1" Style="{StaticResource IconActionButton}" Width="36" Height="36" Margin="2"
-                                        MouseDown="VRotatLeft_MouseDown" MouseUp="VRotatLeft_MouseUp">
-                                    <svgc:SvgViewbox Source="Image\rotate-right.svg" Width="18" Height="18" IsHitTestVisible="False"/>
+                                <Button x:Name="btnVLeft"  Style="{StaticResource IconActionButton}" Width="34" Height="32" Margin="1"
+                                        MouseDown="VRotatLeft_MouseDown"  MouseUp="VRotatLeft_MouseUp">
+                                    <svgc:SvgViewbox Source="Image\rotate-right.svg" Width="16" Height="16" IsHitTestVisible="False"/>
                                 </Button>
-                                <Button x:Name="Button1" Grid.Row="2" Grid.Column="0" Margin="2"
+                            </UniformGrid>
+                            <UniformGrid Rows="1" Columns="2" Margin="0,4,0,0">
+                                <Button x:Name="Button1" Margin="1,0" MinWidth="34" Height="26"
                                         Content="{Binding [Refer],  Source={x:Static local:LanguageManager.Instance}}"
-                                        Click="Button1_OnClick" MinWidth="36" Height="30"/>
-                                <Button x:Name="Button2" Grid.Row="2" Grid.Column="1" Margin="2"
+                                        Click="Button1_OnClick"/>
+                                <Button x:Name="Button2" Margin="1,0" MinWidth="34" Height="26"
                                         Content="{Binding [Modify], Source={x:Static local:LanguageManager.Instance}}"
-                                        Click="Button2_OnClick" MinWidth="36" Height="30"/>
-                                <StackPanel Grid.Row="3" Grid.ColumnSpan="2" Orientation="Horizontal" HorizontalAlignment="Center" Margin="0,4,0,0">
-                                    <ToggleButton x:Name="SpeedLow_2"    Click="OnBnClickedSpeedLow_2"    Width="24" Height="24" Margin="1" Background="Transparent" BorderBrush="Transparent">
-                                        <svgc:SvgViewbox Source="Image\speed1.svg" IsHitTestVisible="False"/>
-                                    </ToggleButton>
-                                    <ToggleButton x:Name="SpeedMedium_2" Click="OnBnClickedSpeedMedium_2" Width="24" Height="24" Margin="1" Background="Transparent" BorderBrush="Transparent">
-                                        <svgc:SvgViewbox Source="Image\speed2.svg" IsHitTestVisible="False"/>
-                                    </ToggleButton>
-                                    <ToggleButton x:Name="SpeedHigh_2"   Click="OnBnClickedSpeedHigh_2"   Width="24" Height="24" Margin="1" Background="Transparent" BorderBrush="Transparent">
-                                        <svgc:SvgViewbox Source="Image\speed3.svg" IsHitTestVisible="False"/>
-                                    </ToggleButton>
-                                </StackPanel>
-                            </Grid>
+                                        Click="Button2_OnClick"/>
+                            </UniformGrid>
+                            <StackPanel Orientation="Horizontal" HorizontalAlignment="Center" Margin="0,6,0,0">
+                                <ToggleButton x:Name="SpeedLow_2"    Style="{StaticResource SpeedToggle}" Click="OnBnClickedSpeedLow_2"    ToolTip="低速">
+                                    <svgc:SvgViewbox Source="Image\speed1.svg" IsHitTestVisible="False"/>
+                                </ToggleButton>
+                                <ToggleButton x:Name="SpeedMedium_2" Style="{StaticResource SpeedToggle}" Click="OnBnClickedSpeedMedium_2" ToolTip="中速">
+                                    <svgc:SvgViewbox Source="Image\speed2.svg" IsHitTestVisible="False"/>
+                                </ToggleButton>
+                                <ToggleButton x:Name="SpeedHigh_2"   Style="{StaticResource SpeedToggle}" Click="OnBnClickedSpeedHigh_2"   ToolTip="高速">
+                                    <svgc:SvgViewbox Source="Image\speed3.svg" IsHitTestVisible="False"/>
+                                </ToggleButton>
+                            </StackPanel>
                         </StackPanel>
 
                         <!-- Test buttons -->

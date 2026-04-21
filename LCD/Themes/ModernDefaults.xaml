@@ -649,6 +649,96 @@
         <Setter Property="Foreground" Value="{StaticResource ModernTextBrush}"/>
     </Style>
 
+    <!-- Top-level menu items on the menu bar. Submenu items keep default look. -->
+    <Style TargetType="MenuItem" x:Key="TopLevelMenuItem">
+        <Setter Property="FontFamily" Value="{StaticResource ModernFontFamily}"/>
+        <Setter Property="FontSize"   Value="13"/>
+        <Setter Property="Foreground" Value="{StaticResource ModernTextBrush}"/>
+        <Setter Property="Padding"    Value="14,6"/>
+        <Setter Property="Margin"     Value="2,0"/>
+        <Setter Property="Background" Value="Transparent"/>
+        <Setter Property="Cursor"     Value="Hand"/>
+        <Setter Property="Template">
+            <Setter.Value>
+                <ControlTemplate TargetType="MenuItem">
+                    <Border x:Name="Bd"
+                            Background="{TemplateBinding Background}"
+                            CornerRadius="4"
+                            Padding="{TemplateBinding Padding}"
+                            SnapsToDevicePixels="True">
+                        <Grid>
+                            <ContentPresenter ContentSource="Header"
+                                              VerticalAlignment="Center"
+                                              HorizontalAlignment="Center"
+                                              RecognizesAccessKey="True"/>
+                            <Popup x:Name="PART_Popup"
+                                   IsOpen="{TemplateBinding IsSubmenuOpen}"
+                                   Placement="Bottom"
+                                   AllowsTransparency="True"
+                                   PopupAnimation="Fade"
+                                   Focusable="False">
+                                <Border Background="White"
+                                        BorderBrush="{StaticResource ModernBorderBrush}"
+                                        BorderThickness="1"
+                                        CornerRadius="6"
+                                        Margin="0,4,0,0"
+                                        Padding="4">
+                                    <StackPanel IsItemsHost="True" KeyboardNavigation.DirectionalNavigation="Cycle"/>
+                                </Border>
+                            </Popup>
+                        </Grid>
+                    </Border>
+                    <ControlTemplate.Triggers>
+                        <Trigger Property="IsHighlighted" Value="True">
+                            <Setter TargetName="Bd" Property="Background" Value="{StaticResource ModernHoverBrush}"/>
+                        </Trigger>
+                        <Trigger Property="IsSubmenuOpen" Value="True">
+                            <Setter TargetName="Bd" Property="Background" Value="{StaticResource ModernAccentSoftBrush}"/>
+                            <!-- Do not set Foreground here: it inherits into the popup items and makes
+                                 the whole submenu text accent-blue. -->
+                        </Trigger>
+                    </ControlTemplate.Triggers>
+                </ControlTemplate>
+            </Setter.Value>
+        </Setter>
+    </Style>
+
+    <!-- ===== Speed toggle (active state = accent soft fill + accent border) ===== -->
+    <Style x:Key="SpeedToggle" TargetType="ToggleButton">
+        <Setter Property="Background"     Value="Transparent"/>
+        <Setter Property="BorderBrush"    Value="Transparent"/>
+        <Setter Property="BorderThickness" Value="1"/>
+        <Setter Property="Padding"        Value="3"/>
+        <Setter Property="Cursor"         Value="Hand"/>
+        <Setter Property="Width"          Value="28"/>
+        <Setter Property="Height"         Value="24"/>
+        <Setter Property="Margin"         Value="1"/>
+        <Setter Property="Template">
+            <Setter.Value>
+                <ControlTemplate TargetType="ToggleButton">
+                    <Border x:Name="Bd"
+                            Background="{TemplateBinding Background}"
+                            BorderBrush="{TemplateBinding BorderBrush}"
+                            BorderThickness="{TemplateBinding BorderThickness}"
+                            CornerRadius="4"
+                            Padding="{TemplateBinding Padding}"
+                            SnapsToDevicePixels="True">
+                        <ContentPresenter HorizontalAlignment="Center" VerticalAlignment="Center"/>
+                    </Border>
+                    <ControlTemplate.Triggers>
+                        <Trigger Property="IsMouseOver" Value="True">
+                            <Setter TargetName="Bd" Property="Background" Value="{StaticResource ModernHoverBrush}"/>
+                        </Trigger>
+                        <Trigger Property="IsChecked" Value="True">
+                            <Setter TargetName="Bd" Property="Background" Value="{StaticResource ModernAccentSoftBrush}"/>
+                            <Setter TargetName="Bd" Property="BorderBrush" Value="{StaticResource ModernAccentBrush}"/>
+                        </Trigger>
+                    </ControlTemplate.Triggers>
+                </ControlTemplate>
+            </Setter.Value>
+        </Setter>
+    </Style>
+
     <!-- ===== DataGrid ===== -->
     <Style TargetType="DataGrid">
         <Setter Property="FontFamily"          Value="{StaticResource ModernFontFamily}"/>
