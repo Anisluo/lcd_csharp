@@ -283,6 +283,17 @@ namespace LCD
         }
 
         /// <summary>
+        /// 相对路径（如 "Template.xml"/"Config.xml"）统一按 exe 安装目录解析，
+        /// 避免启动工作目录不在 bin/Debug 时找不到文件。
+        /// </summary>
+        private static string ResolveDataPath(string name)
+        {
+            if (string.IsNullOrEmpty(name)) return name;
+            if (Path.IsPathRooted(name)) return name;
+            return Path.Combine(AppDomain.CurrentDomain.BaseDirectory, name);
+        }
+
+        /// <summary>
         /// 初始化测试设备
         /// </summary>
         private static void InitDevice()
@@ -310,7 +321,7 @@ namespace LCD
         {
             try
             {
-                StreamReader sr = File.OpenText("Config.xml");
+                StreamReader sr = File.OpenText(ResolveDataPath("Config.xml"));
                 string xml = sr.ReadToEnd();
                 sr.Close();
                 Project.cfg = XmlUtil.Deserialize(typeof(Config), xml) as Config;
@@ -340,7 +351,7 @@ namespace LCD
             {
                 Config cfg = Project.cfg;
                 string xml = XmlUtil.Serializer(typeof(Config), cfg);
-                StreamWriter sw = File.CreateText(fname);
+                StreamWriter sw = File.CreateText(ResolveDataPath(fname));
                 sw.Write(xml);
                 sw.Close();
             }
@@ -352,9 +363,16 @@ namespace LCD
 
         public static void LoadTempLate(String Name)
         {
+            string path = ResolveDataPath(Name);
+            if (!File.Exists(path))
+            {
+                // 首次启动没有模板文件属正常情况 —— 保持空列表，不再弹错误框。
+                Project.WriteLog($"模板文件不存在，使用空列表: {path}");
+                return;
+            }
             try
             {
-                StreamReader sr = File.OpenText(Name);//"Template.xml"
+                StreamReader sr = File.OpenText(path);
                 string xml = sr.ReadToEnd();
                 sr.Close();
                 Project.lstInfos = XmlUtil.Deserialize(typeof(List<InfoData>), xml) as List<InfoData>;
@@ -364,18 +382,18 @@ namespace LCD
                 Project.WriteLog(e.Message);
                 MessageBox.Show(""+e.Message);
             }
-            
+
         }
 
         /// <summary>
-        /// 保存模板  
+        /// 保存模板
         /// </summary>
         public static void SaveTemplate(String Name)//lstInfos
         {
             try
             {
                 string Xml = XmlUtil.Serializer(typeof(List<InfoData>),Project.lstInfos);
-                StreamWriter sw = File.CreateText(Name);
+                StreamWriter sw = File.CreateText(ResolveDataPath(Name));
                 sw.Write(Xml);
                 sw.Close();
             }
@@ -396,7 +414,7 @@ namespace LCD
             try
             {
                 string xml = XmlUtil.Serializer(typeof(List<InfoData>), lstInfos);
-                StreamWriter sw = File.CreateText(fname);
+                StreamWriter sw = File.CreateText(ResolveDataPath(fname));
                 sw.Write(xml);
                 sw.Close();
             }
