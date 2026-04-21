@@ -89,9 +89,13 @@ namespace LCD
         }
 
         /// <summary>
-        /// 初始化格式
+        /// 初始化格式。实际存储在 TestRunState.ResultFormat。
         /// </summary>
-        public static SortedDictionary<string, bool> resultFormat = new SortedDictionary<string, bool>();
+        public static SortedDictionary<string, bool> resultFormat
+        {
+            get => TestRunState.ResultFormat;
+            set => TestRunState.ResultFormat = value;
+        }
 
         /// <summary>
         /// 全局急停信号
@@ -101,14 +105,23 @@ namespace LCD
             get => MotionRuntime.FstStop;
             set => MotionRuntime.FstStop = value;
         }
-        public static bool TstPause { get; set; } = false;//暂停测试
+        public static bool TstPause
+        {
+            get => TestRunState.TstPause;
+            set => TestRunState.TstPause = value;
+        }
 
-        public static List<ResultData> lstDatas = new List<ResultData>();//测试结果
+        public static List<ResultData> lstDatas
+        {
+            get => TestRunState.Results;
+            set => TestRunState.Results = value;
+        }
 
-
-        
-
-        public static bool TestFlag = false;
+        public static bool TestFlag
+        {
+            get => TestRunState.TestFlag;
+            set => TestRunState.TestFlag = value;
+        }
         /// <summary>
         /// 初始化结果数据格式
         /// </summary>
@@ -189,9 +202,13 @@ namespace LCD
             set => SessionState.ProjectID = value;
         }
         /// <summary>
-        /// 测试模板信息
+        /// 测试模板信息。实际存储在 TestRunState.Infos。
         /// </summary>
-        public static List<InfoData> lstInfos = new List<InfoData>();
+        public static List<InfoData> lstInfos
+        {
+            get => TestRunState.Infos;
+            set => TestRunState.Infos = value;
+        }
 
         //添加日志，进行测试
         public static void WriteLog(string message, LogLevel level = LogLevel.Info)
@@ -586,19 +603,7 @@ namespace LCD
         public double expTime;
     }
     // Axies + AXiesName 已迁至 LCD.Core/Data/Axies.cs（保留 LCD.Data 命名空间）。
-    public enum ENUMMESSTYLE//
-    {
-        _01_POINT,
-        _02_RESPONSE,
-        _03_SPECTRUM,
-        _04_FLICKER,
-        _05_CROSSTALK,
-        _06_ACR,
-        _07_warmup,
-        TCO,
-        None,
-        Power
-    }
+    // ENUMMESSTYLE 已迁至 LCD.Core/Models/TestRun/ENUMMESSTYLE.cs（保留 LCD.Data 命名空间）。
 
     //机械参数
     public class Machine
@@ -616,9 +621,5 @@ namespace LCD
         public SerialPortDevice Bus { get; set; } = new SerialPortDevice();
     }
 
-    public class ResultData
-    {
-        public string Name;
-        public DataTable table;
-    }
+    // ResultData 已迁至 LCD.Core/Models/TestRun/ResultData.cs（保留 LCD.Data 命名空间）。
 }

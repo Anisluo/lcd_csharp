@@ -107,7 +107,11 @@
     <Compile Include="Models\Session\ProjectModeClass.cs" />
     <Compile Include="Models\Session\TestDataMode.cs" />
     <Compile Include="Models\Session\SpectrumDataMode.cs" />
+    <Compile Include="Models\TestRun\ENUMMESSTYLE.cs" />
+    <Compile Include="Models\TestRun\InfoData.cs" />
+    <Compile Include="Models\TestRun\ResultData.cs" />
     <Compile Include="Runtime\SessionState.cs" />
+    <Compile Include="Runtime\TestRunState.cs" />
     <Compile Include="Data\Axies.cs" />
     <Compile Include="Runtime\MotionRuntime.cs" />
     <Compile Include="Data\IData.cs" />
