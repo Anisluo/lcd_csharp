@@ -1,5 +1,4 @@
 ﻿using LCD.Data;
-using LCD.Dll;
 using LCD.Utils;
 using MvCamCtrl.NET;
 using System;
