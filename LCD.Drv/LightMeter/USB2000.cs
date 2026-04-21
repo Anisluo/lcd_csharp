@@ -7,6 +7,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using System.Xml;
+using VisionCore;
 
 namespace LCD.Ctrl
 {
@@ -547,7 +548,7 @@ namespace LCD.Ctrl
             string configlFile = AppDomain.CurrentDomain.BaseDirectory + fileName;//获得当前文件名
             if (!System.IO.File.Exists(configlFile))
             {
-                Project.WriteLog("光谱偏差矫正参数SpectrumAdjust.xml文件读取失败");
+                Log.Error("光谱偏差矫正参数SpectrumAdjust.xml文件读取失败");
             }
             try
             {
@@ -569,7 +570,7 @@ namespace LCD.Ctrl
                 }
                 if (spectrumAdjCoef.Count != 401)
                 {
-                    Project.WriteLog("SpectrumAdjust.xml文件中存在数据缺失");
+                    Log.Warn("SpectrumAdjust.xml文件中存在数据缺失");
                 }
             }
             catch (Exception ex)
@@ -584,7 +585,7 @@ namespace LCD.Ctrl
             string configlFile = AppDomain.CurrentDomain.BaseDirectory + fileName;//获得当前文件名
             if (!System.IO.File.Exists(configlFile))
             {
-                Project.WriteLog("读取配置文件失败!");
+                Log.Error("读取配置文件失败!");
             }
             try
             {
@@ -605,7 +606,7 @@ namespace LCD.Ctrl
                 }
                 if (spectrumAdjCoef.Count != 401)
                 {
-                    Project.WriteLog("SpectrumAdjust.xml文件中存在数据缺失");
+                    Log.Warn("SpectrumAdjust.xml文件中存在数据缺失");
                 }
             }
             catch (Exception ex)

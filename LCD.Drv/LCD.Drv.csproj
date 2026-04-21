@@ -37,6 +37,12 @@
     <Reference Include="PropertyChanged, Version=4.1.0.0, Culture=neutral, PublicKeyToken=ee3ee20bcf148ddd, processorArchitecture=MSIL">
       <HintPath>..\packages\PropertyChanged.Fody.4.1.0\lib\net40\PropertyChanged.dll</HintPath>
     </Reference>
+    <Reference Include="Admesy_x86">
+      <HintPath>..\LCD\libs\Admesy_x86.dll</HintPath>
+    </Reference>
+    <Reference Include="NETOmniDriver-NET40">
+      <HintPath>..\LCD\bin\Debug\Debug\NETOmniDriver-NET40.dll</HintPath>
+    </Reference>
     <Reference Include="System" />
     <Reference Include="System.Core" />
     <Reference Include="System.Data" />
@@ -52,6 +58,9 @@
     <Compile Include="PG\PatternGeneratorNC816.cs" />
     <Compile Include="LightMeter\TestMachine.cs" />
     <Compile Include="LightMeter\DemoMachine.cs" />
+    <Compile Include="LightMeter\ADMESY_WRAPPER.cs" />
+    <Compile Include="LightMeter\Admesy.cs" />
+    <Compile Include="LightMeter\USB2000.cs" />
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\LCD.Core\LCD.Core.csproj">

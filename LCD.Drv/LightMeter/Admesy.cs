@@ -1,10 +1,7 @@
-﻿using LCD.Data;
-using System;
+﻿using System;
 using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-using System.Windows.Documents;
+using LCD.Data;
+using VisionCore;
 
 namespace LCD.Ctrl
 {
@@ -26,16 +23,16 @@ namespace LCD.Ctrl
             if (!admes.open_device())//开启admes设备
             {
                 //mess.Show(admes.get_errorstring());
-                Project.WriteLog("Admesy打开失败："+ admes.get_errorstring());
+                Log.Error("Admesy打开失败："+ admes.get_errorstring());
             }
             else
             {
-                Project.WriteLog("Admesy打开成功");
+                Log.Info("Admesy打开成功");
             }
             if (!admes.check_dll_status())
             {
                 //MessageBox.Show(admes.get_errorstring());
-                Project.WriteLog("Admesy库文件检查失败：" + admes.get_errorstring());
+                Log.Error("Admesy库文件检查失败：" + admes.get_errorstring());
             }
 
             value = new double[sample_count];
@@ -67,7 +64,7 @@ namespace LCD.Ctrl
             bool st = admes.read_sample(sample_count, 0, ref value, 4000);
             if(st==false)
             {
-                Project.WriteLog("读取数据失败:"+ admes.get_errorstring());
+                Log.Error("读取数据失败:"+ admes.get_errorstring());
                 return null;
             }
             //2次拟合
