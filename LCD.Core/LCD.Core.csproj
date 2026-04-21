@@ -100,10 +100,15 @@
     <Compile Include="VisionCore\Plugins\ObjBase.cs" />
     <Compile Include="VisionCore\Plugins\PluginsInfo.cs" />
     <Compile Include="Services\PointLayoutService.cs" />
+    <Compile Include="Models\PowerReading.cs" />
+    <Compile Include="Models\ColorimetricReading.cs" />
+    <Compile Include="Abstractions\IPowerSupply.cs" />
+    <Compile Include="Abstractions\ILightMeter.cs" />
+    <Compile Include="Abstractions\IMotionController.cs" />
+    <Compile Include="Abstractions\IPatternGenerator.cs" />
+    <Compile Include="Abstractions\ICamera.cs" />
   </ItemGroup>
   <ItemGroup>
-    <Folder Include="Abstractions\" />
-    <Folder Include="Models\" />
     <Folder Include="Tasks\" />
   </ItemGroup>
   <ItemGroup>
