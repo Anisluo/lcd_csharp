@@ -1,0 +1,839 @@
+<?xml version="1.0" encoding="utf-8"?>
+<root>
+  <!-- 
+    Microsoft ResX Schema 
+    
+    Version 2.0
+    
+    The primary goals of this format is to allow a simple XML format 
+    that is mostly human readable. The generation and parsing of the 
+    various data types are done through the TypeConverter classes 
+    associated with the data types.
+    
+    Example:
+    
+    ... ado.net/XML headers & schema ...
+    <resheader name="resmimetype">text/microsoft-resx</resheader>
+    <resheader name="version">2.0</resheader>
+    <resheader name="reader">System.Resources.ResXResourceReader, System.Windows.Forms, ...</resheader>
+    <resheader name="writer">System.Resources.ResXResourceWriter, System.Windows.Forms, ...</resheader>
+    <data name="Name1"><value>this is my long string</value><comment>this is a comment</comment></data>
+    <data name="Color1" type="System.Drawing.Color, System.Drawing">Blue</data>
+    <data name="Bitmap1" mimetype="application/x-microsoft.net.object.binary.base64">
+        <value>[base64 mime encoded serialized .NET Framework object]</value>
+    </data>
+    <data name="Icon1" type="System.Drawing.Icon, System.Drawing" mimetype="application/x-microsoft.net.object.bytearray.base64">
+        <value>[base64 mime encoded string representing a byte array form of the .NET Framework object]</value>
+        <comment>This is a comment</comment>
+    </data>
+                
+    There are any number of "resheader" rows that contain simple 
+    name/value pairs.
+    
+    Each data row contains a name, and value. The row also contains a 
+    type or mimetype. Type corresponds to a .NET class that support 
+    text/value conversion through the TypeConverter architecture. 
+    Classes that don't support this are serialized and stored with the 
+    mimetype set.
+    
+    The mimetype is used for serialized objects, and tells the 
+    ResXResourceReader how to depersist the object. This is currently not 
+    extensible. For a given mimetype the value must be set accordingly:
+    
+    Note - application/x-microsoft.net.object.binary.base64 is the format 
+    that the ResXResourceWriter will generate, however the reader can 
+    read any of the formats listed below.
+    
+    mimetype: application/x-microsoft.net.object.binary.base64
+    value   : The object must be serialized with 
+            : System.Runtime.Serialization.Formatters.Binary.BinaryFormatter
+            : and then encoded with base64 encoding.
+    
+    mimetype: application/x-microsoft.net.object.soap.base64
+    value   : The object must be serialized with 
+            : System.Runtime.Serialization.Formatters.Soap.SoapFormatter
+            : and then encoded with base64 encoding.
+
+    mimetype: application/x-microsoft.net.object.bytearray.base64
+    value   : The object must be serialized into a byte array 
+            : using a System.ComponentModel.TypeConverter
+            : and then encoded with base64 encoding.
+    -->
+  <xsd:schema id="root" xmlns="" xmlns:xsd="http://www.w3.org/2001/XMLSchema" xmlns:msdata="urn:schemas-microsoft-com:xml-msdata">
+    <xsd:import namespace="http://www.w3.org/XML/1998/namespace" />
+    <xsd:element name="root" msdata:IsDataSet="true">
+      <xsd:complexType>
+        <xsd:choice maxOccurs="unbounded">
+          <xsd:element name="metadata">
+            <xsd:complexType>
+              <xsd:sequence>
+                <xsd:element name="value" type="xsd:string" minOccurs="0" />
+              </xsd:sequence>
+              <xsd:attribute name="name" use="required" type="xsd:string" />
+              <xsd:attribute name="type" type="xsd:string" />
+              <xsd:attribute name="mimetype" type="xsd:string" />
+              <xsd:attribute ref="xml:space" />
+            </xsd:complexType>
+          </xsd:element>
+          <xsd:element name="assembly">
+            <xsd:complexType>
+              <xsd:attribute name="alias" type="xsd:string" />
+              <xsd:attribute name="name" type="xsd:string" />
+            </xsd:complexType>
+          </xsd:element>
+          <xsd:element name="data">
+            <xsd:complexType>
+              <xsd:sequence>
+                <xsd:element name="value" type="xsd:string" minOccurs="0" msdata:Ordinal="1" />
+                <xsd:element name="comment" type="xsd:string" minOccurs="0" msdata:Ordinal="2" />
+              </xsd:sequence>
+              <xsd:attribute name="name" type="xsd:string" use="required" msdata:Ordinal="1" />
+              <xsd:attribute name="type" type="xsd:string" msdata:Ordinal="3" />
+              <xsd:attribute name="mimetype" type="xsd:string" msdata:Ordinal="4" />
+              <xsd:attribute ref="xml:space" />
+            </xsd:complexType>
+          </xsd:element>
+          <xsd:element name="resheader">
+            <xsd:complexType>
+              <xsd:sequence>
+                <xsd:element name="value" type="xsd:string" minOccurs="0" msdata:Ordinal="1" />
+              </xsd:sequence>
+              <xsd:attribute name="name" type="xsd:string" use="required" />
+            </xsd:complexType>
+          </xsd:element>
+        </xsd:choice>
+      </xsd:complexType>
+    </xsd:element>
+  </xsd:schema>
+  <resheader name="resmimetype">
+    <value>text/microsoft-resx</value>
+  </resheader>
+  <resheader name="version">
+    <value>2.0</value>
+  </resheader>
+  <resheader name="reader">
+    <value>System.Resources.ResXResourceReader, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+  </resheader>
+  <resheader name="writer">
+    <value>System.Resources.ResXResourceWriter, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+  </resheader>
+  <data name="Open" xml:space="preserve">
+    <value>Open</value>
+  </data>
+  <data name="Close" xml:space="preserve">
+    <value>Close</value>
+  </data>
+  <data name="FileF" xml:space="preserve">
+    <value>File(F)</value>
+  </data>
+  <data name="History" xml:space="preserve">
+    <value>History</value>
+  </data>
+  <data name="ParaP" xml:space="preserve">
+    <value>Parameter（P）</value>
+  </data>
+  <data name="DeviceSet" xml:space="preserve">
+    <value>Instrument settings</value>
+  </data>
+  <data name="ViewpointSw" xml:space="preserve">
+    <value>Viewpoint switching</value>
+  </data>
+  <data name="PlatformSet" xml:space="preserve">
+    <value>Platform settings</value>
+  </data>
+  <data name="SportMode" xml:space="preserve">
+    <value>Sport mode</value>
+  </data>
+  <data name="CameraSet" xml:space="preserve">
+    <value>Camera settings</value>
+  </data>
+  <data name="DeviceResponseSet" xml:space="preserve">
+    <value>Response instrument configuration</value>
+  </data>
+  <data name="PGSet" xml:space="preserve">
+    <value>PG configuration</value>
+  </data>
+  <data name="PowerSet" xml:space="preserve">
+    <value>Power configuration</value>
+  </data>
+  <data name="DataFormatSet" xml:space="preserve">
+    <value>Data format configuration</value>
+  </data>
+  <data name="ReturnZero" xml:space="preserve">
+    <value>Return to zero</value>
+  </data>
+  <data name="LoadingPos" xml:space="preserve">
+    <value>Loading area</value>
+  </data>
+  <data name="Helph" xml:space="preserve">
+    <value>Help（H）</value>
+  </data>
+  <data name="LangSet" xml:space="preserve">
+    <value>Language switching</value>
+  </data>
+  <data name="OpManual" xml:space="preserve">
+    <value>Operating manual </value>
+  </data>
+  <data name="DeviceSelfCheck" xml:space="preserve">
+    <value>Equipment self diagnosis</value>
+  </data>
+  <data name="ShowAll" xml:space="preserve">
+    <value>Dispaly all</value>
+  </data>
+  <data name="ShowPart" xml:space="preserve">
+    <value>Dispaly partial</value>
+  </data>
+  <data name="Refer" xml:space="preserve">
+    <value>Ref</value>
+  </data>
+  <data name="Modify" xml:space="preserve">
+    <value>RV</value>
+  </data>
+  <data name="XAxis" xml:space="preserve">
+    <value>X Axis：</value>
+  </data>
+  <data name="YAxis" xml:space="preserve">
+    <value>Y Axis：</value>
+  </data>
+  <data name="ZAxis" xml:space="preserve">
+    <value>Z Axis：</value>
+  </data>
+  <data name="UAxis" xml:space="preserve">
+    <value>U Axis：</value>
+  </data>
+  <data name="VAxis" xml:space="preserve">
+    <value>V Axis：</value>
+  </data>
+  <data name="MonitorScreen" xml:space="preserve">
+    <value>Monitoring screen</value>
+  </data>
+  <data name="TestDevice" xml:space="preserve">
+    <value>Testing equipment</value>
+  </data>
+  <data name="CommCheck" xml:space="preserve">
+    <value>Communication test</value>
+  </data>
+  <data name="PGTest" xml:space="preserve">
+    <value>PG test</value>
+  </data>
+  <data name="LogOutput" xml:space="preserve">
+    <value>Log output</value>
+  </data>
+  <data name="TestContent" xml:space="preserve">
+    <value>Test content</value>
+  </data>
+  <data name="TestFlow" xml:space="preserve">
+    <value>Test flow</value>
+  </data>
+  <data name="NotConnect" xml:space="preserve">
+    <value>Not connected</value>
+  </data>
+  <data name="TestSig1" xml:space="preserve">
+    <value>Test signal 1：</value>
+  </data>
+  <data name="TestSig2" xml:space="preserve">
+    <value>Test signal 2：</value>
+  </data>
+  <data name="TestStatus" xml:space="preserve">
+    <value>Test status：</value>
+  </data>
+  <data name="Preparing" xml:space="preserve">
+    <value>In preparation</value>
+  </data>
+  <data name="TestTemplate" xml:space="preserve">
+    <value>Template</value>
+  </data>
+  <data name="Test1Point" xml:space="preserve">
+    <value>SINGT</value>
+  </data>
+  <data name="TestSpectral" xml:space="preserve">
+    <value>SPECTT</value>
+  </data>
+  <data name="CamerPara1" xml:space="preserve">
+    <value>Settings:</value>
+  </data>
+  <data name="Exposure1" xml:space="preserve">
+    <value>Exposure：</value>
+  </data>
+  <data name="CustomTemplate" xml:space="preserve">
+    <value>Custom template</value>
+  </data>
+  <data name="TemplateType" xml:space="preserve">
+    <value>Template type</value>
+  </data>
+  <data name="ProductThick" xml:space="preserve">
+    <value>Product thickness：</value>
+  </data>
+  <data name="Rename" xml:space="preserve">
+    <value>Rename</value>
+  </data>
+  <data name="Delete" xml:space="preserve">
+    <value>Delete</value>
+  </data>
+  <data name="Load" xml:space="preserve">
+    <value>Load</value>
+  </data>
+  <data name="SaveAs" xml:space="preserve">
+    <value>Save as</value>
+  </data>
+  <data name="OK" xml:space="preserve">
+    <value>OK</value>
+  </data>
+  <data name="NoticeMsg" xml:space="preserve">
+    <value>Notice message!</value>
+  </data>
+  <data name="NoticeMsg2" xml:space="preserve">
+    <value>Notice message</value>
+  </data>
+  <data name="Cancel" xml:space="preserve">
+    <value>Cancel</value>
+  </data>
+  <data name="StdMatrixSet" xml:space="preserve">
+    <value>Standard matrix settings</value>
+  </data>
+  <data name="CustomMatrix" xml:space="preserve">
+    <value>Custom matrix</value>
+  </data>
+  <data name="TemplateName" xml:space="preserve">
+    <value>Template name</value>
+  </data>
+  <data name="MatrixType" xml:space="preserve">
+    <value>Matrix type</value>
+  </data>
+  <data name="Point5" xml:space="preserve">
+    <value>5 P</value>
+  </data>
+  <data name="Point9" xml:space="preserve">
+    <value>9 P</value>
+  </data>
+  <data name="Point13" xml:space="preserve">
+    <value>13 P</value>
+  </data>
+  <data name="CustomPoint" xml:space="preserve">
+    <value>Custom</value>
+  </data>
+  <data name="ScreenLen" xml:space="preserve">
+    <value>Screen length</value>
+  </data>
+  <data name="MM" xml:space="preserve">
+    <value>milimeter</value>
+  </data>
+  <data name="ScreenWidth" xml:space="preserve">
+    <value>Screen width</value>
+  </data>
+  <data name="PositonType" xml:space="preserve">
+    <value>Locate mode</value>
+  </data>
+  <data name="LocateMM" xml:space="preserve">
+    <value>Locate mm</value>
+  </data>
+  <data name="LocatePercent" xml:space="preserve">
+    <value>Locate percent</value>
+  </data>
+  <data name="LocatePara" xml:space="preserve">
+    <value>Locate parameter</value>
+  </data>
+  <data name="RowsEq" xml:space="preserve">
+    <value>Rows = </value>
+  </data>
+  <data name="ColsEq" xml:space="preserve">
+    <value>Colums = </value>
+  </data>
+  <data name="PointsInfo" xml:space="preserve">
+    <value>Test points information</value>
+  </data>
+  <data name="SerialNo" xml:space="preserve">
+    <value>Serial no</value>
+  </data>
+  <data name="TestStd" xml:space="preserve">
+    <value>Test standards：</value>
+  </data>
+  <data name="SaveSnData" xml:space="preserve">
+    <value>Save</value>
+  </data>
+  <data name="SetResultFormat" xml:space="preserve">
+    <value>Result format</value>
+  </data>
+  <data name="SelectAll" xml:space="preserve">
+    <value>Select all</value>
+  </data>
+  <data name="SelectNone" xml:space="preserve">
+    <value>Select none</value>
+  </data>
+  <data name="EqliCalc" xml:space="preserve">
+    <value>Equilibrium calculation</value>
+  </data>
+  <data name="InstrSet" xml:space="preserve">
+    <value>Instrument settings</value>
+  </data>
+  <data name="DemoMode" xml:space="preserve">
+    <value>Demo mode</value>
+  </data>
+  <data name="CorrectFator" xml:space="preserve">
+    <value>Correct factor：</value>
+  </data>
+  <data name="Brightness" xml:space="preserve">
+    <value>Brightness：</value>
+  </data>
+  <data name="ColorX" xml:space="preserve">
+    <value>Chromaticity x:</value>
+  </data>
+  <data name="ColorY" xml:space="preserve">
+    <value>Chromaticity y:</value>
+  </data>
+  <data name="TestSetDash" xml:space="preserve">
+    <value>Test settings：</value>
+  </data>
+  <data name="StartDelay" xml:space="preserve">
+    <value>Startup delay：</value>
+  </data>
+  <data name="MS" xml:space="preserve">
+    <value>ms</value>
+  </data>
+  <data name="HotDelay" xml:space="preserve">
+    <value>Preheating time</value>
+  </data>
+  <data name="TimeOutDash" xml:space="preserve">
+    <value>Time out：</value>
+  </data>
+  <data name="InstrTestTimeout" xml:space="preserve">
+    <value>Test  timeout</value>
+  </data>
+  <data name="RestartTime" xml:space="preserve">
+    <value>Restart time：</value>
+  </data>
+  <data name="InstrRestartTime" xml:space="preserve">
+    <value>Instrument restart time</value>
+  </data>
+  <data name="ParaSetDash" xml:space="preserve">
+    <value>Parameter settings</value>
+  </data>
+  <data name="IntegrationTime" xml:space="preserve">
+    <value>Integration time：</value>
+  </data>
+  <data name="U200IntTime" xml:space="preserve">
+    <value>USB2000 integration time</value>
+  </data>
+  <data name="CommSetDash" xml:space="preserve">
+    <value>Settings</value>
+  </data>
+  <data name="CommPortDash" xml:space="preserve">
+    <value>Port：</value>
+  </data>
+  <data name="BaudDash" xml:space="preserve">
+    <value>Baudrate：</value>
+  </data>
+  <data name="DataWidDash" xml:space="preserve">
+    <value>Data bits：</value>
+  </data>
+  <data name="StopBItsDash" xml:space="preserve">
+    <value>Stop bits：</value>
+  </data>
+  <data name="ParityDash" xml:space="preserve">
+    <value>Parity：</value>
+  </data>
+  <data name="CommDevList" xml:space="preserve">
+    <value>Device list</value>
+  </data>
+  <data name="Add" xml:space="preserve">
+    <value>Add</value>
+  </data>
+  <data name="EnableIt" xml:space="preserve">
+    <value>Enable</value>
+  </data>
+  <data name="PointTest" xml:space="preserve">
+    <value>Spot check</value>
+  </data>
+  <data name="NoteDash" xml:space="preserve">
+    <value>Note：</value>
+  </data>
+  <data name="LocalPoint" xml:space="preserve">
+    <value>Local endpoint：</value>
+  </data>
+  <data name="DstAddr" xml:space="preserve">
+    <value>Dest address</value>
+  </data>
+  <data name="DstEd" xml:space="preserve">
+    <value>Dest endpoint：</value>
+  </data>
+  <data name="ComDebug1" xml:space="preserve">
+    <value>Comm debug 1</value>
+  </data>
+  <data name="SendData" xml:space="preserve">
+    <value>Send data</value>
+  </data>
+  <data name="RecvData" xml:space="preserve">
+    <value>Recv data</value>
+  </data>
+  <data name="Send" xml:space="preserve">
+    <value>Send</value>
+  </data>
+  <data name="Clear2" xml:space="preserve">
+    <value>Clear</value>
+  </data>
+  <data name="UnFitColor" xml:space="preserve">
+    <value>Unqualified colors:</value>
+  </data>
+  <data name="ConformityReq" xml:space="preserve">
+    <value>Conformity requirements:  conformity &gt; </value>
+  </data>
+  <data name="UserName" xml:space="preserve">
+    <value>User name</value>
+  </data>
+  <data name="Password" xml:space="preserve">
+    <value>Password</value>
+  </data>
+  <data name="MovePlatSet" xml:space="preserve">
+    <value>Move platform settings</value>
+  </data>
+  <data name="PulseEqu" xml:space="preserve">
+    <value>Pulse equivalent:</value>
+  </data>
+  <data name="PluseEquMean" xml:space="preserve">
+    <value>Pluse</value>
+  </data>
+  <data name="InPosSig1En" xml:space="preserve">
+    <value>In-Position Signal1 enable</value>
+  </data>
+  <data name="InPosSig2En" xml:space="preserve">
+    <value>In-Position Signal2 enable</value>
+  </data>
+  <data name="MotorAxisNo" xml:space="preserve">
+    <value>Motor axis no</value>
+  </data>
+  <data name="PluseEqu2" xml:space="preserve">
+    <value>Pluse equivalent</value>
+  </data>
+  <data name="AxisNo" xml:space="preserve">
+    <value>Axis no：</value>
+  </data>
+  <data name="ReverseZero" xml:space="preserve">
+    <value>Reverse return zero</value>
+  </data>
+  <data name="InterName" xml:space="preserve">
+    <value>Interpolation </value>
+  </data>
+  <data name="Middle" xml:space="preserve">
+    <value>Middle</value>
+  </data>
+  <data name="Speed" xml:space="preserve">
+    <value>Speed</value>
+  </data>
+  <data name="LowSpd" xml:space="preserve">
+    <value>Low speed</value>
+  </data>
+  <data name="MiddleSpd" xml:space="preserve">
+    <value>Middle speed</value>
+  </data>
+  <data name="HighSpd" xml:space="preserve">
+    <value>High speed</value>
+  </data>
+  <data name="InitalSpd" xml:space="preserve">
+    <value>Initial speed</value>
+  </data>
+  <data name="HighSpd2" xml:space="preserve">
+    <value>High speed</value>
+  </data>
+  <data name="AccSpd" xml:space="preserve">
+    <value>Acceleration</value>
+  </data>
+  <data name="ReturnSpd" xml:space="preserve">
+    <value>Return zero speed</value>
+  </data>
+  <data name="SoftLimit" xml:space="preserve">
+    <value>Soft limit</value>
+  </data>
+  <data name="AlarmEn" xml:space="preserve">
+    <value>Alarm enable</value>
+  </data>
+  <data name="ReturnEn" xml:space="preserve">
+    <value>Return zero enable</value>
+  </data>
+  <data name="DevTypes" xml:space="preserve">
+    <value>Device type</value>
+  </data>
+  <data name="NoComp" xml:space="preserve">
+    <value>No compensate</value>
+  </data>
+  <data name="ZSafeDis" xml:space="preserve">
+    <value>Z axis safe distant</value>
+  </data>
+  <data name="USafeDis" xml:space="preserve">
+    <value>U axis min angle</value>
+  </data>
+  <data name="UMaxAngle" xml:space="preserve">
+    <value>U axis max angle</value>
+  </data>
+
+	<data name="UProductH" xml:space="preserve">
+    <value>U Product Height</value>
+  </data>
+	
+  <data name="EnterAngle" xml:space="preserve">
+    <value>Blanking angle</value>
+  </data>
+  <data name="CommDevList2" xml:space="preserve">
+    <value>Comm device list</value>
+  </data>
+  <data name="SerialComm" xml:space="preserve">
+    <value>Serial</value>
+  </data>
+  <data name="UdpComm" xml:space="preserve">
+    <value>UDP comm</value>
+  </data>
+  <data name="TcpServer" xml:space="preserve">
+    <value>TCP server</value>
+  </data>
+  <data name="TcpClient" xml:space="preserve">
+    <value>TCP client</value>
+  </data>
+  <data name="Property" xml:space="preserve">
+    <value>Property</value>
+  </data>
+  <data name="NameDash" xml:space="preserve">
+    <value>Name：</value>
+  </data>
+  <data name="EnableDash" xml:space="preserve">
+    <value>Enable：</value>
+  </data>
+  <data name="SerialPort" xml:space="preserve">
+    <value>Port：</value>
+  </data>
+  <data name="BaudrateDash" xml:space="preserve">
+    <value>Baudrate：</value>
+  </data>
+  <data name="LocalPort" xml:space="preserve">
+    <value>Local port：</value>
+  </data>
+  <data name="DstPort" xml:space="preserve">
+    <value>Dest port：</value>
+  </data>
+  <data name="PortDash" xml:space="preserve">
+    <value>Port：</value>
+  </data>
+  <data name="SendData2" xml:space="preserve">
+    <value>Send data</value>
+  </data>
+  <data name="RecvData2" xml:space="preserve">
+    <value>Recvdata</value>
+  </data>
+  <data name="Infos" xml:space="preserve">
+    <value>Info</value>
+  </data>
+  <data name="Title" xml:space="preserve">
+    <value>Title</value>
+  </data>
+  <data name="HistoryLog" xml:space="preserve">
+    <value>History</value>
+  </data>
+  <data name="Export" xml:space="preserve">
+    <value>Export</value>
+  </data>
+  <data name="PgSettings" xml:space="preserve">
+    <value>PG settings</value>
+  </data>
+  <data name="PicSwitch" xml:space="preserve">
+    <value>Picture switch：</value>
+  </data>
+  <data name="PicSw" xml:space="preserve">
+    <value>Picture switch</value>
+  </data>
+  <data name="RgbSw" xml:space="preserve">
+    <value>RGB switch：</value>
+  </data>
+  <data name="RgbSw2" xml:space="preserve">
+    <value>RGB switch</value>
+  </data>
+  <data name="ExternPg" xml:space="preserve">
+    <value>Extern PG</value>
+  </data>
+  <data name="NoPg" xml:space="preserve">
+    <value>No PG</value>
+  </data>
+  <data name="BusType" xml:space="preserve">
+    <value>Bus type</value>
+  </data>
+  <data name="CommType" xml:space="preserve">
+    <value>Comm type：</value>
+  </data>
+  <data name="PgPara" xml:space="preserve">
+    <value>PG parameter：</value>
+  </data>
+  <data name="InsrFormat" xml:space="preserve">
+    <value>Instructs format:</value>
+  </data>
+  <data name="ComSet3" xml:space="preserve">
+    <value>Settings:</value>
+  </data>
+  <data name="IpaAddr" xml:space="preserve">
+    <value>IP addr：</value>
+  </data>
+  <data name="PoweSet" xml:space="preserve">
+    <value>Power settings</value>
+  </data>
+  <data name="IsEnable" xml:space="preserve">
+    <value>Enable?</value>
+  </data>
+  <data name="DevSelfDialog" xml:space="preserve">
+    <value>Self diagnosis</value>
+  </data>
+  <data name="Diag" xml:space="preserve">
+    <value>Diagnosis</value>
+  </data>
+  <data name="AngleSw" xml:space="preserve">
+    <value>View angle switch</value>
+  </data>
+  <data name="Sr3aAngle" xml:space="preserve">
+    <value>SR3A view angle settings</value>
+  </data>
+  <data name="AppName" xml:space="preserve">
+    <value>LCD automatic test system V2.1.112</value>
+  </data>
+  <data name="WarnMachine" xml:space="preserve">
+    <value>Warn machine test</value>
+  </data>
+  <data name="SelectReverse" xml:space="preserve">
+    <value>Reverse select</value>
+  </data>
+  <data name="ResetMsg" xml:space="preserve">
+    <value>Reset</value>
+  </data>
+  <data name="WarnCount" xml:space="preserve">
+    <value>Warm up countdown:</value>
+  </data>
+  <data name="Save" xml:space="preserve">
+    <value>Save</value>
+  </data>
+  <data name="Point15" xml:space="preserve">
+    <value>15 P</value>
+  </data>
+  <data name="Point17" xml:space="preserve">
+    <value>17 P</value>
+  </data>
+  <data name="Point17_ary" xml:space="preserve">
+    <value>17 P Aarray</value>
+  </data>
+  <data name="Point25" xml:space="preserve">
+    <value>25 P</value>
+  </data>
+  <data name="Point13_Diag" xml:space="preserve">
+    <value>13 P Diag</value>
+  </data>
+  <data name="AddPlusEnable" xml:space="preserve">
+    <value>Compensation Direction</value>
+  </data>
+  <data name="WarmTest" xml:space="preserve">
+    <value>Warm up test</value>
+  </data>
+  <data name="StartWarmTest" xml:space="preserve">
+    <value>Start warm up test</value>
+  </data>
+  <data name="WarmTestTime" xml:space="preserve">
+    <value>Time:</value>
+  </data>
+  <data name="WarmTestUnit" xml:space="preserve">
+    <value>Minutes</value>
+  </data>
+  <data name="Xpercent" xml:space="preserve">
+    <value>X Percent:</value>
+  </data>
+  <data name="YPercent" xml:space="preserve">
+    <value>Y Percent:</value>
+  </data>
+  <data name="CameraModel" xml:space="preserve">
+    <value>Camera Type</value>
+  </data>
+  <data name="CameraHK" xml:space="preserve">
+    <value>HIKVISION</value>
+  </data>
+  <data name="CameraIndex" xml:space="preserve">
+    <value>No select</value>
+  </data>
+  <data name="RotationAngle" xml:space="preserve">
+    <value>Rotation angle:</value>
+  </data>
+  <data name="MoveDebug" xml:space="preserve">
+    <value>Move Debug</value>
+  </data>
+  <data name="InputCoord" xml:space="preserve">
+    <value>Input Coordinates</value>
+  </data>
+  <data name="MovePosition" xml:space="preserve">
+    <value>Move to</value>
+  </data>
+  <data name="RunEndDelay" xml:space="preserve">
+    <value>Move end delay</value>
+  </data>
+  <data name="Copy" xml:space="preserve">
+    <value>Copy</value>
+  </data>
+  <data name="MoveDoneDelay" xml:space="preserve">
+    <value>Axis movement done delay </value>
+  </data>
+  <data name="MaxUangel" xml:space="preserve">
+    <value>U axis max angle</value>
+  </data>
+  <data name="MaxVangel" xml:space="preserve">
+    <value>V axis max angle</value>
+  </data>
+  <data name="UReverse" xml:space="preserve">
+    <value>U axis reverse run</value>
+  </data>
+  <data name="VReverse" xml:space="preserve">
+    <value>V axis reverse run</value>
+  </data>
+  <data name="LightDectPort" xml:space="preserve">
+    <value>Grating Port</value>
+  </data>
+  <data name="ShowLab" xml:space="preserve">
+    <value>Show L*a*b</value>
+  </data>
+  <data name="HistoryView" xml:space="preserve">
+    <value>History View</value>
+  </data>
+  <data name="PowerSelect" xml:space="preserve">
+    <value>Power Device:</value>
+  </data>
+  <data name="PowerControl" xml:space="preserve">
+    <value>Power Control</value>
+  </data>
+  <data name="VoltageSet" xml:space="preserve">
+    <value>Voltage Set(V)：</value>
+  </data>
+  <data name="CurrentSet" xml:space="preserve">
+    <value>Current Set(A)：</value>
+  </data>
+  <data name="RealVoltage" xml:space="preserve">
+    <value>Real Votage(V)：</value>
+  </data>
+  <data name="RealCurrent" xml:space="preserve">
+    <value>Real Current(A):</value>
+  </data>
+  <data name="PowerOuput" xml:space="preserve">
+    <value>Output</value>
+  </data>
+  <data name="PowerEnable" xml:space="preserve">
+    <value>Enable</value>
+  </data>
+  <data name="ControlPowerDash" xml:space="preserve">
+    <value>Programmable power supply:</value>
+  </data>
+  <data name="CrosstalkInfo" xml:space="preserve">
+    <value>CrossTalki</value>
+  </data>
+  <data name="NoticeInfo" xml:space="preserve">
+    <value>Notice</value>
+  </data>
+  <data name="Type_A" xml:space="preserve">
+    <value>Type A</value>
+  </data>
+  <data name="Type_B" xml:space="preserve">
+    <value>Type B</value>
+  </data>
+  <data name="Type_C" xml:space="preserve">
+    <value>Type C</value>
+  </data>
+  <data name="Degree" xml:space="preserve">
+    <value>°</value>
+  </data>
+</root>

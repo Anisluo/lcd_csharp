@@ -1,0 +1,839 @@
+<?xml version="1.0" encoding="utf-8"?>
+<root>
+  <!-- 
+    Microsoft ResX Schema 
+    
+    Version 2.0
+    
+    The primary goals of this format is to allow a simple XML format 
+    that is mostly human readable. The generation and parsing of the 
+    various data types are done through the TypeConverter classes 
+    associated with the data types.
+    
+    Example:
+    
+    ... ado.net/XML headers & schema ...
+    <resheader name="resmimetype">text/microsoft-resx</resheader>
+    <resheader name="version">2.0</resheader>
+    <resheader name="reader">System.Resources.ResXResourceReader, System.Windows.Forms, ...</resheader>
+    <resheader name="writer">System.Resources.ResXResourceWriter, System.Windows.Forms, ...</resheader>
+    <data name="Name1"><value>this is my long string</value><comment>this is a comment</comment></data>
+    <data name="Color1" type="System.Drawing.Color, System.Drawing">Blue</data>
+    <data name="Bitmap1" mimetype="application/x-microsoft.net.object.binary.base64">
+        <value>[base64 mime encoded serialized .NET Framework object]</value>
+    </data>
+    <data name="Icon1" type="System.Drawing.Icon, System.Drawing" mimetype="application/x-microsoft.net.object.bytearray.base64">
+        <value>[base64 mime encoded string representing a byte array form of the .NET Framework object]</value>
+        <comment>This is a comment</comment>
+    </data>
+                
+    There are any number of "resheader" rows that contain simple 
+    name/value pairs.
+    
+    Each data row contains a name, and value. The row also contains a 
+    type or mimetype. Type corresponds to a .NET class that support 
+    text/value conversion through the TypeConverter architecture. 
+    Classes that don't support this are serialized and stored with the 
+    mimetype set.
+    
+    The mimetype is used for serialized objects, and tells the 
+    ResXResourceReader how to depersist the object. This is currently not 
+    extensible. For a given mimetype the value must be set accordingly:
+    
+    Note - application/x-microsoft.net.object.binary.base64 is the format 
+    that the ResXResourceWriter will generate, however the reader can 
+    read any of the formats listed below.
+    
+    mimetype: application/x-microsoft.net.object.binary.base64
+    value   : The object must be serialized with 
+            : System.Runtime.Serialization.Formatters.Binary.BinaryFormatter
+            : and then encoded with base64 encoding.
+    
+    mimetype: application/x-microsoft.net.object.soap.base64
+    value   : The object must be serialized with 
+            : System.Runtime.Serialization.Formatters.Soap.SoapFormatter
+            : and then encoded with base64 encoding.
+
+    mimetype: application/x-microsoft.net.object.bytearray.base64
+    value   : The object must be serialized into a byte array 
+            : using a System.ComponentModel.TypeConverter
+            : and then encoded with base64 encoding.
+    -->
+  <xsd:schema id="root" xmlns="" xmlns:xsd="http://www.w3.org/2001/XMLSchema" xmlns:msdata="urn:schemas-microsoft-com:xml-msdata">
+    <xsd:import namespace="http://www.w3.org/XML/1998/namespace" />
+    <xsd:element name="root" msdata:IsDataSet="true">
+      <xsd:complexType>
+        <xsd:choice maxOccurs="unbounded">
+          <xsd:element name="metadata">
+            <xsd:complexType>
+              <xsd:sequence>
+                <xsd:element name="value" type="xsd:string" minOccurs="0" />
+              </xsd:sequence>
+              <xsd:attribute name="name" use="required" type="xsd:string" />
+              <xsd:attribute name="type" type="xsd:string" />
+              <xsd:attribute name="mimetype" type="xsd:string" />
+              <xsd:attribute ref="xml:space" />
+            </xsd:complexType>
+          </xsd:element>
+          <xsd:element name="assembly">
+            <xsd:complexType>
+              <xsd:attribute name="alias" type="xsd:string" />
+              <xsd:attribute name="name" type="xsd:string" />
+            </xsd:complexType>
+          </xsd:element>
+          <xsd:element name="data">
+            <xsd:complexType>
+              <xsd:sequence>
+                <xsd:element name="value" type="xsd:string" minOccurs="0" msdata:Ordinal="1" />
+                <xsd:element name="comment" type="xsd:string" minOccurs="0" msdata:Ordinal="2" />
+              </xsd:sequence>
+              <xsd:attribute name="name" type="xsd:string" use="required" msdata:Ordinal="1" />
+              <xsd:attribute name="type" type="xsd:string" msdata:Ordinal="3" />
+              <xsd:attribute name="mimetype" type="xsd:string" msdata:Ordinal="4" />
+              <xsd:attribute ref="xml:space" />
+            </xsd:complexType>
+          </xsd:element>
+          <xsd:element name="resheader">
+            <xsd:complexType>
+              <xsd:sequence>
+                <xsd:element name="value" type="xsd:string" minOccurs="0" msdata:Ordinal="1" />
+              </xsd:sequence>
+              <xsd:attribute name="name" type="xsd:string" use="required" />
+            </xsd:complexType>
+          </xsd:element>
+        </xsd:choice>
+      </xsd:complexType>
+    </xsd:element>
+  </xsd:schema>
+  <resheader name="resmimetype">
+    <value>text/microsoft-resx</value>
+  </resheader>
+  <resheader name="version">
+    <value>2.0</value>
+  </resheader>
+  <resheader name="reader">
+    <value>System.Resources.ResXResourceReader, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+  </resheader>
+  <resheader name="writer">
+    <value>System.Resources.ResXResourceWriter, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+  </resheader>
+  <data name="Open" xml:space="preserve">
+    <value>打开</value>
+  </data>
+  <data name="Close" xml:space="preserve">
+    <value>关闭</value>
+  </data>
+  <data name="FileF" xml:space="preserve">
+    <value>文件(F)</value>
+  </data>
+  <data name="History" xml:space="preserve">
+    <value>历史记录</value>
+  </data>
+  <data name="ParaP" xml:space="preserve">
+    <value>参数（P）</value>
+  </data>
+  <data name="DeviceSet" xml:space="preserve">
+    <value>仪器设定</value>
+  </data>
+  <data name="ViewpointSw" xml:space="preserve">
+    <value>视角切换</value>
+  </data>
+  <data name="PlatformSet" xml:space="preserve">
+    <value>平台设定</value>
+  </data>
+  <data name="SportMode" xml:space="preserve">
+    <value>运动模式</value>
+  </data>
+  <data name="CameraSet" xml:space="preserve">
+    <value>相机设置</value>
+  </data>
+  <data name="DeviceResponseSet" xml:space="preserve">
+    <value>响应仪器配置</value>
+  </data>
+  <data name="PGSet" xml:space="preserve">
+    <value>PG配置</value>
+  </data>
+  <data name="PowerSet" xml:space="preserve">
+    <value>电源设置</value>
+  </data>
+  <data name="DataFormatSet" xml:space="preserve">
+    <value>数据格式配置</value>
+  </data>
+  <data name="ReturnZero" xml:space="preserve">
+    <value>回零</value>
+  </data>
+  <data name="LoadingPos" xml:space="preserve">
+    <value>上料位置</value>
+  </data>
+  <data name="Helph" xml:space="preserve">
+    <value>帮助（H）</value>
+  </data>
+  <data name="LangSet" xml:space="preserve">
+    <value>中英文切换</value>
+  </data>
+  <data name="OpManual" xml:space="preserve">
+    <value>操作手册</value>
+  </data>
+  <data name="DeviceSelfCheck" xml:space="preserve">
+    <value>设备自诊断</value>
+  </data>
+  <data name="ShowAll" xml:space="preserve">
+    <value>显示全部</value>
+  </data>
+  <data name="ShowPart" xml:space="preserve">
+    <value>显示部分</value>
+  </data>
+  <data name="Refer" xml:space="preserve">
+    <value>参考</value>
+  </data>
+  <data name="Modify" xml:space="preserve">
+    <value>修正</value>
+  </data>
+  <data name="XAxis" xml:space="preserve">
+    <value>X轴：</value>
+  </data>
+  <data name="YAxis" xml:space="preserve">
+    <value>Y轴：</value>
+  </data>
+  <data name="ZAxis" xml:space="preserve">
+    <value>Z轴：</value>
+  </data>
+  <data name="UAxis" xml:space="preserve">
+    <value>U轴：</value>
+  </data>
+  <data name="VAxis" xml:space="preserve">
+    <value>V轴：</value>
+  </data>
+  <data name="MonitorScreen" xml:space="preserve">
+    <value>监视画面</value>
+  </data>
+  <data name="TestDevice" xml:space="preserve">
+    <value>测试设备</value>
+  </data>
+  <data name="CommCheck" xml:space="preserve">
+    <value>通讯测试</value>
+  </data>
+  <data name="PGTest" xml:space="preserve">
+    <value>PG测试</value>
+  </data>
+  <data name="LogOutput" xml:space="preserve">
+    <value>Log输出</value>
+  </data>
+  <data name="TestContent" xml:space="preserve">
+    <value>测试内容</value>
+  </data>
+  <data name="TestFlow" xml:space="preserve">
+    <value>测试流程</value>
+  </data>
+  <data name="NotConnect" xml:space="preserve">
+    <value>未连接</value>
+  </data>
+  <data name="TestSig1" xml:space="preserve">
+    <value>测试信号1:</value>
+  </data>
+  <data name="TestSig2" xml:space="preserve">
+    <value>测试信号2：</value>
+  </data>
+  <data name="TestStatus" xml:space="preserve">
+    <value>测试状态：</value>
+  </data>
+  <data name="Preparing" xml:space="preserve">
+    <value>准备中</value>
+  </data>
+  <data name="TestTemplate" xml:space="preserve">
+    <value>测试模版</value>
+  </data>
+  <data name="Test1Point" xml:space="preserve">
+    <value>单点测量</value>
+  </data>
+  <data name="TestSpectral" xml:space="preserve">
+    <value>光谱测量</value>
+  </data>
+  <data name="CamerPara1" xml:space="preserve">
+    <value>相机参数：</value>
+  </data>
+  <data name="Exposure1" xml:space="preserve">
+    <value>曝光：</value>
+  </data>
+  <data name="CustomTemplate" xml:space="preserve">
+    <value>自定义模版</value>
+  </data>
+  <data name="TemplateType" xml:space="preserve">
+    <value>模版类型</value>
+  </data>
+  <data name="ProductThick" xml:space="preserve">
+    <value>产品厚度：</value>
+  </data>
+  <data name="Rename" xml:space="preserve">
+    <value>重命名</value>
+  </data>
+  <data name="Delete" xml:space="preserve">
+    <value>删除</value>
+  </data>
+  <data name="Load" xml:space="preserve">
+    <value>载入</value>
+  </data>
+  <data name="SaveAs" xml:space="preserve">
+    <value>另存为</value>
+  </data>
+  <data name="OK" xml:space="preserve">
+    <value>确定</value>
+  </data>
+  <data name="NoticeMsg" xml:space="preserve">
+    <value>提示信息！</value>
+  </data>
+  <data name="NoticeMsg2" xml:space="preserve">
+    <value>提示信息</value>
+  </data>
+  <data name="Cancel" xml:space="preserve">
+    <value>取消</value>
+  </data>
+  <data name="StdMatrixSet" xml:space="preserve">
+    <value>标准点阵设置</value>
+  </data>
+  <data name="CustomMatrix" xml:space="preserve">
+    <value>自定义点阵</value>
+  </data>
+  <data name="TemplateName" xml:space="preserve">
+    <value>模版名称</value>
+  </data>
+  <data name="MatrixType" xml:space="preserve">
+    <value>点阵类型</value>
+  </data>
+  <data name="Point5" xml:space="preserve">
+    <value>5点</value>
+  </data>
+  <data name="Point9" xml:space="preserve">
+    <value>9点</value>
+  </data>
+  <data name="Point13" xml:space="preserve">
+    <value>13点</value>
+  </data>
+  <data name="CustomPoint" xml:space="preserve">
+    <value>点阵</value>
+  </data>
+  <data name="ScreenLen" xml:space="preserve">
+    <value>屏幕长度</value>
+  </data>
+  <data name="MM" xml:space="preserve">
+    <value>毫米</value>
+  </data>
+  <data name="ScreenWidth" xml:space="preserve">
+    <value>屏幕宽度</value>
+  </data>
+  <data name="PositonType" xml:space="preserve">
+    <value>定位方式</value>
+  </data>
+  <data name="LocateMM" xml:space="preserve">
+    <value>毫米定位</value>
+  </data>
+  <data name="LocatePercent" xml:space="preserve">
+    <value>百分比定位</value>
+  </data>
+  <data name="LocatePara" xml:space="preserve">
+    <value>定位参数</value>
+  </data>
+  <data name="RowsEq" xml:space="preserve">
+    <value>行数 = </value>
+  </data>
+  <data name="ColsEq" xml:space="preserve">
+    <value>列数 = </value>
+  </data>
+  <data name="PointsInfo" xml:space="preserve">
+    <value>测量点信息</value>
+  </data>
+  <data name="SerialNo" xml:space="preserve">
+    <value>序号</value>
+  </data>
+  <data name="TestStd" xml:space="preserve">
+    <value>测量标准：</value>
+  </data>
+  <data name="SaveSnData" xml:space="preserve">
+    <value>保存序号和数据</value>
+  </data>
+  <data name="SetResultFormat" xml:space="preserve">
+    <value>设置结果格式</value>
+  </data>
+  <data name="SelectAll" xml:space="preserve">
+    <value>全选</value>
+  </data>
+  <data name="SelectNone" xml:space="preserve">
+    <value>全不选</value>
+  </data>
+  <data name="EqliCalc" xml:space="preserve">
+    <value>均衡性计算</value>
+  </data>
+  <data name="InstrSet" xml:space="preserve">
+    <value>仪器设定</value>
+  </data>
+  <data name="DemoMode" xml:space="preserve">
+    <value>演示模式</value>
+  </data>
+  <data name="CorrectFator" xml:space="preserve">
+    <value>修正系数：</value>
+  </data>
+  <data name="Brightness" xml:space="preserve">
+    <value>亮度：</value>
+  </data>
+  <data name="ColorX" xml:space="preserve">
+    <value>色坐标x：</value>
+  </data>
+  <data name="ColorY" xml:space="preserve">
+    <value>色坐标y：</value>
+  </data>
+  <data name="TestSetDash" xml:space="preserve">
+    <value>测量设定：</value>
+  </data>
+  <data name="StartDelay" xml:space="preserve">
+    <value>启动延时：</value>
+  </data>
+  <data name="MS" xml:space="preserve">
+    <value>毫秒(ms)</value>
+  </data>
+  <data name="HotDelay" xml:space="preserve">
+    <value>设备热机等待时间</value>
+  </data>
+  <data name="TimeOutDash" xml:space="preserve">
+    <value>超时时间：</value>
+  </data>
+  <data name="InstrTestTimeout" xml:space="preserve">
+    <value>设备测量超时时间</value>
+  </data>
+  <data name="RestartTime" xml:space="preserve">
+    <value>重启时间：</value>
+  </data>
+  <data name="InstrRestartTime" xml:space="preserve">
+    <value>设备重启时间</value>
+  </data>
+  <data name="ParaSetDash" xml:space="preserve">
+    <value>参数设置：</value>
+  </data>
+  <data name="IntegrationTime" xml:space="preserve">
+    <value>积分时间：</value>
+  </data>
+  <data name="U200IntTime" xml:space="preserve">
+    <value>USB2000积分时间</value>
+  </data>
+  <data name="CommSetDash" xml:space="preserve">
+    <value>通讯设定：</value>
+  </data>
+  <data name="CommPortDash" xml:space="preserve">
+    <value>通信口：</value>
+  </data>
+  <data name="BaudDash" xml:space="preserve">
+    <value>波特率：</value>
+  </data>
+  <data name="DataWidDash" xml:space="preserve">
+    <value>数据位：</value>
+  </data>
+  <data name="StopBItsDash" xml:space="preserve">
+    <value>停止位：</value>
+  </data>
+  <data name="ParityDash" xml:space="preserve">
+    <value>校验位：</value>
+  </data>
+  <data name="CommDevList" xml:space="preserve">
+    <value>通讯设备列表</value>
+  </data>
+  <data name="Add" xml:space="preserve">
+    <value>添加</value>
+  </data>
+  <data name="EnableIt" xml:space="preserve">
+    <value>启用</value>
+  </data>
+  <data name="PointTest" xml:space="preserve">
+    <value>点检</value>
+  </data>
+  <data name="NoteDash" xml:space="preserve">
+    <value>备注：</value>
+  </data>
+  <data name="LocalPoint" xml:space="preserve">
+    <value>本地端口：</value>
+  </data>
+  <data name="DstAddr" xml:space="preserve">
+    <value>目标地址：</value>
+  </data>
+  <data name="DstEd" xml:space="preserve">
+    <value>目标端口：</value>
+  </data>
+  <data name="ComDebug1" xml:space="preserve">
+    <value>串口调试1</value>
+  </data>
+  <data name="SendData" xml:space="preserve">
+    <value>发送数据</value>
+  </data>
+  <data name="RecvData" xml:space="preserve">
+    <value>接收数据</value>
+  </data>
+  <data name="Send" xml:space="preserve">
+    <value>发送</value>
+  </data>
+  <data name="Clear2" xml:space="preserve">
+    <value>清除</value>
+  </data>
+  <data name="UnFitColor" xml:space="preserve">
+    <value>不合格颜色：</value>
+  </data>
+  <data name="ConformityReq" xml:space="preserve">
+    <value>均一性要求: 均一性 &gt; </value>
+  </data>
+  <data name="UserName" xml:space="preserve">
+    <value>用户名</value>
+  </data>
+  <data name="Password" xml:space="preserve">
+    <value>密   码</value>
+  </data>
+  <data name="MovePlatSet" xml:space="preserve">
+    <value>运动平台设置</value>
+  </data>
+  <data name="PulseEqu" xml:space="preserve">
+    <value>脉冲当量：</value>
+  </data>
+  <data name="PluseEquMean" xml:space="preserve">
+    <value>脉冲当量是指：平台运动1毫米，需要向电机发送多少脉冲</value>
+  </data>
+  <data name="InPosSig1En" xml:space="preserve">
+    <value>到位信号1启用</value>
+  </data>
+  <data name="InPosSig2En" xml:space="preserve">
+    <value>到位信号2启用</value>
+  </data>
+  <data name="MotorAxisNo" xml:space="preserve">
+    <value>电机轴号</value>
+  </data>
+  <data name="PluseEqu2" xml:space="preserve">
+    <value>脉冲当量</value>
+  </data>
+  <data name="AxisNo" xml:space="preserve">
+    <value>轴号：</value>
+  </data>
+  <data name="ReverseZero" xml:space="preserve">
+    <value>反向归零</value>
+  </data>
+  <data name="InterName" xml:space="preserve">
+    <value>插补</value>
+  </data>
+  <data name="Middle" xml:space="preserve">
+    <value>中心</value>
+  </data>
+  <data name="Speed" xml:space="preserve">
+    <value>速度</value>
+  </data>
+  <data name="LowSpd" xml:space="preserve">
+    <value>低速</value>
+  </data>
+  <data name="MiddleSpd" xml:space="preserve">
+    <value>中速</value>
+  </data>
+  <data name="HighSpd" xml:space="preserve">
+    <value>高速</value>
+  </data>
+  <data name="InitalSpd" xml:space="preserve">
+    <value>初始速度</value>
+  </data>
+  <data name="HighSpd2" xml:space="preserve">
+    <value>高速速度</value>
+  </data>
+  <data name="AccSpd" xml:space="preserve">
+    <value>加速度</value>
+  </data>
+  <data name="ReturnSpd" xml:space="preserve">
+    <value>回零速度</value>
+  </data>
+  <data name="SoftLimit" xml:space="preserve">
+    <value>软极限</value>
+  </data>
+  <data name="AlarmEn" xml:space="preserve">
+    <value>报警启用</value>
+  </data>
+  <data name="ReturnEn" xml:space="preserve">
+    <value>回零启用</value>
+  </data>
+  <data name="DevTypes" xml:space="preserve">
+    <value>设备类型</value>
+  </data>
+  <data name="NoComp" xml:space="preserve">
+    <value>无补偿</value>
+  </data>
+  <data name="ZSafeDis" xml:space="preserve">
+    <value>Z轴安全距离</value>
+  </data>
+  <data name="USafeDis" xml:space="preserve">
+    <value>U轴最小安全角度</value>
+  </data>
+  <data name="UMaxAngle" xml:space="preserve">
+    <value>U轴最大安全角度</value>
+  </data>
+
+	<data name="UProductH" xml:space="preserve">
+    <value>Z轴为0时，仪器旋转中心距离平台高度</value>
+  </data>
+	
+  <data name="EnterAngle" xml:space="preserve">
+    <value>下料角度</value>
+  </data>
+  <data name="CommDevList2" xml:space="preserve">
+    <value>通讯设备列表</value>
+  </data>
+  <data name="SerialComm" xml:space="preserve">
+    <value>串口通讯</value>
+  </data>
+  <data name="UdpComm" xml:space="preserve">
+    <value>UDP通讯</value>
+  </data>
+  <data name="TcpServer" xml:space="preserve">
+    <value>TCP服务端</value>
+  </data>
+  <data name="TcpClient" xml:space="preserve">
+    <value>TCP客户端</value>
+  </data>
+  <data name="Property" xml:space="preserve">
+    <value>属性</value>
+  </data>
+  <data name="NameDash" xml:space="preserve">
+    <value>名称：</value>
+  </data>
+  <data name="EnableDash" xml:space="preserve">
+    <value>启用：</value>
+  </data>
+  <data name="SerialPort" xml:space="preserve">
+    <value>串口号：</value>
+  </data>
+  <data name="BaudrateDash" xml:space="preserve">
+    <value>波特率：</value>
+  </data>
+  <data name="LocalPort" xml:space="preserve">
+    <value>本地端口：</value>
+  </data>
+  <data name="DstPort" xml:space="preserve">
+    <value>目标端口：</value>
+  </data>
+  <data name="PortDash" xml:space="preserve">
+    <value>端口：</value>
+  </data>
+  <data name="SendData2" xml:space="preserve">
+    <value>发送数</value>
+  </data>
+  <data name="RecvData2" xml:space="preserve">
+    <value>接收数据</value>
+  </data>
+  <data name="Infos" xml:space="preserve">
+    <value>信息</value>
+  </data>
+  <data name="Title" xml:space="preserve">
+    <value>标题</value>
+  </data>
+  <data name="HistoryLog" xml:space="preserve">
+    <value>历史记录</value>
+  </data>
+  <data name="Export" xml:space="preserve">
+    <value>导出</value>
+  </data>
+  <data name="PgSettings" xml:space="preserve">
+    <value>PG设置</value>
+  </data>
+  <data name="PicSwitch" xml:space="preserve">
+    <value>图片切换：</value>
+  </data>
+  <data name="PicSw" xml:space="preserve">
+    <value>图片切换</value>
+  </data>
+  <data name="RgbSw" xml:space="preserve">
+    <value>RGB切换：</value>
+  </data>
+  <data name="RgbSw2" xml:space="preserve">
+    <value>RGB切换</value>
+  </data>
+  <data name="ExternPg" xml:space="preserve">
+    <value>外接PG</value>
+  </data>
+  <data name="NoPg" xml:space="preserve">
+    <value>无PG</value>
+  </data>
+  <data name="BusType" xml:space="preserve">
+    <value>总线类型</value>
+  </data>
+  <data name="CommType" xml:space="preserve">
+    <value>通讯方式：</value>
+  </data>
+  <data name="PgPara" xml:space="preserve">
+    <value>PG参数：</value>
+  </data>
+  <data name="InsrFormat" xml:space="preserve">
+    <value>指令格式：</value>
+  </data>
+  <data name="ComSet3" xml:space="preserve">
+    <value>功率测量通信设定：</value>
+  </data>
+  <data name="IpaAddr" xml:space="preserve">
+    <value>IP地址：</value>
+  </data>
+  <data name="PoweSet" xml:space="preserve">
+    <value>电源设置</value>
+  </data>
+  <data name="IsEnable" xml:space="preserve">
+    <value>是否启用：</value>
+  </data>
+  <data name="DevSelfDialog" xml:space="preserve">
+    <value>设备自诊断</value>
+  </data>
+  <data name="Diag" xml:space="preserve">
+    <value>诊断</value>
+  </data>
+  <data name="AngleSw" xml:space="preserve">
+    <value>视角切换</value>
+  </data>
+  <data name="Sr3aAngle" xml:space="preserve">
+    <value>SR3A视角设置</value>
+  </data>
+  <data name="AppName" xml:space="preserve">
+    <value>LCD光学自动测试系统 V2.1.112</value>
+  </data>
+  <data name="WarnMachine" xml:space="preserve">
+    <value>暖机测试</value>
+  </data>
+  <data name="SelectReverse" xml:space="preserve">
+    <value>反选</value>
+  </data>
+  <data name="ResetMsg" xml:space="preserve">
+    <value>复位</value>
+  </data>
+  <data name="WarnCount" xml:space="preserve">
+    <value>暖机倒计时：</value>
+  </data>
+  <data name="Save" xml:space="preserve">
+    <value>保存</value>
+  </data>
+  <data name="Point15" xml:space="preserve">
+    <value>15点</value>
+  </data>
+  <data name="Point17" xml:space="preserve">
+    <value>17点常规</value>
+  </data>
+  <data name="Point17_ary" xml:space="preserve">
+    <value>17点点阵</value>
+  </data>
+  <data name="Point25" xml:space="preserve">
+    <value>25点</value>
+  </data>
+  <data name="Point13_Diag" xml:space="preserve">
+    <value>13点对角</value>
+  </data>
+  <data name="AddPlusEnable" xml:space="preserve">
+    <value>补偿方向</value>
+  </data>
+  <data name="WarmTest" xml:space="preserve">
+    <value>暖机测试</value>
+  </data>
+  <data name="StartWarmTest" xml:space="preserve">
+    <value>启动暖机测试</value>
+  </data>
+  <data name="WarmTestTime" xml:space="preserve">
+    <value>暖机时间：</value>
+  </data>
+  <data name="WarmTestUnit" xml:space="preserve">
+    <value>分钟</value>
+  </data>
+  <data name="Xpercent" xml:space="preserve">
+    <value>X百分比:</value>
+  </data>
+  <data name="YPercent" xml:space="preserve">
+    <value>Y百分比:</value>
+  </data>
+  <data name="CameraModel" xml:space="preserve">
+    <value>相机型号</value>
+  </data>
+  <data name="CameraHK" xml:space="preserve">
+    <value>海康</value>
+  </data>
+  <data name="CameraIndex" xml:space="preserve">
+    <value>相机序号选择：</value>
+  </data>
+  <data name="RotationAngle" xml:space="preserve">
+    <value>旋转角度：</value>
+  </data>
+  <data name="MoveDebug" xml:space="preserve">
+    <value>五轴调试</value>
+  </data>
+  <data name="InputCoord" xml:space="preserve">
+    <value>输入坐标</value>
+  </data>
+  <data name="MovePosition" xml:space="preserve">
+    <value>运动到指定位置</value>
+  </data>
+  <data name="RunEndDelay" xml:space="preserve">
+    <value>轴运行结束后延时</value>
+  </data>
+  <data name="Copy" xml:space="preserve">
+    <value>复制</value>
+  </data>
+  <data name="MoveDoneDelay" xml:space="preserve">
+    <value>轴运行结束后延时</value>
+  </data>
+  <data name="MaxUangel" xml:space="preserve">
+    <value>U轴最大角度</value>
+  </data>
+  <data name="MaxVangel" xml:space="preserve">
+    <value>V轴最大角度</value>
+  </data>
+  <data name="UReverse" xml:space="preserve">
+    <value>U轴点击运行反向</value>
+  </data>
+  <data name="VReverse" xml:space="preserve">
+    <value>V轴点击运行反向</value>
+  </data>
+  <data name="LightDectPort" xml:space="preserve">
+    <value>安全光栅端口</value>
+  </data>
+  <data name="ShowLab" xml:space="preserve">
+    <value>显示L*a*b</value>
+  </data>
+  <data name="HistoryView" xml:space="preserve">
+    <value>历史记录</value>
+  </data>
+  <data name="PowerSelect" xml:space="preserve">
+    <value>程控电源设备：</value>
+  </data>
+  <data name="PowerControl" xml:space="preserve">
+    <value>程控电源</value>
+  </data>
+  <data name="VoltageSet" xml:space="preserve">
+    <value>设定电压(V)：</value>
+  </data>
+  <data name="CurrentSet" xml:space="preserve">
+    <value>设定电流(A)：</value>
+  </data>
+  <data name="RealVoltage" xml:space="preserve">
+    <value>实际电压(V)：</value>
+  </data>
+  <data name="RealCurrent" xml:space="preserve">
+    <value>实际电流(A)：</value>
+  </data>
+  <data name="PowerOuput" xml:space="preserve">
+    <value>输出</value>
+  </data>
+  <data name="PowerEnable" xml:space="preserve">
+    <value>启用</value>
+  </data>
+  <data name="ControlPowerDash" xml:space="preserve">
+    <value>程控电源：</value>
+  </data>
+  <data name="CrosstalkInfo" xml:space="preserve">
+    <value>串扰</value>
+  </data>
+  <data name="NoticeInfo" xml:space="preserve">
+    <value>提示</value>
+  </data>
+  <data name="Type_A" xml:space="preserve">
+    <value>旋转结构</value>
+  </data>
+  <data name="Type_B" xml:space="preserve">
+    <value>翻转结构</value>
+  </data>
+  <data name="Type_C" xml:space="preserve">
+    <value>摆臂结构</value>
+  </data>
+  <data name="Degree" xml:space="preserve">
+    <value>度</value>
+  </data>
+</root>

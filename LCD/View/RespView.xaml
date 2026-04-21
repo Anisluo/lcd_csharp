@@ -1,0 +1,112 @@
+﻿<Window x:Class="LCD.View.RespView"
+        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+        xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+        xmlns:local="clr-namespace:LCD.View"
+        mc:Ignorable="d"
+        ResizeMode="NoResize"
+        Title="RespView" Height="450" Width="500">
+    <Grid>
+        <Grid.RowDefinitions>
+            <RowDefinition Height="50"/>
+            <RowDefinition/>
+            <RowDefinition Height="40"/>
+            <RowDefinition Height="10"/>
+        </Grid.RowDefinitions>
+        <WrapPanel VerticalAlignment="Center" FlowDirection="RightToLeft">
+            <Image Source="../Image/head.png"></Image>
+            <Label Content="响应仪器"  FontSize="20" VerticalAlignment="Center"></Label>
+        </WrapPanel>
+        <Grid Grid.Row="1">
+            <TabControl>
+                <TabItem Header="通信设置">
+                    <Grid>
+                        <Grid.RowDefinitions>
+                            <RowDefinition Height="30"/>
+                            <RowDefinition Height="30"/>
+                            <RowDefinition Height="30"/>
+                            <RowDefinition Height="30"/>
+                            <RowDefinition Height="30"/>
+                            <RowDefinition Height="30"/>
+                            <RowDefinition Height="30"/>
+                            <RowDefinition Height="30"/>
+                            <RowDefinition/>
+                        </Grid.RowDefinitions>
+                        <WrapPanel  VerticalAlignment="Center">
+                            <Label Content="报告编号:" Width="90"></Label>
+                            <TextBox Width="220" VerticalAlignment="Center"></TextBox>
+                        </WrapPanel>
+
+                        <WrapPanel  Grid.Row="1" VerticalAlignment="Center">
+                            <Label Content="部材型号：" Width="90"></Label>
+                            <TextBox Width="90" VerticalAlignment="Center"></TextBox>
+
+                            <Label Content="产品型号：" Margin="20,0,0,0" Width="90"></Label>
+                            <TextBox Width="90" VerticalAlignment="Center"></TextBox>
+                        </WrapPanel>
+
+                        <WrapPanel  Grid.Row="2" VerticalAlignment="Center">
+                            <Label Content="来料日期：" Width="90"></Label>
+                            <TextBox Width="90" VerticalAlignment="Center"></TextBox>
+
+                            <Label Content="批      号：" Margin="20,0,0,0" Width="90"></Label>
+                            <TextBox Width="90" VerticalAlignment="Center"></TextBox>
+                        </WrapPanel>
+
+                        <WrapPanel  Grid.Row="3" VerticalAlignment="Center">
+                            <Label Content="屏幕长度：" Width="90"></Label>
+                            <TextBox Width="90" VerticalAlignment="Center"></TextBox>
+
+                            <Label Content="屏幕宽度：" Margin="20,0,0,0" Width="90"></Label>
+                            <TextBox Width="90" VerticalAlignment="Center"></TextBox>
+                        </WrapPanel>
+
+                        <WrapPanel  
+                        HorizontalAlignment="Center"
+                            Grid.Row="4" VerticalAlignment="Center">
+                            <CheckBox Content="根据屏幕长宽自动计算模板坐标"
+                            VerticalAlignment="Center"
+                            FontSize="14"
+                                      Width="300"></CheckBox>
+                        </WrapPanel>
+
+
+                    </Grid>
+
+
+
+                </TabItem>
+                <TabItem Header="矫正参数">
+
+                    <Grid>
+                        <Grid.RowDefinitions>
+                            <RowDefinition Height="30"/>
+                            <RowDefinition Height="30"/>
+                            <RowDefinition Height="30"/>
+                            <RowDefinition Height="30"/>
+                            <RowDefinition Height="30"/>
+                            <RowDefinition Height="30"/>
+                            <RowDefinition Height="30"/>
+                            <RowDefinition Height="30"/>
+                            <RowDefinition/>
+                        </Grid.RowDefinitions>
+
+                        <WrapPanel  Grid.Row="0" VerticalAlignment="Center">
+                            <Label Content="Z轴原点高度：" Width="90"></Label>
+                            <TextBox Width="90" VerticalAlignment="Center"></TextBox>
+
+                            <Label Content="屏幕厚度：" Margin="20,0,0,0" Width="90"></Label>
+                            <TextBox Width="90" VerticalAlignment="Center"></TextBox>
+                        </WrapPanel>
+                    </Grid>
+
+
+                </TabItem>
+            </TabControl>
+        </Grid>
+        <WrapPanel Grid.Row="2" VerticalAlignment="Center" HorizontalAlignment="Center">
+            <Button Width="100" Height="30" Content="确定"></Button>
+        </WrapPanel>
+    </Grid>
+</Window>

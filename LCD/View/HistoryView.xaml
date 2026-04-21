@@ -1,0 +1,144 @@
+﻿<Window x:Class="LCD.View.HistoryView"
+        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+        xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+        xmlns:local="clr-namespace:LCD.View"
+        xmlns:app1="clr-namespace:LCD"
+        mc:Ignorable="d"
+                xmlns:svgc="http://sharpvectors.codeplex.com/svgc/"
+        ResizeMode="NoResize"
+        Title="{Binding [HistoryView], Source={x:Static app1:LanguageManager.Instance}}" Height="750" Width="800">
+
+
+    <Grid>
+        <Grid.RowDefinitions>
+            <RowDefinition Height="50"/>
+            <RowDefinition Height="50"/>
+            <RowDefinition/>
+            <RowDefinition Height="50"/>
+            <RowDefinition Height="10"/>
+        </Grid.RowDefinitions>
+        <WrapPanel VerticalAlignment="Center" FlowDirection="RightToLeft">
+            <Image Source="../Image/head.png"></Image>
+            <Label Content="{Binding [HistoryLog], Source={x:Static app1:LanguageManager.Instance}}" VerticalAlignment="Center" FontSize="20"></Label>
+        </WrapPanel>
+
+
+        <WrapPanel Grid.Row="1">
+
+         
+
+            <!--<Button  Height="40" 
+                        Name="buttonDelete" 
+                        Click="OnBnClickedAddTemplate"
+                        FontWeight="Bold"
+                        VerticalAlignment="Center" 
+                        Margin="10,0,0,0"
+                        BorderBrush="Transparent"
+                        IsEnabled="True"
+                        Background="Transparent"
+                        HorizontalAlignment="Right" 
+                        Width="40" >
+                <svgc:SvgViewbox Source="..\Image\sub.svg" 
+                                                 IsHitTestVisible="False"></svgc:SvgViewbox>
+            </Button>-->
+
+
+
+       
+
+
+            <!--<Button  Height="30" 
+                        Name="buttonDeletedata" 
+                        Click="OnBnClickedDeleIndex"
+                        FontWeight="Bold"
+                        VerticalAlignment="Center" 
+                        Margin="20,0,0,0"
+                        BorderBrush="Transparent"
+                        IsEnabled="True"
+                        Background="Transparent"
+                        HorizontalAlignment="Right" 
+                        Width="30" >
+                <svgc:SvgViewbox Source="..\Image\sub_data.svg" 
+                                                 IsHitTestVisible="False"></svgc:SvgViewbox>
+            </Button>-->
+
+        </WrapPanel>
+        
+
+        <Grid Grid.Row="2">
+            <Grid  Grid.Row="2">
+                <Grid.ColumnDefinitions>
+                    <ColumnDefinition Width="1*"/>
+                    <ColumnDefinition Width="2*"/>
+                </Grid.ColumnDefinitions>
+
+                <Border Grid.Row="0" 
+            BorderBrush="#07345A"
+            BorderThickness="3"
+            CornerRadius="8"
+            Margin="5"
+                    Grid.Column="0">
+                    <Grid Grid.Row="0" Grid.Column="0">
+
+                        <TreeView x:Name="Name"  ItemsSource="{Binding Items}" >
+                            <TreeView.ItemTemplate>
+                                <HierarchicalDataTemplate ItemsSource="{Binding Children}">
+                                    <StackPanel Orientation="Horizontal">
+                                        <CheckBox IsChecked="{Binding IsChecked,Mode=Default,UpdateSourceTrigger=PropertyChanged}" Click="CheckBox_Click"></CheckBox>
+                                        <TextBlock Text="{Binding Header}" MouseDown="UIElement_OnMouseDown"></TextBlock>
+                                    </StackPanel>
+                                </HierarchicalDataTemplate>
+                            </TreeView.ItemTemplate>
+                        </TreeView>
+
+                        <!--<ListBox Name="mylist" SelectionChanged="mylist_SelectionChanged" >
+                            <ListBox.ContextMenu>
+                                <ContextMenu Name="Tab1Menu1"  >
+                                    <MenuItem Header="后退" Click="MenuItem_OnClick"></MenuItem>
+                                </ContextMenu>
+                            </ListBox.ContextMenu>
+                            <ListBox.ItemTemplate>
+                                <DataTemplate>
+                                    <WrapPanel Margin="4">
+                                        <CheckBox  
+                                                MouseRightButtonDown="CheckBox_MouseRightButtonDown"
+                                                FontSize="14"
+                                                Width="20"
+                                                          IsChecked="{Binding IsSelected}" 
+                                                          />
+                                        <TextBlock Width="180" Text="{Binding Name}" MouseDown="Mylist_OnMouseDown">
+                                        </TextBlock>
+                                    </WrapPanel>
+                                </DataTemplate>
+                            </ListBox.ItemTemplate>
+                        </ListBox>-->
+                    </Grid>
+                </Border>
+
+                <GridSplitter Width="5"></GridSplitter>
+
+                <Border Grid.Column="1">
+                    <DataGrid Name="mydata" 
+                    CanUserAddRows="false" ClipboardCopyMode="ExcludeHeader" SelectionUnit="Cell" >
+                    </DataGrid>
+
+                </Border>
+            </Grid>
+        </Grid>
+
+        <Grid Grid.Row="3">
+            <WrapPanel HorizontalAlignment="Center" VerticalAlignment="Center">
+                <Button Width="120"
+                        Height="40"
+                        Click="Button_Click"
+                        Content="{Binding [Delete], Source={x:Static app1:LanguageManager.Instance}}"
+                        FontSize="17"
+                        FontWeight="Bold"></Button>
+                <Button Width="120" Height="40" Margin="100,0,0,0" Click="OnBnClickedOutput" Content="{Binding [Export], Source={x:Static app1:LanguageManager.Instance}}" FontSize="17" FontWeight="Bold"></Button>
+            </WrapPanel>
+        </Grid>
+
+    </Grid>
+</Window>

@@ -1,0 +1,169 @@
+﻿<Window x:Class="LCD.View.Power"
+        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+        xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+        xmlns:local="clr-namespace:LCD.View"
+        xmlns:app1="clr-namespace:LCD"
+        ResizeMode="NoResize"
+        mc:Ignorable="d"
+        Title="PowerView"
+        Height="450"
+        Width="680" Loaded="Window_Loaded" >
+    <Grid>
+        <Grid>
+            <Grid.RowDefinitions>
+                <RowDefinition Height="35" />
+                <RowDefinition Height="35" />
+                <RowDefinition  Height="35"/>
+                <!--Height="35"-->
+                <RowDefinition />
+                <RowDefinition />
+                <RowDefinition />
+                <RowDefinition />
+                <RowDefinition Height="35" />
+                <RowDefinition Height="5" />
+            </Grid.RowDefinitions>
+
+            <WrapPanel VerticalAlignment="Center"
+                       FlowDirection="RightToLeft">
+                <Image Source="../Image/head.png" />
+                <Label Content="{Binding [PowerSet], Source={x:Static app1:LanguageManager.Instance}}"
+                       VerticalAlignment="Center"
+                       FontSize="20" />
+            </WrapPanel>
+
+
+            <Grid Grid.Row="1">
+                <WrapPanel VerticalAlignment="Center" Margin="27,0,0,0">
+                    <TextBlock Text="{Binding [IsEnable], Source={x:Static app1:LanguageManager.Instance}}"
+                               Width="90"
+                               FontSize="14"
+                               Visibility="Hidden" />
+                    <CheckBox IsChecked="{Binding IsCheckBox}" Visibility="Hidden"
+                              Margin="1,0,0,0" />
+                </WrapPanel>
+            </Grid>
+
+            <Grid Grid.Row="2">
+                <WrapPanel  VerticalAlignment="Center"
+                Margin="20,0,0,0">
+                    <Label Content="{Binding [PowerSelect], Source={x:Static app1:LanguageManager.Instance}}"
+               Width="110"
+               FontSize="14"></Label>
+                    <CheckBox IsChecked="{Binding EnablePowerControl}"  VerticalAlignment="Center"
+               Width="80" Content="{Binding [PowerEnable], Source={x:Static app1:LanguageManager.Instance}}"
+               FontSize="14"></CheckBox>
+                    <ComboBox Width="80"
+                  FontSize="14"
+                  Name="PowerTypes"
+                  VerticalAlignment="Center"
+                  SelectedIndex="{Binding PowerType}"
+                  Text="{Binding PowerTypeText}"></ComboBox>
+
+                 <Label Content="{Binding [SerialPort], Source={x:Static app1:LanguageManager.Instance}}"
+                    Width="80" Margin="20,0,0,0"
+                    FontSize="14"></Label>
+                    
+                    <ComboBox Width="80"
+                      FontSize="14"
+                      Name="powerports"
+                      VerticalAlignment="Center"                      
+                      Text="{Binding PowerSerialName}"></ComboBox>
+
+                </WrapPanel>
+            </Grid>
+
+            <Grid Grid.Row="3">
+                <WrapPanel  VerticalAlignment="Center"
+                            Margin="20,0,0,0">
+                    <Label Content="{Binding [ComSet3], Source={x:Static app1:LanguageManager.Instance}}"
+                           Width="110"
+                           FontSize="14"></Label>
+                    <Label Content="{Binding [SerialPort], Source={x:Static app1:LanguageManager.Instance}}"
+                           Width="80"
+                           FontSize="14"></Label>
+                    <ComboBox Width="80"
+                              FontSize="14"
+                              Name="myports"
+                              VerticalAlignment="Center"
+                              SelectedIndex="{Binding comName}"
+                              Text="{Binding comNameText}"></ComboBox>
+
+                    <Label Content="{Binding [BaudrateDash], Source={x:Static app1:LanguageManager.Instance}}"
+                           Margin="20,0,0,0"
+                           Width="80"
+                           FontSize="14"></Label>
+                    <ComboBox Width="80"
+                              SelectedIndex="{Binding bardRate}"
+                              Text="{Binding bardRateText}"
+                              FontSize="14"
+                              VerticalAlignment="Center">
+                        <ComboBoxItem>9600</ComboBoxItem>
+                        <ComboBoxItem>38400</ComboBoxItem>
+                        <ComboBoxItem>115200</ComboBoxItem>
+                    </ComboBox>
+                </WrapPanel>
+            </Grid>
+            <Grid Grid.Row="4">
+                <WrapPanel  VerticalAlignment="Center">
+                    <Label Content="{Binding [DataWidDash], Source={x:Static app1:LanguageManager.Instance}}"
+                           Margin="110,0,0,0"
+                           Width="80"
+                           FontSize="14"></Label>
+                    <ComboBox Width="80"
+                              SelectedIndex="{Binding dataBit}"
+                              Text="{Binding dataBitText}"
+                              FontSize="14"
+                              VerticalAlignment="Center">
+                        <ComboBoxItem>6</ComboBoxItem>
+                        <ComboBoxItem>7</ComboBoxItem>
+                        <ComboBoxItem>8</ComboBoxItem>
+
+                    </ComboBox>
+
+                    <Label Content="{Binding [StopBitsDash], Source={x:Static app1:LanguageManager.Instance}}"
+                           Margin="20,0,0,0"
+                           Width="80"
+                           FontSize="14"></Label>
+                    <ComboBox Width="80"
+                              SelectedIndex="{Binding stopBit}"
+                              Text="{Binding stopBitText}"
+                              FontSize="14"
+                              VerticalAlignment="Center">
+                        <ComboBoxItem>0</ComboBoxItem>
+                        <ComboBoxItem>1</ComboBoxItem>
+                    </ComboBox>
+
+                    <Label Content="{Binding [ParityDash], Source={x:Static app1:LanguageManager.Instance}}"
+                           Margin="20,0,0,0"
+                           Width="80"
+                           FontSize="14"></Label>
+                    <ComboBox Width="80"
+                              SelectedIndex="{Binding Parity}"
+                              Text="{Binding ParityText}"
+                              FontSize="14"
+                              VerticalAlignment="Center">
+                        <ComboBoxItem>None</ComboBoxItem>
+                        <ComboBoxItem>Odd</ComboBoxItem>
+                        <ComboBoxItem>Even</ComboBoxItem>
+                    </ComboBox>
+                </WrapPanel>
+
+            </Grid>
+            <Grid Grid.Row="7">
+                <WrapPanel FlowDirection="RightToLeft"
+                           HorizontalAlignment="Center"
+                           VerticalAlignment="Center">
+                    <Button Content="{Binding [OK], Source={x:Static app1:LanguageManager.Instance}}"
+                            Click="Button_Click"
+                            FontWeight="Bold"
+                            FontSize="16"
+                            Background="White"
+                            Width="120"
+                            Height="30"></Button>
+                </WrapPanel>
+            </Grid>
+        </Grid>
+    </Grid>
+</Window>

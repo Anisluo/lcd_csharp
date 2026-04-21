@@ -1,0 +1,130 @@
+diff --git a/LCD/Data/Project.cs b/LCD/Data/Project.cs
+--- a/LCD/Data/Project.cs
++++ b/LCD/Data/Project.cs
+@@
+     public enum ENUMMESSTYLE//
+     {
+         _01_POINT,
+         _02_RESPONSE,
+         _03_SPECTRUM,
+         _04_FLICKER,
+         _05_CROSSTALK,
+         _06_ACR,
+         _07_warmup,
++        TCO,
+         None,
+         Power
+     }
+
+diff --git a/LCD/View/CustomView.xaml b/LCD/View/CustomView.xaml
+--- a/LCD/View/CustomView.xaml
++++ b/LCD/View/CustomView.xaml
+@@
+                                 <ComboBoxItem>05-CrossTalk</ComboBoxItem>
+                                 <!--<ComboBoxItem>04-Flicker</ComboBoxItem>
+                                 <ComboBoxItem>05-CrossTalk</ComboBoxItem>
+                                 <ComboBoxItem>06-ACR</ComboBoxItem>-->
+                                 <ComboBoxItem>07-warmup</ComboBoxItem>
++                                <ComboBoxItem>08-TCO</ComboBoxItem>
+                             </ComboBox>
+
+diff --git a/LCD/View/CustomView.xaml.cs b/LCD/View/CustomView.xaml.cs
+--- a/LCD/View/CustomView.xaml.cs
++++ b/LCD/View/CustomView.xaml.cs
+@@
+             else if (inf.MESTYPE == ENUMMESSTYLE._07_warmup)
+             {
+                 inf.Type = "Warmup";
+             }
++            else if (inf.MESTYPE == ENUMMESSTYLE.TCO)
++            {
++                inf.Type = "TCO";
++            }
+             else if (inf.MESTYPE == ENUMMESSTYLE.Power)
+             {
+                 inf.Type = "Power";
+             }
+@@
+             else if (this.comboBoxType.Text.IndexOf("05") != -1) { MESTYPE = ENUMMESSTYLE._05_CROSSTALK; }
+             else if (this.comboBoxType.Text.IndexOf("06") != -1){ MESTYPE = ENUMMESSTYLE._06_ACR; }
+             else if (this.comboBoxType.Text.IndexOf("7")!=-1) { MESTYPE = ENUMMESSTYLE._07_warmup; }
++            else if ((this.comboBoxType.Text.IndexOf("08") != -1) || (this.comboBoxType.Text.IndexOf("TCO") != -1)) { MESTYPE = ENUMMESSTYLE.TCO; }
+@@
+                 case ENUMMESSTYLE._05_CROSSTALK: InitDataGrid_CROSSTALK(info); break;
+                 case ENUMMESSTYLE._06_ACR: InitDataGrid_ACR(info); break;
+                 case ENUMMESSTYLE._07_warmup: InitDataGrid_warmup(info); break;
++                case ENUMMESSTYLE.TCO: InitDataGrid_POINT(info); break;
+             }
+@@
+             if(infoData == null)
+             {
+                 //为null表示新建的，这个时候也需要新建一个InfoData对象
+                 infoData = new InfoData();
+                 infoData.id = info.id;
++                infoData.MESTYPE = info.MESTYPE;
+                 Project.lstInfos.Add(infoData);//加到队列里面啊，后面才能搜索到
+             }
++            else
++            {
++                infoData.MESTYPE = info.MESTYPE;
++            }
+             if (infoData.MESTYPE == ENUMMESSTYLE._05_CROSSTALK)
+             {
+@@
+                 case 2: MESTYPE = ENUMMESSTYLE._03_SPECTRUM; break;
+                 case 3: MESTYPE = ENUMMESSTYLE._05_CROSSTALK; break;
+                 case 4: MESTYPE = ENUMMESSTYLE._07_warmup; break;
++                case 5: MESTYPE = ENUMMESSTYLE.TCO; break;
+                 //case 5: MESTYPE = ENUMMESSTYLE._06_ACR; break;
+                 //case 6: MESTYPE = ENUMMESSTYLE._07_warmup; break;
+             }
+@@
+                 if (MESTYPE == ENUMMESSTYLE._01_POINT || MESTYPE == ENUMMESSTYLE._07_warmup||
+-                    MESTYPE == ENUMMESSTYLE._03_SPECTRUM || MESTYPE == ENUMMESSTYLE._05_CROSSTALK)
++                    MESTYPE == ENUMMESSTYLE._03_SPECTRUM || MESTYPE == ENUMMESSTYLE._05_CROSSTALK ||
++                    MESTYPE == ENUMMESSTYLE.TCO)
+                 {
+                     AutoCreate.Visibility = Visibility.Visible;
+                 }
+
+diff --git a/LCD/View/DataTemplateView.xaml.cs b/LCD/View/DataTemplateView.xaml.cs
+--- a/LCD/View/DataTemplateView.xaml.cs
++++ b/LCD/View/DataTemplateView.xaml.cs
+@@
+                     case ENUMMESSTYLE._05_CROSSTALK: Init_POINT(lstdata, InitDataTemplate); break;
+                     case ENUMMESSTYLE._06_ACR: Init_POINT(lstdata, InitDataTemplate); break;
+                     case ENUMMESSTYLE._07_warmup: Init_POINT(lstdata, InitDataTemplate); break;
++                    case ENUMMESSTYLE.TCO: Init_POINT(lstdata, InitDataTemplate); break;
+ 
+                 }
+
+diff --git a/LCD/Ctrl/ProcessCtrl.cs b/LCD/Ctrl/ProcessCtrl.cs
+--- a/LCD/Ctrl/ProcessCtrl.cs
++++ b/LCD/Ctrl/ProcessCtrl.cs
+@@
+                         case ENUMMESSTYLE._05_CROSSTALK: ProcessPointTemplateXY(dt, ENUMMESSTYLE._05_CROSSTALK, TestName); ; break;
+                         case ENUMMESSTYLE._06_ACR: ProcessPointTemplateXY(dt, ENUMMESSTYLE._01_POINT, TestName); ; break;
+                         case ENUMMESSTYLE._07_warmup: ProcessPointTemplateXYZ(dt, ENUMMESSTYLE._07_warmup, TestName, Project.lstInfos[i].id, height); ; break;
++                        case ENUMMESSTYLE.TCO: ProcessPointTemplateXYZ(dt, ENUMMESSTYLE._01_POINT, TestName, Project.lstInfos[i].id, height); break;
+                         case ENUMMESSTYLE.Power:
+
+diff --git a/LCD/View/CustomTemplate.xaml.cs b/LCD/View/CustomTemplate.xaml.cs
+--- a/LCD/View/CustomTemplate.xaml.cs
++++ b/LCD/View/CustomTemplate.xaml.cs
+@@
+                 InfoData infodata = new InfoData();
+                 infodata.height = 0;
+                 infodata.IsSelected = true;
+-                infodata.MESTYPE = ENUMMESSTYLE._01_POINT;
++                infodata.MESTYPE = info.MESTYPE;
+                 infodata.Name = info.Name;
+
+diff --git a/LCD/MainWindow.xaml.cs b/LCD/MainWindow.xaml.cs
+--- a/LCD/MainWindow.xaml.cs
++++ b/LCD/MainWindow.xaml.cs
+@@
+-            if (eNUMMESSTYLE == ENUMMESSTYLE._01_POINT)
++            if (eNUMMESSTYLE == ENUMMESSTYLE._01_POINT || eNUMMESSTYLE == ENUMMESSTYLE.TCO)
+             {
+                 this.Dispatcher.Invoke(new Action(() =>
+                 {

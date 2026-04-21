@@ -1,0 +1,218 @@
+﻿<Window x:Class="LCD.View.PGView"
+        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+        xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+        xmlns:local="clr-namespace:LCD.View"
+        xmlns:app1="clr-namespace:LCD"
+        ResizeMode="NoResize"
+        mc:Ignorable="d"
+        Title="PGView" Height="450" Width="680">
+    <Grid>
+        <Grid.RowDefinitions>
+            <RowDefinition Height="35"/>
+            <RowDefinition Height="170"/>
+            <RowDefinition /> <!--Height="35"-->
+            <RowDefinition />
+            <RowDefinition />
+            <RowDefinition/>
+            <RowDefinition />
+            <RowDefinition Height="35"/>
+            <RowDefinition Height="5"/>
+        </Grid.RowDefinitions>
+
+        <WrapPanel VerticalAlignment="Center"
+                   FlowDirection="RightToLeft">
+            <Image Source="../Image/head.png"/>
+            <Label Content="{Binding [PgSettings], Source={x:Static app1:LanguageManager.Instance}}" 
+                   VerticalAlignment="Center" 
+                   FontSize="20"/>
+        </WrapPanel>
+
+
+        <Grid Grid.Row="1">
+            <Grid.RowDefinitions>
+                <RowDefinition/>
+            </Grid.RowDefinitions>
+            <Grid.ColumnDefinitions>
+                <ColumnDefinition/>
+                <ColumnDefinition/>
+                <ColumnDefinition/>
+            </Grid.ColumnDefinitions>
+            <Border BorderBrush="Gray" BorderThickness="2" 
+            CornerRadius="8"
+                    Height="170" Width="150">
+                <StackPanel HorizontalAlignment="Center">
+                    <!--<Image  Height="130" Grid.Column="0" Grid.Row="0" Source="../Image/BM7.png">
+                    </Image>-->
+                    <Border Height="130"></Border>
+
+                    <RadioButton Content="Soft PG"
+                    Name="softPg"
+                    FontWeight="Bold"
+                    Click="OnBnClickedSoftPG"
+                    
+                                 Margin="0,10,0,0" HorizontalAlignment="Center"/>
+                </StackPanel>
+
+            </Border>
+
+
+            <Border BorderBrush="Gray" 
+                Grid.Column="1" Grid.Row="0"
+                        BorderThickness="2" 
+            CornerRadius="8"
+                    Height="170" Width="150">
+                <StackPanel HorizontalAlignment="Center">
+                    <!--<Image Grid.Column="0"
+                    Height="130"
+                           Grid.Row="0" Source="../Image/BM5A.png">
+                    </Image>-->
+                    <Border Height="130"></Border>
+                    <RadioButton Content="{Binding [ExternPg], Source={x:Static app1:LanguageManager.Instance}}"
+                    FontWeight="Bold" 
+                    Name="otherPG"
+                    Click="OnBnClickedSoftPG"
+                                 Margin="0,10,0,0" 
+                                 HorizontalAlignment="Center"/>
+                </StackPanel>
+            </Border>
+
+
+
+            <Border BorderBrush="Gray" 
+                Grid.Column="2" Grid.Row="0"
+                        BorderThickness="2" 
+            CornerRadius="8"
+                    Height="170" Width="150">
+                <StackPanel HorizontalAlignment="Center">
+                    <Border Height="130"></Border>
+                    <RadioButton Content="{Binding [NoPg], Source={x:Static app1:LanguageManager.Instance}}"
+                    FontWeight="Bold" 
+                    Name="demoPG"
+                    Click="OnBnClickedSoftPG"
+                                 Margin="0,10,0,0" 
+                                 HorizontalAlignment="Center"/>
+                </StackPanel>
+            </Border>
+
+
+
+        </Grid>
+        <Grid Grid.Row="2">
+            <WrapPanel  VerticalAlignment="Center" Visibility="{Binding BusType}">
+                <Label Content="{Binding [BusType], Source={x:Static app1:LanguageManager.Instance}}" Margin="20,0,0,0"></Label>
+                <Label Content="{Binding [CommType], Source={x:Static app1:LanguageManager.Instance}}" Margin="35,0,0,0" Width="80" FontSize="14"></Label>
+                <ComboBox Width="80" 
+                SelectedIndex="{Binding BusTypeIndex}" 
+                         SelectionChanged="ComboBox_SelectionChanged"
+                          FontSize="14" VerticalAlignment="Center">
+                    <ComboBoxItem>SerialPort</ComboBoxItem>
+                    <ComboBoxItem>TCP</ComboBoxItem>
+
+                </ComboBox>
+            </WrapPanel>
+
+            <!-- DataContextChanged="ComboBox_DataContextChanged"
+            -->
+        </Grid>
+        <Grid Grid.Row="3">
+            <WrapPanel VerticalAlignment="Center">
+                <Label Content="{Binding [PgPara], Source={x:Static app1:LanguageManager.Instance}}" Width="90" Margin="20,0,0,0" FontSize="14"></Label>
+                <Label Content="{Binding [InstrFormat], Source={x:Static app1:LanguageManager.Instance}}" Width="80" FontSize="14"></Label>
+                <TextBox Width="280" FontSize="14" VerticalAlignment="Center">8000</TextBox>
+            </WrapPanel>
+        </Grid>
+        <!--Visibility="{Binding TCPVisibility}"-->
+        <Grid Grid.Row="4" Visibility="{Binding TCPVisibility}">
+            <Grid.RowDefinitions>
+                <RowDefinition Height="30"/>
+                <RowDefinition Height="30"/>
+                <RowDefinition/>
+            </Grid.RowDefinitions>
+            <WrapPanel  VerticalAlignment="Center">
+                <Label Content="{Binding [ComSet3], Source={x:Static app1:LanguageManager.Instance}}" Width="90"  Margin="20,0,0,0" FontSize="14"></Label>
+                <Label Content="{Binding [IpAddr], Source={x:Static app1:LanguageManager.Instance}}" Width="80" FontSize="14"></Label>
+                <TextBox Width="180"
+                Name="ip"
+                         FontSize="14"
+                Text="{Binding ip}"
+                         VerticalAlignment="Center"></TextBox>
+
+                <Label Content="{Binding [PortDash], Source={x:Static app1:LanguageManager.Instance}}" Margin="20,0,0,0" Width="80" FontSize="14"></Label>
+                <TextBox Width="80"
+                Name="port"
+                         FontSize="14" 
+                Text="{Binding port}"
+                         VerticalAlignment="Center"></TextBox>
+            </WrapPanel>
+
+ 
+
+
+
+        </Grid>
+        <Grid Grid.Row="5" Visibility="{Binding SerialPortVisibility}">
+            <WrapPanel  VerticalAlignment="Center" Margin="20,0,0,0">
+                <Label Content="{Binding [ComSet3], Source={x:Static app1:LanguageManager.Instance}}" Width="90"  FontSize="14"></Label>
+                <Label Content="{Binding [SerialPort], Source={x:Static app1:LanguageManager.Instance}}" Width="80" FontSize="14"></Label>
+                <ComboBox Width="80" FontSize="14" 
+                Name="myports"
+                          VerticalAlignment="Center" Text="{Binding comName}"></ComboBox>
+
+                <Label Content="{Binding [BaudrateDash], Source={x:Static app1:LanguageManager.Instance}}" Margin="20,0,0,0" Width="80" FontSize="14"></Label>
+                <ComboBox Width="80"
+                SelectedIndex="{Binding bardRate}"
+                          FontSize="14" VerticalAlignment="Center">
+                    <ComboBoxItem>9600</ComboBoxItem>
+                    <ComboBoxItem>38400</ComboBoxItem>
+                    <ComboBoxItem>115200</ComboBoxItem>
+                </ComboBox>
+            </WrapPanel>
+        </Grid>
+        <Grid Grid.Row="6" Visibility="{Binding SerialPortVisibility}">
+            <WrapPanel  VerticalAlignment="Center">
+                <Label Content="{Binding [DataWidDash], Source={x:Static app1:LanguageManager.Instance}}" Margin="110,0,0,0" Width="80" FontSize="14"></Label>
+                <ComboBox Width="80" 
+                SelectedIndex="{Binding dataBit}"
+                          FontSize="14" VerticalAlignment="Center">
+                    <ComboBoxItem>6</ComboBoxItem>
+                    <ComboBoxItem>7</ComboBoxItem>
+                    <ComboBoxItem>8</ComboBoxItem>
+
+                </ComboBox>
+
+                <Label Content="{Binding [StopBitsDash], Source={x:Static app1:LanguageManager.Instance}}" Margin="20,0,0,0" Width="80" FontSize="14"></Label>
+                <ComboBox Width="80" 
+                SelectedIndex="{Binding stopBit}"
+                          FontSize="14" VerticalAlignment="Center">
+                    <ComboBoxItem>0</ComboBoxItem>
+                    <ComboBoxItem>1</ComboBoxItem>
+                </ComboBox>
+
+                <Label Content="{Binding [ParityDash], Source={x:Static app1:LanguageManager.Instance}}" Margin="20,0,0,0" Width="80" FontSize="14"></Label>
+                <ComboBox Width="80"
+                SelectedIndex="{Binding Parity}"
+                
+                          FontSize="14" VerticalAlignment="Center">
+                    <ComboBoxItem>None</ComboBoxItem>
+                    <ComboBoxItem>Odd</ComboBoxItem>
+                    <ComboBoxItem>Even</ComboBoxItem>
+                </ComboBox>
+            </WrapPanel>
+
+        </Grid>
+        <Grid Grid.Row="7">
+            <WrapPanel FlowDirection="RightToLeft" 
+            HorizontalAlignment="Center"
+                       VerticalAlignment="Center">
+                <Button Content="{Binding [OK], Source={x:Static app1:LanguageManager.Instance}}"
+                Click="OnBnClickedEnsure"
+                FontWeight="Bold"
+                FontSize="16"
+                Background="White"
+                        Width="120" Height="30"></Button>
+            </WrapPanel>
+        </Grid>
+    </Grid>
+</Window>

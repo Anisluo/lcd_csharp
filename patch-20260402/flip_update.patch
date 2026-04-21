@@ -1,0 +1,59 @@
+--- a/LCD/Data/Project.cs
++++ b/LCD/Data/Project.cs
+@@ -372,6 +372,7 @@
+         public double VMaxAngle;
+         public int UReverse;
+         public int VReverse;
++        public bool IsFlipped => EQType == 5; // 仪器固定旋转式
+
+         public Machine machine;//机械参数
+
+--- a/LCD/View/MPCView.xaml
++++ b/LCD/View/MPCView.xaml
+@@ -244,6 +244,7 @@
+                         <ComboBoxItem Content="{Binding [NoComp], Source={x:Static app1:LanguageManager.Instance}}"></ComboBoxItem>
+                         <ComboBoxItem Content="仪器旋转式"></ComboBoxItem>
++                        <ComboBoxItem Content="仪器固定旋转式"></ComboBoxItem>
+                     </ComboBox>
+
+--- a/LCD/Ctrl/MovCtrl.cs
++++ b/LCD/Ctrl/MovCtrl.cs
+@@ -502,13 +502,14 @@
+         public void MoveXAxisDown(EnumMoveSpeed speed)
+         {
+             Axies axe = Project.cfg.ax_x;
+             if (!axe.IsEnable) { return; }
++            int dir = Project.cfg.IsFlipped ? -axe.direction : axe.direction;
+             if (axe.IsSecondValue)
+             {
+                 if (MPC08EDLL.check_done(axe.value) != 0) { return; }
+-                MoveAxisNoWaitByVector(axe, speed, axe.direction);
++                MoveAxisNoWaitByVector(axe, speed, dir);
+             }
+             else
+             {
+                 if (MPC08EDLL.check_done(axe.value) != 0) { Project.WriteLog("轴状态异常"); return; }
+-                MoveAxisNoWait(axe, speed, axe.direction);
++                MoveAxisNoWait(axe, speed, dir);
+             }
+         }
+
+@@ -535,13 +536,14 @@
+         public void MoveYAxiesDown(EnumMoveSpeed speed)
+         {
+             Axies axe = Project.cfg.ax_y;
+             if (!axe.IsEnable) { return; }
++            int dir = Project.cfg.IsFlipped ? -axe.direction : axe.direction;
+             if (axe.IsSecondValue)
+             {
+                 //if (MPC08EDLL.check_done(axe.value) != 0) { return; }
+-                MoveAxisNoWaitByVector(axe, speed, axe.direction);
++                MoveAxisNoWaitByVector(axe, speed, dir);
+             }
+             else
+             {
+                 if (MPC08EDLL.check_done(axe.value) != 0) { return; }
+-                MoveAxisNoWait(axe, speed, axe.direction);
++                MoveAxisNoWait(axe, speed, dir);
+             }
+         }

@@ -1,0 +1,43 @@
+﻿<Window x:Class="LCD.View.WarnMachineConfig"
+        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+        xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+        xmlns:local="clr-namespace:LCD.View"
+        xmlns:app1="clr-namespace:LCD"
+        mc:Ignorable="d"
+        Title="{Binding [WarmTest], Source={x:Static app1:LanguageManager.Instance}}" Height="150" Width="400">
+    <Grid>
+        <Grid>
+            <Grid.ColumnDefinitions>
+                <ColumnDefinition Width="Auto"/>
+            </Grid.ColumnDefinitions>
+            
+             <Grid.RowDefinitions>
+                <RowDefinition/>
+                <RowDefinition/>
+                <RowDefinition/>
+            </Grid.RowDefinitions>
+            <Grid Grid.Row="0">
+                <CheckBox x:Name="checbox" Content="{Binding [StartWarmTest], Source={x:Static app1:LanguageManager.Instance}}" Margin="50,0,0,0"
+                IsChecked="False"
+                Checked="Checkbox_Checked"
+                Unchecked="Checkbox_Unchecked"
+                VerticalAlignment="Center" Width="180"></CheckBox>
+            </Grid>
+            <Grid Grid.Row="1">
+                <WrapPanel Orientation="Vertical">
+                    <Label Content="{Binding [WarmTestTime], Source={x:Static app1:LanguageManager.Instance}}" Margin="105,0,0,0" Width="80" VerticalAlignment="Center"></Label>
+                    <TextBox  x:Name="time" Width="80"  VerticalAlignment="Center"></TextBox>
+                    <Label Content="{Binding [WarmTestUnit], Source={x:Static app1:LanguageManager.Instance}}"  Width="80"></Label>
+                </WrapPanel>
+            </Grid>
+            <Grid Grid.Row="2">
+                <WrapPanel Orientation="Horizontal"  VerticalAlignment="Center">
+                    <Button x:Name="OKButton" Click="OKButton_OnClick" Width="100" Margin="50,0,0,0" Background="Green"  VerticalAlignment="Center" HorizontalAlignment="Center"  Content="{Binding [OK], Source={x:Static app1:LanguageManager.Instance}}"></Button>
+                    <Button x:Name="CancelButton" Click="CancelButton_OnClick" Width="100" Margin="100,0,0,0" Content="{Binding [Cancel], Source={x:Static app1:LanguageManager.Instance}}" Background="Red" VerticalAlignment="Center" HorizontalAlignment="Right" ></Button>
+                </WrapPanel>
+            </Grid>
+        </Grid>
+    </Grid>
+</Window>

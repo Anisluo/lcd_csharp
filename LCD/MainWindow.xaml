@@ -1,0 +1,894 @@
+﻿<Window x:Class="LCD.MainWindow"
+        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+        xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+        xmlns:local="clr-namespace:LCD"
+        xmlns:hc="clr-namespace:LCD.Themes"
+        mc:Ignorable="d"
+        Closing="Window_Closing"
+        Closed="Window_Closed"
+               xmlns:svgc="http://sharpvectors.codeplex.com/svgc/"
+        Background="White"
+        Title="{Binding [AppName], Source={x:Static local:LanguageManager.Instance}}" Height="800" Width="1550" Loaded="Window_Loaded" Icon="/icon.png" >
+
+    <!--<Window.Resources>
+        <ContextMenu x:Key="ContextMenu">
+            <MenuItem Name="ShowAll" Header="显示全部" Click="MenuItem_OnClick"/>
+            <Separator></Separator>
+            <MenuItem Name="ShowPortion" Header="显示部分" Click="ShowPortion"/>
+        </ContextMenu>
+    </Window.Resources>-->
+
+    <Grid>
+        <Grid.RowDefinitions>
+            <RowDefinition Height="30"/>
+            <RowDefinition Height="35"/>
+            <RowDefinition/>
+            <RowDefinition Height="20"/>
+        </Grid.RowDefinitions>
+        <WrapPanel Grid.Row="0" Grid.RowSpan="2" HorizontalAlignment="Right">
+            <Image Source="Image/head.png"/>
+        </WrapPanel>
+
+        <Menu  HorizontalAlignment="Left" Background="Transparent" VerticalAlignment="Center">
+            <MenuItem Header="{Binding [FileF], Source={x:Static local:LanguageManager.Instance}}">
+                <MenuItem Header="{Binding [Open], Source={x:Static local:LanguageManager.Instance}}" Click="Open_OnClick"></MenuItem>
+                <MenuItem Header="{Binding [Close], Source={x:Static local:LanguageManager.Instance}}" Click="Close_Click"></MenuItem>
+                <!--<MenuItem Header="导出CSV"></MenuItem>-->
+                <MenuItem Header="{Binding [History], Source={x:Static local:LanguageManager.Instance}}" Click="OnBnClickedHistory"></MenuItem>
+                <!--<MenuItem Header="图像"></MenuItem>-->
+            </MenuItem>
+            <MenuItem x:Name="MenuPara" Header="{Binding [ParaP], Source={x:Static local:LanguageManager.Instance}}">
+                <MenuItem Header="{Binding [DeviceSet], Source={x:Static local:LanguageManager.Instance}}" Click="OnBnClickedDevice"></MenuItem>
+                <MenuItem Name="Viewangle" Header="{Binding [ViewpointSw], Source={x:Static local:LanguageManager.Instance}}" Click="OnBnClickedFdl"></MenuItem>
+                <MenuItem Name="MPcItemMenuItem" Header="{Binding [PlatformSet], Source={x:Static local:LanguageManager.Instance}}" Click="OnBnClickMPC"></MenuItem>
+                <MenuItem Header="{Binding [SportMode], Source={x:Static local:LanguageManager.Instance}}" Click="OnBnClickMoveStyle"></MenuItem>
+                <MenuItem Header="{Binding [CameraSet], Source={x:Static local:LanguageManager.Instance}}" Click="OnBnClickCamera"></MenuItem>
+                <MenuItem Header="{Binding [DeviceResponseSet], Source={x:Static local:LanguageManager.Instance}}" Click="OnBnClickedResp"></MenuItem>
+                <MenuItem Header="{Binding [PGSet], Source={x:Static local:LanguageManager.Instance}}" Click="OnBnClickedPGView"></MenuItem>
+                <MenuItem Header="{Binding [PowerSet], Source={x:Static local:LanguageManager.Instance}}"
+                          Click="MenuItem_PowerClick"></MenuItem>
+                <MenuItem Header="{Binding [DataFormatSet], Source={x:Static local:LanguageManager.Instance}}" Click="OnBnClickedResultFormat"></MenuItem>
+                <MenuItem Header="{Binding [ReturnZero], Source={x:Static local:LanguageManager.Instance}}"
+                          x:Name="CenterMenuitem"
+                          Click="OnBnClicked2Center" />
+                <MenuItem Header="{Binding [WarnMachine], Source={x:Static local:LanguageManager.Instance}}"
+                          x:Name="WarnMchineTest"
+                          Click="OnBnClicked2WarnMachine" />
+                <MenuItem Header="{Binding [LoadingPos], Source={x:Static local:LanguageManager.Instance}}" Click="MenuItem_OnClickup"/>
+                <MenuItem Header="{Binding [MoveDebug], Source={x:Static local:LanguageManager.Instance}}" Click="MenuItem_OnClickDebug"/>
+            </MenuItem>
+            <!--<MenuItem Header="测量（M）">
+                <MenuItem Header="单点测量"></MenuItem>
+                <MenuItem Header="多点测量"></MenuItem>
+            </MenuItem>-->
+
+            <!--<MenuItem Header="模板（T）">
+                <MenuItem Header="5点模板" Click="OnBnClicked5PointView"></MenuItem>
+                <MenuItem Header="9点模板" Click="OnBnClicked9PointView"></MenuItem>
+                <MenuItem Header="13点模板" Click="OnBnClicked13PointView"></MenuItem>
+                -->
+            <!--<MenuItem Header="点位模板" Click="OnBnClickedCustomTemplate"></MenuItem>
+                <MenuItem Header="响应模板" Click="OnBnClickedResponseTemplate"></MenuItem>
+                <MenuItem Header="自定义模板组" Click="OnBnClickedCustomView" ></MenuItem>-->
+            <!--
+            </MenuItem>-->
+
+            <!--<MenuItem Header="报表（R）">
+                <MenuItem Header="单次报表"></MenuItem>
+                <MenuItem Header="多次报表"></MenuItem>
+            </MenuItem>-->
+            <MenuItem Header="{Binding [Helph], Source={x:Static local:LanguageManager.Instance}}">
+                <MenuItem Header="{Binding [LangSet], Source={x:Static local:LanguageManager.Instance}}" Click="OnBtnLangSelect"></MenuItem>
+                <MenuItem Header="{Binding [OpManual], Source={x:Static local:LanguageManager.Instance}}"></MenuItem>
+                <MenuItem Header="{Binding [DeviceSelfCheck], Source={x:Static local:LanguageManager.Instance}}" Click="OnBnClickedSelfCheck"></MenuItem>
+            </MenuItem>
+        </Menu>
+
+        <TextBlock Visibility="Collapsed" Grid.Row="1" Margin="0,0,360,0" VerticalAlignment="Center" Width="120" FontSize="24" Background="Red" TextAlignment="Center" Text="正常" HorizontalAlignment="Right"/>
+
+        <WrapPanel Grid.Row="1" VerticalAlignment="Center">
+            <Button  Width="30" Height="28" Margin="10,0,0,0" BorderBrush="Transparent" Background="Transparent" BorderThickness="0" Click="OnBnClickedSwitchUser" VerticalAlignment="Center" >
+                <svgc:SvgViewbox Source="Image\user.svg" IsHitTestVisible="False"></svgc:SvgViewbox>
+            </Button>
+
+            <Button  Width="30" Height="28" Margin="10,0,0,0" Background="Transparent" BorderBrush="Transparent" BorderThickness="0" Click="OnBnClickedStop" VerticalAlignment="Center" >
+                <svgc:SvgViewbox Source="Image\run.svg" IsHitTestVisible="False"></svgc:SvgViewbox>
+            </Button>
+
+
+            <Button  Width="30" Height="28" Margin="10,0,0,0" Background="Transparent" BorderBrush="Transparent" BorderThickness="0" Click="OnBnClickedHistory" VerticalAlignment="Center" >
+                <svgc:SvgViewbox Source="Image\Stop.svg" IsHitTestVisible="False"></svgc:SvgViewbox>
+            </Button>
+
+            <Button  Width="30" Height="28" Margin="10,0,0,0" Background="Transparent" BorderBrush="Transparent" Click="OnBnClickedHistory" VerticalAlignment="Center" >
+                <svgc:SvgViewbox Source="Image\history.svg" IsHitTestVisible="False"></svgc:SvgViewbox>
+            </Button>
+
+            <Button  Width="30" Height="28" Margin="10,0,0,0" Background="Transparent" BorderBrush="Transparent" BorderThickness="0" Click="OnBnClickedHistory" VerticalAlignment="Center" >
+                <svgc:SvgViewbox Source="Image\template.svg" IsHitTestVisible="False"></svgc:SvgViewbox>
+            </Button>
+
+            <!--<Button  Width="30" Height="28" Margin="0,0,0,0" Background="Transparent" BorderBrush="Transparent" BorderThickness="0" FontSize="16" Content="2°" Click="OnBnClickedHistory" VerticalAlignment="Center"/>
+            <Button  Width="30" Height="28" Margin="2,0,0,0" Background="Transparent" BorderBrush="Transparent" BorderThickness="0" FontSize="16" Content="1°" Click="OnBnClickedHistory" VerticalAlignment="Center" />
+            <Button  Width="30" Height="28" Margin="2,0,0,0" Background="Transparent" BorderBrush="Transparent" BorderThickness="0" FontSize="16" Content="0.2°" Click="OnBnClickedHistory" VerticalAlignment="Center"/>
+            <Button  Width="30" Height="28" Margin="2,0,0,0" Background="Transparent" BorderBrush="Transparent" BorderThickness="0" FontSize="16" Content="0.1°" Click="OnBnClickedHistory" VerticalAlignment="Center"/>-->
+            
+            <Button Width="30" Height="28" Margin="10,0,0,0" Background="Transparent" BorderBrush="Transparent" BorderThickness="0" Click="OnBnClickedClear" VerticalAlignment="Center" >
+                <svgc:SvgViewbox Source="Image\clear.svg" IsHitTestVisible="False"></svgc:SvgViewbox>
+            </Button>
+
+            <StackPanel x:Name="ViewAngleBtns" Orientation="Horizontal">
+                <Button x:Name="ViewAngle2" Width="30" Height="28" Margin="10,0,0,0" Background="Transparent" BorderBrush="Transparent" BorderThickness="0" Click="OnBnClickedView2" VerticalAlignment="Center" >
+                    <svgc:SvgViewbox Source="Image\2.svg" IsHitTestVisible="False"></svgc:SvgViewbox>
+                </Button>
+                <Button  Width="30" Height="28" Margin="10,0,0,0" Background="Transparent" BorderBrush="Transparent" BorderThickness="0" Click="OnBnClickedView1" VerticalAlignment="Center" >
+                    <svgc:SvgViewbox Source="Image\1.svg" IsHitTestVisible="False"></svgc:SvgViewbox>
+                </Button>
+                <Button  Width="30" Height="28" Margin="10,0,0,0" Background="Transparent" BorderBrush="Transparent" BorderThickness="0" Click="OnBnClickedView02" VerticalAlignment="Center" >
+                    <svgc:SvgViewbox Source="Image\02.svg" IsHitTestVisible="False"></svgc:SvgViewbox>
+                </Button>
+                <Button  Width="30" Height="28" Margin="10,0,0,0" Background="Transparent" BorderBrush="Transparent" BorderThickness="0" Click="OnBnClickedView01" VerticalAlignment="Center" >
+                    <svgc:SvgViewbox Source="Image\01.svg" IsHitTestVisible="False"></svgc:SvgViewbox>
+                </Button>
+            </StackPanel>
+
+            <Button Visibility="Collapsed" Content="测试" Margin="1" Style="{StaticResource ButtonBaseStyle}" hc:IconElement.Geometry="{StaticResource PlayGeometry}" hc:IconElement.Height="12" Foreground="Black" BorderThickness="1"/>
+            <Button Visibility="Collapsed" Content="暂停" Margin="1" Style="{StaticResource ButtonBaseStyle}" hc:IconElement.Geometry="{StaticResource PauseGeometry}" hc:IconElement.Height="12" Foreground="Black" BorderThickness="1"/>
+            <Button Visibility="Collapsed" Content="停止" Margin="1" Style="{StaticResource ButtonBaseStyle}" hc:IconElement.Geometry="{StaticResource StopGeometry}" hc:IconElement.Height="12" Foreground="White" Background="DarkRed"/>
+
+
+        </WrapPanel>
+
+        <Grid Grid.Row="2">
+            <Grid.ColumnDefinitions>
+                <ColumnDefinition Width="1.2*" />
+                <ColumnDefinition/>
+            </Grid.ColumnDefinitions>
+            <Grid>
+                <Grid.RowDefinitions>
+                    <RowDefinition Height="3*"/>
+                    <RowDefinition Height="150"/>
+                </Grid.RowDefinitions>
+                <!--ContextMenu="{StaticResource ContextMenu}"-->
+                <TabControl x:Name="ResTab" >
+
+                    <TabItem>
+                        <TabItem.ContextMenu>
+                            <ContextMenu Name="Tab1Menu"  >
+                                <MenuItem Header="{Binding [ShowAll], Source={x:Static local:LanguageManager.Instance}}" Click="MenuItem_OnClick"></MenuItem>
+                                <MenuItem Header="{Binding [ShowPart], Source={x:Static local:LanguageManager.Instance}}" Click="ShowPortion"></MenuItem>
+                                <MenuItem Header="{Binding [Copy], Source={x:Static local:LanguageManager.Instance}}" Click="Copy_Click"></MenuItem>
+                            </ContextMenu>
+                        </TabItem.ContextMenu>
+                        <TabItem.Header>
+                            <StackPanel Orientation="Horizontal">
+                            <svgc:SvgViewbox Height="24" 
+                            Width="40" Source="Image\results.svg" IsHitTestVisible="False"></svgc:SvgViewbox>
+                            <TextBlock Text="Lxy" VerticalAlignment="Center"/>
+                            </StackPanel>
+                        </TabItem.Header>
+                        <TabItem.Content>
+                            <ContentControl Name="Result" Background="White" >
+                            </ContentControl>
+                        </TabItem.Content>
+                    </TabItem>
+                    <TabItem>
+                        <TabItem.ContextMenu>
+                            <ContextMenu Name="Tab1Menu1"  >
+                                <MenuItem Header="{Binding [ShowAll], Source={x:Static local:LanguageManager.Instance}}" Click="spectrumResult"></MenuItem>
+                                <MenuItem Header="{Binding [ShowPart], Source={x:Static local:LanguageManager.Instance}}" Click='spectrumResultFalse'></MenuItem>
+                                <MenuItem Header="{Binding [Copy], Source={x:Static local:LanguageManager.Instance}}" Click="Copy_Click"></MenuItem>
+                            </ContextMenu>
+                        </TabItem.ContextMenu>
+                        <TabItem.Header >
+                            <StackPanel Orientation="Horizontal">
+                            <svgc:SvgViewbox Height="24" 
+                            Width="40" Source="Image\results.svg" IsHitTestVisible="False"></svgc:SvgViewbox>
+                                <TextBlock Text="Spectrum" VerticalAlignment="Center"/>
+                            </StackPanel>
+                        </TabItem.Header>
+                        <TabItem.Content>
+                            <ContentControl Name="SpectrumResults" Background="White">
+                            </ContentControl>
+                        </TabItem.Content>
+                    </TabItem>
+                    <TabItem>
+                        <TabItem.ContextMenu>
+                            <ContextMenu Name="Tab1Menu3"  >
+                                <MenuItem Header="{Binding [ShowAll], Source={x:Static local:LanguageManager.Instance}}" Click='warmupResultOK'></MenuItem>
+                                <MenuItem Header="{Binding [ShowPart], Source={x:Static local:LanguageManager.Instance}}" Click="warmupResultFalse"></MenuItem>
+                                <MenuItem Header="{Binding [Copy], Source={x:Static local:LanguageManager.Instance}}" Click="Copy_Click"></MenuItem>
+                            </ContextMenu>
+                        </TabItem.ContextMenu>
+                        <TabItem.Header >
+                            <StackPanel Orientation="Horizontal">
+                            <svgc:SvgViewbox Height="24" 
+                            Width="40" Source="Image\results.svg" IsHitTestVisible="False"></svgc:SvgViewbox>
+                                <TextBlock Text="Warm up" VerticalAlignment="Center"/>
+                            </StackPanel>
+                        </TabItem.Header>
+                        <TabItem.Content>
+                            <ContentControl Name="warmup" Background="White">
+                            </ContentControl>
+                        </TabItem.Content>
+                    </TabItem>
+                    <TabItem>
+                        <TabItem.ContextMenu>
+                            <ContextMenu Name="Tab1Menu4">
+                                <MenuItem Header="{Binding [ShowAll], Source={x:Static local:LanguageManager.Instance}}"
+                                          Click='warmupResultOK'></MenuItem>
+                                <MenuItem Header="{Binding [ShowPart], Source={x:Static local:LanguageManager.Instance}}"
+                                          Click="warmupResultFalse"></MenuItem>
+                                <MenuItem Header="{Binding [Copy], Source={x:Static local:LanguageManager.Instance}}" Click="Copy_Click"></MenuItem>
+                            </ContextMenu>
+                        </TabItem.ContextMenu>
+                        <TabItem.Header>
+                            <StackPanel Orientation="Horizontal">
+                            <svgc:SvgViewbox Height="24"
+                                             Width="40"
+                                             Source="Image\power123.svg"
+                                             IsHitTestVisible="False"></svgc:SvgViewbox>
+                                <TextBlock Text="Power" VerticalAlignment="Center"/>
+                            </StackPanel>
+                        </TabItem.Header>
+                        <TabItem.Content>
+                            <ContentControl Name="Power"
+                                            Background="White">
+                            </ContentControl>
+                        </TabItem.Content>
+                    </TabItem>
+
+                    <TabItem>
+                        <TabItem.ContextMenu>
+                            <ContextMenu Name="Tab1Menu42">
+                                <MenuItem Header="{Binding [ShowAll], Source={x:Static local:LanguageManager.Instance}}"
+                      Click='warmupResultOK'></MenuItem>
+                                <MenuItem Header="{Binding [ShowPart], Source={x:Static local:LanguageManager.Instance}}"
+                      Click="warmupResultFalse"></MenuItem>
+                                <MenuItem Header="{Binding [Copy], Source={x:Static local:LanguageManager.Instance}}" Click="Copy_Click"></MenuItem>
+                            </ContextMenu>
+                        </TabItem.ContextMenu>
+                        <TabItem.Header>
+                            <StackPanel Orientation="Horizontal">
+                                <svgc:SvgViewbox Height="24"
+                         Width="40"
+                         Source="Image\results.svg"
+                         IsHitTestVisible="False"></svgc:SvgViewbox>
+                                <TextBlock Text="RT-Data" VerticalAlignment="Center"/>
+                            </StackPanel>
+                        </TabItem.Header>
+                        <TabItem.Content>
+                            <ContentControl Name="RiseFallTime"
+                        Background="White">
+                            </ContentControl>
+                        </TabItem.Content>
+                    </TabItem>
+
+                    <TabItem Visibility="Collapsed">
+                        <TabItem.Header >
+                            <StackPanel Orientation="Horizontal">
+                            <svgc:SvgViewbox Height="24" 
+                            Width="40"
+                                             Source="Image\histogram.svg" IsHitTestVisible="False"></svgc:SvgViewbox>
+                                <TextBlock Text="RT-Curve" VerticalAlignment="Center"/>
+                            </StackPanel>
+                        </TabItem.Header>
+
+                        <TabItem.Content>
+                            <ContentControl Name="Statics" Background="White">
+                            </ContentControl>
+                        </TabItem.Content>
+
+
+                    </TabItem>
+
+                    <TabItem Visibility="Collapsed">
+                        <TabItem.Header >
+                            <StackPanel Orientation="Horizontal">
+                            <svgc:SvgViewbox Height="24" 
+                            Width="40"
+                                             Source="Image\curves.svg" IsHitTestVisible="False"></svgc:SvgViewbox>
+                                <TextBlock Text="RT-Curve" VerticalAlignment="Center"/>
+                            </StackPanel>
+                        </TabItem.Header>
+                        <TabItem.Content>
+                            <ContentControl Name="Waves" Background="White">
+                            </ContentControl>
+                        </TabItem.Content>
+
+                    </TabItem>
+
+                    <TabItem>
+                        <TabItem.Header >
+                            <StackPanel Orientation="Horizontal">
+                            <svgc:SvgViewbox Height="24"  Width="40"
+                         Source="Image\curves.svg" IsHitTestVisible="False"></svgc:SvgViewbox>
+                            <TextBlock Text="RT-Curve" VerticalAlignment="Center"/>
+                            </StackPanel>
+                        </TabItem.Header>
+                        <TabItem.Content>
+                            <ContentControl Name="lines" Background="White">
+                            </ContentControl>
+                        </TabItem.Content>
+                    </TabItem>
+
+                    <TabItem>
+                        <TabItem.Header >
+                            <StackPanel Orientation="Horizontal">
+                                <svgc:SvgViewbox Height="24"  Width="40"
+                                    Source="Image\results.svg" IsHitTestVisible="False"></svgc:SvgViewbox>
+                                <TextBlock Text="CrossTalk" VerticalAlignment="Center"/>
+                            </StackPanel>
+                        </TabItem.Header>
+                        <TabItem.Content>
+                            <ContentControl Name="crosstalk" Background="White">
+                            </ContentControl>
+                        </TabItem.Content>
+                    </TabItem>
+
+
+
+                </TabControl>
+
+                <Grid Grid.Row="1" Name="mypanel" >
+                    <Grid Background="White">
+                        <Grid.ColumnDefinitions>
+                            <ColumnDefinition Width="20"/>
+                            <ColumnDefinition Width="120"/>
+                            <ColumnDefinition Width="120"/>
+                            <ColumnDefinition Width="90"/>
+                            <ColumnDefinition Width="60"/>
+                            <ColumnDefinition Width="130"/>
+                            <ColumnDefinition Width="130"/>
+                            <ColumnDefinition/>
+                        </Grid.ColumnDefinitions>
+
+                        <Grid Grid.Column="1">
+                            <Grid.RowDefinitions>
+                                <RowDefinition/>
+                                <RowDefinition/>
+                                <RowDefinition/>
+                                <RowDefinition Height="29"/>
+                            </Grid.RowDefinitions>
+                            <Grid.ColumnDefinitions>
+                                <ColumnDefinition/>
+                                <ColumnDefinition/>
+                                <ColumnDefinition/>
+                            </Grid.ColumnDefinitions>
+                            <Button  Grid.Row="0" Grid.Column="1" 
+                            BorderBrush="Transparent"
+                            Height="40" Width="40"
+                            Background="Transparent"
+                                     x:Name="btnUP">
+
+                                <svgc:SvgViewbox Source="Image\up.svg" IsHitTestVisible="False"></svgc:SvgViewbox>
+                            </Button>
+                            <Button Grid.Row="1"  x:Name="btnLeft" 
+                            BorderBrush="Transparent"
+                            Height="40" Width="40"
+                            Background="Transparent">
+                                <svgc:SvgViewbox Source="Image\left.svg" IsHitTestVisible="False"></svgc:SvgViewbox>
+                            </Button>
+                            <Button Grid.Row="1" Grid.Column="2" 
+                            Height="40" Width="40"
+                            BorderBrush="Transparent"
+                            Background="Transparent"
+                                    x:Name="btnRight"  >
+                                <svgc:SvgViewbox Source="Image\right.svg" IsHitTestVisible="False"></svgc:SvgViewbox>
+                            </Button>
+                            <Button Grid.Row="2"  Grid.Column="1"  
+                            Height="40" Width="40"
+                            Background="Transparent"
+                            BorderBrush="Transparent"
+                                    x:Name="btnDown"  >
+                                <svgc:SvgViewbox Source="Image\down.svg" IsHitTestVisible="False"></svgc:SvgViewbox>
+                            </Button>
+                            <Button  Grid.Row="1" Grid.Column="1" 
+                                     x:Name="btnZero" 
+                                     Width="40" 
+                                     Height="40" 
+                                     Click="btnO_Click"
+                            Background="Transparent"
+                            BorderBrush="Transparent" >
+
+                                <svgc:SvgViewbox Source="Image\zero.svg" IsHitTestVisible="False"></svgc:SvgViewbox>
+                            </Button>
+
+                            <Button  Grid.Row="0" Grid.Column="2"  
+                            Height="40" Width="40"
+                            BorderBrush="Transparent"
+                            Background="Transparent"
+                                     x:Name="btnIn"  >
+
+                                <svgc:SvgViewbox Source="Image\sort-up.svg" IsHitTestVisible="False"></svgc:SvgViewbox>
+                            </Button>
+                            <Button Grid.Row="2" Grid.Column="2"  
+                            Width="40" Height="40"
+                            Background="Transparent"
+                            BorderBrush="Transparent"
+                                    x:Name="btnOut"  >
+                                <svgc:SvgViewbox Source="Image\sort-down.svg" IsHitTestVisible="False"></svgc:SvgViewbox>
+                            </Button>
+
+                            <WrapPanel Grid.Row="3"
+                                       Grid.ColumnSpan="3"
+                                       Orientation="Vertical"
+                                       VerticalAlignment="Stretch"
+                                       HorizontalAlignment="Stretch">
+
+                                <!--<svgc:SvgViewbox Width="30"
+                                                 Height="30"
+                                                 Margin="0,0,10,0"
+                                                 Source="Image\speedlabel.svg"
+                                                 IsHitTestVisible="False"></svgc:SvgViewbox>-->
+                                <ToggleButton Name="SpeelLow_1"
+                                              Margin="2"
+                                              FontWeight="Bold"
+                                              BorderBrush="Transparent"
+                                              Background="Transparent"
+                                              Click="OnBnClickedSpeedLow_1"
+                                              Height="25"
+                                              Width="25">
+                                    <svgc:SvgViewbox Source="Image\speed1.svg"
+                                                     IsHitTestVisible="False"></svgc:SvgViewbox>
+                                </ToggleButton>
+
+
+                                <ToggleButton  FontSize="20"
+                                               FontWeight="Bold"
+                                               BorderBrush="Transparent"
+                                               Background="Transparent"
+                                               Name="SpeedMedium_1"
+                                               Click="OnBnClickedSpeedMedium_1"
+                                               Height="25"
+                                               Width="25">
+                                    <svgc:SvgViewbox Source="Image\speed2.svg"
+                                                     IsHitTestVisible="False"></svgc:SvgViewbox>
+                                </ToggleButton>
+
+                                <ToggleButton  FontSize="20"
+                                               FontWeight="Bold"
+                                               BorderBrush="Transparent"
+                                               Background="Transparent"
+                                               Name="SpeedHigh_1"
+                                               Click="OnBnClickedSpeedHigh_1"
+                                               Height="25"
+                                               Width="25">
+                                    <svgc:SvgViewbox Source="Image\speed3.svg"
+                                                     IsHitTestVisible="False"></svgc:SvgViewbox>
+                                </ToggleButton>
+                            </WrapPanel>
+
+                        </Grid>
+
+                        <Grid Grid.Column="2">
+                            <Grid.RowDefinitions>
+                                <RowDefinition/>
+                                <RowDefinition/>
+                                <RowDefinition/>
+                                <RowDefinition Height="30" />
+                            </Grid.RowDefinitions>
+                            <Grid.ColumnDefinitions>
+                                <ColumnDefinition/>
+                                <ColumnDefinition/>
+                            </Grid.ColumnDefinitions>
+                            <Button  Grid.Row="0" Grid.Column="1"
+                            Height="40" Width="40"
+                            Background="Transparent"
+                            MouseDown="URotatRight_MouseDown" MouseUp="URotatRight_MouseUp"
+                            BorderBrush="Transparent"
+                                     Name="btnURight" >
+                                <svgc:SvgViewbox Source="Image\cwrotate.svg" IsHitTestVisible="False"></svgc:SvgViewbox>
+                            </Button>
+                            <Button Grid.Row="0" Grid.Column="0" 
+                            Height="40" Width="40"
+                            Background="Transparent"
+                            MouseDown="URotatLeft_MouseDown" MouseUp="URotatLeft_MouseUp"
+                            BorderBrush="Transparent"
+                                    x:Name="btnULeft">
+
+                                <svgc:SvgViewbox Source="Image\acrotate.svg" IsHitTestVisible="False"></svgc:SvgViewbox>
+                            </Button>
+                            <Button Grid.Row="1" Grid.Column="0" 
+                            Background="Transparent"
+                            BorderBrush="Transparent"
+                            MouseDown="VRotatRight_MouseDown" MouseUp="VRotatRight_MouseUp"
+                            Height="40" Width="40"
+                                    x:Name="btnVRight" >
+
+                                <svgc:SvgViewbox Source="Image\rotate-left.svg" IsHitTestVisible="False"></svgc:SvgViewbox>
+                            </Button>
+                            <Button Grid.Row="1" Grid.Column="1" 
+                            Height="40" Width="40"
+                            MouseDown="VRotatLeft_MouseDown" MouseUp="VRotatLeft_MouseUp"
+                            BorderBrush="Transparent"
+                            Background="Transparent"
+                                    x:Name="btnVLeft">
+
+                                <svgc:SvgViewbox Source="Image\rotate-right.svg" IsHitTestVisible="False"></svgc:SvgViewbox>
+                            </Button>
+                            <Button 
+                                    Grid.Row="2"
+                                    Grid.Column="0"
+                                    FontWeight="Bold"
+                                    HorizontalAlignment="Center"
+                                    VerticalAlignment="Center"
+                                    Background="White"
+                                    Content="{Binding [Refer], Source={x:Static local:LanguageManager.Instance}}"
+                                    x:Name="Button1"
+                                    Click="Button1_OnClick"
+                                    Style="{StaticResource ButtonBaseStyle}" />
+                            <Button Grid.Row="2"
+                                    Grid.Column="1"
+                                    FontWeight="Bold"
+                                    HorizontalAlignment="Center"
+                                    VerticalAlignment="Center"
+                                    Background="White"
+                                    Content="{Binding [Modify], Source={x:Static local:LanguageManager.Instance}}"
+                                    Click="Button2_OnClick"
+                                    x:Name="Button2"
+                                    Style="{StaticResource ButtonBaseStyle}" />
+                            <WrapPanel Grid.Row="3"
+                                       Grid.ColumnSpan="3"
+                                       Orientation="Vertical"
+                                       VerticalAlignment="Stretch"
+                                       HorizontalAlignment="Stretch">
+
+                                <!--<svgc:SvgViewbox Width="30"
+                                                 Height="30"
+                                                 Margin="0,0,10,0"
+                                                 Source="Image\speedlabel.svg"
+                                                 IsHitTestVisible="False"></svgc:SvgViewbox>-->
+                                <ToggleButton Margin="2"
+                                              FontWeight="Bold"
+                                              BorderBrush="Transparent"
+                                              Background="Transparent"
+                                              Name="SpeedLow_2"
+                                              Click="OnBnClickedSpeedLow_2"
+                                              Height="25"
+                                              Width="25">
+                                    <svgc:SvgViewbox Source="Image\speed1.svg"
+                                                     IsHitTestVisible="False"></svgc:SvgViewbox>
+                                </ToggleButton>
+
+
+                                <ToggleButton  FontSize="20"
+                                               FontWeight="Bold"
+                                               BorderBrush="Transparent"
+                                               Background="Transparent"
+                                               Name="SpeedMedium_2"
+                                               Click="OnBnClickedSpeedMedium_2"
+                                               Height="25"
+                                               Width="25">
+                                    <svgc:SvgViewbox Source="Image\speed2.svg"
+                                                     IsHitTestVisible="False"></svgc:SvgViewbox>
+                                </ToggleButton>
+
+                                <ToggleButton  FontSize="20"
+                                               FontWeight="Bold"
+                                               BorderBrush="Transparent"
+                                               Background="Transparent"
+                                               Name="SpeedHigh_2"
+                                               Click="OnBnClickedSpeedHigh_2"
+                                               Height="25"
+                                               Width="25">
+                                    <svgc:SvgViewbox Source="Image\speed3.svg"
+                                                     IsHitTestVisible="False"></svgc:SvgViewbox>
+                                </ToggleButton>
+                            </WrapPanel>
+                        </Grid>
+
+                        <Grid Grid.Column="3">
+                            <Grid.RowDefinitions>
+                                <RowDefinition/>
+                                <RowDefinition/>
+                                <RowDefinition/>
+                                <RowDefinition/>
+                            </Grid.RowDefinitions>
+                            <WrapPanel Grid.Row="0" VerticalAlignment="Center" HorizontalAlignment="Center">
+                                <Button x:Name="TempButton" Background="White" Width="90" Height="28" Click="OnBnClickedSelfTemplate" FontWeight="Bold" Content="{Binding [TestTemplate], Source={x:Static local:LanguageManager.Instance}}" Style="{StaticResource ButtonBaseStyle}"/>
+                            </WrapPanel>
+
+                            <WrapPanel Grid.Row="1" VerticalAlignment="Center" HorizontalAlignment="Center">
+                                <Button x:Name="SingleButton" Background="White" Width="90" Click="OnBnClickReadSingleData" FontWeight="Bold" Height="28" Content="{Binding [Test1Point], Source={x:Static local:LanguageManager.Instance}}" Style="{StaticResource ButtonBaseStyle}"/>
+                            </WrapPanel>
+
+                            <WrapPanel Grid.Row="2" VerticalAlignment="Center" HorizontalAlignment="Center">
+                                <Button x:Name="SprectrumButon" Width="90" FontWeight="Bold" Height="28" Background="White" Click="OnBnClickSpectrumSingleData" Content="{Binding [TestSpectral], Source={x:Static local:LanguageManager.Instance}}" Style="{StaticResource ButtonBaseStyle}"/>
+                            </WrapPanel>
+
+                            <WrapPanel Grid.Row="3" VerticalAlignment="Center" HorizontalAlignment="Center">
+                                <Button x:Name="ResetButton" Width="90" Content="{Binding [ResetMsg], Source={x:Static local:LanguageManager.Instance}}" Click="Button_Click" Margin="1" Style="{StaticResource ButtonBaseStyle}" hc:IconElement.Geometry="{StaticResource ResetGeometry}" hc:IconElement.Height="12" Foreground="White" Background="#FF50A0FF"/>
+                            </WrapPanel>
+                        </Grid>
+
+
+                        <Grid Grid.Column="4">
+                            <Grid.RowDefinitions>
+                                <RowDefinition/>
+                                <RowDefinition/>
+                            </Grid.RowDefinitions>
+                            <WrapPanel Grid.Row="0" VerticalAlignment="Center" HorizontalAlignment="Center">
+                                <Button x:Name="StartTestButton" FontSize="20" 
+                                FontWeight="Bold"
+                                Background="Green"
+                                Click="OnBnClickedStartRun"
+                                        Height="50" Width="50">
+                                    <svgc:SvgViewbox 
+                                        Source="Image\run.svg" 
+                                        IsHitTestVisible="False"></svgc:SvgViewbox>
+                                </Button>
+                            </WrapPanel>
+
+                            <WrapPanel Grid.Row="1" VerticalAlignment="Center" HorizontalAlignment="Center">
+                                <Button  FontSize="20" 
+                                FontWeight="Bold"
+                                Click="OnBnClickedFstStop"
+                                Background="Red"
+                                        Height="50" Width="50">
+                                    <svgc:SvgViewbox 
+                                        Source="Image\Stop.svg" 
+                                        IsHitTestVisible="False"></svgc:SvgViewbox>
+                                </Button>
+                            </WrapPanel>
+                        </Grid>
+
+
+                        <Grid Grid.Column="5">
+                            <Grid.RowDefinitions>
+                                <RowDefinition Height="AUto"/>
+                                <RowDefinition/>
+                                <RowDefinition/>
+                                <RowDefinition/>
+                            </Grid.RowDefinitions>
+
+
+                            <WrapPanel Background="Black" Grid.Row="1" VerticalAlignment="Center" HorizontalAlignment="Center">
+                                <Label Content="{Binding [XAxis], Source={x:Static local:LanguageManager.Instance}}" Foreground="White"></Label>
+                                <TextBlock Width="80" FontSize="16" Name="XPos" Foreground="White" ></TextBlock>
+                            </WrapPanel>
+
+
+                            <WrapPanel Background="Black" Grid.Row="2" VerticalAlignment="Center" HorizontalAlignment="Center">
+                                <Label Content="{Binding [YAxis], Source={x:Static local:LanguageManager.Instance}}" Foreground="White"></Label>
+                                <TextBlock Width="80" FontSize="16" Name="YPos" Foreground="White"></TextBlock>
+                            </WrapPanel>
+
+
+                            <WrapPanel Background="Black" Grid.Row="3" VerticalAlignment="Center" HorizontalAlignment="Center">
+                                <Label Content="{Binding [ZAxis], Source={x:Static local:LanguageManager.Instance}}" Foreground="White"></Label>
+                                <TextBlock Width="80" FontSize="16" Name="ZPos" Foreground="White"></TextBlock>
+                            </WrapPanel>
+                        </Grid>
+
+
+                        <Grid Grid.Column="6">
+                            <Grid.RowDefinitions>
+                                <RowDefinition Height="AUto"/>
+                                <RowDefinition/>
+                                <RowDefinition/>
+                                <RowDefinition/>
+                            </Grid.RowDefinitions>
+
+
+                            <WrapPanel Background="Black" Grid.Row="1" VerticalAlignment="Center" HorizontalAlignment="Center">
+                                <Label Content="{Binding [UAxis], Source={x:Static local:LanguageManager.Instance}}" Foreground="White"></Label>
+                                <TextBlock Width="80" FontSize="16" Name="UPos" Foreground="White"></TextBlock>
+                            </WrapPanel>
+
+
+                            <WrapPanel Background="Black" Grid.Row="2" VerticalAlignment="Center" HorizontalAlignment="Center">
+                                <Label Content="{Binding [VAxis], Source={x:Static local:LanguageManager.Instance}}" Foreground="White"></Label>
+                                <TextBlock Width="80" FontSize="16" Name="VPos" Foreground="White"></TextBlock>
+                            </WrapPanel>
+
+
+                            <WrapPanel Visibility="Hidden" Background="Black" Grid.Row="3" VerticalAlignment="Center" HorizontalAlignment="Center">
+                                <Label Content="Ball：" Foreground="White"></Label>
+                                <TextBlock Width="80" 
+                                FontSize="16"
+                                           Name="BallPos" 
+                                           Foreground="White"></TextBlock>
+                            </WrapPanel>
+                        </Grid>
+
+                        <Grid Grid.Column="7" x:Name="PowerControllerPanel">
+                            <Grid.RowDefinitions>
+                                <RowDefinition Height="AUto"/>
+                                <RowDefinition/>
+                                <RowDefinition/>
+                                <RowDefinition/>
+                                <RowDefinition/>
+                                <RowDefinition/>
+                                <RowDefinition/>
+                            </Grid.RowDefinitions>
+                            <WrapPanel  Grid.Row="1" VerticalAlignment="Center" HorizontalAlignment="Left">
+                                <Label Content="{Binding [PowerControl], Source={x:Static local:LanguageManager.Instance}}" Foreground="Black"></Label>
+                            </WrapPanel>
+
+                            <WrapPanel Grid.Row="2" VerticalAlignment="Center" HorizontalAlignment="Left">
+                                <Label Width="80" Margin="5,0,0,0" Content="{Binding [VoltageSet], Source={x:Static local:LanguageManager.Instance}}" Foreground="Black"></Label>
+                                <TextBox Width="80" FontSize="16" Name="VoltageSet" Foreground="Black"></TextBox>
+                            </WrapPanel>
+
+                            <WrapPanel Grid.Row="3" VerticalAlignment="Center" HorizontalAlignment="Left">
+                                <Label Width="80" Margin="5,0,0,0" Content="{Binding [CurrentSet], Source={x:Static local:LanguageManager.Instance}}" Foreground="Black"></Label>
+                                <TextBox Width="80" FontSize="16" Name="CurrentSet" Foreground="Black"></TextBox>
+                            </WrapPanel>
+
+                            <WrapPanel Grid.Row="4" VerticalAlignment="Center" HorizontalAlignment="Left">
+                                <Label Width="80" Margin="5,0,0,0" Content="{Binding [RealVoltage], Source={x:Static local:LanguageManager.Instance}}" Foreground="Black"></Label>
+                                <TextBlock Width="80" FontSize="16" Name="RealVoltage" Foreground="Black"></TextBlock>
+                            </WrapPanel>
+
+                            <WrapPanel Grid.Row="5" VerticalAlignment="Center" HorizontalAlignment="Left">
+                                <Label Width="80" Margin="5,0,0,0" Content="{Binding [RealCurrent], Source={x:Static local:LanguageManager.Instance}}" Foreground="Black"></Label>
+                                <TextBlock Width="80" FontSize="16" Name="RealCurrent" Foreground="Black"></TextBlock>
+                            </WrapPanel>
+
+                            <WrapPanel Grid.Row="6" VerticalAlignment="Center" HorizontalAlignment="Left">
+                                <Button Name="PowerOutputBtn" Width="70" Margin="5,0,0,0" FontSize="18" Content="{Binding [PowerOuput], Source={x:Static local:LanguageManager.Instance}}" Style="{StaticResource ButtonBaseStyle}"  Foreground="White" Background="#FF50A0FF"></Button>
+                                <Button  Content="打开" Width="70" Margin="10,0,0,0" FontSize="18" Name="PowerBtn" Style="{StaticResource ButtonBaseStyle}"  Foreground="White" Background="#FF50A0FF"></Button>
+                            </WrapPanel>
+
+                        </Grid>
+
+
+                    </Grid>
+                </Grid>
+            </Grid>
+            <GridSplitter Width="2"  FlowDirection="LeftToRight"/>
+            <Grid Grid.Column="1" Background="White">
+                <Grid.RowDefinitions>
+                    <RowDefinition Height="70*"/>
+                    <RowDefinition Height="40*"/>
+                </Grid.RowDefinitions>
+                <TabControl Margin="0,0,0,2">
+                    <TabItem Header="{Binding [MonitorScreen], Source={x:Static local:LanguageManager.Instance}}">
+                        <ContentControl Background="Black" Name="cam"/>
+                    </TabItem>
+                    <TabItem Header="{Binding [TestDevice], Source={x:Static local:LanguageManager.Instance}}">
+                        <ContentControl Background="Black" Name="device"></ContentControl>
+                    </TabItem>
+                    <TabItem Header="{Binding [CommCheck], Source={x:Static local:LanguageManager.Instance}}">
+                        <ContentControl Background="Black" Name="ecom"></ContentControl>
+                    </TabItem>
+                    <TabItem Header="{Binding [PGTest], Source={x:Static local:LanguageManager.Instance}}">
+                        <ContentControl Background="Black"
+                                        Name="PG"></ContentControl>
+                    </TabItem>
+                    <TabItem Header="{Binding [CrosstalkInfo], Source={x:Static local:LanguageManager.Instance}}">
+                        <ContentControl Background="Black"
+                         Name="CrosstalkImage">
+                            <Image Source="Image\crosstalk.png" />
+                        </ContentControl>
+                    </TabItem>
+                </TabControl>
+
+                <GridSplitter Grid.Row="1" HorizontalAlignment="Stretch" VerticalAlignment="Top" Height="2" />
+
+                <TabControl Grid.Row="1" x:Name="LogIndex">
+                    <TabItem Header="{Binding [LogOutput], Source={x:Static local:LanguageManager.Instance}}">
+                        <RichTextBox Name="xxx" TextChanged="xxx_TextChanged" VerticalScrollBarVisibility="Visible">
+                            <FlowDocument Name="mylog" LineHeight="2">
+
+                            </FlowDocument>
+                        </RichTextBox>
+                    </TabItem>
+                    <TabItem Header="{Binding [TestContent], Source={x:Static local:LanguageManager.Instance}}" Visibility="Collapsed">
+                        <TabItem.Content>
+                            <ContentControl x:Name="workItem"/>
+                        </TabItem.Content>
+                    </TabItem>
+
+                    <TabItem Header="{Binding [TestFlow], Source={x:Static local:LanguageManager.Instance}}">
+                        <TabItem.Content>
+                            <ContentControl Grid.Row="1" x:Name="workData"/>
+                        </TabItem.Content>
+                    </TabItem>
+                </TabControl>
+
+            </Grid>
+        </Grid>
+
+        <Grid Grid.Row="3">
+            <Grid.ColumnDefinitions>
+                <ColumnDefinition Width="79*"/>
+                <ColumnDefinition Width="76*"/>
+            </Grid.ColumnDefinitions>
+            <StatusBar Name="statusbar" Grid.ColumnSpan="2">
+                <StatusBar.Resources>
+                    <Style TargetType="TextBlock">
+                        <Setter Property="VerticalAlignment" Value="Center"/>
+                    </Style>
+                </StatusBar.Resources>
+                <StatusBarItem>
+                    <StackPanel Orientation="Horizontal">
+                        <TextBlock  Text="{Binding [XAxis], Source={x:Static local:LanguageManager.Instance}}"/>
+                        <TextBlock Name="x" Text="{Binding [NotConnect], Source={x:Static local:LanguageManager.Instance}}" Foreground="DarkRed" FontSize="10"/>
+                    </StackPanel>
+                </StatusBarItem>
+                <StatusBarItem>
+                    <StackPanel Orientation="Horizontal">
+                        <TextBlock  Text="{Binding [YAxis], Source={x:Static local:LanguageManager.Instance}}" VerticalAlignment="Center"/>
+                        <TextBlock Name="y" Text="{Binding [NotConnect], Source={x:Static local:LanguageManager.Instance}}" Foreground="DarkRed" FontSize="10"/>
+                    </StackPanel>
+                </StatusBarItem>
+                <StatusBarItem>
+                    <StackPanel Orientation="Horizontal">
+                        <TextBlock  Text="{Binding [ZAxis], Source={x:Static local:LanguageManager.Instance}}"/>
+                        <TextBlock Name="z" Text="{Binding [NotConnect], Source={x:Static local:LanguageManager.Instance}}" Foreground="DarkRed" FontSize="10"/>
+                    </StackPanel>
+                </StatusBarItem>
+                <StatusBarItem>
+                    <StackPanel Orientation="Horizontal">
+                        <TextBlock  Text="{Binding [UAxis], Source={x:Static local:LanguageManager.Instance}}"/>
+                        <TextBlock Name="u" Text="{Binding [NotConnect], Source={x:Static local:LanguageManager.Instance}}" Foreground="DarkRed" FontSize="10"/>
+                    </StackPanel>
+                </StatusBarItem>
+                <StatusBarItem>
+                    <StackPanel Orientation="Horizontal">
+                        <TextBlock  Text="{Binding [VAxis], Source={x:Static local:LanguageManager.Instance}}"/>
+                        <TextBlock Name="v" Text="{Binding [NotConnect], Source={x:Static local:LanguageManager.Instance}}" Foreground="DarkRed" FontSize="10"/>
+                    </StackPanel>
+                </StatusBarItem>
+                <StatusBarItem>
+                    <StackPanel Orientation="Horizontal"  x:Name="PowerControlStatus">
+                        <TextBlock  Text="{Binding [ControlPowerDash], Source={x:Static local:LanguageManager.Instance}}"/>
+                        <TextBlock Name="PowerControl" Text="{Binding [NotConnect], Source={x:Static local:LanguageManager.Instance}}" Foreground="DarkRed" FontSize="10"/>
+                    </StackPanel>
+                </StatusBarItem>
+                <StatusBarItem Visibility="Collapsed">
+                    <StackPanel Orientation="Horizontal">
+                        <TextBlock  Text="{Binding [TestSig1], Source={x:Static local:LanguageManager.Instance}}" />
+                        <TextBlock Name="TestSignal1"
+                                   Text=""
+                                   Foreground="DarkRed"
+                                   FontSize="10" />
+                    </StackPanel>
+                </StatusBarItem>
+                <StatusBarItem  Visibility="Collapsed">
+                    <StackPanel Orientation="Horizontal">
+                        <TextBlock  Text="{Binding [TestSig2], Source={x:Static local:LanguageManager.Instance}}" />
+                        <TextBlock Name="TestSignal2"
+                                   Text="{Binding [NotConnect], Source={x:Static local:LanguageManager.Instance}}"
+                                   Foreground="DarkRed"
+                                   FontSize="10" />
+                    </StackPanel>
+                </StatusBarItem>
+
+                <StatusBarItem x:Name="TimeCountBar" Visibility="Collapsed" >
+                    <StackPanel Orientation="Horizontal">
+                        <TextBlock  Text="{Binding [WarnCount], Source={x:Static local:LanguageManager.Instance}}" />
+                        <TextBlock Name="TimeCount"
+                        Text=""
+                        Foreground="DarkRed"
+                        FontSize="10" />
+                    </StackPanel>
+                </StatusBarItem>
+                <!--<StatusBarItem>
+                    <StackPanel>
+                        <StackPanel Orientation="Horizontal">
+                            <TextBlock Name="d" Text="仪器:"/>
+                            <TextBlock Text="未连接" Foreground="DarkRed" FontSize="10"/>
+                        </StackPanel>
+                    </StackPanel>
+                </StatusBarItem>-->
+                <StatusBarItem HorizontalAlignment="Right">
+                    <StackPanel Orientation="Horizontal">
+                        <TextBlock Name="testst" Text="{Binding [TestStatus], Source={x:Static local:LanguageManager.Instance}}"/>
+                        <TextBlock Text="{Binding [Preparing], Source={x:Static local:LanguageManager.Instance}}" Foreground="DarkRed" FontSize="10"/>
+                    </StackPanel>
+                </StatusBarItem>
+                <!--<StatusBarItem HorizontalAlignment="Right">
+                    <StackPanel Orientation="Horizontal">
+                        <TextBlock Name="devst" Text="设备状态:"/>
+                        <TextBlock Text="准备中" Foreground="DarkRed" FontSize="10"/>
+                    </StackPanel>
+                </StatusBarItem>-->
+            </StatusBar>
+        </Grid>
+    </Grid>
+</Window>

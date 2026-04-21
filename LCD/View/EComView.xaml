@@ -1,0 +1,272 @@
+﻿<UserControl x:Class="LCD.View.EComView"
+        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+        xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+        xmlns:local="clr-namespace:LCD"
+        xmlns:app1="clr-namespace:LCD"
+        mc:Ignorable="d"
+        Background="White"
+        d:DesignWidth="568" d:DesignHeight="390"
+        HorizontalAlignment="Stretch" DataContext="{Binding Mode=OneWay, RelativeSource={RelativeSource Self}}"    >
+    <Grid>
+        <Grid.RowDefinitions>
+            <RowDefinition Height="70*"/>
+            <RowDefinition Height="30*"/>
+            <RowDefinition Height="30"/>
+        </Grid.RowDefinitions>
+
+        <Grid Grid.Row="0" Margin="10,0,10,10" VerticalAlignment="Stretch">
+            <Grid.ColumnDefinitions>
+                <ColumnDefinition Width="180"/>
+                <ColumnDefinition/>
+            </Grid.ColumnDefinitions>
+            <Grid Grid.Row="0" Grid.Column="0" Margin="0,10,0,10">
+                <GroupBox Header="{Binding [CommDevList2], Source={x:Static app1:LanguageManager.Instance}}">
+                    <Grid>
+                        <Grid.ColumnDefinitions></Grid.ColumnDefinitions>
+                        <Grid.RowDefinitions>
+                            <RowDefinition Height="3"/>
+                            <RowDefinition Height="20"/>
+                            <RowDefinition Height="27"/>
+                            <RowDefinition Height="30*"/>
+                        </Grid.RowDefinitions>
+
+                        <ComboBox Grid.Row="1" HorizontalAlignment="Stretch" Margin="10,0,70,0" Height="20" SelectedIndex="{Binding DevTypeIndex}">
+                            <ComboBoxItem Content="{Binding [SerialComm], Source={x:Static app1:LanguageManager.Instance}}"/>
+                            <ComboBoxItem Content="{Binding [UdpComm], Source={x:Static app1:LanguageManager.Instance}}"/>
+                            <ComboBoxItem Content="{Binding [TcpServer], Source={x:Static app1:LanguageManager.Instance}}"/>
+                            <ComboBoxItem Content="{Binding [TcpClient], Source={x:Static app1:LanguageManager.Instance}}"/>
+                        </ComboBox>
+                        <Button Grid.Row="1" Content="{Binding [Add], Source={x:Static app1:LanguageManager.Instance}}" HorizontalAlignment="Right" Margin="0,0,10,0" Width="50" Height="20" Click="AddDevice_Click"/>
+
+                        <Button Grid.Row="2" Content="{Binding [Delete], Source={x:Static app1:LanguageManager.Instance}}" Height="20" Margin="10,0" Click="DeletDevice_Click"/>
+
+                        <ListView x:Name="listView" Grid.Row="3" Margin="10,0" ItemsSource="{Binding TestDevices}" DisplayMemberPath="Key"/>
+
+
+                    </Grid>
+                </GroupBox>
+            </Grid>
+
+            <GroupBox Header="{Binding [Property], Source={x:Static app1:LanguageManager.Instance}}" Grid.Row="0" Grid.Column="1" Margin="0,10,0,10" DataContext="{Binding SelectedItem, ElementName=listView}">
+                <Grid>
+                    <Grid Visibility="{Binding CommunicationModel,Converter={x:Static local:Converters.ShowCOM},FallbackValue=Collapsed}">
+                        <Grid.ColumnDefinitions>
+                            <ColumnDefinition Width="30*"/>
+                            <ColumnDefinition Width="60*"/>
+                        </Grid.ColumnDefinitions>
+                        <Grid.RowDefinitions>
+                            <RowDefinition Height="24"/>
+                            <RowDefinition Height="24"/>
+                            <RowDefinition Height="24"/>
+                            <RowDefinition Height="24"/>
+                            <RowDefinition Height="24"/>
+                            <RowDefinition Height="24"/>
+                            <RowDefinition Height="24"/>
+                            <RowDefinition Height="24"/>
+                        </Grid.RowDefinitions>
+                        <Grid.Resources>
+                            <Style TargetType="TextBlock">
+                                <Setter Property="VerticalAlignment" Value="Center"/>
+                                <Setter Property="HorizontalAlignment" Value="Right"/>
+                            </Style>
+
+                            <Style TargetType="TextBox" BasedOn="{StaticResource TextBoxBaseStyle}">
+                                <Setter Property="VerticalAlignment" Value="Center"/>
+                                <Setter Property="HorizontalAlignment" Value="Stretch"/>
+                                <Setter Property="Margin" Value="10,0"/>
+                                <Setter Property="MinHeight" Value="20"/>
+                                <Setter Property="Padding" Value="0,0,0,0"/>
+                            </Style>
+
+                            <Style TargetType="CheckBox">
+                                <Setter Property="VerticalAlignment" Value="Center"/>
+                                <Setter Property="HorizontalAlignment" Value="Stretch"/>
+                                <Setter Property="Margin" Value="10,0"/>
+                            </Style>
+                        </Grid.Resources>
+
+                        <TextBlock Grid.Row="0" Text="{Binding [NameDash], Source={x:Static app1:LanguageManager.Instance}}"/>
+                        <TextBlock Grid.Row="1" Text="{Binding [EnableDash], Source={x:Static app1:LanguageManager.Instance}}"/>
+                        <TextBlock Grid.Row="2" Text="{Binding [NoteDash], Source={x:Static app1:LanguageManager.Instance}}"/>
+                        <TextBlock Grid.Row="3" Text="{Binding [SerialDash], Source={x:Static app1:LanguageManager.Instance}}"/>
+                        <TextBlock Grid.Row="4" Text="{Binding [BaudrateDash], Source={x:Static app1:LanguageManager.Instance}}"/>
+                        <TextBlock Grid.Row="5" Text="{Binding [ParityDash], Source={x:Static app1:LanguageManager.Instance}}"/>
+                        <TextBlock Grid.Row="6" Text="{Binding [DataWidDash], Source={x:Static app1:LanguageManager.Instance}}"/>
+                        <TextBlock Grid.Row="7" Text="{Binding [StopBitsDash], Source={x:Static app1:LanguageManager.Instance}}"/>
+
+                        <TextBox Grid.Column="1" Grid.Row="0" Text="{Binding Key}"/>
+                        <CheckBox Grid.Column="1" Grid.Row="1" IsChecked="{Binding IsOpen}"/>
+                        <TextBox Grid.Column="1" Grid.Row="2" Text="{Binding Remarks}"/>
+                        <TextBox Grid.Column="1" Grid.Row="3" Text="{Binding PortName}"/>
+                        <TextBox Grid.Column="1" Grid.Row="4" Text="{Binding BaudRate}"/>
+                        <TextBox Grid.Column="1" Grid.Row="5" Text="{Binding Parity}"/>
+                        <TextBox Grid.Column="1" Grid.Row="6" Text="{Binding DataBits}"/>
+                        <TextBox Grid.Column="1" Grid.Row="7" Text="{Binding StopBits}"/>
+
+                    </Grid>
+
+                    <Grid Visibility="{Binding CommunicationModel,Converter={x:Static local:Converters.ShowUDP},FallbackValue=Collapsed}">
+                        <Grid.ColumnDefinitions>
+                            <ColumnDefinition Width="30*"/>
+                            <ColumnDefinition Width="60*"/>
+                        </Grid.ColumnDefinitions>
+                        <Grid.RowDefinitions>
+                            <RowDefinition Height="27"/>
+                            <RowDefinition Height="27"/>
+                            <RowDefinition Height="27"/>
+                            <RowDefinition Height="27"/>
+                            <RowDefinition Height="27"/>
+                            <RowDefinition Height="27"/>
+                        </Grid.RowDefinitions>
+                        <Grid.Resources>
+                            <Style TargetType="TextBlock">
+                                <Setter Property="VerticalAlignment" Value="Center"/>
+                                <Setter Property="HorizontalAlignment" Value="Right"/>
+                            </Style>
+
+                            <Style TargetType="TextBox" BasedOn="{StaticResource TextBoxBaseStyle}">
+                                <Setter Property="VerticalAlignment" Value="Center"/>
+                                <Setter Property="HorizontalAlignment" Value="Stretch"/>
+                                <Setter Property="Margin" Value="10,0"/>
+                                <Setter Property="MinHeight" Value="20"/>
+                                <Setter Property="Padding" Value="0,0,0,0"/>
+                            </Style>
+
+                            <Style TargetType="CheckBox">
+                                <Setter Property="VerticalAlignment" Value="Center"/>
+                                <Setter Property="HorizontalAlignment" Value="Stretch"/>
+                                <Setter Property="Margin" Value="10,0"/>
+                            </Style>
+                        </Grid.Resources>
+
+                        <TextBlock Grid.Row="0" Text="{Binding [NameDash], Source={x:Static app1:LanguageManager.Instance}}"/>
+                        <TextBlock Grid.Row="1" Text="{Binding [EnableDash], Source={x:Static app1:LanguageManager.Instance}}"/>
+                        <TextBlock Grid.Row="2" Text="{Binding [NoteDash], Source={x:Static app1:LanguageManager.Instance}}"/>
+                        <TextBlock Grid.Row="3" Text="{Binding [LocalPort], Source={x:Static app1:LanguageManager.Instance}}"/>
+                        <TextBlock Grid.Row="4" Text="{Binding [DstAddr], Source={x:Static app1:LanguageManager.Instance}}"/>
+                        <TextBlock Grid.Row="5" Text="{Binding [DstPort], Source={x:Static app1:LanguageManager.Instance}}"/>
+
+                        <TextBox Grid.Column="1" Grid.Row="0" Text="{Binding Key}"/>
+                        <CheckBox Grid.Column="1" Grid.Row="1" IsChecked="{Binding IsOpen}"/>
+                        <TextBox Grid.Column="1" Grid.Row="2" Text="{Binding Remarks}"/>
+                        <TextBox Grid.Column="1" Grid.Row="3" Text="{Binding LocalPort}"/>
+                        <TextBox Grid.Column="1" Grid.Row="4" Text="{Binding RemoteIP}"/>
+                        <TextBox Grid.Column="1" Grid.Row="5" Text="{Binding RemotePort}"/>
+
+                    </Grid>
+
+                    <Grid Visibility="{Binding CommunicationModel,Converter={x:Static local:Converters.ShowTcpServ},FallbackValue=Collapsed}">
+                        <Grid.ColumnDefinitions>
+                            <ColumnDefinition Width="30*"/>
+                            <ColumnDefinition Width="60*"/>
+                        </Grid.ColumnDefinitions>
+                        <Grid.RowDefinitions>
+                            <RowDefinition Height="27"/>
+                            <RowDefinition Height="27"/>
+                            <RowDefinition Height="27"/>
+                            <RowDefinition Height="27"/>
+                            <RowDefinition Height="27"/>
+                            <RowDefinition Height="27"/>
+                        </Grid.RowDefinitions>
+                        <Grid.Resources>
+                            <Style TargetType="TextBlock">
+                                <Setter Property="VerticalAlignment" Value="Center"/>
+                                <Setter Property="HorizontalAlignment" Value="Right"/>
+                            </Style>
+
+                            <Style TargetType="TextBox" BasedOn="{StaticResource TextBoxBaseStyle}">
+                                <Setter Property="VerticalAlignment" Value="Center"/>
+                                <Setter Property="HorizontalAlignment" Value="Stretch"/>
+                                <Setter Property="Margin" Value="10,0"/>
+                                <Setter Property="MinHeight" Value="20"/>
+                                <Setter Property="Padding" Value="0,0,0,0"/>
+                            </Style>
+
+                            <Style TargetType="CheckBox">
+                                <Setter Property="VerticalAlignment" Value="Center"/>
+                                <Setter Property="HorizontalAlignment" Value="Stretch"/>
+                                <Setter Property="Margin" Value="10,0"/>
+                            </Style>
+                        </Grid.Resources>
+
+                        <TextBlock Grid.Row="0" Text="{Binding [NameDash], Source={x:Static app1:LanguageManager.Instance}}"/>
+                        <TextBlock Grid.Row="1" Text="{Binding [EnableDash], Source={x:Static app1:LanguageManager.Instance}}"/>
+                        <TextBlock Grid.Row="2" Text="{Binding [NoteDash], Source={x:Static app1:LanguageManager.Instance}}"/>
+                        <TextBlock Grid.Row="3" Text="{Binding [PortDash], Source={x:Static app1:LanguageManager.Instance}}"/>
+
+                        <TextBox Grid.Column="1" Grid.Row="0" Text="{Binding Key}"/>
+                        <CheckBox Grid.Column="1" Grid.Row="1" IsChecked="{Binding IsOpen}"/>
+                        <TextBox Grid.Column="1" Grid.Row="2" Text="{Binding Remarks}"/>
+                        <TextBox Grid.Column="1" Grid.Row="3" Text="{Binding LocalPort}"/>
+
+                    </Grid>
+
+                    <Grid Visibility="{Binding CommunicationModel,Converter={x:Static local:Converters.ShowTcpClnt},FallbackValue=Collapsed}">
+                        <Grid.ColumnDefinitions>
+                            <ColumnDefinition Width="30*"/>
+                            <ColumnDefinition Width="60*"/>
+                        </Grid.ColumnDefinitions>
+                        <Grid.RowDefinitions>
+                            <RowDefinition Height="27"/>
+                            <RowDefinition Height="27"/>
+                            <RowDefinition Height="27"/>
+                            <RowDefinition Height="27"/>
+                            <RowDefinition Height="27"/>
+                            <RowDefinition Height="27"/>
+                        </Grid.RowDefinitions>
+                        <Grid.Resources>
+                            <Style TargetType="TextBlock">
+                                <Setter Property="VerticalAlignment" Value="Center"/>
+                                <Setter Property="HorizontalAlignment" Value="Right"/>
+                            </Style>
+
+                            <Style TargetType="TextBox" BasedOn="{StaticResource TextBoxBaseStyle}">
+                                <Setter Property="VerticalAlignment" Value="Center"/>
+                                <Setter Property="HorizontalAlignment" Value="Stretch"/>
+                                <Setter Property="Margin" Value="10,0"/>
+                                <Setter Property="MinHeight" Value="20"/>
+                                <Setter Property="Padding" Value="0,0,0,0"/>
+                            </Style>
+
+                            <Style TargetType="CheckBox">
+                                <Setter Property="VerticalAlignment" Value="Center"/>
+                                <Setter Property="HorizontalAlignment" Value="Stretch"/>
+                                <Setter Property="Margin" Value="10,0"/>
+                            </Style>
+                        </Grid.Resources>
+
+                        <TextBlock Grid.Row="0" Text="{Binding [NameDash], Source={x:Static app1:LanguageManager.Instance}}"/>
+                        <TextBlock Grid.Row="1" Text="{Binding [EnableDash], Source={x:Static app1:LanguageManager.Instance}}"/>
+                        <TextBlock Grid.Row="2" Text="{Binding [NoteDash], Source={x:Static app1:LanguageManager.Instance}}"/>
+                        <TextBlock Grid.Row="3" Text="{Binding [DstAddr], Source={x:Static app1:LanguageManager.Instance}}"/>
+                        <TextBlock Grid.Row="4" Text="{Binding [DstPort], Source={x:Static app1:LanguageManager.Instance}}"/>
+
+                        <TextBox Grid.Column="1" Grid.Row="0" Text="{Binding Key}"/>
+                        <CheckBox Grid.Column="1" Grid.Row="1" IsChecked="{Binding IsOpen}"/>
+                        <TextBox Grid.Column="1" Grid.Row="2" Text="{Binding Remarks}"/>
+                        <TextBox Grid.Column="1" Grid.Row="3" Text="{Binding RemoteIP}"/>
+                        <TextBox Grid.Column="1" Grid.Row="4" Text="{Binding RemotePort}"/>
+
+                    </Grid>
+                </Grid>
+            </GroupBox>
+        </Grid>
+
+        <Grid Grid.Row="1" Margin="10,0">
+            <Grid.ColumnDefinitions>
+                <ColumnDefinition Width="50*"/>
+                <ColumnDefinition Width="50*"/>
+            </Grid.ColumnDefinitions>
+
+            <GroupBox Grid.Row="1" Grid.Column="0" Header="{Binding [SendData2], Source={x:Static app1:LanguageManager.Instance}}">
+                <TextBox Text="{Binding SendStr}" TextWrapping="Wrap" VerticalContentAlignment="Top" AcceptsReturn="True"/>
+            </GroupBox>
+            <GroupBox Grid.Row="1" Grid.Column="1" Header="{Binding [RecvData2], Source={x:Static app1:LanguageManager.Instance}}" DataContext="{Binding SelectedItem, ElementName=listView}">
+                <TextBox Text="{Binding m_ReadData}" TextWrapping="Wrap"  VerticalContentAlignment="Top" AcceptsReturn="True"/>
+            </GroupBox>
+        </Grid>
+        <Button Grid.Column="1" Grid.Row="2" Content="{Binding [Send], Source={x:Static app1:LanguageManager.Instance}}" Width="74" Height="24" Click="Send_Click"/>
+    </Grid>
+</UserControl>

@@ -1,0 +1,15 @@
+﻿<Window x:Class="LCD.View.LangSelect"
+        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+        xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+        xmlns:local="clr-namespace:LCD.View"
+        mc:Ignorable="d"
+        Title="LangSelect" Height="250" Width="500">
+    <Grid>
+        <Label Content="Language"  HorizontalAlignment="Left" Margin="43,54,0,0" VerticalAlignment="Top" HorizontalContentAlignment="Center" VerticalContentAlignment="Center"/>
+        <RadioButton x:Name="cn" Content="中文" GroupName="LanguangeChoice" HorizontalAlignment="Left" Margin="132,60,0,0" VerticalAlignment="Top" HorizontalContentAlignment="Left" VerticalContentAlignment="Center"  IsChecked="True"/>
+        <RadioButton x:Name="en" Content="English" GroupName="LanguangeChoice" HorizontalAlignment="Center" Margin="0,60,0,0" VerticalAlignment="Top" HorizontalContentAlignment="Left" VerticalContentAlignment="Center" />
+        <Button Content="OK" HorizontalAlignment="Left" Margin="314,55,0,0" VerticalAlignment="Top" Height="25" Width="60" Click="Button_Click"/>
+    </Grid>
+</Window>

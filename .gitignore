@@ -1,0 +1,63 @@
+# Build output
+[Bb]in/
+[Oo]bj/
+[Dd]ebug/
+[Rr]elease/
+x64/
+x86/
+build_out*.txt
+
+# Visual Studio
+.vs/
+*.suo
+*.user
+*.userosscache
+*.sln.docstates
+*.ide/
+*.VC.db
+*.VC.opendb
+
+# NuGet
+packages/
+*.nupkg
+*.nuspec.user
+# Keep packages.config so downstream can restore
+!packages.config
+
+# Downloaded bootstrap tools (not needed in repo)
+nuget.exe
+
+# ReSharper / Rider
+_ReSharper*/
+*.DotSettings.user
+
+# Backup / editor noise
+*~
+*.bak
+*.tmp
+*.swp
+.DS_Store
+Thumbs.db
+
+# Local data / runtime artifacts
+*.db
+*.db-journal
+*.sqlite
+*.log
+*.pdb
+log/
+logs/
+
+# Extracted / temp folders created during development
+_tmp_docx_img/
+
+# Duplicate / backup source files that shouldn't have been committed
+*副本*
+*-副本*
+LCD/View/CustomTemplate-2024*.xaml
+LCD/View/CustomTemplate.xaml-2024*.cs
+LCD/View/CustomTemplate - 副本.xaml
+LCD/Managers/Manager_Plugins*(1)*.cs
+
+# Config backups
+Config - 副本.xml
