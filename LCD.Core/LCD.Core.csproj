@@ -102,6 +102,8 @@
     <Compile Include="Services\PointLayoutService.cs" />
     <Compile Include="Models\PowerReading.cs" />
     <Compile Include="Models\SerialBusConfig.cs" />
+    <Compile Include="Data\Axies.cs" />
+    <Compile Include="Runtime\MotionRuntime.cs" />
     <Compile Include="Data\IData.cs" />
     <Compile Include="Abstractions\IPowerSupply.cs" />
     <Compile Include="Abstractions\ILightMeter.cs" />

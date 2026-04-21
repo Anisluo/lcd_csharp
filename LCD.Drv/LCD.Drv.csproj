@@ -78,6 +78,7 @@
     <Compile Include="LightMeter\SR3A.cs" />
     <Compile Include="LightMeter\MS01.cs" />
     <Compile Include="Motion\MPC08EDLL.cs" />
+    <Compile Include="Motion\MovCtrl.cs" />
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\LCD.Core\LCD.Core.csproj">

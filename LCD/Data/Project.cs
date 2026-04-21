@@ -1,5 +1,6 @@
 ﻿/********************/
 using LCD.Core.Abstractions;
+using LCD.Core.Runtime;
 using LCD.Ctrl;
 using LCD.Data;
 using LCD.dataBase;
@@ -25,16 +26,20 @@ namespace LCD
     public class Project
     {
         /// <summary>
-        /// 急停按钮
+        /// 急停按钮。实际存储在 LCD.Core.Runtime.MotionRuntime，保留这里作为转发入口以兼容历史调用。
         /// </summary>
-        public static bool Stop=false;
+        public static bool Stop
+        {
+            get => MotionRuntime.Stop;
+            set => MotionRuntime.Stop = value;
+        }
 
-        public static double Xorg;
-        public static double Yorg;
-        public static double Zorg;
-        public static double Uorg;
-        public static double Vorg;
-        public static double Ballorg;
+        public static double Xorg { get => MotionRuntime.Xorg; set => MotionRuntime.Xorg = value; }
+        public static double Yorg { get => MotionRuntime.Yorg; set => MotionRuntime.Yorg = value; }
+        public static double Zorg { get => MotionRuntime.Zorg; set => MotionRuntime.Zorg = value; }
+        public static double Uorg { get => MotionRuntime.Uorg; set => MotionRuntime.Uorg = value; }
+        public static double Vorg { get => MotionRuntime.Vorg; set => MotionRuntime.Vorg = value; }
+        public static double Ballorg { get => MotionRuntime.Ballorg; set => MotionRuntime.Ballorg = value; }
 
         public static TestMachine testMachine { get { return deviceview == null ? null : deviceview.TestDevice; } set { if (deviceview != null) deviceview.TestDevice = value; } }
 
@@ -74,7 +79,11 @@ namespace LCD
         /// <summary>
         /// 全局急停信号
         /// </summary>
-        public static bool FstStop { get; set; } = false;
+        public static bool FstStop
+        {
+            get => MotionRuntime.FstStop;
+            set => MotionRuntime.FstStop = value;
+        }
         public static bool TstPause { get; set; } = false;//暂停测试
 
         public static List<ResultData> lstDatas = new List<ResultData>();//测试结果
@@ -518,56 +527,7 @@ namespace LCD
         public int port;
         public double expTime;
     }
-    public class Axies
-    {
-        public bool BackLash;
-        /// <summary>
-        /// 报警启用
-        /// </summary>
-        public bool AlarmEnable;
-        public AXiesName Name;
-        public double HomeSpend;
-        public int SpendIndex;
-        public bool IsEnable;
-        public int value;
-        public int secondvalue;
-        public bool IsSecondValue;//判断是否有使能轴号
-        public int direction;
-        public double center;
-        public double homespeed;
-        public double SpeedFast;
-        /// <summary>
-        /// 平均速度
-        /// </summary>
-        public double SpeedMedium;
-        public double SpeedLow;
-        /// <summary>
-        /// 脉冲/mm
-        /// </summary>
-        public double StepsPerMM;//单位毫米对应的脉冲量
-        public double acSpeed;
-        /// <summary>
-        /// 软极限
-        /// </summary>
-        public double LowerLimit;
-        /// <summary>
-        /// 最大范围
-        /// </summary>
-        public long UpperLimit;
-
-        //是否使能补偿方向
-        public bool CompensationDirection;
-    }
-
-    public enum AXiesName
-    {
-        X轴,
-        Y轴,
-        Z轴,
-        U轴,
-        V轴,
-        Ball轴
-    }
+    // Axies + AXiesName 已迁至 LCD.Core/Data/Axies.cs（保留 LCD.Data 命名空间）。
     public enum ENUMMESSTYLE//
     {
         _01_POINT,

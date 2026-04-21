@@ -287,8 +287,6 @@
     <Compile Include="Converters\BoolToGreenRedConverter.cs" />
     <Compile Include="Converters\Converters.cs" />
     <Compile Include="Converters\EComTypeToVisibilityConverter.cs" />
-    <Compile Include="Ctrl\MovCtrl.cs" />
-    <Compile Include="Ctrl\MPG.cs" />
     <Compile Include="Ctrl\PointF.cs" />
     <Compile Include="Ctrl\Power.cs" />
     <Compile Include="Ctrl\ProcessCtrl.cs" />

@@ -205,6 +205,16 @@ namespace LCD
 
             mypanel.DataContext = PtInfo;
             mvctrl = MovCtrl.GetInstance();
+            // 注入 6 轴配置与运动相关标志（取代 MovCtrl 直接读 Project.cfg.ax_X）
+            mvctrl.AxX = Project.cfg.ax_x;
+            mvctrl.AxY = Project.cfg.ax_y;
+            mvctrl.AxZ = Project.cfg.ax_z;
+            mvctrl.AxU = Project.cfg.ax_u;
+            mvctrl.AxV = Project.cfg.ax_v;
+            mvctrl.AxBall = Project.cfg.ax_ball;
+            mvctrl.IsFlipped = Project.cfg.IsFlipped;
+            mvctrl.LightScreenAlarmEnable = Project.cfg.LightScreenAlarmEnable;
+            mvctrl.LightScreenSignal = Project.cfg.LightScreenSignal;
 
             var t2 = sw.Elapsed.TotalSeconds;
             //心跳函数
