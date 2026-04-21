@@ -2465,46 +2465,8 @@ namespace LCD
 
         private void init_test_machine()
         {
-            if (Project.cfg.TESTMACHINE == ENUMMACHINE.BMA7)
-            {
-                Project.testMachine = Ctrl.BM7A.GetInstance();
-            }
-            else if (Project.cfg.TESTMACHINE == ENUMMACHINE.BM5A)
-            {
-
-            }
-            else if (Project.cfg.TESTMACHINE == ENUMMACHINE.PR655)
-            {
-
-            }
-            else if (Project.cfg.TESTMACHINE == ENUMMACHINE.CS2000)
-            {
-                Project.testMachine = Ctrl.CS2000.GetInstance();
-            }
-            else if ((Project.cfg.TESTMACHINE == ENUMMACHINE.SR3A) || (Project.cfg.TESTMACHINE == ENUMMACHINE.SR5A))
-            {
-                Project.testMachine = Ctrl.SR3A.GetInstance();
-            }
-            else if (Project.cfg.TESTMACHINE == ENUMMACHINE.MS01)
-            {
-                Project.testMachine = Ctrl.MS01.GetInstance();
-            }
-            else if (Project.cfg.TESTMACHINE == ENUMMACHINE.BM5AS)
-            {
-                //Project.testMachine = Ctrl.BM7A.GetInstance();
-            }
-            else if (Project.cfg.TESTMACHINE == ENUMMACHINE.CS2000)
-            {
-                Project.testMachine = Ctrl.CS2000.GetInstance();
-            }
-            else if (Project.cfg.TESTMACHINE == ENUMMACHINE.Demo)
-            {
-
-            }
-            else if (Project.cfg.TESTMACHINE == ENUMMACHINE.Admesy)
-            {
-                Project.testMachine = Ctrl.Admesy.GetInstance();
-            }
+            TestMachine machine = LightMeterFactory.Create(Project.cfg.TESTMACHINE);
+            if (machine != null) Project.testMachine = machine;
         }
 
         private void set_fdl_menu_visable()

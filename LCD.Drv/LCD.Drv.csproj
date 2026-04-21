@@ -69,6 +69,7 @@
     <Compile Include="PG\PGDLL.cs" />
     <Compile Include="PG\PatternGeneratorNC816.cs" />
     <Compile Include="LightMeter\TestMachine.cs" />
+    <Compile Include="LightMeter\LightMeterFactory.cs" />
     <Compile Include="LightMeter\DemoMachine.cs" />
     <Compile Include="LightMeter\ADMESY_WRAPPER.cs" />
     <Compile Include="LightMeter\Admesy.cs" />

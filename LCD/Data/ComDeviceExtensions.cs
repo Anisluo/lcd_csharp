@@ -1,4 +1,5 @@
 using LCD.Core.Models;
+using LCD.Ctrl;
 
 namespace LCD.Data
 {
@@ -25,6 +26,20 @@ namespace LCD.Data
                 StopBits = dev.stopBit,
                 Parity = dev.parity,
             };
+        }
+
+        public static SerialBusConfig GetBusConfigFor(this Config cfg, ENUMMACHINE machine)
+        {
+            if (cfg == null) return null;
+            switch (machine)
+            {
+                case ENUMMACHINE.BMA7: return cfg.BM7A?.ToBusConfig();
+                case ENUMMACHINE.CS2000: return cfg.CS2000?.ToBusConfig();
+                case ENUMMACHINE.SR3A:
+                case ENUMMACHINE.SR5A: return cfg.SR3A?.ToBusConfig();
+                case ENUMMACHINE.MS01: return cfg.MS01?.ToBusConfig();
+                default: return null;
+            }
         }
     }
 }

@@ -9,6 +9,7 @@ using System.Threading.Tasks;
 using System.Windows;
 using System.Windows.Interop;
 using System.Windows.Threading;
+using LCD.Core.Services;
 using LCD.Data;
 using LCD.dataBase;
 using LCD.View;
@@ -64,46 +65,6 @@ namespace LCD.Ctrl
 
         public delegate void ShowIndexDelegate(int index);
         public event ShowIndexDelegate ShowIndex;//显示index指标
-
-        /// <summary>
-        /// 计算补偿点位
-        /// </summary>
-        /// <param name="dx"></param>
-        /// <param name="dy"></param>
-        /// <param name="dz"></param>
-        /// <param name="du"></param>
-        /// <param name="dv"></param>
-        /// <param name="dball"></param>
-      
-
-        private void CalcNewPoint_Mode1(ref double dx,
-            ref double dy,
-            ref double dz,
-            ref double du,
-            ref double dv,
-            ref double dball)
-        {
-            dx += Project.Xorg;
-            dy += Project.Yorg;
-            dz += Project.Zorg;
-            du += Project.Uorg;
-
-            double deltdr = Project.cfg.machine.h0 * (Math.Sin(dv / 180 * Math.PI));//计算delta dr长度
-            dx += deltdr * Math.Cos(du);
-            dy += deltdr * Math.Sin(du);
-            dv += Project.Vorg;
-            dball += Project.Ballorg;
-        }
-
-
-        public void OnSinglePt()
-        {
-            TestMachine tst = Project.testMachine;
-            IData str = tst.MeasureLxy();
-
-
-        }
-
 
         public void OnMove2Point(double dx, double dy, double dz, double du, double dv, double dball,bool Home)
         {
@@ -188,6 +149,25 @@ namespace LCD.Ctrl
             }
         }
 
+        private void RebindMachineIfNeeded(params ENUMMACHINE[] machines)
+        {
+            ENUMMACHINE current = Project.cfg.TESTMACHINE;
+            bool match = false;
+            for (int i = 0; i < machines.Length; i++)
+            {
+                if (machines[i] == current) { match = true; break; }
+            }
+            if (!match) return;
+            Project.testMachine = LightMeterFactory.Create(current);
+            if (Project.testMachine == null) return;
+            Project.testMachine.Config = Project.cfg.GetBusConfigFor(current);
+            if (Project.testMachine.IsOpen == false)
+            {
+                Project.testMachine.Init();
+                if (current == ENUMMACHINE.MS01) Project.testMachine.AutoCheck();
+            }
+        }
+
         /// <summary>
         /// 执行测试
         /// </summary>
@@ -230,60 +210,19 @@ namespace LCD.Ctrl
             {
                 Project.TestFlag = true;
 
-                if (Project.cfg.TESTMACHINE == ENUMMACHINE.BMA7)
+                Project.testMachine = LightMeterFactory.Create(Project.cfg.TESTMACHINE);
+                if (Project.testMachine != null)
                 {
-                    Project.testMachine = Ctrl.BM7A.GetInstance();
-                    Project.testMachine.Config = Project.cfg.BM7A.ToBusConfig();
-                }
-                else if (Project.cfg.TESTMACHINE == ENUMMACHINE.BM5A)
-                {
+                    Project.testMachine.Config = Project.cfg.GetBusConfigFor(Project.cfg.TESTMACHINE);
 
-                }
-                else if (Project.cfg.TESTMACHINE == ENUMMACHINE.PR655)
-                {
-
-                }
-                else if (Project.cfg.TESTMACHINE == ENUMMACHINE.CS2000)
-                {
-                    Project.testMachine = Ctrl.CS2000.GetInstance();
-                    Project.testMachine.Config = Project.cfg.CS2000.ToBusConfig();
-                }
-                else if ((Project.cfg.TESTMACHINE == ENUMMACHINE.SR3A)|| (Project.cfg.TESTMACHINE == ENUMMACHINE.SR5A))
-                {
-                    Project.testMachine = Ctrl.SR3A.GetInstance();
-                    Project.testMachine.Config = Project.cfg.SR3A.ToBusConfig();
-                }
-                else if (Project.cfg.TESTMACHINE == ENUMMACHINE.MS01)
-                {
-                    Project.testMachine = Ctrl.MS01.GetInstance();
-                    Project.testMachine.Config = Project.cfg.MS01.ToBusConfig();
                     if (Project.testMachine.IsOpen == false)
                     {
                         Project.testMachine.Init();
                     }
-                    Project.testMachine.AutoCheck();
-                }
-                else if (Project.cfg.TESTMACHINE == ENUMMACHINE.BM5AS)
-                {
-                    //Project.testMachine = Ctrl.BM7A.GetInstance();
-                }
-                else if (Project.cfg.TESTMACHINE == ENUMMACHINE.CS2000)
-                {
-                    Project.testMachine = Ctrl.CS2000.GetInstance();
-                    Project.testMachine.Config = Project.cfg.CS2000.ToBusConfig();
-                }
-                else if (Project.cfg.TESTMACHINE == ENUMMACHINE.Demo)
-                {
-
-                }
-                else if(Project.cfg.TESTMACHINE == ENUMMACHINE.Admesy)
-                {
-                    Project.testMachine =Ctrl.Admesy.GetInstance();
-                }
-
-                if (Project.testMachine.IsOpen == false)
-                {
-                    Project.testMachine.Init();
+                    if (Project.cfg.TESTMACHINE == ENUMMACHINE.MS01)
+                    {
+                        Project.testMachine.AutoCheck();
+                    }
                 }
 
                 check_pause();
@@ -341,47 +280,15 @@ namespace LCD.Ctrl
                     switch (Project.lstInfos[i].MESTYPE)
                     {
                         case ENUMMESSTYLE._01_POINT:
-                            if((Project.cfg.TESTMACHINE == ENUMMACHINE.SR3A)||(Project.cfg.TESTMACHINE == ENUMMACHINE.SR5A))
-                            {
-                                Project.testMachine = Ctrl.SR3A.GetInstance();
-                                Project.testMachine.Config = Project.cfg.SR3A.ToBusConfig();
-                                //判断一下是否已经初始化了
-                                if(Project.testMachine.IsOpen ==false)
-                                {
-                                    Project.testMachine.Init();
-                                }
-                            }
+                            RebindMachineIfNeeded(ENUMMACHINE.SR3A, ENUMMACHINE.SR5A);
                             ProcessPointTemplateXYZ(dt, ENUMMESSTYLE._01_POINT, TestName, Project.lstInfos[i].id,height); break;
 
                         case ENUMMESSTYLE._02_RESPONSE:
-                            if (Project.cfg.TESTMACHINE == ENUMMACHINE.Admesy)
-                            {
-                                Project.testMachine = Ctrl.Admesy.GetInstance();                                
-                            }
-                            ProcessPointTemplateXY(dt, ENUMMESSTYLE._01_POINT, TestName);  
+                            RebindMachineIfNeeded(ENUMMACHINE.Admesy);
+                            ProcessPointTemplateXY(dt, ENUMMESSTYLE._01_POINT, TestName);
                             break;
                         case ENUMMESSTYLE._03_SPECTRUM:
-                            if ((Project.cfg.TESTMACHINE == ENUMMACHINE.SR3A)|| (Project.cfg.TESTMACHINE == ENUMMACHINE.SR5A))
-                            {
-                                Project.testMachine = Ctrl.SR3A.GetInstance();
-                                Project.testMachine.Config = Project.cfg.SR3A.ToBusConfig();
-                                //判断一下是否已经初始化了
-                                if (Project.testMachine.IsOpen == false)
-                                {
-                                    Project.testMachine.Init();
-                                }
-                            }
-                            else if(Project.cfg.TESTMACHINE == ENUMMACHINE.MS01)
-                            {
-                                Project.testMachine = Ctrl.MS01.GetInstance();
-                                Project.testMachine.Config = Project.cfg.MS01.ToBusConfig();
-                                //判断一下是否已经初始化了
-                                if (Project.testMachine.IsOpen == false)
-                                {
-                                    Project.testMachine.Init();
-                                    Project.testMachine.AutoCheck();
-                                }
-                            }
+                            RebindMachineIfNeeded(ENUMMACHINE.SR3A, ENUMMACHINE.SR5A, ENUMMACHINE.MS01);
                             ProcessPointTemplateXYZ(dt, ENUMMESSTYLE._03_SPECTRUM, TestName, Project.lstInfos[i].id,height); ; break;
                         case ENUMMESSTYLE._04_FLICKER: ProcessPointTemplateXY(dt, ENUMMESSTYLE._01_POINT, TestName); ; break;
                         case ENUMMESSTYLE._05_CROSSTALK: ProcessPointTemplateXY(dt, ENUMMESSTYLE._05_CROSSTALK, TestName); ; break;
@@ -661,7 +568,7 @@ namespace LCD.Ctrl
                             str.CoordU = du;
                             str.CoordV = dv;
                             //计算lab
-                            IData lab = calc_lcolor(str.X, str.Y, str.Z);
+                            IData lab = ColorService.ToLab(str.X, str.Y, str.Z);
                             str.Lcolor = lab.Lcolor;
                             str.Acolor = lab.Acolor;
                             str.Bcolor = lab.Bcolor;
@@ -881,7 +788,7 @@ namespace LCD.Ctrl
                             str.CoordU = du;
                             str.CoordV = dv;
                             //计算lab
-                            IData lab = calc_lcolor(str.X,str.Y,str.Z);
+                            IData lab = ColorService.ToLab(str.X,str.Y,str.Z);
                             str.Lcolor = lab.Lcolor;
                             str.Acolor =lab.Acolor;
                             str.Bcolor = lab.Bcolor;
@@ -906,7 +813,7 @@ namespace LCD.Ctrl
                         str.CoordU = du;
                         str.CoordV = dv;
                         //计算lab
-                        IData lab = calc_lcolor(str.X, str.Y, str.Z);
+                        IData lab = ColorService.ToLab(str.X, str.Y, str.Z);
                         str.Lcolor = lab.Lcolor;
                         str.Acolor = lab.Acolor;
                         str.Bcolor = lab.Bcolor;
@@ -983,48 +890,6 @@ namespace LCD.Ctrl
             }
         }
 
-        //计算LAB
-        private IData calc_lcolor(double x, double y,double z)
-        {
-            IData data = new IData();
-            double fx = 0,fy=0,fz=0;
-            double xn = 475.228,yn=500, zn = 544.529;
-            double ratio = x / xn;
-            if(ratio >Math.Pow(6/29.0,3))
-            {
-                fx = Math.Pow(ratio,1/3.0);
-            }
-            else
-            {
-                fx = 7.787037 * ratio + 0.137931;
-            }
-
-            ratio = y / yn;
-            if (ratio > Math.Pow(6 / 29.0, 3))
-            {
-                fy = Math.Pow(ratio, 1 / 3.0);
-            }
-            else
-            {
-                fy = 7.787037 * ratio + 0.137931;
-            }
-
-            ratio = z / zn;
-            if (ratio > Math.Pow(6 / 29.0, 3))
-            {
-                fz = Math.Pow(ratio, 1 / 3.0);
-            }
-            else
-            {
-                fz = 7.787037 * ratio + 0.137931;
-            }
-
-            data.Lcolor = 116 * fy - 16;
-            data.Acolor = 500 * (fx - fy);
-            data.Bcolor = 200 * (fy - fz);
-            return data;
-        }
-
         public bool ProcessPointSingle()
         {
             TestMachine ts = Project.testMachine;           
@@ -1040,7 +905,7 @@ namespace LCD.Ctrl
                 str.CoordZ = str.Z;
                 str.CoordU = str.u;
                 str.CoordV = str.v;
-                IData lab = calc_lcolor(str.X, str.Y, str.Z);
+                IData lab = ColorService.ToLab(str.X, str.Y, str.Z);
                 str.Lcolor = lab.Lcolor;
                 str.Acolor = lab.Acolor;
                 str.Bcolor = lab.Bcolor;
@@ -1066,7 +931,7 @@ namespace LCD.Ctrl
                 str.CoordZ = str.Z;
                 str.CoordU = str.u;
                 str.CoordV = str.v;
-                IData lab = calc_lcolor(str.X, str.Y, str.Z);
+                IData lab = ColorService.ToLab(str.X, str.Y, str.Z);
                 str.Lcolor = lab.Lcolor;
                 str.Acolor = lab.Acolor;
                 str.Bcolor = lab.Bcolor;
@@ -1077,101 +942,5 @@ namespace LCD.Ctrl
             return false;
         }
 
-        private string[] ParseLxy(string str)
-        {
-            switch (Project.cfg.TESTMACHINE)
-            {
-                case ENUMMACHINE.BMA7: return ParseLxy_BM7A(str);
-                case ENUMMACHINE.USB2000: return ParseLxy_Common(str);
-                default: return ParseLxy_Common(str);
-            }
-        }
-
-
-        private string[] ParseLxy_Common(string str)
-        {
-            if (str == "") { return null; }
-            string[] strs = str.Split(',');
-            string[] data = new string[9];
-            data[0] = strs[0];//L
-            data[1] = strs[1];//X
-            data[2] = strs[2];//Y
-            data[3] = strs[3];//Z
-            data[4] = strs[4];//cx
-            data[5] = strs[5];//cy
-            data[6] = strs[6];//u'
-            data[7] = strs[7];//v'
-            data[8] = strs[8];//Tc
-            return data;
-        }
-
-
-
-        private string[] ParseLxy_BM7A(string str)
-        {
-            if (str == "") { return null; }
-            string[] strs = str.Split('\n');
-
-            string[] data = new string[9];
-            data[0] = strs[12].Replace("\r", "");//L
-            data[1] = strs[13].Replace("\r", "");//X
-            data[2] = strs[14].Replace("\r", "");//Y
-            data[3] = strs[15].Replace("\r", "");//Z
-            data[4] = strs[16].Replace("\r", "");//cx
-            data[5] = strs[17].Replace("\r", "");//cy
-            data[6] = strs[18].Replace("\r", "");//u'
-            data[7] = strs[19].Replace("\r", "");//v'
-            data[8] = strs[20].Replace("\r", "");//Tc
-            return data;
-        }
-
-
-
-
-        //处理五轴点位数据
-        public void ProcessPointTemplateXYZUV()
-        {
-
-        }
-
-        //处理crosstop测试数据
-        public void ProcessXYCrossTop()
-        {
-
-        }
-
-        //处理五轴加积分球
-        public void ProcessPointTemplateXYZUVBall()
-        {
-
-        }
-
-        //处理响应测试
-        public void ProcessResponseXY()
-        {
-
-        }
-
-        //处理ACR测试
-        public void ProcessACRXY()
-        {
-
-        }
-
-        //处理
-        //Edit
     }
-
-    //定义测量类型
-    //public enum EnumMeasureStyle
-    //{
-    //    Point_XY,
-    //    Point_XYZ,
-    //    Point_XYZUV,
-    //    CrossTop,
-    //    Response,
-    //    Spectrum,
-    //}
-
-
 }

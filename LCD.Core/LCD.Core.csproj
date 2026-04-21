@@ -100,6 +100,7 @@
     <Compile Include="VisionCore\Plugins\ObjBase.cs" />
     <Compile Include="VisionCore\Plugins\PluginsInfo.cs" />
     <Compile Include="Services\PointLayoutService.cs" />
+    <Compile Include="Services\ColorService.cs" />
     <Compile Include="Models\PowerReading.cs" />
     <Compile Include="Models\SerialBusConfig.cs" />
     <Compile Include="Data\Axies.cs" />
