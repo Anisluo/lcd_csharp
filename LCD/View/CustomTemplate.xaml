@@ -51,22 +51,22 @@
                 <StackPanel x:Name="PointNum" Grid.Row="1" Orientation="Vertical" VerticalAlignment="Center">
                     <StackPanel Orientation="Horizontal" Margin="0,2,0,2">
                         <Label Content="{Binding [MatrixType], Source={x:Static app1:LanguageManager.Instance}}" Width="70" VerticalAlignment="Center"></Label>
-                        <RadioButton x:Name="point5" Checked="PointChecked" Content="{Binding [Point5], Source={x:Static app1:LanguageManager.Instance}}" Width="55" Margin="6,0,0,0" VerticalAlignment="Center" IsChecked="True"></RadioButton>
-                        <RadioButton x:Name="point9" Checked="PointChecked" Content="{Binding [Point9], Source={x:Static app1:LanguageManager.Instance}}" Width="55" Margin="6,0,0,0" VerticalAlignment="Center"></RadioButton>
-                        <RadioButton x:Name="point13" Checked="PointChecked" Content="{Binding [Point13], Source={x:Static app1:LanguageManager.Instance}}" Width="55" Margin="6,0,0,0" VerticalAlignment="Center"></RadioButton>
-                        <RadioButton x:Name="point13_diag" Checked="PointChecked" Content="{Binding [Point13_Diag], Source={x:Static app1:LanguageManager.Instance}}" Width="85" Margin="6,0,0,0" VerticalAlignment="Center"></RadioButton>
+                        <RadioButton x:Name="point5" GroupName="PointType" Checked="PointChecked" Content="{Binding [Point5], Source={x:Static app1:LanguageManager.Instance}}" Width="55" Margin="6,0,0,0" VerticalAlignment="Center" IsChecked="True"></RadioButton>
+                        <RadioButton x:Name="point9" GroupName="PointType" Checked="PointChecked" Content="{Binding [Point9], Source={x:Static app1:LanguageManager.Instance}}" Width="55" Margin="6,0,0,0" VerticalAlignment="Center"></RadioButton>
+                        <RadioButton x:Name="point13" GroupName="PointType" Checked="PointChecked" Content="{Binding [Point13], Source={x:Static app1:LanguageManager.Instance}}" Width="55" Margin="6,0,0,0" VerticalAlignment="Center"></RadioButton>
+                        <RadioButton x:Name="point13_diag" GroupName="PointType" Checked="PointChecked" Content="{Binding [Point13_Diag], Source={x:Static app1:LanguageManager.Instance}}" Width="85" Margin="6,0,0,0" VerticalAlignment="Center"></RadioButton>
                     </StackPanel>
                     <StackPanel Orientation="Horizontal" Margin="0,2,0,2">
                         <Label Width="70"></Label>
-                        <RadioButton x:Name="point15" Checked="PointChecked" Content="{Binding [Point15], Source={x:Static app1:LanguageManager.Instance}}" Width="55" Margin="6,0,0,0" VerticalAlignment="Center"></RadioButton>
-                        <RadioButton x:Name="point17" Checked="PointChecked" Content="{Binding [Point17], Source={x:Static app1:LanguageManager.Instance}}" Width="85" Margin="6,0,0,0" VerticalAlignment="Center"></RadioButton>
-                        <RadioButton x:Name="point17_ary" Checked="PointChecked" Content="{Binding [Point17_ary], Source={x:Static app1:LanguageManager.Instance}}" Width="85" Margin="6,0,0,0" VerticalAlignment="Center"></RadioButton>
+                        <RadioButton x:Name="point15" GroupName="PointType" Checked="PointChecked" Content="{Binding [Point15], Source={x:Static app1:LanguageManager.Instance}}" Width="55" Margin="6,0,0,0" VerticalAlignment="Center"></RadioButton>
+                        <RadioButton x:Name="point17" GroupName="PointType" Checked="PointChecked" Content="{Binding [Point17], Source={x:Static app1:LanguageManager.Instance}}" Width="85" Margin="6,0,0,0" VerticalAlignment="Center"></RadioButton>
+                        <RadioButton x:Name="point17_ary" GroupName="PointType" Checked="PointChecked" Content="{Binding [Point17_ary], Source={x:Static app1:LanguageManager.Instance}}" Width="85" Margin="6,0,0,0" VerticalAlignment="Center"></RadioButton>
                     </StackPanel>
                     <StackPanel Orientation="Horizontal" Margin="0,2,0,2">
                         <Label Width="70"></Label>
-                        <RadioButton x:Name="point25" Checked="PointChecked" Content="{Binding [Point25], Source={x:Static app1:LanguageManager.Instance}}" Width="55" Margin="6,0,0,0" VerticalAlignment="Center"></RadioButton>
-                        <RadioButton x:Name="pointother" Checked="PointChecked" Content="{Binding [CustomPoint], Source={x:Static app1:LanguageManager.Instance}}" Width="65" Margin="6,0,0,0" VerticalAlignment="Center"></RadioButton>
-                        <RadioButton x:Name="point_crosstalk" Checked="PointChecked" Content="CrossTalk" Width="90" Margin="6,0,0,0" VerticalAlignment="Center"></RadioButton>
+                        <RadioButton x:Name="point25" GroupName="PointType" Checked="PointChecked" Content="{Binding [Point25], Source={x:Static app1:LanguageManager.Instance}}" Width="55" Margin="6,0,0,0" VerticalAlignment="Center"></RadioButton>
+                        <RadioButton x:Name="pointother" GroupName="PointType" Checked="PointChecked" Content="{Binding [CustomPoint], Source={x:Static app1:LanguageManager.Instance}}" Width="65" Margin="6,0,0,0" VerticalAlignment="Center"></RadioButton>
+                        <RadioButton x:Name="point_crosstalk" GroupName="PointType" Checked="PointChecked" Content="CrossTalk" Width="90" Margin="6,0,0,0" VerticalAlignment="Center"></RadioButton>
                     </StackPanel>
                 </StackPanel>
 
