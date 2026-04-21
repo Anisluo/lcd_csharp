@@ -13,10 +13,13 @@ using System.Windows.Documents;
 using System.Windows.Input;
 using System.Windows.Media;
 using System.Windows.Threading;
+using LCD.Core.Abstractions;
+using LCD.Core.Models;
 using LCD.Ctrl;
 using LCD.Data;
 using LCD.dataBase;
 using LCD.Dll;
+using LCD.Drv.Power;
 using LCD.View;
 using NPOI.SS.Formula.Functions;
 using SharpDX.Mathematics.Interop;
@@ -67,7 +70,7 @@ namespace LCD
         private DispatcherTimer warn_timer = null;
 
         //程控电源接口
-        private IPowerDevice ipowerDevice = null;
+        private IPowerSupply ipowerDevice = null;
 
         private Thread power_query_thread;
         
@@ -433,7 +436,7 @@ namespace LCD
             }
             if (string.IsNullOrEmpty(Project.cfg.power.PowerSerialName) == false)
             {
-                bool st  = ipowerDevice.start(Project.cfg.power.PowerSerialName);
+                bool st  = ipowerDevice.Open(Project.cfg.power.PowerSerialName);
                 update_power_control_status(st);
             }
             else
@@ -603,25 +606,23 @@ namespace LCD
             {
                 if (Project.cfg.power.EnablePowerControl)
                 {
-                    Result result = null;
-                    //LogHelper.Instance.Write("begin:" + DateTime.Now.ToString("hh-mm-ss.fff"));
+                    PowerReading result = null;
                     try
                     {
-                        result = ipowerDevice?.query();
+                        result = ipowerDevice?.Query();
                     }
                     catch (Exception ex)
                     {
                         LogHelper.Instance.Write("电源查询异常:" + ex.Message + ex.StackTrace);
                         continue;
                     }
-                    //LogHelper.Instance.Write("end:" + DateTime.Now.ToString("hh-mm-ss.fff"));
 
                     //显示的时候才dispatch
                     this.Dispatcher?.Invoke(new Action(() => {
                         if (result != null)
                         {
                             RealVoltage.Text = result.Voltage.ToString("0.0000");
-                            RealCurrent.Text = result.ElectricCurrent.ToString("0.0000");
+                            RealCurrent.Text = result.Current.ToString("0.0000");
                             update_power_control_status(true);
                         }
                         else
@@ -1127,7 +1128,7 @@ namespace LCD
                 }
                 if (Project.cfg.power.EnablePowerControl)
                 {
-                    ipowerDevice?.output(false);
+                    ipowerDevice?.SetOutput(false);
                     Project.WriteLog("关闭电源输出");
                 }
             })
@@ -2167,7 +2168,7 @@ namespace LCD
 
                 if (Project.cfg.power.EnablePowerControl)
                 {
-                    ipowerDevice?.output(false);
+                    ipowerDevice?.SetOutput(false);
                     Project.WriteLog("关闭电源输出");
                 }
             })
@@ -2297,13 +2298,13 @@ namespace LCD
                 {
                     return;
                 }
-                ipowerDevice?.output(true);
+                ipowerDevice?.SetOutput(true);
                 PowerBtn.Content = "关闭";
             }
             else
             {
                 PowerBtn.Content = "打开";
-                ipowerDevice?.output(false);
+                ipowerDevice?.SetOutput(false);
             }
         }
 
@@ -2318,9 +2319,9 @@ namespace LCD
             voltage = double.Parse(VoltageSet.Text);
             current = double.Parse(CurrentSet.Text);
             //设置电压和电流
-            ipowerDevice?.voltage_set(voltage);
-            ipowerDevice?.current_set(current);
-            ipowerDevice?.output(true);
+            ipowerDevice?.SetVoltage(voltage);
+            ipowerDevice?.SetCurrent(current);
+            ipowerDevice?.SetOutput(true);
             PowerBtn.Content = "关闭";
         }
 
@@ -2388,7 +2389,7 @@ namespace LCD
             {
                 PowerControllerPanel.Visibility = Visibility.Visible;
                 PowerControlStatus.Visibility = Visibility.Visible;
-                ipowerDevice?.stop();
+                ipowerDevice?.Close();
                 initial_power_controller();               
             }
             else
@@ -2422,9 +2423,9 @@ namespace LCD
             catch { }
             //LogHelper.Instance.Write("1..");
             //软件关闭的时候关闭电源
-            ipowerDevice?.output(false);
+            ipowerDevice?.SetOutput(false);
             //LogHelper.Instance.Write("2..");
-            ipowerDevice?.stop();
+            ipowerDevice?.Close();
             //LogHelper.Instance.Write("3..");
             Project.cam.CloseCam();
             //LogHelper.Instance.Write("4..");

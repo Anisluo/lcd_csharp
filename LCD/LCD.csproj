@@ -292,7 +292,6 @@
     <Compile Include="Ctrl\BM7A.cs" />
     <Compile Include="Ctrl\CS2000.cs" />
     <Compile Include="Ctrl\DemoMachine.cs" />
-    <Compile Include="Ctrl\IPowerDevice.cs" />
     <Compile Include="Ctrl\MovCtrl.cs" />
     <Compile Include="Ctrl\MPG.cs" />
     <Compile Include="Ctrl\MS01.cs" />
@@ -302,10 +301,6 @@
     <Compile Include="Ctrl\PGP.cs" />
     <Compile Include="Ctrl\PointF.cs" />
     <Compile Include="Ctrl\Power.cs" />
-    <Compile Include="Ctrl\PowerDC.cs" />
-    <Compile Include="Ctrl\PowerM88.cs" />
-    <Compile Include="Ctrl\PowerNGI36150.cs" />
-    <Compile Include="Ctrl\PowerPld6003.cs" />
     <Compile Include="Ctrl\ProcessCtrl.cs" />
     <Compile Include="Ctrl\SR3A.cs" />
     <Compile Include="Ctrl\TestMachine.cs" />
@@ -790,6 +785,10 @@
     <ProjectReference Include="..\LCD.Core\LCD.Core.csproj">
       <Project>{05a6b362-89d5-4e59-acd9-e6aadc95d76d}</Project>
       <Name>LCD.Core</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\LCD.Drv\LCD.Drv.csproj">
+      <Project>{c818728c-aa22-46b8-9c6f-770f7d637b4a}</Project>
+      <Name>LCD.Drv</Name>
     </ProjectReference>
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
