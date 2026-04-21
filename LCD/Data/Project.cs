@@ -135,20 +135,42 @@ namespace LCD
         public static Config cfg { get; set; } = new Config();
 
         public static PointF PtCenter { get; set; } = new PointF(0, 0, 0);
-        public static List<UserIdMode> listBarCode { get; set; }=new List<UserIdMode>();
 
+        public static List<UserIdMode> listBarCode
+        {
+            get => SessionState.ListBarCode;
+            set => SessionState.ListBarCode = value;
+        }
 
-        
-        public static List<TestDataMode> TestDataModes { get; set; }=new List<TestDataMode>();
+        public static List<TestDataMode> TestDataModes
+        {
+            get => SessionState.TestDataModes;
+            set => SessionState.TestDataModes = value;
+        }
 
-        public static List<SpectrumDataMode> ListSpectrumData { get; set; }=new List<SpectrumDataMode>();
+        public static List<SpectrumDataMode> ListSpectrumData
+        {
+            get => SessionState.ListSpectrumData;
+            set => SessionState.ListSpectrumData = value;
+        }
 
+        public static List<UserIdMode> SaveTestData
+        {
+            get => SessionState.SaveTestData;
+            set => SessionState.SaveTestData = value;
+        }
 
-        public static List<UserIdMode> SaveTestData { get; set; }=new List<UserIdMode>();
+        public static int BarCodeID
+        {
+            get => SessionState.BarCodeID;
+            set => SessionState.BarCodeID = value;
+        }
 
-
-        public static  int BarCodeID { get; set; }
-        public static int ProjectID { get; set; }
+        public static int ProjectID
+        {
+            get => SessionState.ProjectID;
+            set => SessionState.ProjectID = value;
+        }
         /// <summary>
         /// 测试模板信息
         /// </summary>

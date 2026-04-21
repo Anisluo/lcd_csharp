@@ -103,6 +103,11 @@
     <Compile Include="Services\ColorService.cs" />
     <Compile Include="Models\PowerReading.cs" />
     <Compile Include="Models\SerialBusConfig.cs" />
+    <Compile Include="Models\Session\UserIdMode.cs" />
+    <Compile Include="Models\Session\ProjectModeClass.cs" />
+    <Compile Include="Models\Session\TestDataMode.cs" />
+    <Compile Include="Models\Session\SpectrumDataMode.cs" />
+    <Compile Include="Runtime\SessionState.cs" />
     <Compile Include="Data\Axies.cs" />
     <Compile Include="Runtime\MotionRuntime.cs" />
     <Compile Include="Data\IData.cs" />
