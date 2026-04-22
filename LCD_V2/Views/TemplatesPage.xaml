@@ -3,20 +3,22 @@
              xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml">
     <Grid>
         <Grid.ColumnDefinitions>
-            <ColumnDefinition Width="320"/>
-            <ColumnDefinition Width="16"/>
+            <ColumnDefinition Width="260"/>
+            <ColumnDefinition Width="12"/>
             <ColumnDefinition Width="*"/>
         </Grid.ColumnDefinitions>
 
-        <!-- Templates list -->
+        <!-- ══════════════ Templates library ══════════════ -->
         <Border Grid.Column="0" Style="{StaticResource Card}" Padding="0">
             <DockPanel>
-                <Grid DockPanel.Dock="Top" Margin="16,14,16,10">
+                <Grid DockPanel.Dock="Top" Margin="14,12,14,8">
                     <TextBlock Text="模板库" Style="{StaticResource H3}"/>
-                    <Button Content="+ 新建" Style="{StaticResource PrimaryButton}" HorizontalAlignment="Right" Padding="10,5"/>
+                    <Button x:Name="BtnNew" Content="+ 新建" Style="{StaticResource PrimaryButton}"
+                            HorizontalAlignment="Right" Padding="10,5" Click="BtnNew_Click"/>
                 </Grid>
-                <TextBox DockPanel.Dock="Top" Margin="16,0,16,12" Text="搜索模板…" Foreground="{StaticResource TextSubtleBrush}"/>
-                <ListBox BorderThickness="0" Background="Transparent" Padding="8,0" ItemContainerStyle="{StaticResource NavListItem}">
+                <TextBox DockPanel.Dock="Top" Margin="14,0,14,10"
+                         Text="搜索模板…" Foreground="{StaticResource TextSubtleBrush}"/>
+                <ListBox BorderThickness="0" Background="Transparent" Padding="6,0">
                     <ListBox.Resources>
                         <Style TargetType="ListBoxItem" BasedOn="{StaticResource NavListItem}">
                             <Setter Property="Foreground" Value="{StaticResource TextBrush}"/>
@@ -25,79 +27,212 @@
                     <ListBoxItem>
                         <StackPanel>
                             <TextBlock Text="5 点模板"  FontWeight="SemiBold"/>
-                            <TextBlock Text="5 个测试点 · 中心 + 四角" Foreground="{StaticResource TextMutedBrush}" FontSize="11"/>
+                            <TextBlock Text="中心 + 四角" Foreground="{StaticResource TextMutedBrush}" FontSize="11"/>
                         </StackPanel>
                     </ListBoxItem>
                     <ListBoxItem>
                         <StackPanel>
                             <TextBlock Text="9 点模板"  FontWeight="SemiBold"/>
-                            <TextBlock Text="3×3 均布点" Foreground="{StaticResource TextMutedBrush}" FontSize="11"/>
+                            <TextBlock Text="3×3 均布" Foreground="{StaticResource TextMutedBrush}" FontSize="11"/>
                         </StackPanel>
                     </ListBoxItem>
                     <ListBoxItem>
                         <StackPanel>
                             <TextBlock Text="13 点模板" FontWeight="SemiBold"/>
-                            <TextBlock Text="中心 + 对角线 + 边缘" Foreground="{StaticResource TextMutedBrush}" FontSize="11"/>
+                            <TextBlock Text="双环布点" Foreground="{StaticResource TextMutedBrush}" FontSize="11"/>
                         </StackPanel>
                     </ListBoxItem>
-                    <ListBoxItem>
+                    <ListBoxItem IsSelected="True">
                         <StackPanel>
                             <TextBlock Text="13 点对角" FontWeight="SemiBold"/>
-                            <TextBlock Text="对角线定位点" Foreground="{StaticResource TextMutedBrush}" FontSize="11"/>
+                            <TextBlock Text="X + 内菱形（固定 10% 网格）" Foreground="{StaticResource TextMutedBrush}" FontSize="11"/>
                         </StackPanel>
                     </ListBoxItem>
                     <ListBoxItem>
                         <StackPanel>
-                            <TextBlock Text="自定义 17 点" FontWeight="SemiBold"/>
-                            <TextBlock Text="用户自定义" Foreground="{StaticResource TextMutedBrush}" FontSize="11"/>
+                            <TextBlock Text="17 点模板" FontWeight="SemiBold"/>
+                            <TextBlock Text="边 + 中线 + 内环" Foreground="{StaticResource TextMutedBrush}" FontSize="11"/>
                         </StackPanel>
                     </ListBoxItem>
                 </ListBox>
             </DockPanel>
         </Border>
 
-        <!-- Editor area -->
-        <Border Grid.Column="2" Style="{StaticResource Card}">
-            <StackPanel>
-                <TextBlock Text="模板编辑" Style="{StaticResource H3}"/>
-                <TextBlock Text="选择左侧模板进行编辑，或新建模板。"
-                           Foreground="{StaticResource TextMutedBrush}" Margin="0,4,0,20"/>
+        <!-- ══════════════ Editor ══════════════ -->
+        <Border Grid.Column="2" Style="{StaticResource Card}" Padding="0">
+            <DockPanel>
+                <!-- editor header -->
+                <Border DockPanel.Dock="Top"
+                        BorderBrush="{StaticResource DividerBrush}" BorderThickness="0,0,0,1"
+                        Padding="18,14">
+                    <Grid>
+                        <StackPanel>
+                            <TextBlock Text="新建 / 编辑模板" Style="{StaticResource H3}"/>
+                            <TextBlock Text="选择参考图片、填入 A/B/C/D 参数，自动生成点位列表"
+                                       Foreground="{StaticResource TextMutedBrush}" Margin="0,2,0,0"/>
+                        </StackPanel>
+                        <StackPanel Orientation="Horizontal" HorizontalAlignment="Right" VerticalAlignment="Center">
+                            <Button Content="重置" Margin="0,0,8,0" Click="BtnReset_Click"/>
+                            <Button Content="保存模板" Style="{StaticResource PrimaryButton}" Click="BtnSave_Click"/>
+                        </StackPanel>
+                    </Grid>
+                </Border>
 
-                <TextBlock Text="基本信息" Style="{StaticResource Section}"/>
-                <Grid Margin="0,0,0,16">
+                <!-- body: 2 columns (form | preview) -->
+                <Grid Margin="18,14,18,18">
                     <Grid.ColumnDefinitions>
-                        <ColumnDefinition Width="*"/>
-                        <ColumnDefinition Width="16"/>
+                        <ColumnDefinition Width="380"/>
+                        <ColumnDefinition Width="18"/>
                         <ColumnDefinition Width="*"/>
                     </Grid.ColumnDefinitions>
+
+                    <!-- ═══ left: form ═══ -->
                     <StackPanel Grid.Column="0">
-                        <TextBlock Text="模板名称" Foreground="{StaticResource TextMutedBrush}" Margin="0,0,0,4"/>
-                        <TextBox Text="13 点对角"/>
+                        <!-- reference image -->
+                        <TextBlock Text="参考图片" Style="{StaticResource Section}"/>
+                        <Border BorderBrush="{StaticResource BorderBrush}" BorderThickness="1"
+                                CornerRadius="6" Background="#F9FAFB" Height="180">
+                            <Grid>
+                                <Image x:Name="RefImage" Stretch="Uniform" Margin="4"/>
+                                <StackPanel x:Name="RefPlaceholder" VerticalAlignment="Center" HorizontalAlignment="Center">
+                                    <Ellipse Width="40" Height="40" Fill="#E5E7EB" HorizontalAlignment="Center"/>
+                                    <TextBlock Text="尚未选择图片" Foreground="{StaticResource TextMutedBrush}"
+                                               HorizontalAlignment="Center" Margin="0,8,0,0"/>
+                                    <TextBlock Text="点击下方按钮，选择 *.jpg 参考图"
+                                               Foreground="{StaticResource TextSubtleBrush}" FontSize="11"
+                                               HorizontalAlignment="Center" Margin="0,2,0,0"/>
+                                </StackPanel>
+                            </Grid>
+                        </Border>
+                        <Button x:Name="BtnPickImage" Content="选择参考图片…" Margin="0,8,0,0"
+                                HorizontalAlignment="Stretch" Click="BtnPickImage_Click"/>
+
+                        <!-- basic info -->
+                        <TextBlock Text="基本信息" Style="{StaticResource Section}" Margin="0,18,0,0"/>
+                        <Grid>
+                            <Grid.ColumnDefinitions>
+                                <ColumnDefinition Width="*"/>
+                                <ColumnDefinition Width="10"/>
+                                <ColumnDefinition Width="*"/>
+                            </Grid.ColumnDefinitions>
+                            <StackPanel Grid.Column="0">
+                                <TextBlock Text="模板名称" Foreground="{StaticResource TextMutedBrush}" Margin="0,0,0,4" FontSize="12"/>
+                                <TextBox x:Name="TxtName" Text="13 点对角" TextChanged="AnyParam_Changed"/>
+                            </StackPanel>
+                            <StackPanel Grid.Column="2">
+                                <TextBlock Text="点阵类型" Foreground="{StaticResource TextMutedBrush}" Margin="0,0,0,4" FontSize="12"/>
+                                <ComboBox x:Name="CmbType" SelectedIndex="3" SelectionChanged="Type_Changed">
+                                    <ComboBoxItem Content="5 点"/>
+                                    <ComboBoxItem Content="9 点"/>
+                                    <ComboBoxItem Content="13 点"/>
+                                    <ComboBoxItem Content="13 点对角"/>
+                                    <ComboBoxItem Content="17 点"/>
+                                </ComboBox>
+                            </StackPanel>
+                        </Grid>
+
+                        <!-- product dimensions -->
+                        <TextBlock Text="产品尺寸 (mm)" Style="{StaticResource Section}" Margin="0,16,0,0"/>
+                        <Grid>
+                            <Grid.ColumnDefinitions>
+                                <ColumnDefinition Width="*"/>
+                                <ColumnDefinition Width="10"/>
+                                <ColumnDefinition Width="*"/>
+                            </Grid.ColumnDefinitions>
+                            <StackPanel Grid.Column="0">
+                                <TextBlock Text="长 H" Foreground="{StaticResource TextMutedBrush}" Margin="0,0,0,4" FontSize="12"/>
+                                <TextBox x:Name="TxtH" Text="300.00" TextChanged="AnyParam_Changed"/>
+                            </StackPanel>
+                            <StackPanel Grid.Column="2">
+                                <TextBlock Text="宽 V" Foreground="{StaticResource TextMutedBrush}" Margin="0,0,0,4" FontSize="12"/>
+                                <TextBox x:Name="TxtV" Text="200.00" TextChanged="AnyParam_Changed"/>
+                            </StackPanel>
+                        </Grid>
+
+                        <!-- ABCD + unit toggle -->
+                        <Grid Margin="0,16,0,0">
+                            <TextBlock Text="参数 A / B / C / D" Style="{StaticResource Section}" VerticalAlignment="Center"/>
+                            <StackPanel Orientation="Horizontal" HorizontalAlignment="Right">
+                                <RadioButton x:Name="RadioPct" GroupName="UnitMode" Content="百分比 (%)"
+                                             IsChecked="True" Margin="0,0,12,0" Checked="Unit_Changed"/>
+                                <RadioButton x:Name="RadioMm"  GroupName="UnitMode" Content="毫米 (mm)" Checked="Unit_Changed"/>
+                            </StackPanel>
+                        </Grid>
+                        <Grid Margin="0,6,0,0">
+                            <Grid.RowDefinitions>
+                                <RowDefinition Height="Auto"/>
+                                <RowDefinition Height="6"/>
+                                <RowDefinition Height="Auto"/>
+                            </Grid.RowDefinitions>
+                            <Grid.ColumnDefinitions>
+                                <ColumnDefinition Width="*"/>
+                                <ColumnDefinition Width="10"/>
+                                <ColumnDefinition Width="*"/>
+                            </Grid.ColumnDefinitions>
+
+                            <StackPanel Grid.Row="0" Grid.Column="0">
+                                <TextBlock Text="A (X 边距)" Foreground="{StaticResource TextMutedBrush}" Margin="0,0,0,4" FontSize="12"/>
+                                <TextBox x:Name="TxtA" Text="10" TextChanged="AnyParam_Changed"/>
+                            </StackPanel>
+                            <StackPanel Grid.Row="0" Grid.Column="2">
+                                <TextBlock Text="B (Y 边距)" Foreground="{StaticResource TextMutedBrush}" Margin="0,0,0,4" FontSize="12"/>
+                                <TextBox x:Name="TxtB" Text="10" TextChanged="AnyParam_Changed"/>
+                            </StackPanel>
+                            <StackPanel Grid.Row="2" Grid.Column="0">
+                                <TextBlock Text="C (X 内环)" Foreground="{StaticResource TextMutedBrush}" Margin="0,0,0,4" FontSize="12"/>
+                                <TextBox x:Name="TxtC" Text="25" TextChanged="AnyParam_Changed"/>
+                            </StackPanel>
+                            <StackPanel Grid.Row="2" Grid.Column="2">
+                                <TextBlock Text="D (Y 内环)" Foreground="{StaticResource TextMutedBrush}" Margin="0,0,0,4" FontSize="12"/>
+                                <TextBox x:Name="TxtD" Text="25" TextChanged="AnyParam_Changed"/>
+                            </StackPanel>
+                        </Grid>
+
+                        <TextBlock x:Name="TxtHint" Margin="0,10,0,0" FontSize="11"
+                                   Foreground="{StaticResource TextSubtleBrush}"
+                                   Text="提示：13 点对角使用固定 10% 网格，A/B/C/D 不参与计算。"
+                                   TextWrapping="Wrap"/>
                     </StackPanel>
-                    <StackPanel Grid.Column="2">
-                        <TextBlock Text="点阵类型" Foreground="{StaticResource TextMutedBrush}" Margin="0,0,0,4"/>
-                        <TextBox Text="13_POINT_DIAG" IsReadOnly="True"/>
-                    </StackPanel>
+
+                    <!-- ═══ right: points preview ═══ -->
+                    <Border Grid.Column="2" BorderBrush="{StaticResource BorderBrush}" BorderThickness="1"
+                            CornerRadius="6" Background="White">
+                        <DockPanel>
+                            <Border DockPanel.Dock="Top" Background="#F9FAFB"
+                                    BorderBrush="{StaticResource BorderBrush}" BorderThickness="0,0,0,1"
+                                    Padding="12,8">
+                                <Grid>
+                                    <StackPanel Orientation="Horizontal">
+                                        <TextBlock Text="生成的点位" FontWeight="SemiBold"/>
+                                        <Border Background="{StaticResource AccentSoftBrush}" CornerRadius="8" Padding="6,1" Margin="8,0,0,0">
+                                            <TextBlock x:Name="TxtCount" Text="13 个"
+                                                       Foreground="{StaticResource AccentBrush}"
+                                                       FontSize="11" FontWeight="SemiBold"/>
+                                        </Border>
+                                    </StackPanel>
+                                    <TextBlock Text="参数变更即时重算"
+                                               Foreground="{StaticResource TextSubtleBrush}" FontSize="11"
+                                               HorizontalAlignment="Right" VerticalAlignment="Center"/>
+                                </Grid>
+                            </Border>
+                            <DataGrid x:Name="PointsGrid"
+                                      AutoGenerateColumns="False" CanUserAddRows="False"
+                                      IsReadOnly="True" HeadersVisibility="Column"
+                                      BorderThickness="0"
+                                      GridLinesVisibility="Horizontal"
+                                      SelectionMode="Single">
+                                <DataGrid.Columns>
+                                    <DataGridTextColumn Header="#"       Binding="{Binding Id}"  Width="50"/>
+                                    <DataGridTextColumn Header="X (mm)"  Binding="{Binding XMm, StringFormat='0.00'}" Width="*"/>
+                                    <DataGridTextColumn Header="Y (mm)"  Binding="{Binding YMm, StringFormat='0.00'}" Width="*"/>
+                                    <DataGridTextColumn Header="X (%)"   Binding="{Binding XPct, StringFormat='0.0'}" Width="*"/>
+                                    <DataGridTextColumn Header="Y (%)"   Binding="{Binding YPct, StringFormat='0.0'}" Width="*"/>
+                                </DataGrid.Columns>
+                            </DataGrid>
+                        </DockPanel>
+                    </Border>
                 </Grid>
-
-                <TextBlock Text="点位数据" Style="{StaticResource Section}"/>
-                <DataGrid Height="300" AutoGenerateColumns="False" CanUserAddRows="False">
-                    <DataGrid.Columns>
-                        <DataGridTextColumn Header="#"       Width="50"/>
-                        <DataGridTextColumn Header="X (mm)"  Width="*"/>
-                        <DataGridTextColumn Header="Y (mm)"  Width="*"/>
-                        <DataGridTextColumn Header="Z (mm)"  Width="*"/>
-                        <DataGridTextColumn Header="U (°)"   Width="*"/>
-                        <DataGridTextColumn Header="V (°)"   Width="*"/>
-                        <DataGridTextColumn Header="备注"    Width="*"/>
-                    </DataGrid.Columns>
-                </DataGrid>
-
-                <StackPanel Orientation="Horizontal" HorizontalAlignment="Right" Margin="0,16,0,0">
-                    <Button Content="取消" Margin="0,0,8,0"/>
-                    <Button Content="保存模板" Style="{StaticResource PrimaryButton}"/>
-                </StackPanel>
-            </StackPanel>
+            </DockPanel>
         </Border>
     </Grid>
 </UserControl>

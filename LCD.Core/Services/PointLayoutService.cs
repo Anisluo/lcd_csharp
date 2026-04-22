@@ -33,11 +33,11 @@ namespace LCD.Core.Services
 
     public sealed class PointPos
     {
-        public int Id;
-        public double XMm;
-        public double YMm;
-        public double XPct;
-        public double YPct;
+        public int    Id   { get; set; }
+        public double XMm  { get; set; }
+        public double YMm  { get; set; }
+        public double XPct { get; set; }
+        public double YPct { get; set; }
     }
 
     public static class PointLayoutService
