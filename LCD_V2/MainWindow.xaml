@@ -217,14 +217,13 @@
                                 <TextBlock Text="系统就绪" Margin="6,0,0,0" VerticalAlignment="Center"/>
                             </StackPanel>
                         </Border>
-                        <Button Style="{StaticResource GhostButton}" Margin="6,0,0,0" MinWidth="0" Padding="8,6">
+                        <Button Style="{StaticResource GhostButton}" Margin="6,0,0,0" MinWidth="0" Padding="8,6" ToolTip="通知">
                             <Path Data="{StaticResource IconBell}"
                                   Stretch="Uniform" Width="18" Height="18"
                                   Fill="Transparent"
                                   Stroke="{StaticResource TextMutedBrush}" StrokeThickness="1.6"
                                   StrokeStartLineCap="Round" StrokeEndLineCap="Round" StrokeLineJoin="Round"/>
                         </Button>
-                        <Button Content="开始测试" Style="{StaticResource PrimaryButton}" Margin="12,0,0,0"/>
                     </StackPanel>
                 </Grid>
             </Border>

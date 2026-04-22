@@ -300,13 +300,27 @@
                                 </Button>
                             </Grid>
 
-                            <Separator Margin="0,16"/>
+                            <!-- 返回零点 (motor homing) — primary secondary action, styled to sit
+                                 between the Start/EStop duo and the quick measurement actions. -->
+                            <Button MinHeight="40" Margin="0,12,0,0" HorizontalAlignment="Stretch"
+                                    BorderBrush="{StaticResource AccentBrush}"
+                                    Foreground="{StaticResource AccentBrush}"
+                                    Background="{StaticResource AccentSoftBrush}">
+                                <StackPanel Orientation="Horizontal">
+                                    <Path Data="{StaticResource IconHome}"
+                                          Stretch="Uniform" Width="14" Height="14"
+                                          Fill="{StaticResource AccentBrush}"
+                                          VerticalAlignment="Center"/>
+                                    <TextBlock Text="返回零点" FontSize="13" FontWeight="SemiBold" Margin="8,0,0,0" VerticalAlignment="Center"/>
+                                </StackPanel>
+                            </Button>
+
+                            <Separator Margin="0,14"/>
 
                             <TextBlock Text="快速操作" Style="{StaticResource Section}"/>
-                            <Button Content="单点测量"   Margin="0,0,0,6" HorizontalAlignment="Stretch"/>
-                            <Button Content="光谱测量"   Margin="0,0,0,6" HorizontalAlignment="Stretch"/>
-                            <Button Content="模板测试"   Margin="0,0,0,6" HorizontalAlignment="Stretch"/>
-                            <Button Content="复位"       Style="{StaticResource PrimaryButton}" HorizontalAlignment="Stretch"/>
+                            <Button Content="单点测量" Margin="0,0,0,6" HorizontalAlignment="Stretch"/>
+                            <Button Content="光谱测量" Margin="0,0,0,6" HorizontalAlignment="Stretch"/>
+                            <Button Content="模板测试" HorizontalAlignment="Stretch"/>
                         </StackPanel>
                     </Border>
 
@@ -363,11 +377,9 @@
                                 <Run Text="4" Foreground="{StaticResource AccentBrush}" FontWeight="SemiBold" FontSize="15"/>
                                 <Run Text=" / 13" Foreground="{StaticResource TextMutedBrush}"/>
                             </TextBlock>
-                            <ProgressBar Width="160" Height="6" Margin="10,0,14,0" Minimum="0" Maximum="13" Value="4"
+                            <ProgressBar Width="200" Height="6" Margin="10,0,0,0" Minimum="0" Maximum="13" Value="4"
                                          Background="{StaticResource DividerBrush}" Foreground="{StaticResource AccentBrush}"
                                          BorderThickness="0"/>
-                            <Button Content="暂停" Margin="0,0,6,0"/>
-                            <Button Content="停止" Style="{StaticResource DangerButton}"/>
                         </StackPanel>
                     </Grid>
 
