@@ -220,33 +220,78 @@
                                    TextWrapping="Wrap"/>
                     </StackPanel>
 
-                    <!-- ═══ right: points preview ═══ -->
+                    <!-- ═══ right: points preview — schematic on top, list below ═══ -->
                     <Border Grid.Column="2" BorderBrush="{StaticResource BorderBrush}" BorderThickness="1"
                             CornerRadius="6" Background="White">
-                        <DockPanel>
-                            <Border DockPanel.Dock="Top" Background="#F9FAFB"
+                        <Grid>
+                            <Grid.RowDefinitions>
+                                <RowDefinition Height="Auto"/>   <!-- header -->
+                                <RowDefinition Height="Auto"/>   <!-- schematic -->
+                                <RowDefinition Height="Auto"/>   <!-- divider -->
+                                <RowDefinition Height="*"/>      <!-- list -->
+                            </Grid.RowDefinitions>
+
+                            <!-- header -->
+                            <Border Grid.Row="0" Background="#F9FAFB"
                                     BorderBrush="{StaticResource BorderBrush}" BorderThickness="0,0,0,1"
                                     Padding="12,8">
                                 <Grid>
                                     <StackPanel Orientation="Horizontal">
-                                        <TextBlock Text="生成的点位" FontWeight="SemiBold"/>
+                                        <TextBlock Text="点位示意图" FontWeight="SemiBold"/>
                                         <Border Background="{StaticResource AccentSoftBrush}" CornerRadius="8" Padding="6,1" Margin="8,0,0,0">
                                             <TextBlock x:Name="TxtCount" Text="13 个"
                                                        Foreground="{StaticResource AccentBrush}"
                                                        FontSize="11" FontWeight="SemiBold"/>
                                         </Border>
+                                        <TextBlock x:Name="TxtDims" Margin="10,0,0,0"
+                                                   Foreground="{StaticResource TextSubtleBrush}" FontSize="11"
+                                                   VerticalAlignment="Center"/>
                                     </StackPanel>
-                                    <TextBlock Text="参数变更即时重算"
+                                    <TextBlock Text="点击点位查看坐标"
                                                Foreground="{StaticResource TextSubtleBrush}" FontSize="11"
                                                HorizontalAlignment="Right" VerticalAlignment="Center"/>
                                 </Grid>
                             </Border>
-                            <DataGrid x:Name="PointsGrid"
+
+                            <!-- schematic — fixed height, product aspect preserved by Viewbox -->
+                            <Border Grid.Row="1" Height="300" Background="#FAFBFD" Padding="16">
+                                <Grid>
+                                    <Viewbox Stretch="Uniform">
+                                        <Canvas x:Name="SchematicCanvas" Background="Transparent"/>
+                                    </Viewbox>
+                                    <!-- selected point callout, positioned top-right inside the schematic area -->
+                                    <Border x:Name="CalloutBox"
+                                            HorizontalAlignment="Right" VerticalAlignment="Top"
+                                            Background="{StaticResource TitleBarBrush}"
+                                            CornerRadius="4" Padding="10,6" Margin="0,0,4,0"
+                                            Visibility="Collapsed">
+                                        <StackPanel>
+                                            <TextBlock x:Name="CalloutTitle"
+                                                       Foreground="White" FontWeight="SemiBold" FontSize="11"/>
+                                            <TextBlock x:Name="CalloutBody"
+                                                       Foreground="#D1D5DB" FontSize="10.5" Margin="0,2,0,0"/>
+                                        </StackPanel>
+                                    </Border>
+                                </Grid>
+                            </Border>
+
+                            <!-- divider with title -->
+                            <Border Grid.Row="2" Background="#F9FAFB"
+                                    BorderBrush="{StaticResource BorderBrush}"
+                                    BorderThickness="0,1,0,1"
+                                    Padding="12,6">
+                                <TextBlock Text="点位列表" FontWeight="SemiBold"
+                                           Foreground="{StaticResource TextMutedBrush}" FontSize="11"/>
+                            </Border>
+
+                            <!-- list — syncs with schematic via selection -->
+                            <DataGrid Grid.Row="3" x:Name="PointsGrid"
                                       AutoGenerateColumns="False" CanUserAddRows="False"
                                       IsReadOnly="True" HeadersVisibility="Column"
                                       BorderThickness="0"
                                       GridLinesVisibility="Horizontal"
-                                      SelectionMode="Single">
+                                      SelectionMode="Single"
+                                      SelectionChanged="PointsGrid_SelectionChanged">
                                 <DataGrid.Columns>
                                     <DataGridTextColumn Header="#"       Binding="{Binding Id}"  Width="50"/>
                                     <DataGridTextColumn Header="X (mm)"  Binding="{Binding XMm, StringFormat='0.00'}" Width="*"/>
@@ -255,7 +300,7 @@
                                     <DataGridTextColumn Header="Y (%)"   Binding="{Binding YPct, StringFormat='0.0'}" Width="*"/>
                                 </DataGrid.Columns>
                             </DataGrid>
-                        </DockPanel>
+                        </Grid>
                     </Border>
                 </Grid>
             </DockPanel>

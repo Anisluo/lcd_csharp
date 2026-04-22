@@ -4,7 +4,10 @@ using System.Collections.ObjectModel;
 using System.Globalization;
 using System.Windows;
 using System.Windows.Controls;
+using System.Windows.Input;
+using System.Windows.Media;
 using System.Windows.Media.Imaging;
+using System.Windows.Shapes;
 using LCD.Core.Services;
 
 namespace LCD_V2.Views
@@ -153,9 +156,135 @@ namespace LCD_V2.Views
             var pts = PointLayoutService.Generate(type, input);
             PointsGrid.ItemsSource = pts;
             TxtCount.Text = pts.Count + " 个";
+            TxtDims.Text  = $"{input.H:0}×{input.V:0} mm";
             TxtHint.Text  = HintFor(type);
 
             LoadPresetImage(type);
+            DrawSchematic(pts, input.H, input.V);
+            HideCallout();
+        }
+
+        // ========== point-layout schematic ==========
+
+        private readonly Dictionary<int, Ellipse> _dotByPointId = new Dictionary<int, Ellipse>();
+
+        private static readonly SolidColorBrush DotFillDefault  = new SolidColorBrush(Color.FromRgb(0x9C, 0xA3, 0xAF)); // gray
+        private static readonly SolidColorBrush DotFillSelected = new SolidColorBrush(Color.FromRgb(0x63, 0x66, 0xF1)); // accent
+        private static readonly SolidColorBrush ProductFill     = Brushes.White;
+        private static readonly SolidColorBrush ProductStroke   = new SolidColorBrush(Color.FromRgb(0xD1, 0xD5, 0xDB));
+        private static readonly SolidColorBrush GridlineStroke  = new SolidColorBrush(Color.FromArgb(0x60, 0xE5, 0xE7, 0xEB));
+
+        private void DrawSchematic(IReadOnlyList<PointPos> pts, double h, double v)
+        {
+            _dotByPointId.Clear();
+            SchematicCanvas.Children.Clear();
+            if (h <= 0 || v <= 0) return;
+
+            SchematicCanvas.Width  = h;
+            SchematicCanvas.Height = v;
+
+            // gridlines at 25/50/75%
+            for (int i = 1; i <= 3; i++)
+            {
+                var vx = new Line
+                {
+                    X1 = h * i / 4, Y1 = 0, X2 = h * i / 4, Y2 = v,
+                    Stroke = GridlineStroke, StrokeThickness = 0.4,
+                };
+                var hy = new Line
+                {
+                    X1 = 0, Y1 = v * i / 4, X2 = h, Y2 = v * i / 4,
+                    Stroke = GridlineStroke, StrokeThickness = 0.4,
+                };
+                SchematicCanvas.Children.Add(vx);
+                SchematicCanvas.Children.Add(hy);
+            }
+
+            // product boundary
+            var rect = new Rectangle
+            {
+                Width  = h,
+                Height = v,
+                Fill   = ProductFill,
+                Stroke = ProductStroke,
+                StrokeThickness = 1.0,
+            };
+            SchematicCanvas.Children.Add(rect);
+
+            // points
+            double dotR   = Math.Max(3.0, Math.Min(h, v) * 0.018);  // scales with product size
+            double fontPt = Math.Max(2.0, dotR * 1.3);
+            foreach (var p in pts)
+            {
+                var dot = new Ellipse
+                {
+                    Width           = dotR * 2,
+                    Height          = dotR * 2,
+                    Fill            = DotFillDefault,
+                    Stroke          = Brushes.White,
+                    StrokeThickness = 0.6,
+                    Cursor          = Cursors.Hand,
+                    Tag             = p,
+                    ToolTip         = $"#{p.Id}\nX = {p.XMm:0.00} mm  ({p.XPct:0.0}%)\nY = {p.YMm:0.00} mm  ({p.YPct:0.0}%)",
+                };
+                Canvas.SetLeft(dot, p.XMm - dotR);
+                Canvas.SetTop(dot,  p.YMm - dotR);
+                dot.MouseLeftButtonDown += Dot_MouseLeftButtonDown;
+                SchematicCanvas.Children.Add(dot);
+                _dotByPointId[p.Id] = dot;
+
+                // numeric label next to the dot
+                var label = new TextBlock
+                {
+                    Text       = p.Id.ToString(),
+                    FontSize   = fontPt,
+                    Foreground = new SolidColorBrush(Color.FromRgb(0x37, 0x41, 0x51)),
+                    IsHitTestVisible = false,
+                    FontWeight = FontWeights.SemiBold,
+                };
+                Canvas.SetLeft(label, p.XMm + dotR + 0.4);
+                Canvas.SetTop(label,  p.YMm - dotR - 0.2);
+                SchematicCanvas.Children.Add(label);
+            }
+        }
+
+        private void Dot_MouseLeftButtonDown(object sender, MouseButtonEventArgs e)
+        {
+            if (sender is Ellipse dot && dot.Tag is PointPos p)
+            {
+                PointsGrid.SelectedItem = p;
+                PointsGrid.ScrollIntoView(p);
+                e.Handled = true;
+            }
+        }
+
+        private void PointsGrid_SelectionChanged(object sender, SelectionChangedEventArgs e)
+        {
+            var p = PointsGrid.SelectedItem as PointPos;
+            HighlightDot(p);
+            if (p == null) HideCallout(); else ShowCallout(p);
+        }
+
+        private void HighlightDot(PointPos selected)
+        {
+            foreach (var kv in _dotByPointId)
+            {
+                var isSel = selected != null && kv.Key == selected.Id;
+                kv.Value.Fill = isSel ? DotFillSelected : DotFillDefault;
+                kv.Value.StrokeThickness = isSel ? 1.2 : 0.6;
+            }
+        }
+
+        private void ShowCallout(PointPos p)
+        {
+            CalloutTitle.Text = $"#{p.Id}";
+            CalloutBody.Text  = $"X = {p.XMm:0.00} mm  ({p.XPct:0.0}%)\nY = {p.YMm:0.00} mm  ({p.YPct:0.0}%)";
+            CalloutBox.Visibility = Visibility.Visible;
+        }
+
+        private void HideCallout()
+        {
+            if (CalloutBox != null) CalloutBox.Visibility = Visibility.Collapsed;
         }
 
         private PointLayoutInput BuildInput()
