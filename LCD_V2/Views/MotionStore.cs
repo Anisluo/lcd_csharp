@@ -51,6 +51,7 @@ namespace LCD_V2.Views
                         if (ser.Deserialize(fs) is List<MotionProfile> items)
                             foreach (var it in items) col.Add(it);
                     }
+                    BackfillAxisCodes(col);
                 }
                 catch
                 {
@@ -58,6 +59,31 @@ namespace LCD_V2.Views
                 }
             }
             return col;
+        }
+
+        /// <summary>
+        /// Legacy profiles (saved before AxisCode existed) deserialise with empty codes.
+        /// Fill in pure-numeric 1..5 based on list position. Also strips the legacy "轴"
+        /// prefix from earlier migrations so codes stay consistent with the new convention.
+        /// InterpolateCode is left empty; user fills it in if a gantry dual-drive is needed.
+        /// </summary>
+        private static void BackfillAxisCodes(ObservableCollection<MotionProfile> col)
+        {
+            foreach (var p in col)
+            {
+                if (p.Axes == null) continue;
+                for (int i = 0; i < p.Axes.Count; i++)
+                {
+                    var a = p.Axes[i];
+                    if (string.IsNullOrWhiteSpace(a.AxisCode))
+                        a.AxisCode = (i + 1).ToString();
+                    else if (a.AxisCode.StartsWith("轴"))
+                        a.AxisCode = a.AxisCode.Substring(1).Trim();
+
+                    if (!string.IsNullOrWhiteSpace(a.InterpolateCode) && a.InterpolateCode.StartsWith("轴"))
+                        a.InterpolateCode = a.InterpolateCode.Substring(1).Trim();
+                }
+            }
         }
 
         private static void Seed(ObservableCollection<MotionProfile> col)

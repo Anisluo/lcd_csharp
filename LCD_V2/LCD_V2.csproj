@@ -94,6 +94,7 @@
     </Compile>
     <Compile Include="Views\TemplateItem.cs" />
     <Compile Include="Views\TemplateStore.cs" />
+    <Compile Include="Views\DashboardSettings.cs" />
     <Page Include="Views\MetricsPage.xaml">
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
@@ -116,6 +117,14 @@
     </Compile>
     <Compile Include="Views\MotionProfile.cs" />
     <Compile Include="Views\MotionStore.cs" />
+    <Page Include="Views\Motion3DView.xaml">
+      <Generator>MSBuild:Compile</Generator>
+      <SubType>Designer</SubType>
+    </Page>
+    <Compile Include="Views\Motion3DView.xaml.cs">
+      <DependentUpon>Motion3DView.xaml</DependentUpon>
+      <SubType>Code</SubType>
+    </Compile>
     <Page Include="Views\ResultsPage.xaml">
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>

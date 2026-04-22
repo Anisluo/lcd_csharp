@@ -232,7 +232,8 @@
                                                  Text="1.0" Height="30"
                                                  Padding="6,0"
                                                  HorizontalContentAlignment="Center"
-                                                 VerticalContentAlignment="Center"/>
+                                                 VerticalContentAlignment="Center"
+                                                 TextChanged="TxtStep_TextChanged"/>
                                         <TextBlock Grid.Column="2" Text="%"
                                                    Foreground="{StaticResource TextMutedBrush}" FontSize="12"
                                                    VerticalAlignment="Center" Margin="6,0,0,0"/>

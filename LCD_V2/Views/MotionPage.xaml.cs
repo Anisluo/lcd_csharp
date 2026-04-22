@@ -5,6 +5,7 @@ using System.Linq;
 using System.Windows;
 using System.Windows.Controls;
 using System.Windows.Data;
+using System.Windows.Threading;
 
 namespace LCD_V2.Views
 {
@@ -30,6 +31,14 @@ namespace LCD_V2.Views
             LibraryList.ItemsSource = view;
 
             AxesGrid.ItemsSource = _editorAxes;
+
+            // 3D preview follows the axis table — refresh when the user finishes editing a cell.
+            // CellEditEnding fires before the value is pushed to the bound object, so we
+            // defer the refresh a tick so IsEnabled etc. reflect the new value.
+            AxesGrid.CellEditEnding += (s, e) =>
+                Dispatcher.BeginInvoke(
+                    new Action(() => Preview3D?.SetAxes(_editorAxes)),
+                    DispatcherPriority.Background);
 
             Loaded += (s, e) =>
             {
@@ -82,6 +91,7 @@ namespace LCD_V2.Views
 
             _editorAxes.Clear();
             foreach (var a in CloneAxes(m.Axes ?? MotionCatalog.NewDefaultAxes())) _editorAxes.Add(a);
+            Preview3D?.SetAxes(_editorAxes);
             _suppressSync = false;
         }
 
@@ -134,6 +144,22 @@ namespace LCD_V2.Views
                 "保存", MessageBoxButton.OK, MessageBoxImage.Information);
         }
 
+        private void BtnSim_Click(object sender, RoutedEventArgs e)
+        {
+            if (Preview3D == null) return;
+            if (Preview3D.IsSimulating)
+            {
+                Preview3D.StopSimulation();
+                BtnSim.Content = "开始仿真";
+            }
+            else
+            {
+                Preview3D.SetAxes(_editorAxes); // latest config before the loop starts
+                Preview3D.StartSimulation();
+                BtnSim.Content = "停止仿真";
+            }
+        }
+
         private void BtnDelete_Click(object sender, RoutedEventArgs e)
         {
             if (!(((FrameworkElement)sender).Tag is MotionProfile item)) return;
@@ -158,6 +184,7 @@ namespace LCD_V2.Views
             CmbAlgorithm.SelectedIndex = 0;
             _editorAxes.Clear();
             foreach (var a in MotionCatalog.NewDefaultAxes()) _editorAxes.Add(a);
+            Preview3D?.SetAxes(_editorAxes);
             _suppressSync = false;
         }
 
@@ -165,15 +192,17 @@ namespace LCD_V2.Views
         {
             return src.Select(a => new AxisConfig
             {
-                AxisName    = a.AxisName,
-                Enabled     = a.Enabled,
-                HighSpeed   = a.HighSpeed,
-                MidSpeed    = a.MidSpeed,
-                LowSpeed    = a.LowSpeed,
-                AccelTimeMs = a.AccelTimeMs,
-                PulseUnit   = a.PulseUnit,
-                Invert      = a.Invert,
-                Interpolate = a.Interpolate,
+                AxisName        = a.AxisName,
+                AxisCode        = a.AxisCode,
+                InterpolateCode = a.InterpolateCode,
+                Enabled         = a.Enabled,
+                HighSpeed       = a.HighSpeed,
+                MidSpeed        = a.MidSpeed,
+                LowSpeed        = a.LowSpeed,
+                AccelTimeMs     = a.AccelTimeMs,
+                PulseUnit       = a.PulseUnit,
+                Invert          = a.Invert,
+                Interpolate     = a.Interpolate,
             }).ToList();
         }
     }

@@ -26,6 +26,10 @@ namespace LCD_V2.Views
         private IReadOnlyList<PointPos> _runningPoints;
         private int _currentPointIndex;
 
+        // Guards the initial restore — SelectionChanged fires during Load/SetSelected
+        // and we don't want to overwrite saved state with the mid-init value.
+        private bool _restoring = true;
+
         public DashboardPage()
         {
             InitializeComponent();
@@ -34,9 +38,48 @@ namespace LCD_V2.Views
             MetricCombo.ItemsSource   = MetricStore.Library;
             MotionCombo.ItemsSource   = MotionStore.Library;
 
-            if (TemplateStore.Library.Count > 0) TemplateCombo.SelectedIndex = 0;  // fires → SwitchTemplate
-            if (MetricStore.Library.Count   > 0) MetricCombo.SelectedIndex   = 0;
-            if (MotionStore.Library.Count   > 0) MotionCombo.SelectedIndex   = 0;
+            // Restore persisted selections — fall back to the first item when the saved
+            // name is missing from the library (e.g. user deleted that template since
+            // last run).
+            var s = DashboardSettingsStore.Current;
+            TemplateCombo.SelectedItem =
+                FindByName(TemplateStore.Library, s.SelectedTemplateName, t => t.Name)
+                ?? (TemplateStore.Library.Count > 0 ? TemplateStore.Library[0] : null);
+            MetricCombo.SelectedItem =
+                FindByName(MetricStore.Library, s.SelectedMetricName, m => m.Name)
+                ?? (MetricStore.Library.Count > 0 ? MetricStore.Library[0] : null);
+            MotionCombo.SelectedItem =
+                FindByName(MotionStore.Library, s.SelectedMotionName, m => m.Name)
+                ?? (MotionStore.Library.Count > 0 ? MotionStore.Library[0] : null);
+
+            _hPct = Clamp(s.CrosshairHPct, 0, 100);
+            _vPct = Clamp(s.CrosshairVPct, 0, 100);
+            if (!string.IsNullOrWhiteSpace(s.StepPercent) && TxtStep != null)
+                TxtStep.Text = s.StepPercent;
+
+            _restoring = false;
+        }
+
+        private static T FindByName<T>(IEnumerable<T> src, string name, Func<T, string> getName)
+            where T : class
+        {
+            if (string.IsNullOrEmpty(name) || src == null) return null;
+            foreach (var item in src)
+                if (string.Equals(getName(item), name, StringComparison.Ordinal)) return item;
+            return null;
+        }
+
+        private void PersistSelections()
+        {
+            if (_restoring) return;
+            var s = DashboardSettingsStore.Current;
+            s.SelectedTemplateName = (TemplateCombo.SelectedItem as TemplateItem)?.Name;
+            s.SelectedMetricName   = (MetricCombo.SelectedItem   as InstrumentMetric)?.Name;
+            s.SelectedMotionName   = (MotionCombo.SelectedItem   as MotionProfile)?.Name;
+            s.CrosshairHPct        = _hPct;
+            s.CrosshairVPct        = _vPct;
+            s.StepPercent          = TxtStep?.Text ?? s.StepPercent;
+            DashboardSettingsStore.Save();
         }
 
         private InstrumentMetric _activeMetric;
@@ -47,12 +90,14 @@ namespace LCD_V2.Views
             _activeMetric = MetricCombo.SelectedItem as InstrumentMetric;
             // No visual effect on the schematic yet — metric selection is consumed when
             // a real test run reads parameter / algorithm settings from the profile.
+            PersistSelections();
         }
 
         private void MotionCombo_SelectionChanged(object sender, SelectionChangedEventArgs e)
         {
             _activeMotion = MotionCombo.SelectedItem as MotionProfile;
             // Reserved for future use — motion profile drives MovCtrl when run wiring lands.
+            PersistSelections();
         }
 
         // ─────────────────────────────────────────────────────────────
@@ -62,6 +107,7 @@ namespace LCD_V2.Views
         private void TemplateCombo_SelectionChanged(object sender, SelectionChangedEventArgs e)
         {
             if (TemplateCombo.SelectedItem is TemplateItem t) SwitchTemplate(t);
+            PersistSelections();
         }
 
         private void SwitchTemplate(TemplateItem t)
@@ -294,30 +340,40 @@ namespace LCD_V2.Views
         {
             _hPct = Clamp(_hPct - ReadStep(), 0, 100);
             UpdateCrosshair();
+            PersistSelections();
         }
 
         private void BtnHDown_Click(object sender, RoutedEventArgs e)
         {
             _hPct = Clamp(_hPct + ReadStep(), 0, 100);
             UpdateCrosshair();
+            PersistSelections();
         }
 
         private void BtnVLeft_Click(object sender, RoutedEventArgs e)
         {
             _vPct = Clamp(_vPct - ReadStep(), 0, 100);
             UpdateCrosshair();
+            PersistSelections();
         }
 
         private void BtnVRight_Click(object sender, RoutedEventArgs e)
         {
             _vPct = Clamp(_vPct + ReadStep(), 0, 100);
             UpdateCrosshair();
+            PersistSelections();
         }
 
         private void BtnCenterCross_Click(object sender, RoutedEventArgs e)
         {
             _hPct = 50; _vPct = 50;
             UpdateCrosshair();
+            PersistSelections();
+        }
+
+        private void TxtStep_TextChanged(object sender, TextChangedEventArgs e)
+        {
+            PersistSelections();
         }
     }
 
