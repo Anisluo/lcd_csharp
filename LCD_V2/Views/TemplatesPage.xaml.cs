@@ -6,7 +6,6 @@ using System.Windows;
 using System.Windows.Controls;
 using System.Windows.Media.Imaging;
 using LCD.Core.Services;
-using Microsoft.Win32;
 
 namespace LCD_V2.Views
 {
@@ -48,8 +47,6 @@ namespace LCD_V2.Views
             { PointLayoutType.Point17,     "pack://application:,,,/Image/std17poi.jpeg"     },
         };
 
-        private bool _userOverrodeImage;
-
         // ========== click handlers ==========
 
         private void BtnNew_Click(object sender, RoutedEventArgs e)
@@ -64,7 +61,6 @@ namespace LCD_V2.Views
             TxtA.Text = "10"; TxtB.Text = "10";
             TxtC.Text = "25"; TxtD.Text = "25";
             RadioPct.IsChecked = true;
-            _userOverrodeImage = false;
             _suppressSync = false;
             Regenerate();
         }
@@ -112,33 +108,6 @@ namespace LCD_V2.Views
             }
         }
 
-        private void BtnPickImage_Click(object sender, RoutedEventArgs e)
-        {
-            var dlg = new OpenFileDialog
-            {
-                Title  = "选择参考图片",
-                Filter = "图片文件 (*.jpg;*.jpeg;*.png;*.bmp)|*.jpg;*.jpeg;*.png;*.bmp|所有文件|*.*",
-            };
-            if (dlg.ShowDialog() != true) return;
-            try
-            {
-                var bmp = new BitmapImage();
-                bmp.BeginInit();
-                bmp.CacheOption = BitmapCacheOption.OnLoad;
-                bmp.UriSource   = new Uri(dlg.FileName);
-                bmp.EndInit();
-                bmp.Freeze();
-                RefImage.Source = bmp;
-                RefPlaceholder.Visibility = Visibility.Collapsed;
-                _userOverrodeImage = true;
-            }
-            catch (Exception ex)
-            {
-                MessageBox.Show(Window.GetWindow(this), "加载图片失败：" + ex.Message,
-                    "错误", MessageBoxButton.OK, MessageBoxImage.Error);
-            }
-        }
-
         private void Library_SelectionChanged(object sender, SelectionChangedEventArgs e)
         {
             if (!(LibraryList.SelectedItem is TemplateItem item)) return;
@@ -153,7 +122,6 @@ namespace LCD_V2.Views
             TxtC.Text = item.C.ToString(CultureInfo.InvariantCulture);
             TxtD.Text = item.D.ToString(CultureInfo.InvariantCulture);
             if (item.UseMm) RadioMm.IsChecked = true; else RadioPct.IsChecked = true;
-            _userOverrodeImage = false;
             _suppressSync = false;
             Regenerate();
         }
@@ -175,7 +143,7 @@ namespace LCD_V2.Views
             TxtCount.Text = pts.Count + " 个";
             TxtHint.Text  = HintFor(type);
 
-            if (!_userOverrodeImage) LoadPresetImage(type);
+            LoadPresetImage(type);
         }
 
         private PointLayoutInput BuildInput()

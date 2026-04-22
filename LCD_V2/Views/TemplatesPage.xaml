@@ -117,7 +117,7 @@
 
                     <!-- ═══ left: form ═══ -->
                     <StackPanel Grid.Column="0">
-                        <!-- reference image -->
+                        <!-- reference image (auto-loaded based on 点阵配置 selection) -->
                         <TextBlock Text="参考图片" Style="{StaticResource Section}"/>
                         <Border BorderBrush="{StaticResource BorderBrush}" BorderThickness="1"
                                 CornerRadius="6" Background="#F9FAFB" Height="180">
@@ -125,16 +125,11 @@
                                 <Image x:Name="RefImage" Stretch="Uniform" Margin="4"/>
                                 <StackPanel x:Name="RefPlaceholder" VerticalAlignment="Center" HorizontalAlignment="Center">
                                     <Ellipse Width="40" Height="40" Fill="#E5E7EB" HorizontalAlignment="Center"/>
-                                    <TextBlock Text="尚未选择图片" Foreground="{StaticResource TextMutedBrush}"
+                                    <TextBlock Text="该配置暂无内置参考图" Foreground="{StaticResource TextMutedBrush}"
                                                HorizontalAlignment="Center" Margin="0,8,0,0"/>
-                                    <TextBlock Text="点击下方按钮，选择 *.jpg 参考图"
-                                               Foreground="{StaticResource TextSubtleBrush}" FontSize="11"
-                                               HorizontalAlignment="Center" Margin="0,2,0,0"/>
                                 </StackPanel>
                             </Grid>
                         </Border>
-                        <Button x:Name="BtnPickImage" Content="选择参考图片…" Margin="0,8,0,0"
-                                HorizontalAlignment="Stretch" Click="BtnPickImage_Click"/>
 
                         <!-- basic info -->
                         <TextBlock Text="基本信息" Style="{StaticResource Section}" Margin="0,18,0,0"/>
