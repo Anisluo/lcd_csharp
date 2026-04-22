@@ -76,26 +76,31 @@ namespace LCD_V2.Views
 
         private void BtnSave_Click(object sender, RoutedEventArgs e)
         {
-            var item = _editing ?? new TemplateItem();
-            FillFromForm(item);
-            item.PointCount = PointsGrid.Items.Count;
+            // Always allocate a fresh instance so ObservableCollection.Replace sees a
+            // different reference. Mutating the existing item in place wouldn't repaint
+            // the ListBox row (TemplateItem is not INotifyPropertyChanged).
+            var updated = new TemplateItem();
+            FillFromForm(updated);
+            updated.PointCount = PointsGrid.Items.Count;
 
             if (_editing == null)
             {
-                _library.Add(item);
-                _editing = item;
-                LibraryList.SelectedItem = item;
+                _library.Add(updated);
             }
             else
             {
-                // refresh ListBox row: rebind
-                var idx = _library.IndexOf(item);
-                _library[idx] = item; // triggers visual refresh
-                LibraryList.SelectedItem = item;
+                int idx = _library.IndexOf(_editing);
+                if (idx >= 0) _library[idx] = updated;
+                else          _library.Add(updated);
             }
 
+            _suppressSync = true; // selection change will re-invoke Library_SelectionChanged
+            _editing = updated;
+            LibraryList.SelectedItem = updated;
+            _suppressSync = false;
+
             MessageBox.Show(Window.GetWindow(this),
-                $"已保存到模板库：{item.Name}（{item.PointCount} 个点位）",
+                $"已保存到模板库：{updated.Name}（{updated.PointCount} 个点位）",
                 "保存模板", MessageBoxButton.OK, MessageBoxImage.Information);
         }
 
