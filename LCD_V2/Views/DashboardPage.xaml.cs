@@ -1,10 +1,13 @@
 using System;
 using System.Collections.Generic;
 using System.Globalization;
+using System.Linq;
 using System.Windows;
 using System.Windows.Controls;
+using System.Windows.Input;
 using System.Windows.Media;
 using System.Windows.Shapes;
+using LCD.Core.Services;
 
 namespace LCD_V2.Views
 {
@@ -18,42 +21,192 @@ namespace LCD_V2.Views
         private Line _hLine;
         private Line _vLine;
 
+        // current simulated run state — what point we're "on"
+        private TemplateItem _runningTemplate;
+        private IReadOnlyList<PointPos> _runningPoints;
+        private int _currentPointIndex;
+
         public DashboardPage()
         {
             InitializeComponent();
 
-            // Mock "当前测试" session: 13 点对角模板, simulated progress 到第 4 点
-            var templatePoints = new List<TemplatePoint>
-            {
-                new TemplatePoint { No = 1,  X = 0.00,  Y = 0.00,  Z = 0.00, U = 0.00, V = 0.00, Remark = "中心"   },
-                new TemplatePoint { No = 2,  X = -57.15, Y = -34.29, Z = 0.00, U = 0.00, V = 0.00, Remark = "左上"   },
-                new TemplatePoint { No = 3,  X = 57.15,  Y = -34.29, Z = 0.00, U = 0.00, V = 0.00, Remark = "右上"   },
-                new TemplatePoint { No = 4,  X = 57.15,  Y = 34.29,  Z = 0.00, U = 0.00, V = 0.00, Remark = "右下"   },
-                new TemplatePoint { No = 5,  X = -57.15, Y = 34.29,  Z = 0.00, U = 0.00, V = 0.00, Remark = "左下"   },
-                new TemplatePoint { No = 6,  X = -28.58, Y = -17.15, Z = 0.00, U = 0.00, V = 0.00, Remark = "左上内" },
-                new TemplatePoint { No = 7,  X = 28.58,  Y = -17.15, Z = 0.00, U = 0.00, V = 0.00, Remark = "右上内" },
-                new TemplatePoint { No = 8,  X = 28.58,  Y = 17.15,  Z = 0.00, U = 0.00, V = 0.00, Remark = "右下内" },
-                new TemplatePoint { No = 9,  X = -28.58, Y = 17.15,  Z = 0.00, U = 0.00, V = 0.00, Remark = "左下内" },
-                new TemplatePoint { No = 10, X = 0.00,  Y = -34.29, Z = 0.00, U = 0.00, V = 0.00, Remark = "上中"   },
-                new TemplatePoint { No = 11, X = 57.15,  Y = 0.00,  Z = 0.00, U = 0.00, V = 0.00, Remark = "右中"   },
-                new TemplatePoint { No = 12, X = 0.00,  Y = 34.29,  Z = 0.00, U = 0.00, V = 0.00, Remark = "下中"   },
-                new TemplatePoint { No = 13, X = -57.15, Y = 0.00,  Z = 0.00, U = 0.00, V = 0.00, Remark = "左中"   },
-            };
-            TemplateGrid.ItemsSource = templatePoints;
-            // 光标停在第 4 点：前 3 点已完成并显示结果, 第 4 点正在测量
-            TemplateGrid.SelectedIndex = 3;
-            TemplateGrid.ScrollIntoView(templatePoints[3]);
+            TemplateCombo.ItemsSource = TemplateStore.Library;
+            if (TemplateStore.Library.Count > 0)
+                TemplateCombo.SelectedIndex = 0;  // will fire SelectionChanged → SwitchTemplate
+        }
 
-            var results = new List<TestResult>
+        // ─────────────────────────────────────────────────────────────
+        //  template selection + simulated run
+        // ─────────────────────────────────────────────────────────────
+
+        private void TemplateCombo_SelectionChanged(object sender, SelectionChangedEventArgs e)
+        {
+            if (TemplateCombo.SelectedItem is TemplateItem t) SwitchTemplate(t);
+        }
+
+        private void SwitchTemplate(TemplateItem t)
+        {
+            _runningTemplate = t;
+            _runningPoints   = GeneratePoints(t);
+
+            // Mock simulated progress — a reasonable "we're 30% through" snapshot so the
+            // three colour states (done / current / pending) are all visible on-screen.
+            _currentPointIndex = Math.Min(Math.Max((int)Math.Round(_runningPoints.Count * 0.3), 1),
+                                          _runningPoints.Count - 1);
+
+            DrawTemplateSchematic(t, _runningPoints, _currentPointIndex);
+            RefreshResultsMock();
+            UpdateProgressChrome();
+            HideDashCallout();
+        }
+
+        private static IReadOnlyList<PointPos> GeneratePoints(TemplateItem t)
+        {
+            var input = new PointLayoutInput { H = t.H, V = t.V, UseMeter = t.UseMm };
+            if (t.UseMm) { input.Amm = t.A; input.Bmm = t.B; input.Cmm = t.C; input.Dmm = t.D; }
+            else         { input.Apct = t.A; input.Bpct = t.B; input.Cpct = t.C; input.Dpct = t.D; }
+            return PointLayoutService.Generate(t.ConfigType, input);
+        }
+
+        private void UpdateProgressChrome()
+        {
+            int done    = _currentPointIndex;
+            int total   = _runningPoints?.Count ?? 0;
+            int current = total > 0 ? 1 : 0;
+
+            RunProgressCurrent.Text = _currentPointIndex.ToString();
+            RunProgressTotal.Text   = " / " + total;
+            RunProgress.Maximum     = Math.Max(1, total);
+            RunProgress.Value       = _currentPointIndex;
+
+            TxtResultsMeasured.Text = $"{done} 已采";
+            TxtResultsInFlight.Text = $"{current} 进行中";
+
+            if (_runningTemplate != null)
             {
-                new TestResult { No = 1, L = 315.4, Cx = 0.3127, Cy = 0.3291, CCT = 6503, Status = "OK" },
-                new TestResult { No = 2, L = 298.7, Cx = 0.3133, Cy = 0.3284, CCT = 6478, Status = "OK" },
-                new TestResult { No = 3, L = 306.2, Cx = 0.3124, Cy = 0.3298, CCT = 6521, Status = "OK" },
-                new TestResult { No = 4, L = null,  Cx = null,   Cy = null,   CCT = null, Status = "测量中" },
-            };
-            ResultGrid.ItemsSource = results;
-            ResultGrid.SelectedIndex = 3;
-            ResultGrid.ScrollIntoView(results[3]);
+                TxtTemplateCount.Text = $"· {total} 点";
+                TxtTemplateDims.Text  = $"{_runningTemplate.H:0}×{_runningTemplate.V:0} mm";
+            }
+        }
+
+        private void RefreshResultsMock()
+        {
+            var rows = new List<TestResult>();
+            var rng  = new Random(12345); // fixed seed so the demo looks stable
+            for (int i = 0; i < _currentPointIndex; i++)
+            {
+                rows.Add(new TestResult
+                {
+                    No  = i + 1,
+                    L   = 280 + rng.NextDouble() * 50,
+                    Cx  = 0.3080 + rng.NextDouble() * 0.008,
+                    Cy  = 0.3250 + rng.NextDouble() * 0.008,
+                    CCT = 6400 + rng.Next(200),
+                    Status = "OK",
+                });
+            }
+            rows.Add(new TestResult { No = _currentPointIndex + 1, Status = "测量中" });
+            ResultGrid.ItemsSource = rows;
+            ResultGrid.SelectedIndex = rows.Count - 1;
+            ResultGrid.ScrollIntoView(rows[rows.Count - 1]);
+        }
+
+        // ─────────────────────────────────────────────────────────────
+        //  template schematic — colour-coded dots
+        // ─────────────────────────────────────────────────────────────
+
+        private static readonly SolidColorBrush DoneFill    = new SolidColorBrush(Color.FromRgb(0x10, 0xB9, 0x81)); // green
+        private static readonly SolidColorBrush CurrentFill = new SolidColorBrush(Color.FromRgb(0xF5, 0x9E, 0x0B)); // amber
+        private static readonly SolidColorBrush PendingFill = new SolidColorBrush(Color.FromRgb(0x9C, 0xA3, 0xAF)); // gray
+        private static readonly SolidColorBrush ProductStroke = new SolidColorBrush(Color.FromRgb(0xD1, 0xD5, 0xDB));
+        private static readonly SolidColorBrush GridlineStroke = new SolidColorBrush(Color.FromArgb(0x40, 0xE5, 0xE7, 0xEB));
+
+        private void DrawTemplateSchematic(TemplateItem t, IReadOnlyList<PointPos> pts, int currentIndex)
+        {
+            TemplateCanvas.Children.Clear();
+            if (t == null || t.H <= 0 || t.V <= 0) return;
+
+            TemplateCanvas.Width  = t.H;
+            TemplateCanvas.Height = t.V;
+
+            // gridlines at 25/50/75%
+            for (int i = 1; i <= 3; i++)
+            {
+                TemplateCanvas.Children.Add(new Line
+                {
+                    X1 = t.H * i / 4.0, Y1 = 0, X2 = t.H * i / 4.0, Y2 = t.V,
+                    Stroke = GridlineStroke, StrokeThickness = 0.4,
+                });
+                TemplateCanvas.Children.Add(new Line
+                {
+                    X1 = 0, Y1 = t.V * i / 4.0, X2 = t.H, Y2 = t.V * i / 4.0,
+                    Stroke = GridlineStroke, StrokeThickness = 0.4,
+                });
+            }
+
+            // product boundary
+            TemplateCanvas.Children.Add(new Rectangle
+            {
+                Width  = t.H,
+                Height = t.V,
+                Fill   = Brushes.White,
+                Stroke = ProductStroke,
+                StrokeThickness = 1.0,
+            });
+
+            double dotR   = Math.Max(6.0, Math.Min(t.H, t.V) * 0.035);
+            double fontPt = Math.Max(4.0, dotR * 1.2);
+
+            for (int i = 0; i < pts.Count; i++)
+            {
+                var p = pts[i];
+                Brush fill;
+                string statusLbl;
+                if (i < currentIndex)      { fill = DoneFill;    statusLbl = "已测"; }
+                else if (i == currentIndex) { fill = CurrentFill; statusLbl = "测量中"; }
+                else                        { fill = PendingFill; statusLbl = "待测"; }
+
+                var dot = new Ellipse
+                {
+                    Width  = dotR * 2,
+                    Height = dotR * 2,
+                    Fill   = fill,
+                    Stroke = Brushes.White,
+                    StrokeThickness = i == currentIndex ? 1.2 : 0.6,
+                    Cursor  = Cursors.Hand,
+                    Tag     = p,
+                    ToolTip = $"#{p.Id}  {statusLbl}\nX = {p.XMm:0.00} mm  ({p.XPct:0.0}%)\nY = {p.YMm:0.00} mm  ({p.YPct:0.0}%)",
+                };
+                Canvas.SetLeft(dot, p.XMm - dotR);
+                Canvas.SetTop(dot,  p.YMm - dotR);
+                dot.MouseLeftButtonDown += DashDot_MouseLeftButtonDown;
+                TemplateCanvas.Children.Add(dot);
+
+                var label = new TextBlock
+                {
+                    Text       = p.Id.ToString(),
+                    FontSize   = fontPt,
+                    Foreground = new SolidColorBrush(Color.FromRgb(0x37, 0x41, 0x51)),
+                    IsHitTestVisible = false,
+                    FontWeight = FontWeights.SemiBold,
+                };
+                Canvas.SetLeft(label, p.XMm + dotR + 0.4);
+                Canvas.SetTop(label,  p.YMm - dotR - 0.2);
+                TemplateCanvas.Children.Add(label);
+            }
+        }
+
+        private void DashDot_MouseLeftButtonDown(object sender, MouseButtonEventArgs e)
+        {
+            if (!(sender is Ellipse dot) || !(dot.Tag is PointPos p)) return;
+            DashCalloutTitle.Text = $"#{p.Id}";
+            DashCalloutBody.Text  = $"X = {p.XMm:0.00} mm  ({p.XPct:0.0}%)\nY = {p.YMm:0.00} mm  ({p.YPct:0.0}%)";
+            DashCallout.Visibility = Visibility.Visible;
+        }
+
+        private void HideDashCallout()
+        {
+            if (DashCallout != null) DashCallout.Visibility = Visibility.Collapsed;
         }
 
         // ─────────────────────────────────────────────────────────────
