@@ -31,8 +31,28 @@ namespace LCD_V2.Views
             InitializeComponent();
 
             TemplateCombo.ItemsSource = TemplateStore.Library;
-            if (TemplateStore.Library.Count > 0)
-                TemplateCombo.SelectedIndex = 0;  // will fire SelectionChanged → SwitchTemplate
+            MetricCombo.ItemsSource   = MetricStore.Library;
+            MotionCombo.ItemsSource   = MotionStore.Library;
+
+            if (TemplateStore.Library.Count > 0) TemplateCombo.SelectedIndex = 0;  // fires → SwitchTemplate
+            if (MetricStore.Library.Count   > 0) MetricCombo.SelectedIndex   = 0;
+            if (MotionStore.Library.Count   > 0) MotionCombo.SelectedIndex   = 0;
+        }
+
+        private InstrumentMetric _activeMetric;
+        private MotionProfile    _activeMotion;
+
+        private void MetricCombo_SelectionChanged(object sender, SelectionChangedEventArgs e)
+        {
+            _activeMetric = MetricCombo.SelectedItem as InstrumentMetric;
+            // No visual effect on the schematic yet — metric selection is consumed when
+            // a real test run reads parameter / algorithm settings from the profile.
+        }
+
+        private void MotionCombo_SelectionChanged(object sender, SelectionChangedEventArgs e)
+        {
+            _activeMotion = MotionCombo.SelectedItem as MotionProfile;
+            // Reserved for future use — motion profile drives MovCtrl when run wiring lands.
         }
 
         // ─────────────────────────────────────────────────────────────

@@ -472,33 +472,66 @@
             <!-- ═════════ current test: template ↔ results ═════════ -->
             <Border Grid.Row="2" Style="{StaticResource Card}">
                 <StackPanel>
-                    <!-- header strip -->
+                    <!-- header strip — row 0: title + progress, row 1: three selectors -->
                     <Grid Margin="0,0,0,12">
-                        <StackPanel Orientation="Horizontal" VerticalAlignment="Center">
-                            <TextBlock Text="当前测试" Style="{StaticResource H3}"/>
-                            <Rectangle Width="1" Height="18" Fill="{StaticResource DividerBrush}" Margin="14,0"/>
-                            <TextBlock Text="模板" Foreground="{StaticResource TextMutedBrush}" VerticalAlignment="Center" Margin="0,0,6,0"/>
-                            <!-- ComboBox bound in code-behind to TemplateStore.Library -->
-                            <ComboBox x:Name="TemplateCombo"
-                                      DisplayMemberPath="Name"
-                                      MinWidth="180" MinHeight="30"
-                                      VerticalContentAlignment="Center"
-                                      SelectionChanged="TemplateCombo_SelectionChanged"/>
-                            <TextBlock Text="条码" Foreground="{StaticResource TextMutedBrush}" Margin="14,0,6,0" VerticalAlignment="Center"/>
-                            <TextBlock Text="LCD-0421-001" FontWeight="SemiBold" VerticalAlignment="Center"/>
-                        </StackPanel>
+                        <Grid.RowDefinitions>
+                            <RowDefinition Height="Auto"/>
+                            <RowDefinition Height="Auto"/>
+                        </Grid.RowDefinitions>
 
-                        <StackPanel Orientation="Horizontal" HorizontalAlignment="Right" VerticalAlignment="Center">
-                            <TextBlock Text="进度" Foreground="{StaticResource TextMutedBrush}" VerticalAlignment="Center" Margin="0,0,6,0"/>
-                            <TextBlock VerticalAlignment="Center">
-                                <Run x:Name="RunProgressCurrent" Text="0" Foreground="{StaticResource AccentBrush}" FontWeight="SemiBold" FontSize="15"/>
-                                <Run x:Name="RunProgressTotal"   Text=" / 0" Foreground="{StaticResource TextMutedBrush}"/>
-                            </TextBlock>
-                            <ProgressBar x:Name="RunProgress"
-                                         Width="200" Height="6" Margin="10,0,0,0" Minimum="0" Maximum="1" Value="0"
-                                         Background="{StaticResource DividerBrush}" Foreground="{StaticResource AccentBrush}"
-                                         BorderThickness="0"/>
-                        </StackPanel>
+                        <Grid Grid.Row="0" Margin="0,0,0,10">
+                            <StackPanel Orientation="Horizontal" VerticalAlignment="Center">
+                                <TextBlock Text="当前测试" Style="{StaticResource H3}"/>
+                                <TextBlock Text="条码" Foreground="{StaticResource TextMutedBrush}" Margin="14,0,6,0" VerticalAlignment="Center"/>
+                                <TextBlock Text="LCD-0421-001" FontWeight="SemiBold" VerticalAlignment="Center"/>
+                            </StackPanel>
+                            <StackPanel Orientation="Horizontal" HorizontalAlignment="Right" VerticalAlignment="Center">
+                                <TextBlock Text="进度" Foreground="{StaticResource TextMutedBrush}" VerticalAlignment="Center" Margin="0,0,6,0"/>
+                                <TextBlock VerticalAlignment="Center">
+                                    <Run x:Name="RunProgressCurrent" Text="0" Foreground="{StaticResource AccentBrush}" FontWeight="SemiBold" FontSize="15"/>
+                                    <Run x:Name="RunProgressTotal"   Text=" / 0" Foreground="{StaticResource TextMutedBrush}"/>
+                                </TextBlock>
+                                <ProgressBar x:Name="RunProgress"
+                                             Width="200" Height="6" Margin="10,0,0,0" Minimum="0" Maximum="1" Value="0"
+                                             Background="{StaticResource DividerBrush}" Foreground="{StaticResource AccentBrush}"
+                                             BorderThickness="0"/>
+                            </StackPanel>
+                        </Grid>
+
+                        <!-- 3 selectors, each reads from its own store (TemplateStore / MetricStore / MotionStore) -->
+                        <Grid Grid.Row="1">
+                            <Grid.ColumnDefinitions>
+                                <ColumnDefinition Width="*"/>
+                                <ColumnDefinition Width="12"/>
+                                <ColumnDefinition Width="*"/>
+                                <ColumnDefinition Width="12"/>
+                                <ColumnDefinition Width="*"/>
+                            </Grid.ColumnDefinitions>
+
+                            <StackPanel Grid.Column="0">
+                                <TextBlock Text="模板" Foreground="{StaticResource TextMutedBrush}" FontSize="11" Margin="0,0,0,3"/>
+                                <ComboBox x:Name="TemplateCombo"
+                                          DisplayMemberPath="Name"
+                                          MinHeight="30"
+                                          SelectionChanged="TemplateCombo_SelectionChanged"/>
+                            </StackPanel>
+
+                            <StackPanel Grid.Column="2">
+                                <TextBlock Text="指标" Foreground="{StaticResource TextMutedBrush}" FontSize="11" Margin="0,0,0,3"/>
+                                <ComboBox x:Name="MetricCombo"
+                                          DisplayMemberPath="Name"
+                                          MinHeight="30"
+                                          SelectionChanged="MetricCombo_SelectionChanged"/>
+                            </StackPanel>
+
+                            <StackPanel Grid.Column="4">
+                                <TextBlock Text="运动平台" Foreground="{StaticResource TextMutedBrush}" FontSize="11" Margin="0,0,0,3"/>
+                                <ComboBox x:Name="MotionCombo"
+                                          DisplayMemberPath="Name"
+                                          MinHeight="30"
+                                          SelectionChanged="MotionCombo_SelectionChanged"/>
+                            </StackPanel>
+                        </Grid>
                     </Grid>
 
                     <!-- two-column linked tables -->
