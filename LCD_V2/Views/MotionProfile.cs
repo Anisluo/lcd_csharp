@@ -33,6 +33,13 @@ namespace LCD_V2.Views
         public double AccelTimeMs { get; set; } = 100;
         public double PulseUnit   { get; set; } = 0.001;   // mm or ° per pulse
         public bool   Invert      { get; set; } = false;
+
+        /// <summary>
+        /// Whether this axis participates in coordinated / vector interpolation motion
+        /// (LCD V1's Axies.IsSecondValue). Typically set on X and Y for XY-plane
+        /// interpolation; Z/U/V default to single-axis stepping.
+        /// </summary>
+        public bool Interpolate { get; set; } = false;
     }
 
     /// <summary>Static catalog: the 5 fixed axis names + the list of motion algorithms.</summary>
@@ -58,11 +65,12 @@ namespace LCD_V2.Views
         {
             return new List<AxisConfig>
             {
-                new AxisConfig { AxisName = "X", Enabled = true, HighSpeed = 100, MidSpeed = 50, LowSpeed = 10, AccelTimeMs = 100, PulseUnit = 0.001 },
-                new AxisConfig { AxisName = "Y", Enabled = true, HighSpeed = 100, MidSpeed = 50, LowSpeed = 10, AccelTimeMs = 100, PulseUnit = 0.001 },
-                new AxisConfig { AxisName = "Z", Enabled = true, HighSpeed =  50, MidSpeed = 25, LowSpeed =  5, AccelTimeMs = 100, PulseUnit = 0.001 },
-                new AxisConfig { AxisName = "U", Enabled = true, HighSpeed =  30, MidSpeed = 15, LowSpeed =  3, AccelTimeMs = 150, PulseUnit = 0.01  },
-                new AxisConfig { AxisName = "V", Enabled = true, HighSpeed =  30, MidSpeed = 15, LowSpeed =  3, AccelTimeMs = 150, PulseUnit = 0.01  },
+                // X and Y default to interpolation-enabled (XY-plane vector motion).
+                new AxisConfig { AxisName = "X", Enabled = true, HighSpeed = 100, MidSpeed = 50, LowSpeed = 10, AccelTimeMs = 100, PulseUnit = 0.001, Interpolate = true  },
+                new AxisConfig { AxisName = "Y", Enabled = true, HighSpeed = 100, MidSpeed = 50, LowSpeed = 10, AccelTimeMs = 100, PulseUnit = 0.001, Interpolate = true  },
+                new AxisConfig { AxisName = "Z", Enabled = true, HighSpeed =  50, MidSpeed = 25, LowSpeed =  5, AccelTimeMs = 100, PulseUnit = 0.001, Interpolate = false },
+                new AxisConfig { AxisName = "U", Enabled = true, HighSpeed =  30, MidSpeed = 15, LowSpeed =  3, AccelTimeMs = 150, PulseUnit = 0.01,  Interpolate = false },
+                new AxisConfig { AxisName = "V", Enabled = true, HighSpeed =  30, MidSpeed = 15, LowSpeed =  3, AccelTimeMs = 150, PulseUnit = 0.01,  Interpolate = false },
             };
         }
     }

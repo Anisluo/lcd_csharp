@@ -173,6 +173,7 @@ namespace LCD_V2.Views
                 AccelTimeMs = a.AccelTimeMs,
                 PulseUnit   = a.PulseUnit,
                 Invert      = a.Invert,
+                Interpolate = a.Interpolate,
             }).ToList();
         }
     }
