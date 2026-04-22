@@ -18,6 +18,22 @@ namespace LCD_V2.Views
             Loaded += (s, e) => { _loaded = true; Regenerate(); };
         }
 
+        /// <summary>
+        /// Preset reference image shipped with LCD_V2 for each point-layout type.
+        /// User can still override via the "选择参考图片…" button (sets _userOverrodeImage = true).
+        /// </summary>
+        private static readonly System.Collections.Generic.Dictionary<PointLayoutType, string> PresetImages
+            = new System.Collections.Generic.Dictionary<PointLayoutType, string>
+        {
+            { PointLayoutType.Point5,      "pack://application:,,,/Image/5Points.jpg"       },
+            { PointLayoutType.Point9,      "pack://application:,,,/Image/9Points.jpg"       },
+            { PointLayoutType.Point13,     "pack://application:,,,/Image/13Points.jpg"      },
+            { PointLayoutType.Point13Diag, "pack://application:,,,/Image/13Points_new.jpg"  },
+            { PointLayoutType.Point17,     "pack://application:,,,/Image/std17poi.jpeg"     },
+        };
+
+        private bool _userOverrodeImage;
+
         // === event handlers wired from XAML ===
 
         private void BtnNew_Click(object sender, RoutedEventArgs e)
@@ -32,8 +48,7 @@ namespace LCD_V2.Views
             TxtC.Text = "25";
             TxtD.Text = "25";
             RadioPct.IsChecked = true;
-            RefImage.Source = null;
-            RefPlaceholder.Visibility = Visibility.Visible;
+            _userOverrodeImage = false;
             Regenerate();
         }
 
@@ -67,6 +82,7 @@ namespace LCD_V2.Views
                 bmp.Freeze();
                 RefImage.Source = bmp;
                 RefPlaceholder.Visibility = Visibility.Collapsed;
+                _userOverrodeImage = true;
             }
             catch (Exception ex)
             {
@@ -124,6 +140,36 @@ namespace LCD_V2.Views
             PointsGrid.ItemsSource = pts;
             TxtCount.Text = pts.Count + " 个";
             TxtHint.Text  = HintFor(type);
+
+            // Auto-swap reference image to match the selected type, unless the user
+            // has picked a custom one via the file dialog.
+            if (!_userOverrodeImage) LoadPresetImage(type);
+        }
+
+        private void LoadPresetImage(PointLayoutType type)
+        {
+            if (!PresetImages.TryGetValue(type, out var uri))
+            {
+                RefImage.Source = null;
+                RefPlaceholder.Visibility = Visibility.Visible;
+                return;
+            }
+            try
+            {
+                var bmp = new BitmapImage();
+                bmp.BeginInit();
+                bmp.CacheOption = BitmapCacheOption.OnLoad;
+                bmp.UriSource   = new Uri(uri, UriKind.Absolute);
+                bmp.EndInit();
+                bmp.Freeze();
+                RefImage.Source = bmp;
+                RefPlaceholder.Visibility = Visibility.Collapsed;
+            }
+            catch
+            {
+                RefImage.Source = null;
+                RefPlaceholder.Visibility = Visibility.Visible;
+            }
         }
 
         private static double ParseD(string s, double fallback)

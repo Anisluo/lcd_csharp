@@ -128,6 +128,13 @@
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
   <ItemGroup>
+    <Resource Include="Image\5Points.jpg" />
+    <Resource Include="Image\9Points.jpg" />
+    <Resource Include="Image\13Points.jpg" />
+    <Resource Include="Image\13Points_new.jpg" />
+    <Resource Include="Image\std17poi.jpeg" />
+  </ItemGroup>
+  <ItemGroup>
     <ProjectReference Include="..\LCD.Core\LCD.Core.csproj">
       <Project>{05a6b362-89d5-4e59-acd9-e6aadc95d76d}</Project>
       <Name>LCD.Core</Name>
