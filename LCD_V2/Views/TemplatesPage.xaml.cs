@@ -47,6 +47,13 @@ namespace LCD_V2.Views
             { PointLayoutType.Point17,     "pack://application:,,,/Image/std17poi.jpeg"     },
         };
 
+        /// <summary>Cache decoded BitmapImages so that switching configs is free after first load.</summary>
+        private static readonly Dictionary<PointLayoutType, BitmapImage> _imageCache
+            = new Dictionary<PointLayoutType, BitmapImage>();
+
+        /// <summary>The image currently displayed. Re-used when the config doesn't change.</summary>
+        private PointLayoutType? _currentImageType;
+
         // ========== click handlers ==========
 
         private void BtnNew_Click(object sender, RoutedEventArgs e)
@@ -203,28 +210,42 @@ namespace LCD_V2.Views
 
         private void LoadPresetImage(PointLayoutType type)
         {
+            // No-op if we're already showing this type's image — avoids hot-path IO when
+            // Regenerate() runs on every TextChanged (Chinese IME makes this critical).
+            if (_currentImageType == type) return;
+
             if (!PresetImages.TryGetValue(type, out var uri))
             {
                 RefImage.Source = null;
                 RefPlaceholder.Visibility = Visibility.Visible;
+                _currentImageType = type;
                 return;
             }
-            try
+
+            if (!_imageCache.TryGetValue(type, out var bmp))
             {
-                var bmp = new BitmapImage();
-                bmp.BeginInit();
-                bmp.CacheOption = BitmapCacheOption.OnLoad;
-                bmp.UriSource   = new Uri(uri, UriKind.Absolute);
-                bmp.EndInit();
-                bmp.Freeze();
-                RefImage.Source = bmp;
-                RefPlaceholder.Visibility = Visibility.Collapsed;
+                try
+                {
+                    bmp = new BitmapImage();
+                    bmp.BeginInit();
+                    bmp.CacheOption = BitmapCacheOption.OnLoad;
+                    bmp.UriSource   = new Uri(uri, UriKind.Absolute);
+                    bmp.EndInit();
+                    bmp.Freeze();
+                    _imageCache[type] = bmp;
+                }
+                catch
+                {
+                    RefImage.Source = null;
+                    RefPlaceholder.Visibility = Visibility.Visible;
+                    _currentImageType = type;
+                    return;
+                }
             }
-            catch
-            {
-                RefImage.Source = null;
-                RefPlaceholder.Visibility = Visibility.Visible;
-            }
+
+            RefImage.Source = bmp;
+            RefPlaceholder.Visibility = Visibility.Collapsed;
+            _currentImageType = type;
         }
 
         private static double ParseD(string s, double fallback)

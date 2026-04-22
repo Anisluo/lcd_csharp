@@ -141,7 +141,9 @@
                             </Grid.ColumnDefinitions>
                             <StackPanel Grid.Column="0">
                                 <TextBlock Text="模板名称" Foreground="{StaticResource TextMutedBrush}" Margin="0,0,0,4" FontSize="12"/>
-                                <TextBox x:Name="TxtName" Text="13 点对角" TextChanged="AnyParam_Changed"/>
+                                <!-- Name is only captured at Save time; don't trigger Regenerate on every keystroke
+                                     (Chinese IME composition was firing TextChanged rapidly → UI jank). -->
+                                <TextBox x:Name="TxtName" Text="13 点对角"/>
                             </StackPanel>
                             <StackPanel Grid.Column="2">
                                 <TextBlock Text="点阵配置" Foreground="{StaticResource TextMutedBrush}" Margin="0,0,0,4" FontSize="12"/>
