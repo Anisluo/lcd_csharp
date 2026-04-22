@@ -1,6 +1,7 @@
 <Application x:Class="LCD_V2.App"
              xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
              xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:v="clr-namespace:LCD_V2.Views"
              StartupUri="MainWindow.xaml">
     <Application.Resources>
         <ResourceDictionary>
@@ -8,6 +9,21 @@
                 <ResourceDictionary Source="Themes/Theme.xaml"/>
                 <ResourceDictionary Source="Themes/Icons.xaml"/>
             </ResourceDictionary.MergedDictionaries>
+
+            <!--
+                App-level DataTemplates for the POCO types we bind to ComboBoxes.
+                At Application scope they are visible to popup-hosted content, which
+                UserControl.Resources is not (Popup runs in a separate visual tree).
+            -->
+            <DataTemplate DataType="{x:Type v:TemplateItem}">
+                <TextBlock Text="{Binding Name}"/>
+            </DataTemplate>
+            <DataTemplate DataType="{x:Type v:InstrumentMetric}">
+                <TextBlock Text="{Binding Name}"/>
+            </DataTemplate>
+            <DataTemplate DataType="{x:Type v:MotionProfile}">
+                <TextBlock Text="{Binding Name}"/>
+            </DataTemplate>
         </ResourceDictionary>
     </Application.Resources>
 </Application>

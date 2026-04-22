@@ -1,6 +1,9 @@
 <UserControl x:Class="LCD_V2.Views.DashboardPage"
              xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
              xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml">
+    <!-- Typed DataTemplates for TemplateItem / InstrumentMetric / MotionProfile
+         live at Application scope (App.xaml) — UserControl.Resources aren't
+         visible from inside popup-hosted ContentPresenters. -->
     <ScrollViewer VerticalScrollBarVisibility="Auto">
         <Grid>
             <Grid.RowDefinitions>
@@ -511,7 +514,6 @@
                             <StackPanel Grid.Column="0">
                                 <TextBlock Text="模板" Foreground="{StaticResource TextMutedBrush}" FontSize="11" Margin="0,0,0,3"/>
                                 <ComboBox x:Name="TemplateCombo"
-                                          DisplayMemberPath="Name"
                                           MinHeight="30"
                                           SelectionChanged="TemplateCombo_SelectionChanged"/>
                             </StackPanel>
@@ -519,7 +521,6 @@
                             <StackPanel Grid.Column="2">
                                 <TextBlock Text="指标" Foreground="{StaticResource TextMutedBrush}" FontSize="11" Margin="0,0,0,3"/>
                                 <ComboBox x:Name="MetricCombo"
-                                          DisplayMemberPath="Name"
                                           MinHeight="30"
                                           SelectionChanged="MetricCombo_SelectionChanged"/>
                             </StackPanel>
@@ -527,7 +528,6 @@
                             <StackPanel Grid.Column="4">
                                 <TextBlock Text="运动平台" Foreground="{StaticResource TextMutedBrush}" FontSize="11" Margin="0,0,0,3"/>
                                 <ComboBox x:Name="MotionCombo"
-                                          DisplayMemberPath="Name"
                                           MinHeight="30"
                                           SelectionChanged="MotionCombo_SelectionChanged"/>
                             </StackPanel>
