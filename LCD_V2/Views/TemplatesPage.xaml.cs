@@ -86,15 +86,24 @@ namespace LCD_V2.Views
             FillFromForm(updated);
             updated.PointCount = PointsGrid.Items.Count;
 
-            if (_editing == null)
+            // Save semantics — the template *name* is its identity:
+            //   * no current edit target  → add as new
+            //   * name unchanged vs edit target → in-place update
+            //   * name changed              → add as new (preserves the original entry)
+            bool treatAsNew = _editing == null
+                           || !string.Equals(updated.Name, _editing.Name, StringComparison.Ordinal);
+            string actionWord;
+            if (treatAsNew)
             {
                 _library.Add(updated);
+                actionWord = "已新建";
             }
             else
             {
                 int idx = _library.IndexOf(_editing);
                 if (idx >= 0) _library[idx] = updated;
                 else          _library.Add(updated);
+                actionWord = "已更新";
             }
 
             _suppressSync = true; // selection change will re-invoke Library_SelectionChanged
@@ -103,7 +112,7 @@ namespace LCD_V2.Views
             _suppressSync = false;
 
             MessageBox.Show(Window.GetWindow(this),
-                $"已保存到模板库：{updated.Name}（{updated.PointCount} 个点位）",
+                $"{actionWord}模板：{updated.Name}（{updated.PointCount} 个点位）",
                 "保存模板", MessageBoxButton.OK, MessageBoxImage.Information);
         }
 
@@ -211,9 +220,9 @@ namespace LCD_V2.Views
             };
             SchematicCanvas.Children.Add(rect);
 
-            // points
-            double dotR   = Math.Max(3.0, Math.Min(h, v) * 0.018);  // scales with product size
-            double fontPt = Math.Max(2.0, dotR * 1.3);
+            // points — dot size scales with product, but clearly visible even on small products
+            double dotR   = Math.Max(6.0, Math.Min(h, v) * 0.035);
+            double fontPt = Math.Max(4.0, dotR * 1.2);
             foreach (var p in pts)
             {
                 var dot = new Ellipse
