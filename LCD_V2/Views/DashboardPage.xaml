@@ -340,31 +340,125 @@
                 </StackPanel>
             </Grid>
 
-            <!-- ═════════ recent runs table ═════════ -->
+            <!-- ═════════ current test: template ↔ results ═════════ -->
             <Border Grid.Row="2" Style="{StaticResource Card}">
                 <StackPanel>
+                    <!-- header strip -->
                     <Grid Margin="0,0,0,12">
-                        <TextBlock Text="最近测试" Style="{StaticResource H3}"/>
-                        <StackPanel Orientation="Horizontal" HorizontalAlignment="Right">
-                            <Button Content="导出" Margin="0,0,6,0"/>
-                            <Button Content="刷新" Style="{StaticResource PrimaryButton}"/>
+                        <StackPanel Orientation="Horizontal" VerticalAlignment="Center">
+                            <TextBlock Text="当前测试" Style="{StaticResource H3}"/>
+                            <Rectangle Width="1" Height="18" Fill="{StaticResource DividerBrush}" Margin="14,0"/>
+                            <TextBlock Text="模板" Foreground="{StaticResource TextMutedBrush}" VerticalAlignment="Center"/>
+                            <Border Background="{StaticResource AccentSoftBrush}" CornerRadius="4"
+                                    Padding="8,2" Margin="6,0,0,0" VerticalAlignment="Center">
+                                <TextBlock Text="13 点对角" Foreground="{StaticResource AccentBrush}" FontWeight="SemiBold"/>
+                            </Border>
+                            <TextBlock Text="条码" Foreground="{StaticResource TextMutedBrush}" Margin="14,0,6,0" VerticalAlignment="Center"/>
+                            <TextBlock Text="LCD-0421-001" FontWeight="SemiBold" VerticalAlignment="Center"/>
+                        </StackPanel>
+
+                        <StackPanel Orientation="Horizontal" HorizontalAlignment="Right" VerticalAlignment="Center">
+                            <TextBlock Text="进度" Foreground="{StaticResource TextMutedBrush}" VerticalAlignment="Center" Margin="0,0,6,0"/>
+                            <TextBlock VerticalAlignment="Center">
+                                <Run Text="4" Foreground="{StaticResource AccentBrush}" FontWeight="SemiBold" FontSize="15"/>
+                                <Run Text=" / 13" Foreground="{StaticResource TextMutedBrush}"/>
+                            </TextBlock>
+                            <ProgressBar Width="160" Height="6" Margin="10,0,14,0" Minimum="0" Maximum="13" Value="4"
+                                         Background="{StaticResource DividerBrush}" Foreground="{StaticResource AccentBrush}"
+                                         BorderThickness="0"/>
+                            <Button Content="暂停" Margin="0,0,6,0"/>
+                            <Button Content="停止" Style="{StaticResource DangerButton}"/>
                         </StackPanel>
                     </Grid>
-                    <DataGrid AutoGenerateColumns="False" CanUserAddRows="False" IsReadOnly="True" HeadersVisibility="Column">
-                        <DataGrid.Columns>
-                            <DataGridTextColumn Header="#"        Width="60"/>
-                            <DataGridTextColumn Header="条码"     Width="*"/>
-                            <DataGridTextColumn Header="模板"     Width="*"/>
-                            <DataGridTextColumn Header="点数"     Width="80"/>
-                            <DataGridTextColumn Header="耗时"     Width="100"/>
-                            <DataGridTextColumn Header="状态"     Width="100"/>
-                            <DataGridTextColumn Header="时间"     Width="160"/>
-                        </DataGrid.Columns>
-                    </DataGrid>
-                    <TextBlock Text="暂无测试记录"
-                               Foreground="{StaticResource TextSubtleBrush}"
-                               HorizontalAlignment="Center" Margin="0,24,0,8"
-                               FontSize="12"/>
+
+                    <!-- two-column linked tables -->
+                    <Grid>
+                        <Grid.ColumnDefinitions>
+                            <ColumnDefinition Width="*"/>
+                            <ColumnDefinition Width="16"/>
+                            <ColumnDefinition Width="*"/>
+                        </Grid.ColumnDefinitions>
+
+                        <!-- Left: template points -->
+                        <Border Grid.Column="0" Background="White"
+                                BorderBrush="{StaticResource BorderBrush}" BorderThickness="1"
+                                CornerRadius="6">
+                            <DockPanel>
+                                <Border DockPanel.Dock="Top" Background="#F9FAFB"
+                                        BorderBrush="{StaticResource BorderBrush}" BorderThickness="0,0,0,1"
+                                        Padding="12,8">
+                                    <Grid>
+                                        <StackPanel Orientation="Horizontal">
+                                            <TextBlock Text="模板点位" FontWeight="SemiBold"/>
+                                            <TextBlock Text="13 点" Margin="8,0,0,0"
+                                                       Foreground="{StaticResource TextSubtleBrush}"/>
+                                        </StackPanel>
+                                        <TextBlock Text="→ 移动到下一条即执行"
+                                                   Foreground="{StaticResource TextSubtleBrush}"
+                                                   FontSize="11"
+                                                   HorizontalAlignment="Right" VerticalAlignment="Center"/>
+                                    </Grid>
+                                </Border>
+                                <DataGrid x:Name="TemplateGrid"
+                                          AutoGenerateColumns="False" CanUserAddRows="False"
+                                          IsReadOnly="True" HeadersVisibility="Column"
+                                          BorderThickness="0"
+                                          MaxHeight="240"
+                                          SelectionMode="Single"
+                                          GridLinesVisibility="Horizontal">
+                                    <DataGrid.Columns>
+                                        <DataGridTextColumn Header="#"       Binding="{Binding No}"     Width="50"/>
+                                        <DataGridTextColumn Header="X (mm)"  Binding="{Binding X, StringFormat='0.00'}" Width="*"/>
+                                        <DataGridTextColumn Header="Y (mm)"  Binding="{Binding Y, StringFormat='0.00'}" Width="*"/>
+                                        <DataGridTextColumn Header="Z (mm)"  Binding="{Binding Z, StringFormat='0.00'}" Width="*"/>
+                                        <DataGridTextColumn Header="U (°)"   Binding="{Binding U, StringFormat='0.00'}" Width="*"/>
+                                        <DataGridTextColumn Header="V (°)"   Binding="{Binding V, StringFormat='0.00'}" Width="*"/>
+                                        <DataGridTextColumn Header="备注"    Binding="{Binding Remark}" Width="*"/>
+                                    </DataGrid.Columns>
+                                </DataGrid>
+                            </DockPanel>
+                        </Border>
+
+                        <!-- Right: test results -->
+                        <Border Grid.Column="2" Background="White"
+                                BorderBrush="{StaticResource BorderBrush}" BorderThickness="1"
+                                CornerRadius="6">
+                            <DockPanel>
+                                <Border DockPanel.Dock="Top" Background="#F9FAFB"
+                                        BorderBrush="{StaticResource BorderBrush}" BorderThickness="0,0,0,1"
+                                        Padding="12,8">
+                                    <Grid>
+                                        <StackPanel Orientation="Horizontal">
+                                            <TextBlock Text="测试结果" FontWeight="SemiBold"/>
+                                            <Border Background="{StaticResource SuccessSoftBrush}" CornerRadius="8" Padding="6,1" Margin="8,0,0,0">
+                                                <TextBlock Text="3 已采" Foreground="{StaticResource SuccessBrush}" FontSize="11" FontWeight="SemiBold"/>
+                                            </Border>
+                                            <Border Background="{StaticResource WarningSoftBrush}" CornerRadius="8" Padding="6,1" Margin="6,0,0,0">
+                                                <TextBlock Text="1 进行中" Foreground="{StaticResource WarningBrush}" FontSize="11" FontWeight="SemiBold"/>
+                                            </Border>
+                                        </StackPanel>
+                                        <Button Content="导出 CSV" HorizontalAlignment="Right" Padding="8,3" MinHeight="0"/>
+                                    </Grid>
+                                </Border>
+                                <DataGrid x:Name="ResultGrid"
+                                          AutoGenerateColumns="False" CanUserAddRows="False"
+                                          IsReadOnly="True" HeadersVisibility="Column"
+                                          BorderThickness="0"
+                                          MaxHeight="240"
+                                          SelectionMode="Single"
+                                          GridLinesVisibility="Horizontal">
+                                    <DataGrid.Columns>
+                                        <DataGridTextColumn Header="#"    Binding="{Binding No}"     Width="50"/>
+                                        <DataGridTextColumn Header="L"    Binding="{Binding L,   StringFormat='0.0',   TargetNullValue='—'}" Width="*"/>
+                                        <DataGridTextColumn Header="x"    Binding="{Binding Cx,  StringFormat='0.0000', TargetNullValue='—'}" Width="*"/>
+                                        <DataGridTextColumn Header="y"    Binding="{Binding Cy,  StringFormat='0.0000', TargetNullValue='—'}" Width="*"/>
+                                        <DataGridTextColumn Header="CCT"  Binding="{Binding CCT, StringFormat='0',      TargetNullValue='—'}" Width="*"/>
+                                        <DataGridTextColumn Header="状态" Binding="{Binding Status}" Width="70"/>
+                                    </DataGrid.Columns>
+                                </DataGrid>
+                            </DockPanel>
+                        </Border>
+                    </Grid>
                 </StackPanel>
             </Border>
         </Grid>
