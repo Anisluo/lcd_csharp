@@ -94,6 +94,16 @@
     </Compile>
     <Compile Include="Views\TemplateItem.cs" />
     <Compile Include="Views\TemplateStore.cs" />
+    <Page Include="Views\MetricsPage.xaml">
+      <Generator>MSBuild:Compile</Generator>
+      <SubType>Designer</SubType>
+    </Page>
+    <Compile Include="Views\MetricsPage.xaml.cs">
+      <DependentUpon>MetricsPage.xaml</DependentUpon>
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="Views\InstrumentMetric.cs" />
+    <Compile Include="Views\MetricStore.cs" />
     <Page Include="Views\ResultsPage.xaml">
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>

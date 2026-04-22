@@ -9,10 +9,11 @@ namespace LCD_V2
         {
             base.OnStartup(e);
 
-            // Eagerly initialise the template store so the XML file gets
-            // seeded / loaded at app launch, not the first time the user
-            // opens 模板管理.
-            var _ = TemplateStore.Library;
+            // Eagerly initialise the template store + metric store so the
+            // XML files get seeded / loaded at app launch, not the first
+            // time the user opens the respective page.
+            var _  = TemplateStore.Library;
+            var __ = MetricStore.Library;
         }
     }
 }
