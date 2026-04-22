@@ -15,24 +15,22 @@ namespace LCD_V2.Views
     public partial class TemplatesPage : UserControl
     {
         private bool _loaded;
-        private readonly ObservableCollection<TemplateItem> _library = new ObservableCollection<TemplateItem>();
         private TemplateItem _editing; // the library row currently being edited, or null for a fresh one
         private bool _suppressSync;    // block Regenerate → write-back loops
+
+        private ObservableCollection<TemplateItem> _library => TemplateStore.Library;
 
         public TemplatesPage()
         {
             InitializeComponent();
 
-            // seed a few example templates so the library isn't empty on first launch
-            _library.Add(new TemplateItem { Name = "13 寸屏 · 对角",  ConfigType = PointLayoutType.Point13Diag, H = 286, V = 179, A = 10, B = 10, C = 25, D = 25 });
-            _library.Add(new TemplateItem { Name = "中控屏 9 点", ConfigType = PointLayoutType.Point9,      H = 250, V = 150, A = 10, B = 10, C = 25, D = 25 });
-
+            // Library lives in TemplateStore (process-wide singleton, XML-backed),
+            // so it survives page re-creation and app restarts.
             LibraryList.ItemsSource = _library;
 
             Loaded += (s, e) =>
             {
                 _loaded = true;
-                // start in "new" mode with 13对角 defaults
                 _editing = null;
                 LibraryList.SelectedIndex = -1;
                 Regenerate();
@@ -417,41 +415,5 @@ namespace LCD_V2.Views
                     return "";
             }
         }
-    }
-
-    /// <summary>
-    /// A saved template instance in the library — the *result* of applying a
-    /// generator config (5/9/13/...) to concrete product dimensions + params.
-    /// </summary>
-    public sealed class TemplateItem
-    {
-        public string Name { get; set; } = "未命名";
-        public PointLayoutType ConfigType { get; set; }
-        public double H { get; set; }
-        public double V { get; set; }
-        public double A { get; set; }
-        public double B { get; set; }
-        public double C { get; set; }
-        public double D { get; set; }
-        public bool   UseMm { get; set; }
-        public int    PointCount { get; set; }
-
-        public string ConfigTypeLabel
-        {
-            get
-            {
-                switch (ConfigType)
-                {
-                    case PointLayoutType.Point5:      return "5 点";
-                    case PointLayoutType.Point9:      return "9 点";
-                    case PointLayoutType.Point13:     return "13 点";
-                    case PointLayoutType.Point13Diag: return "13 点对角";
-                    case PointLayoutType.Point17:     return "17 点";
-                    default:                           return ConfigType.ToString();
-                }
-            }
-        }
-
-        public string Summary => $"{ConfigTypeLabel} · {H:0}×{V:0} mm";
     }
 }

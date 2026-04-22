@@ -92,6 +92,8 @@
       <DependentUpon>TemplatesPage.xaml</DependentUpon>
       <SubType>Code</SubType>
     </Compile>
+    <Compile Include="Views\TemplateItem.cs" />
+    <Compile Include="Views\TemplateStore.cs" />
     <Page Include="Views\ResultsPage.xaml">
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
