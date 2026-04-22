@@ -22,6 +22,7 @@ namespace LCD_V2
                 new NavItem { Title = "仪表板",   Icon = (Geometry)FindResource("IconHome"),     PageType = typeof(DashboardPage) },
                 new NavItem { Title = "模板管理", Icon = (Geometry)FindResource("IconGrid"),     PageType = typeof(TemplatesPage) },
                 new NavItem { Title = "仪器指标", Icon = (Geometry)FindResource("IconMetrics"),  PageType = typeof(MetricsPage)   },
+                new NavItem { Title = "运动平台", Icon = (Geometry)FindResource("IconMotion"),   PageType = typeof(MotionPage)    },
                 new NavItem { Title = "测试结果", Icon = (Geometry)FindResource("IconChart"),    PageType = typeof(ResultsPage)   },
                 new NavItem { Title = "设备状态", Icon = (Geometry)FindResource("IconDevices"),  PageType = typeof(DevicesPage)   },
                 new NavItem { Title = "运行日志", Icon = (Geometry)FindResource("IconLogs"),     PageType = typeof(LogsPage)      },
@@ -83,6 +84,7 @@ namespace LCD_V2
                 case "仪表板":   return "实时运行状态 / 最近测试概览";
                 case "模板管理": return "管理点阵模板、测试流程配置";
                 case "仪器指标": return "仪器 / 参数 / 统计算法配置";
+                case "运动平台": return "5 轴速度 / 脉冲 / 运动算法配置";
                 case "测试结果": return "浏览、导出测试结果数据";
                 case "设备状态": return "光度计、PG、电源、运动平台状态";
                 case "运行日志": return "系统运行日志与调试信息";

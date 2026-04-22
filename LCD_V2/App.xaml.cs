@@ -12,8 +12,9 @@ namespace LCD_V2
             // Eagerly initialise the template store + metric store so the
             // XML files get seeded / loaded at app launch, not the first
             // time the user opens the respective page.
-            var _  = TemplateStore.Library;
-            var __ = MetricStore.Library;
+            var _   = TemplateStore.Library;
+            var __  = MetricStore.Library;
+            var ___ = MotionStore.Library;
         }
     }
 }

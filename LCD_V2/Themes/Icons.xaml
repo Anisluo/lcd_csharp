@@ -47,6 +47,9 @@
     <!-- metrics bar chart (three vertical bars + baseline) -->
     <Geometry x:Key="IconMetrics">M 4,20 L 4,14 L 7,14 L 7,20 Z M 10,20 L 10,10 L 13,10 L 13,20 Z M 16,20 L 16,6 L 19,6 L 19,20 Z M 2,21 L 22,21</Geometry>
 
+    <!-- motion four-way compass (XY cross with arrow heads, for 运动平台) -->
+    <Geometry x:Key="IconMotion">M 12,3 L 12,21 M 3,12 L 21,12 M 8,7 L 12,3 L 16,7 M 17,8 L 21,12 L 17,16 M 16,17 L 12,21 L 8,17 M 7,16 L 3,12 L 7,8</Geometry>
+
     <!-- speed bars (one / two / three rising) -->
     <Geometry x:Key="IconSpeed1">M 4,16 L 4,20 L 8,20 L 8,16 Z</Geometry>
     <Geometry x:Key="IconSpeed2">M 4,16 L 4,20 L 8,20 L 8,16 Z M 10,12 L 10,20 L 14,20 L 14,12 Z</Geometry>

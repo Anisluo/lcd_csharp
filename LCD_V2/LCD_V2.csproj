@@ -106,6 +106,16 @@
     <Compile Include="Views\MetricStore.cs" />
     <Compile Include="Views\InstrumentConfig.cs" />
     <Compile Include="Views\InstrumentConfigStore.cs" />
+    <Page Include="Views\MotionPage.xaml">
+      <Generator>MSBuild:Compile</Generator>
+      <SubType>Designer</SubType>
+    </Page>
+    <Compile Include="Views\MotionPage.xaml.cs">
+      <DependentUpon>MotionPage.xaml</DependentUpon>
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="Views\MotionProfile.cs" />
+    <Compile Include="Views\MotionStore.cs" />
     <Page Include="Views\ResultsPage.xaml">
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
