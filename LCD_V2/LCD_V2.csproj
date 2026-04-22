@@ -104,6 +104,8 @@
     </Compile>
     <Compile Include="Views\InstrumentMetric.cs" />
     <Compile Include="Views\MetricStore.cs" />
+    <Compile Include="Views\InstrumentConfig.cs" />
+    <Compile Include="Views\InstrumentConfigStore.cs" />
     <Page Include="Views\ResultsPage.xaml">
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
@@ -145,6 +147,14 @@
     <Resource Include="Image\13Points.jpg" />
     <Resource Include="Image\13Points_new.jpg" />
     <Resource Include="Image\std17poi.jpeg" />
+    <Resource Include="Image\BM7.png" />
+    <Resource Include="Image\BM5A.png" />
+    <Resource Include="Image\BM5AS.png" />
+    <Resource Include="Image\PR655.png" />
+    <Resource Include="Image\CS2000.png" />
+    <Resource Include="Image\CS200.png" />
+    <Resource Include="Image\SR3A.png" />
+    <Resource Include="Image\Demo.png" />
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\LCD.Core\LCD.Core.csproj">

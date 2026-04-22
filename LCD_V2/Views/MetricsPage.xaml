@@ -107,12 +107,14 @@
                 </Border>
 
                 <!-- body -->
+                <ScrollViewer VerticalScrollBarVisibility="Auto" HorizontalScrollBarVisibility="Disabled">
                 <Grid Margin="18,14,18,18">
                     <Grid.RowDefinitions>
                         <RowDefinition Height="Auto"/>
                         <RowDefinition Height="Auto"/>
                         <RowDefinition Height="Auto"/>
-                        <RowDefinition Height="*"/>
+                        <RowDefinition Height="Auto"/>
+                        <RowDefinition Height="Auto"/>
                     </Grid.RowDefinitions>
 
                     <!-- basic info -->
@@ -133,8 +135,161 @@
                         </StackPanel>
                     </Grid>
 
+                    <!-- instrument photo + config (auto-saved per-instrument) -->
+                    <Border Grid.Row="2" Margin="0,0,0,16"
+                            BorderBrush="{StaticResource BorderBrush}" BorderThickness="1"
+                            CornerRadius="6" Background="#FAFBFD" Padding="14,12">
+                        <Grid>
+                            <Grid.ColumnDefinitions>
+                                <ColumnDefinition Width="180"/>
+                                <ColumnDefinition Width="16"/>
+                                <ColumnDefinition Width="*"/>
+                            </Grid.ColumnDefinitions>
+
+                            <!-- left: image + name -->
+                            <StackPanel Grid.Column="0">
+                                <Border BorderBrush="{StaticResource BorderBrush}" BorderThickness="1"
+                                        CornerRadius="6" Background="White" Height="140">
+                                    <Grid>
+                                        <Image x:Name="InstrumentImage" Stretch="Uniform" Margin="6"/>
+                                        <StackPanel x:Name="InstrumentImagePlaceholder" VerticalAlignment="Center" HorizontalAlignment="Center">
+                                            <Ellipse Width="32" Height="32" Fill="#E5E7EB" HorizontalAlignment="Center"/>
+                                            <TextBlock Text="无图片" FontSize="11"
+                                                       Foreground="{StaticResource TextMutedBrush}"
+                                                       HorizontalAlignment="Center" Margin="0,6,0,0"/>
+                                        </StackPanel>
+                                    </Grid>
+                                </Border>
+                                <TextBlock x:Name="InstrumentDisplayName" Text="BM-7A"
+                                           HorizontalAlignment="Center" Margin="0,8,0,0"
+                                           FontWeight="SemiBold"/>
+                                <TextBlock x:Name="InstrumentKey" Text="BMA7"
+                                           HorizontalAlignment="Center"
+                                           Foreground="{StaticResource TextSubtleBrush}" FontSize="11"/>
+                            </StackPanel>
+
+                            <!-- right: config fields -->
+                            <StackPanel Grid.Column="2">
+                                <TextBlock Text="校正系数" FontSize="11" FontWeight="SemiBold"
+                                           Foreground="{StaticResource TextMutedBrush}" Margin="0,0,0,4"/>
+                                <Grid Margin="0,0,0,10">
+                                    <Grid.ColumnDefinitions>
+                                        <ColumnDefinition Width="*"/>
+                                        <ColumnDefinition Width="10"/>
+                                        <ColumnDefinition Width="*"/>
+                                        <ColumnDefinition Width="10"/>
+                                        <ColumnDefinition Width="*"/>
+                                    </Grid.ColumnDefinitions>
+                                    <StackPanel Grid.Column="0">
+                                        <TextBlock Text="亮度 L" Foreground="{StaticResource TextMutedBrush}" FontSize="11" Margin="0,0,0,3"/>
+                                        <TextBox x:Name="TxtCorrLum" MinHeight="28" TextChanged="InstrumentField_Changed"/>
+                                    </StackPanel>
+                                    <StackPanel Grid.Column="2">
+                                        <TextBlock Text="Cx" Foreground="{StaticResource TextMutedBrush}" FontSize="11" Margin="0,0,0,3"/>
+                                        <TextBox x:Name="TxtCorrCx" MinHeight="28" TextChanged="InstrumentField_Changed"/>
+                                    </StackPanel>
+                                    <StackPanel Grid.Column="4">
+                                        <TextBlock Text="Cy" Foreground="{StaticResource TextMutedBrush}" FontSize="11" Margin="0,0,0,3"/>
+                                        <TextBox x:Name="TxtCorrCy" MinHeight="28" TextChanged="InstrumentField_Changed"/>
+                                    </StackPanel>
+                                </Grid>
+
+                                <TextBlock Text="延时 (ms)" FontSize="11" FontWeight="SemiBold"
+                                           Foreground="{StaticResource TextMutedBrush}" Margin="0,0,0,4"/>
+                                <Grid Margin="0,0,0,10">
+                                    <Grid.ColumnDefinitions>
+                                        <ColumnDefinition Width="*"/>
+                                        <ColumnDefinition Width="10"/>
+                                        <ColumnDefinition Width="*"/>
+                                        <ColumnDefinition Width="10"/>
+                                        <ColumnDefinition Width="*"/>
+                                        <ColumnDefinition Width="10"/>
+                                        <ColumnDefinition Width="*"/>
+                                    </Grid.ColumnDefinitions>
+                                    <StackPanel Grid.Column="0">
+                                        <TextBlock Text="启动" Foreground="{StaticResource TextMutedBrush}" FontSize="11" Margin="0,0,0,3"/>
+                                        <TextBox x:Name="TxtStartDelay" MinHeight="28" TextChanged="InstrumentField_Changed"/>
+                                    </StackPanel>
+                                    <StackPanel Grid.Column="2">
+                                        <TextBlock Text="测量" Foreground="{StaticResource TextMutedBrush}" FontSize="11" Margin="0,0,0,3"/>
+                                        <TextBox x:Name="TxtMeasureDelay" MinHeight="28" TextChanged="InstrumentField_Changed"/>
+                                    </StackPanel>
+                                    <StackPanel Grid.Column="4">
+                                        <TextBlock Text="复位" Foreground="{StaticResource TextMutedBrush}" FontSize="11" Margin="0,0,0,3"/>
+                                        <TextBox x:Name="TxtResetDelay" MinHeight="28" TextChanged="InstrumentField_Changed"/>
+                                    </StackPanel>
+                                    <StackPanel Grid.Column="6" x:Name="IntegrationPanel">
+                                        <TextBlock Text="积分时间" Foreground="{StaticResource TextMutedBrush}" FontSize="11" Margin="0,0,0,3"/>
+                                        <TextBox x:Name="TxtIntegration" MinHeight="28" TextChanged="InstrumentField_Changed"/>
+                                    </StackPanel>
+                                </Grid>
+
+                                <StackPanel x:Name="SerialPanel">
+                                    <TextBlock Text="串口配置" FontSize="11" FontWeight="SemiBold"
+                                               Foreground="{StaticResource TextMutedBrush}" Margin="0,0,0,4"/>
+                                    <Grid>
+                                        <Grid.ColumnDefinitions>
+                                            <ColumnDefinition Width="*"/>
+                                            <ColumnDefinition Width="10"/>
+                                            <ColumnDefinition Width="*"/>
+                                            <ColumnDefinition Width="10"/>
+                                            <ColumnDefinition Width="*"/>
+                                            <ColumnDefinition Width="10"/>
+                                            <ColumnDefinition Width="*"/>
+                                            <ColumnDefinition Width="10"/>
+                                            <ColumnDefinition Width="*"/>
+                                        </Grid.ColumnDefinitions>
+                                        <StackPanel Grid.Column="0">
+                                            <TextBlock Text="串口" Foreground="{StaticResource TextMutedBrush}" FontSize="11" Margin="0,0,0,3"/>
+                                            <TextBox x:Name="TxtComPort" MinHeight="28" TextChanged="InstrumentField_Changed"/>
+                                        </StackPanel>
+                                        <StackPanel Grid.Column="2">
+                                            <TextBlock Text="波特率" Foreground="{StaticResource TextMutedBrush}" FontSize="11" Margin="0,0,0,3"/>
+                                            <ComboBox x:Name="CmbBaud" MinHeight="28" SelectionChanged="InstrumentCombo_Changed">
+                                                <ComboBoxItem Content="9600"/>
+                                                <ComboBoxItem Content="19200"/>
+                                                <ComboBoxItem Content="38400"/>
+                                                <ComboBoxItem Content="57600"/>
+                                                <ComboBoxItem Content="115200"/>
+                                            </ComboBox>
+                                        </StackPanel>
+                                        <StackPanel Grid.Column="4">
+                                            <TextBlock Text="数据位" Foreground="{StaticResource TextMutedBrush}" FontSize="11" Margin="0,0,0,3"/>
+                                            <ComboBox x:Name="CmbDataBits" MinHeight="28" SelectionChanged="InstrumentCombo_Changed">
+                                                <ComboBoxItem Content="6"/>
+                                                <ComboBoxItem Content="7"/>
+                                                <ComboBoxItem Content="8"/>
+                                            </ComboBox>
+                                        </StackPanel>
+                                        <StackPanel Grid.Column="6">
+                                            <TextBlock Text="停止位" Foreground="{StaticResource TextMutedBrush}" FontSize="11" Margin="0,0,0,3"/>
+                                            <ComboBox x:Name="CmbStopBits" MinHeight="28" SelectionChanged="InstrumentCombo_Changed">
+                                                <ComboBoxItem Content="0"/>
+                                                <ComboBoxItem Content="1"/>
+                                                <ComboBoxItem Content="2"/>
+                                            </ComboBox>
+                                        </StackPanel>
+                                        <StackPanel Grid.Column="8">
+                                            <TextBlock Text="校验" Foreground="{StaticResource TextMutedBrush}" FontSize="11" Margin="0,0,0,3"/>
+                                            <ComboBox x:Name="CmbParity" MinHeight="28" SelectionChanged="InstrumentCombo_Changed">
+                                                <ComboBoxItem Content="None"/>
+                                                <ComboBoxItem Content="Odd"/>
+                                                <ComboBoxItem Content="Even"/>
+                                            </ComboBox>
+                                        </StackPanel>
+                                    </Grid>
+                                </StackPanel>
+
+                                <TextBlock x:Name="InstrumentSaveHint"
+                                           Text="仪器参数自动保存"
+                                           Foreground="{StaticResource TextSubtleBrush}" FontSize="11"
+                                           Margin="0,8,0,0"/>
+                            </StackPanel>
+                        </Grid>
+                    </Border>
+
                     <!-- params header strip -->
-                    <Grid Grid.Row="2" Margin="0,0,0,6">
+                    <Grid Grid.Row="3" Margin="0,0,0,6">
                         <TextBlock Text="参数与算法" Style="{StaticResource Section}" VerticalAlignment="Center"/>
                         <StackPanel Orientation="Horizontal" HorizontalAlignment="Right" VerticalAlignment="Center">
                             <Button Content="全选" Click="BtnSelectAll_Click"  Padding="8,3" MinHeight="0" Margin="0,0,6,0"/>
@@ -143,8 +298,8 @@
                     </Grid>
 
                     <!-- params table -->
-                    <Border Grid.Row="3" BorderBrush="{StaticResource BorderBrush}" BorderThickness="1"
-                            CornerRadius="6" Background="White">
+                    <Border Grid.Row="4" BorderBrush="{StaticResource BorderBrush}" BorderThickness="1"
+                            CornerRadius="6" Background="White" MinHeight="260">
                         <DataGrid x:Name="ParamsGrid"
                                   AutoGenerateColumns="False" CanUserAddRows="False"
                                   HeadersVisibility="Column"
@@ -166,6 +321,7 @@
                         </DataGrid>
                     </Border>
                 </Grid>
+                </ScrollViewer>
             </DockPanel>
         </Border>
     </Grid>

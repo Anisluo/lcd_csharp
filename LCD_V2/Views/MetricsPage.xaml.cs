@@ -1,10 +1,12 @@
 using System;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
+using System.Globalization;
 using System.Linq;
 using System.Windows;
 using System.Windows.Controls;
 using System.Windows.Data;
+using System.Windows.Media.Imaging;
 
 namespace LCD_V2.Views
 {
@@ -13,6 +15,7 @@ namespace LCD_V2.Views
         private bool _loaded;
         private InstrumentMetric _editing;
         private bool _suppressSync;
+        private bool _suppressInstrumentSave; // guard while loading instrument fields
 
         private ObservableCollection<InstrumentMetric> _library => MetricStore.Library;
 
@@ -26,6 +29,7 @@ namespace LCD_V2.Views
             // combo + combo-column choices are static
             CmbInstrument.ItemsSource = MetricCatalog.Instruments;
             AlgoCol.ItemsSource       = MetricCatalog.Algorithms;
+            CmbInstrument.SelectionChanged += CmbInstrument_SelectionChanged;
 
             // library view with client-side filter
             var view = CollectionViewSource.GetDefaultView(_library);
@@ -40,7 +44,127 @@ namespace LCD_V2.Views
                 _editing = null;
                 LibraryList.SelectedIndex = -1;
                 SeedEmptyEditor();
+                // SeedEmptyEditor may set SelectedIndex to the same value it already had,
+                // in which case SelectionChanged won't fire — force a config load here.
+                LoadInstrumentConfig(CmbInstrument.SelectedItem as string);
             };
+        }
+
+        // ========== instrument config: image + params ==========
+
+        private void CmbInstrument_SelectionChanged(object sender, SelectionChangedEventArgs e)
+        {
+            LoadInstrumentConfig(CmbInstrument.SelectedItem as string);
+        }
+
+        private void LoadInstrumentConfig(string key)
+        {
+            var info = InstrumentCatalog.Find(key);
+            if (info == null) return;
+
+            // image + display
+            InstrumentDisplayName.Text = info.DisplayName;
+            InstrumentKey.Text         = info.Key;
+            if (!string.IsNullOrEmpty(info.ImageUri))
+            {
+                try
+                {
+                    var bmp = new BitmapImage();
+                    bmp.BeginInit();
+                    bmp.CacheOption = BitmapCacheOption.OnLoad;
+                    bmp.UriSource   = new Uri(info.ImageUri, UriKind.Absolute);
+                    bmp.EndInit(); bmp.Freeze();
+                    InstrumentImage.Source = bmp;
+                    InstrumentImagePlaceholder.Visibility = Visibility.Collapsed;
+                }
+                catch
+                {
+                    InstrumentImage.Source = null;
+                    InstrumentImagePlaceholder.Visibility = Visibility.Visible;
+                }
+            }
+            else
+            {
+                InstrumentImage.Source = null;
+                InstrumentImagePlaceholder.Visibility = Visibility.Visible;
+            }
+
+            // show/hide sections per instrument
+            IntegrationPanel.Visibility = info.UsesIntegration ? Visibility.Visible : Visibility.Collapsed;
+            SerialPanel.Visibility      = info.UsesSerial      ? Visibility.Visible : Visibility.Collapsed;
+
+            // populate fields
+            var cfg = InstrumentConfigStore.Get(info.Key);
+            _suppressInstrumentSave = true;
+            TxtCorrLum.Text      = cfg.CorrLum.ToString("0.###", CultureInfo.InvariantCulture);
+            TxtCorrCx.Text       = cfg.CorrCx.ToString("0.####", CultureInfo.InvariantCulture);
+            TxtCorrCy.Text       = cfg.CorrCy.ToString("0.####", CultureInfo.InvariantCulture);
+            TxtStartDelay.Text   = cfg.StartDelayMs.ToString();
+            TxtMeasureDelay.Text = cfg.MeasureDelayMs.ToString();
+            TxtResetDelay.Text   = cfg.ResetDelayMs.ToString();
+            TxtIntegration.Text  = cfg.IntegrationMs.ToString();
+            TxtComPort.Text      = cfg.ComPort ?? "";
+            CmbBaud.SelectedItem     = PickItem(CmbBaud,     cfg.BaudRate.ToString());
+            CmbDataBits.SelectedItem = PickItem(CmbDataBits, cfg.DataBits.ToString());
+            CmbStopBits.SelectedItem = PickItem(CmbStopBits, cfg.StopBits.ToString());
+            CmbParity.SelectedItem   = PickItem(CmbParity,   cfg.Parity ?? "None");
+            _suppressInstrumentSave = false;
+        }
+
+        private static ComboBoxItem PickItem(ComboBox cb, string text)
+        {
+            foreach (var o in cb.Items)
+                if (o is ComboBoxItem it && string.Equals(it.Content as string, text, StringComparison.Ordinal))
+                    return it;
+            return cb.Items.Count > 0 ? cb.Items[0] as ComboBoxItem : null;
+        }
+
+        private void InstrumentField_Changed(object sender, TextChangedEventArgs e)
+        {
+            SaveInstrumentConfig();
+        }
+
+        private void InstrumentCombo_Changed(object sender, SelectionChangedEventArgs e)
+        {
+            SaveInstrumentConfig();
+        }
+
+        private void SaveInstrumentConfig()
+        {
+            if (!_loaded || _suppressInstrumentSave) return;
+            var key = CmbInstrument.SelectedItem as string;
+            if (string.IsNullOrEmpty(key)) return;
+
+            var cfg = new InstrumentConfig
+            {
+                Instrument     = key,
+                CorrLum        = ParseD(TxtCorrLum.Text, 1.0),
+                CorrCx         = ParseD(TxtCorrCx.Text, 0.0),
+                CorrCy         = ParseD(TxtCorrCy.Text, 0.0),
+                StartDelayMs   = ParseI(TxtStartDelay.Text, 2000),
+                MeasureDelayMs = ParseI(TxtMeasureDelay.Text, 500),
+                ResetDelayMs   = ParseI(TxtResetDelay.Text, 1000),
+                IntegrationMs  = ParseI(TxtIntegration.Text, 100),
+                ComPort        = (TxtComPort.Text ?? "").Trim(),
+                BaudRate       = ParseI((CmbBaud.SelectedItem     as ComboBoxItem)?.Content as string, 9600),
+                DataBits       = ParseI((CmbDataBits.SelectedItem as ComboBoxItem)?.Content as string, 8),
+                StopBits       = ParseI((CmbStopBits.SelectedItem as ComboBoxItem)?.Content as string, 1),
+                Parity         = (CmbParity.SelectedItem   as ComboBoxItem)?.Content as string ?? "None",
+            };
+            InstrumentConfigStore.Put(cfg);
+        }
+
+        private static double ParseD(string s, double def)
+        {
+            if (string.IsNullOrWhiteSpace(s)) return def;
+            return double.TryParse(s, NumberStyles.Float, CultureInfo.InvariantCulture, out var v)
+                || double.TryParse(s, NumberStyles.Float, CultureInfo.CurrentCulture, out v)
+                ? v : def;
+        }
+        private static int ParseI(string s, int def)
+        {
+            if (string.IsNullOrWhiteSpace(s)) return def;
+            return int.TryParse(s, NumberStyles.Integer, CultureInfo.InvariantCulture, out var v) ? v : def;
         }
 
         // ========== library filter (search box) ==========
@@ -81,7 +205,11 @@ namespace LCD_V2.Views
             _suppressSync = true;
             TxtName.Text = m.Name;
             int idx = Array.IndexOf(MetricCatalog.Instruments, m.Instrument);
-            CmbInstrument.SelectedIndex = idx >= 0 ? idx : 0;
+            int wanted = idx >= 0 ? idx : 0;
+            if (CmbInstrument.SelectedIndex == wanted)
+                LoadInstrumentConfig(CmbInstrument.SelectedItem as string); // force reload
+            else
+                CmbInstrument.SelectedIndex = wanted; // SelectionChanged fires → loads
 
             _editorParams.Clear();
             foreach (var p in BuildFullParamList(m)) _editorParams.Add(p);
