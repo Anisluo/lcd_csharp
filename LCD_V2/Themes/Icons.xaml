@@ -32,4 +32,21 @@
     <Geometry x:Key="IconArrowLeft">M 4,12 L 20,12 M 10,6 L 4,12 L 10,18</Geometry>
     <Geometry x:Key="IconArrowRight">M 20,12 L 4,12 M 14,6 L 20,12 L 14,18</Geometry>
 
+    <!-- rotation (curved arrow, CW) -->
+    <Geometry x:Key="IconRotateCw">M 20,10 A 8,8 0 1,0 20,14 M 20,6 L 20,10 L 16,10</Geometry>
+    <!-- rotation (curved arrow, CCW) -->
+    <Geometry x:Key="IconRotateCcw">M 4,10 A 8,8 0 1,1 4,14 M 4,6 L 4,10 L 8,10</Geometry>
+    <!-- tilt up (top edge rising) -->
+    <Geometry x:Key="IconTiltUp">M 3,16 L 21,16 M 3,16 L 9,8 L 21,8</Geometry>
+    <!-- tilt down (top edge falling) -->
+    <Geometry x:Key="IconTiltDown">M 3,8 L 21,8 M 3,8 L 9,16 L 21,16</Geometry>
+
+    <!-- crosshair / origin -->
+    <Geometry x:Key="IconCrosshair">M 12,2 L 12,22 M 2,12 L 22,12 M 12,8 A 4,4 0 1,0 12,16 A 4,4 0 1,0 12,8</Geometry>
+
+    <!-- speed bars (one / two / three rising) -->
+    <Geometry x:Key="IconSpeed1">M 4,16 L 4,20 L 8,20 L 8,16 Z</Geometry>
+    <Geometry x:Key="IconSpeed2">M 4,16 L 4,20 L 8,20 L 8,16 Z M 10,12 L 10,20 L 14,20 L 14,12 Z</Geometry>
+    <Geometry x:Key="IconSpeed3">M 4,16 L 4,20 L 8,20 L 8,16 Z M 10,12 L 10,20 L 14,20 L 14,12 Z M 16,6 L 16,20 L 20,20 L 20,6 Z</Geometry>
+
 </ResourceDictionary>

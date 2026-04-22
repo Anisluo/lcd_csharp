@@ -425,6 +425,89 @@
         <Setter Property="Padding" Value="14,12"/>
     </Style>
 
+    <!-- ═════════ Jog pad button (flat, border, hover accent) ═════════ -->
+    <Style x:Key="JogButton" TargetType="Button">
+        <Setter Property="Background"       Value="White"/>
+        <Setter Property="BorderBrush"      Value="{StaticResource BorderBrush}"/>
+        <Setter Property="BorderThickness"  Value="1"/>
+        <Setter Property="Foreground"       Value="{StaticResource TextBrush}"/>
+        <Setter Property="Padding"          Value="0"/>
+        <Setter Property="MinWidth"         Value="36"/>
+        <Setter Property="MinHeight"        Value="36"/>
+        <Setter Property="Cursor"           Value="Hand"/>
+        <Setter Property="Template">
+            <Setter.Value>
+                <ControlTemplate TargetType="Button">
+                    <Border x:Name="Bd"
+                            Background="{TemplateBinding Background}"
+                            BorderBrush="{TemplateBinding BorderBrush}"
+                            BorderThickness="{TemplateBinding BorderThickness}"
+                            CornerRadius="{StaticResource RadiusMd}"
+                            SnapsToDevicePixels="True">
+                        <ContentPresenter HorizontalAlignment="Center" VerticalAlignment="Center"/>
+                    </Border>
+                    <ControlTemplate.Triggers>
+                        <Trigger Property="IsMouseOver" Value="True">
+                            <Setter TargetName="Bd" Property="Background"  Value="{StaticResource AccentSoftBrush}"/>
+                            <Setter TargetName="Bd" Property="BorderBrush" Value="{StaticResource AccentBrush}"/>
+                            <Setter Property="Foreground" Value="{StaticResource AccentBrush}"/>
+                        </Trigger>
+                        <Trigger Property="IsPressed" Value="True">
+                            <Setter TargetName="Bd" Property="Background"  Value="{StaticResource AccentBrush}"/>
+                            <Setter Property="Foreground" Value="White"/>
+                        </Trigger>
+                        <Trigger Property="IsEnabled" Value="False">
+                            <Setter Property="Opacity" Value="0.5"/>
+                            <Setter Property="Cursor" Value="Arrow"/>
+                        </Trigger>
+                    </ControlTemplate.Triggers>
+                </ControlTemplate>
+            </Setter.Value>
+        </Setter>
+    </Style>
+
+    <!-- Origin (home) jog button — accent outline by default -->
+    <Style x:Key="JogOriginButton" TargetType="Button" BasedOn="{StaticResource JogButton}">
+        <Setter Property="BorderBrush" Value="{StaticResource AccentBrush}"/>
+        <Setter Property="Foreground"  Value="{StaticResource AccentBrush}"/>
+    </Style>
+
+    <!-- Speed selector toggle — checked = accent fill + white text -->
+    <Style x:Key="SpeedToggle" TargetType="ToggleButton">
+        <Setter Property="Background"       Value="White"/>
+        <Setter Property="BorderBrush"      Value="{StaticResource BorderBrush}"/>
+        <Setter Property="BorderThickness"  Value="1"/>
+        <Setter Property="Foreground"       Value="{StaticResource TextMutedBrush}"/>
+        <Setter Property="Padding"          Value="0"/>
+        <Setter Property="MinWidth"         Value="48"/>
+        <Setter Property="MinHeight"        Value="34"/>
+        <Setter Property="Cursor"           Value="Hand"/>
+        <Setter Property="Template">
+            <Setter.Value>
+                <ControlTemplate TargetType="ToggleButton">
+                    <Border x:Name="Bd"
+                            Background="{TemplateBinding Background}"
+                            BorderBrush="{TemplateBinding BorderBrush}"
+                            BorderThickness="{TemplateBinding BorderThickness}"
+                            CornerRadius="{StaticResource RadiusMd}"
+                            SnapsToDevicePixels="True">
+                        <ContentPresenter HorizontalAlignment="Center" VerticalAlignment="Center"/>
+                    </Border>
+                    <ControlTemplate.Triggers>
+                        <Trigger Property="IsMouseOver" Value="True">
+                            <Setter TargetName="Bd" Property="BorderBrush" Value="{StaticResource AccentBrush}"/>
+                        </Trigger>
+                        <Trigger Property="IsChecked" Value="True">
+                            <Setter TargetName="Bd" Property="Background"  Value="{StaticResource AccentBrush}"/>
+                            <Setter TargetName="Bd" Property="BorderBrush" Value="{StaticResource AccentBrush}"/>
+                            <Setter Property="Foreground" Value="White"/>
+                        </Trigger>
+                    </ControlTemplate.Triggers>
+                </ControlTemplate>
+            </Setter.Value>
+        </Setter>
+    </Style>
+
     <!-- ═════════ Title bar ═════════ -->
     <SolidColorBrush x:Key="TitleBarBrush"     Color="#0B1120"/>
     <SolidColorBrush x:Key="TitleBarTextBrush" Color="#E5E7EB"/>
