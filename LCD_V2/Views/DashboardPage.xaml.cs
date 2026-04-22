@@ -1,10 +1,23 @@
+using System;
 using System.Collections.Generic;
+using System.Globalization;
+using System.Windows;
 using System.Windows.Controls;
+using System.Windows.Media;
+using System.Windows.Shapes;
 
 namespace LCD_V2.Views
 {
     public partial class DashboardPage : UserControl
     {
+        // Crosshair position, stored as percentages of the viewport so resizing preserves layout.
+        // 50 = centre (default behaviour before this feature existed).
+        private double _hPct = 50.0;  // horizontal reference line — its Y as % of viewport height
+        private double _vPct = 50.0;  // vertical   reference line — its X as % of viewport width
+
+        private Line _hLine;
+        private Line _vLine;
+
         public DashboardPage()
         {
             InitializeComponent();
@@ -41,6 +54,97 @@ namespace LCD_V2.Views
             ResultGrid.ItemsSource = results;
             ResultGrid.SelectedIndex = 3;
             ResultGrid.ScrollIntoView(results[3]);
+        }
+
+        // ─────────────────────────────────────────────────────────────
+        // Crosshair reference-line adjustment
+        // ─────────────────────────────────────────────────────────────
+
+        private static readonly SolidColorBrush CrossStroke =
+            new SolidColorBrush(Color.FromRgb(0x9F, 0x12, 0x39));
+
+        private void CrosshairCanvas_SizeChanged(object sender, SizeChangedEventArgs e)
+        {
+            EnsureLines();
+            UpdateCrosshair();
+        }
+
+        private void EnsureLines()
+        {
+            if (_hLine == null)
+            {
+                _hLine = new Line { Stroke = CrossStroke, StrokeThickness = 0.8, SnapsToDevicePixels = true };
+                CrosshairCanvas.Children.Add(_hLine);
+            }
+            if (_vLine == null)
+            {
+                _vLine = new Line { Stroke = CrossStroke, StrokeThickness = 0.8, SnapsToDevicePixels = true };
+                CrosshairCanvas.Children.Add(_vLine);
+            }
+        }
+
+        private void UpdateCrosshair()
+        {
+            if (CrosshairCanvas == null) return;
+            EnsureLines();
+
+            double w = CrosshairCanvas.ActualWidth;
+            double h = CrosshairCanvas.ActualHeight;
+            if (w <= 0 || h <= 0) return;
+
+            double yPx = h * _hPct / 100.0;
+            double xPx = w * _vPct / 100.0;
+
+            _hLine.X1 = 0;  _hLine.X2 = w;
+            _hLine.Y1 = yPx; _hLine.Y2 = yPx;
+
+            _vLine.Y1 = 0;  _vLine.Y2 = h;
+            _vLine.X1 = xPx; _vLine.X2 = xPx;
+
+            if (TxtHPct != null) TxtHPct.Text = _hPct.ToString("0.0", CultureInfo.InvariantCulture) + "%";
+            if (TxtVPct != null) TxtVPct.Text = _vPct.ToString("0.0", CultureInfo.InvariantCulture) + "%";
+        }
+
+        private double ReadStep()
+        {
+            if (TxtStep == null) return 1.0;
+            if (!double.TryParse(TxtStep.Text, NumberStyles.Float, CultureInfo.InvariantCulture, out var s)
+                && !double.TryParse(TxtStep.Text, NumberStyles.Float, CultureInfo.CurrentCulture, out s))
+                s = 1.0;
+            return Math.Max(0.1, Math.Min(20.0, s));
+        }
+
+        private static double Clamp(double v, double lo, double hi)
+            => v < lo ? lo : (v > hi ? hi : v);
+
+        private void BtnHUp_Click(object sender, RoutedEventArgs e)
+        {
+            _hPct = Clamp(_hPct - ReadStep(), 0, 100);
+            UpdateCrosshair();
+        }
+
+        private void BtnHDown_Click(object sender, RoutedEventArgs e)
+        {
+            _hPct = Clamp(_hPct + ReadStep(), 0, 100);
+            UpdateCrosshair();
+        }
+
+        private void BtnVLeft_Click(object sender, RoutedEventArgs e)
+        {
+            _vPct = Clamp(_vPct - ReadStep(), 0, 100);
+            UpdateCrosshair();
+        }
+
+        private void BtnVRight_Click(object sender, RoutedEventArgs e)
+        {
+            _vPct = Clamp(_vPct + ReadStep(), 0, 100);
+            UpdateCrosshair();
+        }
+
+        private void BtnCenterCross_Click(object sender, RoutedEventArgs e)
+        {
+            _hPct = 50; _vPct = 50;
+            UpdateCrosshair();
         }
     }
 

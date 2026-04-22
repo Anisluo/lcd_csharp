@@ -68,6 +68,7 @@
                         <Grid.RowDefinitions>
                             <RowDefinition Height="Auto"/>  <!-- title row -->
                             <RowDefinition Height="*"/>     <!-- camera -->
+                            <RowDefinition Height="Auto"/>  <!-- crosshair adjust strip -->
                             <RowDefinition Height="Auto"/>  <!-- jog controls -->
                         </Grid.RowDefinitions>
 
@@ -87,13 +88,6 @@
                         <!-- camera viewport -->
                         <Border Grid.Row="1" Background="#0B0F19" CornerRadius="6" MinHeight="280">
                             <Grid>
-                                <!-- crosshair overlay -->
-                                <Line X1="0" Y1="0.5" X2="1" Y2="0.5"
-                                      Stroke="#9F1239" StrokeThickness="0.5"
-                                      Stretch="Fill"/>
-                                <Line X1="0.5" Y1="0" X2="0.5" Y2="1"
-                                      Stroke="#9F1239" StrokeThickness="0.5"
-                                      Stretch="Fill"/>
                                 <StackPanel VerticalAlignment="Center" HorizontalAlignment="Center">
                                     <Ellipse Width="40" Height="40" Fill="#1F2937" HorizontalAlignment="Center"/>
                                     <TextBlock Text="等待相机连接"
@@ -106,6 +100,13 @@
                                                HorizontalAlignment="Center"
                                                Margin="0,4,0,0"/>
                                 </StackPanel>
+
+                                <!-- adjustable crosshair overlay, rendered on a Canvas so lines can be positioned precisely -->
+                                <Canvas x:Name="CrosshairCanvas"
+                                        IsHitTestVisible="False"
+                                        ClipToBounds="True"
+                                        SizeChanged="CrosshairCanvas_SizeChanged"/>
+
                                 <!-- camera meta strip -->
                                 <Border VerticalAlignment="Bottom" Background="#80000000" Padding="10,6">
                                     <Grid>
@@ -123,8 +124,71 @@
                             </Grid>
                         </Border>
 
+                        <!-- ════════ CROSSHAIR REFERENCE-LINE ADJUST STRIP ════════ -->
+                        <Border Grid.Row="2" Margin="0,10,0,0"
+                                BorderBrush="{StaticResource BorderBrush}" BorderThickness="1"
+                                CornerRadius="6" Background="#F9FAFB" Padding="10,6">
+                            <StackPanel Orientation="Horizontal">
+                                <!-- red dot + label -->
+                                <StackPanel Orientation="Horizontal" VerticalAlignment="Center" Margin="0,0,14,0">
+                                    <Ellipse Width="8" Height="8" Fill="#E11D48" VerticalAlignment="Center"/>
+                                    <TextBlock Text="参考线微调" FontWeight="SemiBold" FontSize="12"
+                                               Foreground="{StaticResource TextBrush}" VerticalAlignment="Center" Margin="6,0,0,0"/>
+                                </StackPanel>
+
+                                <!-- horizontal line (Y) -->
+                                <TextBlock Text="水平" Foreground="{StaticResource TextMutedBrush}" FontSize="12"
+                                           VerticalAlignment="Center" Margin="0,0,4,0"/>
+                                <Button x:Name="BtnHUp"   Style="{StaticResource JogButton}" Width="28" Height="26" Margin="0,0,2,0" ToolTip="上移" Click="BtnHUp_Click">
+                                    <Path Data="{StaticResource IconArrowUp}" Stretch="Uniform" Width="12" Height="12"
+                                          Stroke="{Binding Foreground, RelativeSource={RelativeSource AncestorType=Button}}"
+                                          StrokeThickness="1.8" StrokeStartLineCap="Round" StrokeEndLineCap="Round" StrokeLineJoin="Round"/>
+                                </Button>
+                                <Button x:Name="BtnHDown" Style="{StaticResource JogButton}" Width="28" Height="26" Margin="0,0,2,0" ToolTip="下移" Click="BtnHDown_Click">
+                                    <Path Data="{StaticResource IconArrowDown}" Stretch="Uniform" Width="12" Height="12"
+                                          Stroke="{Binding Foreground, RelativeSource={RelativeSource AncestorType=Button}}"
+                                          StrokeThickness="1.8" StrokeStartLineCap="Round" StrokeEndLineCap="Round" StrokeLineJoin="Round"/>
+                                </Button>
+                                <TextBlock x:Name="TxtHPct" Text="50.0%" FontSize="11"
+                                           Foreground="{StaticResource TextMutedBrush}"
+                                           VerticalAlignment="Center" Width="42" TextAlignment="Center"/>
+
+                                <Rectangle Width="1" Height="18" Fill="{StaticResource DividerBrush}" Margin="8,0"/>
+
+                                <!-- vertical line (X) -->
+                                <TextBlock Text="垂直" Foreground="{StaticResource TextMutedBrush}" FontSize="12"
+                                           VerticalAlignment="Center" Margin="0,0,4,0"/>
+                                <Button x:Name="BtnVLeft"  Style="{StaticResource JogButton}" Width="28" Height="26" Margin="0,0,2,0" ToolTip="左移" Click="BtnVLeft_Click">
+                                    <Path Data="{StaticResource IconArrowLeft}" Stretch="Uniform" Width="12" Height="12"
+                                          Stroke="{Binding Foreground, RelativeSource={RelativeSource AncestorType=Button}}"
+                                          StrokeThickness="1.8" StrokeStartLineCap="Round" StrokeEndLineCap="Round" StrokeLineJoin="Round"/>
+                                </Button>
+                                <Button x:Name="BtnVRight" Style="{StaticResource JogButton}" Width="28" Height="26" Margin="0,0,2,0" ToolTip="右移" Click="BtnVRight_Click">
+                                    <Path Data="{StaticResource IconArrowRight}" Stretch="Uniform" Width="12" Height="12"
+                                          Stroke="{Binding Foreground, RelativeSource={RelativeSource AncestorType=Button}}"
+                                          StrokeThickness="1.8" StrokeStartLineCap="Round" StrokeEndLineCap="Round" StrokeLineJoin="Round"/>
+                                </Button>
+                                <TextBlock x:Name="TxtVPct" Text="50.0%" FontSize="11"
+                                           Foreground="{StaticResource TextMutedBrush}"
+                                           VerticalAlignment="Center" Width="42" TextAlignment="Center"/>
+
+                                <Rectangle Width="1" Height="18" Fill="{StaticResource DividerBrush}" Margin="8,0"/>
+
+                                <!-- center / reset -->
+                                <Button x:Name="BtnCenterCross" Content="回中" Click="BtnCenterCross_Click"
+                                        Padding="10,3" MinHeight="26" MinWidth="0" Margin="0,0,14,0"/>
+
+                                <!-- step -->
+                                <TextBlock Text="步进" Foreground="{StaticResource TextMutedBrush}" FontSize="12"
+                                           VerticalAlignment="Center" Margin="0,0,4,0"/>
+                                <TextBox x:Name="TxtStep" Text="1.0" Width="52" Height="26" VerticalContentAlignment="Center"/>
+                                <TextBlock Text="%" Foreground="{StaticResource TextMutedBrush}" FontSize="12"
+                                           VerticalAlignment="Center" Margin="4,0,0,0"/>
+                            </StackPanel>
+                        </Border>
+
                         <!-- ════════ JOG CONTROLS ════════ -->
-                        <Grid Grid.Row="2" Margin="0,14,0,0">
+                        <Grid Grid.Row="3" Margin="0,14,0,0">
                             <Grid.ColumnDefinitions>
                                 <ColumnDefinition Width="Auto"/>
                                 <ColumnDefinition Width="Auto"/>
