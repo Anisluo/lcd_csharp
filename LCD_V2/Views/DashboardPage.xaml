@@ -89,7 +89,7 @@
                             <Grid.ColumnDefinitions>
                                 <ColumnDefinition Width="*"/>
                                 <ColumnDefinition Width="12"/>
-                                <ColumnDefinition Width="172"/>
+                                <ColumnDefinition Width="200"/>
                             </Grid.ColumnDefinitions>
 
                             <!-- camera viewport -->
@@ -214,16 +214,23 @@
                                     <Button x:Name="BtnCenterCross" Content="回中" Click="BtnCenterCross_Click"
                                             HorizontalAlignment="Stretch" Height="30" Margin="0,0,0,12"/>
 
-                                    <!-- step -->
-                                    <TextBlock Text="步进" FontSize="11" FontWeight="SemiBold"
-                                               Foreground="{StaticResource TextMutedBrush}" Margin="0,0,0,6"/>
+                                    <!-- step — inline label + textbox + %, leave breathing room -->
                                     <Grid>
                                         <Grid.ColumnDefinitions>
+                                            <ColumnDefinition Width="Auto"/>
                                             <ColumnDefinition Width="*"/>
                                             <ColumnDefinition Width="Auto"/>
                                         </Grid.ColumnDefinitions>
-                                        <TextBox Grid.Column="0" x:Name="TxtStep" Text="1.0" Height="30" VerticalContentAlignment="Center"/>
-                                        <TextBlock Grid.Column="1" Text="%"
+                                        <TextBlock Grid.Column="0" Text="步进"
+                                                   FontSize="11" FontWeight="SemiBold"
+                                                   Foreground="{StaticResource TextMutedBrush}"
+                                                   VerticalAlignment="Center" Margin="0,0,8,0"/>
+                                        <TextBox Grid.Column="1" x:Name="TxtStep"
+                                                 Text="1.0" Height="30"
+                                                 Padding="6,0"
+                                                 HorizontalContentAlignment="Center"
+                                                 VerticalContentAlignment="Center"/>
+                                        <TextBlock Grid.Column="2" Text="%"
                                                    Foreground="{StaticResource TextMutedBrush}" FontSize="12"
                                                    VerticalAlignment="Center" Margin="6,0,0,0"/>
                                     </Grid>
