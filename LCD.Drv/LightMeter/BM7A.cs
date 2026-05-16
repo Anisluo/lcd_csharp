@@ -208,32 +208,18 @@ namespace LCD.Ctrl
 
 
             res = res.Replace(Environment.NewLine, "\n");
-            //Console.WriteLine(res);
             var datastrs = res.Split('\n');
 
-            //for (int i = 0; i < datastrs.Length; i++)
-            //{
-            //    Console.WriteLine(datastrs[i]);
-            //}
-            //Console.WriteLine("X-->" + datastrs[5]);
-            //Console.WriteLine("Y-->" + datastrs[6]);
-            //Console.WriteLine("Z-->" + datastrs[7]);
-            //Console.WriteLine("CX-->" + datastrs[8]);
-            //Console.WriteLine("CY-->" + datastrs[9]);
-            //Console.WriteLine("U-->" + datastrs[10]);
-            //Console.WriteLine("V-->" + datastrs[11]);
-            //Console.WriteLine("CCT-->" + datastrs[12]);
-
             IData Result = new IData();
-            Result.L = Convert.ToDouble(datastrs[5]);
-            Result.X = Convert.ToDouble(datastrs[4]);
-            Result.Y = Convert.ToDouble(datastrs[5]); //Convert.ToDouble(datastrs[5]);
-            Result.Z = Convert.ToDouble(datastrs[6]);
-            Result.Cx = Convert.ToDouble(datastrs[7]);
-            Result.Cy = Convert.ToDouble(datastrs[8]);
-            Result.u = Convert.ToDouble(datastrs[9]);
-            Result.v = Convert.ToDouble(datastrs[10]);
-            Result.CCT = Convert.ToDouble(datastrs[11]);
+            Result.L = SafeParse(GetLine(datastrs, 5));
+            Result.X = SafeParse(GetLine(datastrs, 4));
+            Result.Y = SafeParse(GetLine(datastrs, 5));
+            Result.Z = SafeParse(GetLine(datastrs, 6));
+            Result.Cx = SafeParse(GetLine(datastrs, 7));
+            Result.Cy = SafeParse(GetLine(datastrs, 8));
+            Result.u = SafeParse(GetLine(datastrs, 9));
+            Result.v = SafeParse(GetLine(datastrs, 10));
+            Result.CCT = SafeParse(GetLine(datastrs, 11));
 
 
 
@@ -308,19 +294,58 @@ namespace LCD.Ctrl
             res = res.Replace(Environment.NewLine, "\n");
             var datastrs = res.Split('\n');
 
-
-
+            // BM-7A response layout for a ST (color-coordinate) measurement:
+            //   [0]   "OK"
+            //   [1-11] config bytes (D0 / TS / MA / X2 / Y1 / Z3 / UC / F3 / K0 / FG0 / GK0)
+            //   [12]   L      (luminance)
+            //   [13]   X tristimulus
+            //   [14]   Y tristimulus
+            //   [15]   Z tristimulus
+            //   [16]   Cx
+            //   [17]   Cy
+            //   [18]   u'
+            //   [19]   v'
+            //   [20]   Tc / CCT   — may be "*****" when colour falls outside CCT locus (e.g. pure blue)
+            //   [21]   Duv        — may be "******" in the same case
+            //   [22]   "END"
+            // Asterisks must NOT crash the parser — use SafeParse which yields NaN for non-numeric values.
             IData Result = new IData();
-            Result.L = Convert.ToDouble(datastrs[12]);
-            Result.X = Convert.ToDouble(datastrs[13]);
-            Result.Y = Convert.ToDouble(datastrs[14]); //Convert.ToDouble(datastrs[5]);
-            Result.Z = Convert.ToDouble(datastrs[15]);
-            Result.Cx = Convert.ToDouble(datastrs[16]);
-            Result.Cy = Convert.ToDouble(datastrs[17]);
-            Result.u = Convert.ToDouble(datastrs[18]);
-            Result.v = Convert.ToDouble(datastrs[19]);
-            Result.CCT = Convert.ToDouble(datastrs[20]);
+            Result.L = SafeParse(GetLine(datastrs, 12));
+            Result.X = SafeParse(GetLine(datastrs, 13));
+            Result.Y = SafeParse(GetLine(datastrs, 14));
+            Result.Z = SafeParse(GetLine(datastrs, 15));
+            Result.Cx = SafeParse(GetLine(datastrs, 16));
+            Result.Cy = SafeParse(GetLine(datastrs, 17));
+            Result.u = SafeParse(GetLine(datastrs, 18));
+            Result.v = SafeParse(GetLine(datastrs, 19));
+            Result.CCT = SafeParse(GetLine(datastrs, 20));
+            Result.Tc = Result.CCT;
             return Result;
+        }
+
+        /// <summary>
+        /// Safe numeric parse for BM-7A response lines. Returns <see cref="double.NaN"/>
+        /// when the line is asterisks (instrument reports "*****" for unmeasurable
+        /// quantities like CCT on pure blue), empty, or otherwise non-numeric.
+        /// Callers should check <see cref="double.IsNaN"/> rather than treating NaN
+        /// as a real reading.
+        /// </summary>
+        private static double SafeParse(string s)
+        {
+            if (string.IsNullOrWhiteSpace(s)) return double.NaN;
+            var t = s.Trim();
+            if (t.Length == 0 || t[0] == '*') return double.NaN;
+            double v;
+            if (double.TryParse(t, System.Globalization.NumberStyles.Float,
+                                System.Globalization.CultureInfo.InvariantCulture, out v))
+                return v;
+            Log.Warn("BM7A 数值解析失败: \"" + t + "\" → NaN");
+            return double.NaN;
+        }
+
+        private static string GetLine(string[] lines, int idx)
+        {
+            return (lines != null && idx >= 0 && idx < lines.Length) ? lines[idx] : null;
         }
 
 
