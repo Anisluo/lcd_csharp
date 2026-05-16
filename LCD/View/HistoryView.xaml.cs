@@ -175,7 +175,7 @@ namespace LCD.View
                 dataRow["Cy"] = objs.Cy;
                 dataRow["u"] = objs.u;
                 dataRow["v"] = objs.v;
-                dataRow["CCT"] = objs.CCT;
+                dataRow["CCT"] = DisplayFormat.FromString(objs.CCT);
                 dataRow["完成时间"] = objs.Time;
                 dataRow["备注"] = objs.Remark;
 
@@ -206,7 +206,7 @@ namespace LCD.View
                 dataRow["Cy"] = objs.Cy;
                 dataRow["u"] = objs.u;
                 dataRow["v"] = objs.v;
-                dataRow["CCT"] = objs.CCT;
+                dataRow["CCT"] = DisplayFormat.FromString(objs.CCT);
                 dataRow["完成时间"] = objs.Time;
                 dataRow["备注"] = objs.Remark;
                 for (int i = 0; i < 400; i++)
@@ -246,7 +246,7 @@ namespace LCD.View
                 dataRow["Cy"] = objs.Cy;
                 dataRow["u"] = objs.u;
                 dataRow["v"] = objs.v;
-                dataRow["CCT"] = objs.CCT;
+                dataRow["CCT"] = DisplayFormat.FromString(objs.CCT);
                 dataRow["完成时间"] = objs.Time;
                 dataRow["备注"] = objs.Remark;
             }
@@ -300,7 +300,7 @@ namespace LCD.View
             dataRow["Cy"] = objs.Cy;
             dataRow["u"] = objs.u;
             dataRow["v"] = objs.v;
-            dataRow["CCT"] = objs.CCT;
+            dataRow["CCT"] = DisplayFormat.FromString(objs.CCT);
             dataRow["完成时间"] = objs.Time;
             dataRow["备注"] = objs.Remark;
 

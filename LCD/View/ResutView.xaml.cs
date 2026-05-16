@@ -583,7 +583,7 @@ namespace LCD.View
                     Cy = objs.Cy.ToString(),
                     u = objs.u.ToString(),
                     v = objs.v.ToString(),
-                    CCT = objs.CCT.ToString(),
+                    CCT = DisplayFormat.From(objs.CCT),
                     Time = objs.Time.ToString(),
                     Remark = objs.Remark.Trim(),
                     CoordX = objs.CoordX.ToString(),
@@ -606,7 +606,7 @@ namespace LCD.View
                 dataRow["Cy"] = objs.Cy;
                 dataRow["u"] = objs.u;
                 dataRow["v"] = objs.v;
-                dataRow["CCT"] = objs.CCT;
+                dataRow["CCT"] = DisplayFormat.Cell(objs.CCT);
                 dataRow["L*"] = objs.Lcolor.ToString("f4");
                 dataRow["a*"] = objs.Acolor.ToString("f4");
                 dataRow["b*"] = objs.Bcolor.ToString("f4");
@@ -663,7 +663,7 @@ namespace LCD.View
                     Cy = objs.Cy.ToString(),
                     u = objs.u.ToString(),
                     v = objs.v.ToString(),
-                    CCT = objs.CCT.ToString(),
+                    CCT = DisplayFormat.From(objs.CCT),
                     Time = objs.Time.ToString(),
                     Remark = objs.Remark.Trim(),
                     CoordX = objs.CoordX.ToString(),
@@ -686,7 +686,7 @@ namespace LCD.View
                 dataRow["Cy"] = objs.Cy;
                 dataRow["u"] = objs.u;
                 dataRow["v"] = objs.v;
-                dataRow["CCT"] = objs.CCT;
+                dataRow["CCT"] = DisplayFormat.Cell(objs.CCT);
                 dataRow["L*"] = objs.Lcolor.ToString("f4");
                 dataRow["a*"] = objs.Acolor.ToString("f4");
                 dataRow["b*"] = objs.Bcolor.ToString("f4");
@@ -743,7 +743,7 @@ namespace LCD.View
                     Cy = objs.Cy.ToString(),
                     u = objs.u.ToString(),
                     v = objs.v.ToString(),
-                    CCT = objs.CCT.ToString(),
+                    CCT = DisplayFormat.From(objs.CCT),
                     Time = objs.Time.ToString(),
                     Remark = objs.Remark.Trim(),
                     CoordX = objs.CoordX.ToString(),
@@ -764,7 +764,7 @@ namespace LCD.View
                 dataRow["Cy"] = objs.Cy;
                 dataRow["u"] = objs.u;
                 dataRow["v"] = objs.v;
-                dataRow["CCT"] = objs.CCT;
+                dataRow["CCT"] = DisplayFormat.Cell(objs.CCT);
                 dataRow[done_time_str] = objs.Time;
                 dataRow[note_str] = objs.Remark;
             }

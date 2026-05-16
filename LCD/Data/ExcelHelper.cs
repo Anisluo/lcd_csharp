@@ -237,7 +237,7 @@ namespace LCD.Data
                                     dataRow["a*"] = list[index].ProjectModes[i].TestDataModes[j].Acolor;
                                     dataRow["b*"] = list[index].ProjectModes[i].TestDataModes[j].Bcolor;
                                 }
-                                dataRow["CCT"] = double.Parse(list[index].ProjectModes[i].TestDataModes[j].CCT == "" ? "0" : list[index].ProjectModes[i].TestDataModes[j].CCT);
+                                dataRow["CCT"] = DisplayFormat.CellFromString(list[index].ProjectModes[i].TestDataModes[j].CCT);
                                 dataRow["备注"] = list[index].ProjectModes[i].TestDataModes[j].Remark.Trim() == "" ? "0" : list[index].ProjectModes[i].TestDataModes[j].Remark;
                                 AAA = j * 400;
 
@@ -333,7 +333,7 @@ namespace LCD.Data
                                         dataRow["b*"] = list[index].ProjectModes[i].TestDataModes[j].Bcolor;
                                     }
                                 }
-                                dataRow["CCT"] = list[index].ProjectModes[i].TestDataModes[j].CCT.ToString().Trim();
+                                dataRow["CCT"] = DisplayFormat.FromString(list[index].ProjectModes[i].TestDataModes[j].CCT.ToString().Trim());
                                 dataRow["备注"] = list[index].ProjectModes[i].TestDataModes[j].Remark.Trim();
                                 data.dt.Rows.InsertAt(dataRow, data.dt.Rows.Count + 1);
                             }
