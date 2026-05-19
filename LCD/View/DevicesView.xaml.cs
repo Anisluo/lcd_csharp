@@ -304,6 +304,7 @@ namespace LCD.View
                         Project.cfg.BM7A.mesDelay = devModel.mesDelay;
                         Project.cfg.BM7A.resetDelay = devModel.resetDelay;
                         Project.testMachine = Ctrl.BM7A.GetInstance();
+                        Project.testMachine.Config = Project.cfg.BM7A.ToBusConfig();
                         Project.testMachine.Init();
 
 
@@ -354,6 +355,7 @@ namespace LCD.View
                         Project.cfg.USB2000.mesDelay = devModel.mesDelay;
                         Project.cfg.USB2000.resetDelay = devModel.resetDelay;
                         Project.testMachine = Ctrl.USB2000.GetInstance();
+                        Project.testMachine.Config = Project.cfg.USB2000.ToBusConfig();
                         Project.testMachine.Init();
 
                         //General.Visibility = Visibility.Hidden;
@@ -389,6 +391,7 @@ namespace LCD.View
                         Project.cfg.SR3A.stopBitText = _stopBit.Text;
                         Project.cfg.SR3A.parityText = _Parity.Text;
 
+                        Project.testMachine.Config = Project.cfg.SR3A.ToBusConfig();
                         Project.testMachine.Init();
                     }
                     break;
@@ -420,6 +423,7 @@ namespace LCD.View
                         Project.cfg.SR5A.stopBitText = _stopBit.Text;
                         Project.cfg.SR5A.parityText = _Parity.Text;
 
+                        Project.testMachine.Config = Project.cfg.SR5A.ToBusConfig();
                         Project.testMachine.Init();
                     }
                     break;
@@ -449,9 +453,10 @@ namespace LCD.View
                         Project.cfg.MS01.stopBitText = _stopBit.Text;
                         Project.cfg.MS01.parityText = _Parity.Text;
 
+                        Project.testMachine.Config = Project.cfg.MS01.ToBusConfig();
                         Project.testMachine.Init();
                     }
-                    break;					
+                    break;
 
                 case Ctrl.ENUMMACHINE.Admesy:
                     Admesy.IsChecked = true;

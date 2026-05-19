@@ -306,11 +306,16 @@ namespace LCD
                 case ENUMMACHINE.CS2000: Project.testMachine = CS2000.GetInstance(); break;
                 default: Project.testMachine = BM7A.GetInstance(); break;
             }
-            if (testMachine == null) 
-            { 
+            if (testMachine == null)
+            {
                 Project.WriteLog4(LogLevel.Error, "testMachine为空");
                 return;
             }
+            // Inject serial-port config before Init() runs (MainWindow / DevicesView both
+            // call testMachine.Init() shortly after this). Phase 3 moved this responsibility
+            // out of the driver; without this assignment Init() bails out with
+            // "BM7A.Init: Config 未设置，无法打开串口".
+            testMachine.Config = config.GetBusConfigFor(Project.cfg.TESTMACHINE);
             testMachine.AutoCheck();
         }
 
