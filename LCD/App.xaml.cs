@@ -62,7 +62,15 @@ namespace LCD
         private void App_DispatcherUnhandledException(object sender,
             System.Windows.Threading.DispatcherUnhandledExceptionEventArgs e)
         {
-            LogUnhandledException(e.Exception.Message+"\r\n"+e.Exception.StackTrace);
+            var sb = new System.Text.StringBuilder();
+            for (Exception ex = e.Exception; ex != null; ex = ex.InnerException)
+            {
+                sb.AppendLine("== " + ex.GetType().FullName + " ==");
+                sb.AppendLine(ex.Message);
+                sb.AppendLine(ex.StackTrace);
+                sb.AppendLine();
+            }
+            LogUnhandledException(sb.ToString());
             //var exceptionView = new ExceptionView(e.Exception)
             //{
             //    WindowStartupLocation = WindowStartupLocation.CenterScreen,

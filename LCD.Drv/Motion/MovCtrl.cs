@@ -20,6 +20,7 @@ namespace LCD.Ctrl
     {
         private int board_cnt = 0;
         public int board_cnt1 = 1;
+        public bool IsHardwareAvailable { get; private set; } = false;
         long limitValue = 100000000;
         long maxVal = 4294967296;
 
@@ -144,7 +145,16 @@ namespace LCD.Ctrl
         public void Init()
         {
             //初始化
-            int axe_cnt = MPC08EDLL.auto_set();
+            int axe_cnt;
+            try
+            {
+                axe_cnt = MPC08EDLL.auto_set();
+            }
+            catch (System.DllNotFoundException)
+            {
+                Log.Info("MPC08初始化失败:MPC08.dll未安装");
+                return;
+            }
             if (axe_cnt < 0)
             {
                 Log.Info("MPC08初始化失败:未识别到板卡");
@@ -163,6 +173,7 @@ namespace LCD.Ctrl
                 Log.Info("MPC08初始化失败:板卡初始化失败");
                 return;
             }
+            IsHardwareAvailable = true;
 
             //设置速度
             //SetSpeed();
@@ -701,23 +712,24 @@ namespace LCD.Ctrl
 
         public void UpdataIO(ref int x, ref int y, ref int z, ref int u, ref int v, ref int ball,ref int TestSignal1, ref int TestSignal2,ref int lightscreen)
         {
-
-            if (AxX.IsEnable)
+            try
+            {
+            if (AxX != null && AxX.IsEnable)
                 x = MPC08EDLL.checkin_bit(board_cnt1, AxX.value);
 
-            if (AxY.IsEnable)
+            if (AxY != null && AxY.IsEnable)
                 y = MPC08EDLL.checkin_bit(board_cnt1, AxY.value);
 
-            if (AxZ.IsEnable)
+            if (AxZ != null && AxZ.IsEnable)
                 z = MPC08EDLL.checkin_bit(board_cnt1, AxZ.value);
 
-            if (AxU.IsEnable)
+            if (AxU != null && AxU.IsEnable)
                 u = MPC08EDLL.checkin_bit(board_cnt1, AxU.value);
 
-            if (AxV.IsEnable)
+            if (AxV != null && AxV.IsEnable)
                 v = MPC08EDLL.checkin_bit(board_cnt1, AxV.value);
 
-            if (AxBall.IsEnable)
+            if (AxBall != null && AxBall.IsEnable)
                 ball = MPC08EDLL.checkin_bit(board_cnt1, AxBall.value);
 
             if (LightScreenAlarmEnable)
@@ -731,6 +743,8 @@ namespace LCD.Ctrl
             TestSignal2 = MPC08EDLL.checkin_bit(board_cnt1, 11);
 
            // Console.WriteLine(DateTime.Now+"信号1-->" + TestSignal1+"信号2-->"+TestSignal2);
+            }
+            catch (System.DllNotFoundException) { /* MPC08.dll not available */ }
         }
         /// <summary>
         /// 获取当前坐标参数
