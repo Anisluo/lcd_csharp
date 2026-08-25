@@ -16,18 +16,6 @@ using System.Windows.Media;
 using System.Windows.Media.Imaging;
 using System.Windows.Shapes;
 using LCD.Ctrl;
-using static LCD.View.CustomTemplate;
-using Microsoft.Win32;
-using static System.Net.WebRequestMethods;
-using NPOI.HSSF.UserModel;
-using NPOI.SS.UserModel;
-using NPOI.XSSF.UserModel;
-using System.IO;
-using System.Diagnostics.Contracts;
-using NPOI.SS.Formula.Functions;
-using System.Windows.Interop;
-using static LCD.View.CustomView;
-using SciChart.Charting.Common.Extensions;
 
 namespace LCD.View
 {
@@ -67,7 +55,6 @@ namespace LCD.View
             info1.IsSelected = IsSelected;
             info1.Name = "Power";
             info1.MESTYPE = ENUMMESSTYLE.Power;
-            info1.id = -1;
 
             //心跳函数
             System.Timers.Timer timer = new System.Timers.Timer();//声明timer对象
@@ -76,11 +63,11 @@ namespace LCD.View
             timer.Start();
             if (Project.PG!=null)
             {
-                for (int i = 0; i < Project.PG.PatternList.Count; i++)
+                for (int i = 0; i < Project.PG?.PatternList.Size; i++)
                 {
                     InfoList infoList = new InfoList();
                     infoList.Name2 = i.ToString();
-                    infoList.Name1 = Project.PG.PatternList[i];
+                    infoList.Name1 = Project.PG.PatternList.ItemStrings[i].name;
                     list.Add(infoList);
                     mylist1.ItemsSource = list;
                 }
@@ -355,39 +342,28 @@ namespace LCD.View
         //设置Info转为dataa数据
         private List<InfoData> Info2Data()
         {
-            //这里要改
             List<InfoData> lstDatas = new List<InfoData>();
 
             for (int i = 0; i < lst.Count; i++)
             {
-                //名字也有可能变化啊，
-                InfoData infoData = Project.lstInfos.FirstOrDefault(p => p.id == lst[i].id);
-                if(infoData == null)
-                {
-                    //为null是新建的
-                    //if (lst[i].id <0)
-                    //{
-                    //    //小于0的话是系统创建的，临时的，不添加
-                    //    continue;
-                    //}                    
-                }
                 InfoData ifdata = new InfoData();
-                //模版的高度可能是不同的，不能这样设置成一样的
-                ifdata.height = lst[i].height;
-                //ifdata.height = Double.Parse(ProductHeight.Text.Trim());
+                ifdata.height = Double.Parse(ProductHeight.Text.Trim());
                 ifdata.IsSelected = lst[i].IsSelected;
                 ifdata.Name = lst[i].Name;
-                ifdata.MESTYPE=lst[i].MESTYPE;                
+                ifdata.MESTYPE=lst[i].MESTYPE;
                 ifdata.lstdata = new List<string>();
                 if (lst[i].table != null)
                 {
+
                     string strheader = "";
                     for (int k = 0; k < lst[i].table.Columns.Count; k++)
                     {
                         strheader += lst[i].table.Columns[k].ColumnName + ",";
                     }
                     ifdata.lstdata.Add(strheader);
-                    
+
+
+
                     for (int j = 0; j < lst[i].table.Rows.Count; j++)
                     {
                         DataRow dr = lst[i].table.Rows[j];
@@ -397,50 +373,9 @@ namespace LCD.View
                         {
                             str += (dr.ItemArray[k].ToString()) + ',';
                         }
-                        ifdata.lstdata.Add(str);                        
+                        ifdata.lstdata.Add(str);
                     }
                     
-                }
-
-                //刚添加的没有infoData啊
-                if (infoData != null)
-                {
-                    //填充数据
-                    ifdata.id = infoData.id;//id一定要拷贝过来啊
-                    ifdata.Isxchk = infoData.Isxchk;
-                    ifdata.Isychk = infoData.Isychk;
-                    ifdata.IsLchk = infoData.IsLchk;
-                    ifdata.Lmax = infoData.Lmax;
-                    ifdata.Lmin = infoData.Lmin;
-                    ifdata.xmax = infoData.xmax;
-                    ifdata.xmin = infoData.xmin;
-                    ifdata.ymax = infoData.ymax;
-                    ifdata.ymin = infoData.ymin;
-                    ifdata.IsBalancechk = infoData.IsBalancechk;
-                    ifdata.balancemin = infoData.balancemin;
-                    ifdata.warnR = infoData.warnR;
-                    ifdata.warnG = infoData.warnG;
-                    ifdata.warnB = infoData.warnB;
-
-                    ifdata.productLength = infoData.productLength;
-                    ifdata.productWidth = infoData.productWidth ;
-                    ifdata.IsMeter = infoData.IsMeter ;
-                    ifdata.Ameter =  infoData.Ameter ;
-                    ifdata.Bmeter = infoData.Bmeter ;
-                    ifdata.Apercent =  infoData.Apercent;
-                    ifdata.Bpercent = infoData.Bpercent ;
-                    ifdata.Cmeter = infoData.Cmeter ;
-                    ifdata.Dmeter =infoData.Dmeter ;
-                    ifdata.Cpercent = infoData.Cpercent ;
-                    ifdata.Dpercent = infoData.Dpercent;                    
-                }
-                else
-                {
-                    //更新id序号
-                    int idmax = 0;
-                    idmax = lst.Select(p => p.id).Max();
-                    ifdata.id = idmax + 1;
-                    //其他参数是默认值啊
                 }
                 lstDatas.Add(ifdata);
             }
@@ -457,7 +392,7 @@ namespace LCD.View
         private void Data2Info()
         {
             lst.Clear();
-            //lst.Add(info1);
+            lst.Add(info1);
             double Height = 0;
             try
             {
@@ -475,70 +410,22 @@ namespace LCD.View
                 if (Project.lstInfos[i].MESTYPE == ENUMMESSTYLE.Power)
                 {
                     IsSelected = Project.lstInfos[i].IsSelected;
-                    //continue;
+                    continue;
                 }
 
                 Info inf = new Info();
-                inf.height = Project.lstInfos[i].height;
                 inf.IsSelected = Project.lstInfos[i].IsSelected;
                 inf.Name = Project.lstInfos[i].Name;
                 inf.MESTYPE = Project.lstInfos[i].MESTYPE;
-                //序号更新一下,防止一直增加
-                inf.id = i + 1;
-                Project.lstInfos[i].id = i + 1;
-                update_type(inf);
+
                 Lst2Table(Project.lstInfos[i].lstdata, ref inf.table);
                 lst.Add(inf);
 
             }
         }
 
-        private void update_type(Info inf)
-        {
-            if (inf.MESTYPE == ENUMMESSTYLE._01_POINT)
-            {
-                inf.Type = "点位";
-            }
-            else if (inf.MESTYPE == ENUMMESSTYLE._02_RESPONSE)
-            {
-                inf.Type = "响应";
-            }
-            else if (inf.MESTYPE == ENUMMESSTYLE._03_SPECTRUM)
-            {
-                inf.Type = "光谱";
-            }
-            else if (inf.MESTYPE == ENUMMESSTYLE._04_FLICKER)
-            {
-                inf.Type = "FLICKER";
-            }
-            else if (inf.MESTYPE == ENUMMESSTYLE._05_CROSSTALK)
-            {
-                inf.Type = "串扰";
-            }
-            else if (inf.MESTYPE == ENUMMESSTYLE._06_ACR)
-            {
-                inf.Type = "ACR";
-            }
-            else if (inf.MESTYPE == ENUMMESSTYLE._07_warmup)
-            {
-                inf.Type = "Warmup";
-            }
-            else if (inf.MESTYPE == ENUMMESSTYLE.Power)
-            {
-                inf.Type = "Power";
-            }
-            else
-            {
-                inf.Type = "None";
-            }
-        }
-
         private void Lst2Table(List<string> lstdata, ref DataTable dt)
         {
-            if(lstdata == null)
-            {
-                return;
-            }
             if (lstdata.Count != 0)
             {
                 //if (dt == null)
@@ -582,75 +469,27 @@ namespace LCD.View
         //重新命名
         private void OnBnClickedReName(object sender, RoutedEventArgs e)
         {
-            int n = mylist.SelectedIndex;
-            if(n < 0)
-            {
-                return;
-            }
-            Info info = (Info)mylist.SelectedItem;
-            string text = info.Name;
-            string info1 = "请输入新名称:";
-            if (Project.cfg.Lang != 0)
-            {
-                info1 = "Please input new name:";
-            }
-            pop_up barCode = new pop_up(text, info1);
-            //需要自动开始测试啊
-            barCode.ShowDialog();
-            if (barCode.is_ok == false)
-            {
-                return;
-            }
-            //获取新的名称
-            string new_name = barCode.Time;
-            if(new_name == text)
-            {
-                //没有变化啊
-                return;
-            }
-            //更新一下
-            lst[n].Name= new_name;
-            mylist.ItemsSource = null;
-            mylist.ItemsSource = lst;
+            
+            //Info info = (Info)mylist.SelectedItem;
+            //string text = info.Name;
+            //int n = mylist.SelectedIndex;
+            //if (n != -1)
+            //{
+            //    lst.RemoveAt(n);
+            //}
+
         }
 
         private void OnBnClickedDelete(object sender, RoutedEventArgs e)
-        {           
-            int count = lst.Count(p => p.IsSelected == true);
-            if(count >1)
-            {
-                MessageBox.Show("一次只能删除一个模版");
-                return;
-            }
-            if(count <= 0)
-            {
-                MessageBox.Show("模版没有选中，不能删除");
-                return;
-            }
-            //查找选中的元素
-            var selected = lst.FirstOrDefault(p =>p.IsSelected==true);
-            int n = lst.IndexOf(selected);
-
-            //在这里确认一下
-            string msg = "确定要删除吗？";
-            string title = "提示";
-            if (Project.cfg.Lang != 0)
-            {
-                msg = "Confirm to delete ?";
-                title = "Notice";
-            }
-            MessageBoxResult result = MessageBox.Show(msg, title, MessageBoxButton.OKCancel, MessageBoxImage.Question, MessageBoxResult.Cancel);
-            if (result == MessageBoxResult.Cancel)
+        {
+            int n = mylist.SelectedIndex;
+            if (n >= lst.Count)
             {
                 return;
             }
-            if ((n >= 0)&&(n<lst.Count))
-            {
-                lst.RemoveAt(n);
-                mylist.ItemsSource = null;
-                mylist.ItemsSource = lst;
-                mylist.InvalidateVisual();
-            }
+            lst.RemoveAt(n);
+            mylist.ItemsSource = null;
+            mylist.ItemsSource = lst;
         }
 
 
@@ -663,12 +502,8 @@ namespace LCD.View
         {
             string filename = comboBoxType.Text + DateTime.Now.ToString("yyyyMMddHHmmss");
 
-            string info = "请输入名称：";
-            if (Project.cfg.Lang != 0)
-            {
-                info = "Please input template name:";
-            }
-            pop_up pop_Up = new pop_up(filename,info);
+           
+            pop_up pop_Up = new pop_up(filename,"请输入名称:");
             pop_Up.ShowDialog();
 
             String Temp = pop_Up.Time;
@@ -684,24 +519,12 @@ namespace LCD.View
             else if (this.comboBoxType.Text.IndexOf("06") != -1){ MESTYPE = ENUMMESSTYLE._06_ACR; }
             else if (this.comboBoxType.Text.IndexOf("7")!=-1) { MESTYPE = ENUMMESSTYLE._07_warmup; }
 
-            int id = 0;
-            if(Project.lstInfos.Count ==0)
-            {
-                id = 1;
-            }
-            else
-            {
-                id = Project.lstInfos.Max(p => p.id);
-                id++;
-            }
             Info ifo = new Info();
             {
                 ifo.IsSelected = true;
                 ifo.Name = Temp;
                 ifo.MESTYPE = MESTYPE;
-                ifo.id = id;
             }
-            update_type(ifo);
 
             DataTemplate sDataTemplate= mylist.ItemTemplate;
             ItemCollection sCollection= mylist.Items;
@@ -737,7 +560,6 @@ namespace LCD.View
         {
             int n = mylist.SelectedIndex;
             if (n >= lst.Count) { return; }
-            if(n <0) { return; }
             Info info = lst[n];
 
             int cnt = mydata.SelectedIndex;
@@ -808,8 +630,8 @@ namespace LCD.View
         }
         public class Info: ViewBase
         {
-            public double height { get; set; }
-            public int id { get; set; }
+            
+
 
             private bool isselected;
             public bool IsSelected {
@@ -832,18 +654,6 @@ namespace LCD.View
                 }
             }
 
-            //加一列类型
-            private string type;
-            public string Type
-            {
-                get { return type; }
-                set
-                {
-                    type = value;
-                    OnPropertyChanged();
-                }
-            }
-
             public ENUMMESSTYLE MESTYPE;
             
 
@@ -857,93 +667,7 @@ namespace LCD.View
         private void mylist_SelectionChanged(object sender, SelectionChangedEventArgs e)
         {
             Info info = (Info)mylist.SelectedItem;
-            InitDataGrid(info);           
-
-            if (info != null)
-            {
-                ProductHeight.Text = info.height.ToString();// infoData.height.ToString();
-                //显示厚度数据
-                InfoData infoData = Project.lstInfos.FirstOrDefault(p => p.id == info.id);
-                if (infoData != null)
-                {
-                    //右邊show測量標準
-                    if (infoData.Isxchk)
-                    {
-                        Xcheck.IsChecked = true;
-                        xmax.Text = infoData.xmax.ToString();
-                        xmin.Text = infoData.xmin.ToString();
-                    }
-                    else
-                    {
-                        Xcheck.IsChecked = false;
-                        xmax.Text = "";
-                        xmin.Text = "";
-                    }
-                    if (infoData.Isychk)
-                    {
-                        Ycheck.IsChecked = true;
-                        ymax.Text = infoData.ymax.ToString();
-                        ymin.Text = infoData.ymin.ToString();
-                    }
-                    else
-                    {
-                        Ycheck.IsChecked = false;
-                        ymax.Text = "";
-                        ymin.Text = "";
-                    }
-                    if (infoData.IsLchk)
-                    {
-                        Lcheck.IsChecked = true;
-                        Lmax.Text = infoData.Lmax.ToString();
-                        Lmin.Text = infoData.Lmin.ToString();
-                    }
-                    else
-                    {
-                        Lcheck.IsChecked = false;
-                        Lmax.Text = "";
-                        Lmin.Text = "";
-                    }
-                    if (infoData.IsBalancechk)
-                    {
-                        Balancechk.IsChecked = true;
-                        balancemin.Text = infoData.balancemin.ToString();
-                    }
-                    else
-                    {
-                        Balancechk.IsChecked = false;
-                        balancemin.Text = "";
-                    }
-                    //设置颜色
-                    System.Drawing.Color color = System.Drawing.Color.FromArgb(infoData.warnR, infoData.warnG, infoData.warnB);
-                    update_warn_color(color);
-                }
-            }
-            else
-            {
-                //没有使用默认的
-                Xcheck.IsChecked = false;
-                xmax.Text = "";
-                xmin.Text = "";
-                Ycheck.IsChecked = false;
-                ymax.Text = "";
-                ymin.Text = "";
-                Lcheck.IsChecked = false;
-                Lmax.Text = "";
-                Lmin.Text = "";
-                Balancechk.IsChecked = false;
-                balancemin.Text = "";
-                System.Drawing.Color color = System.Drawing.Color.FromArgb(0, 0, 0);
-                update_warn_color(color);
-            }
-        }
-
-        private void update_warn_color(System.Drawing.Color selectedColor)
-        {
-            // 将所选颜色转换为WPF的颜色结构
-            System.Windows.Media.Color wpfColor = System.Windows.Media.Color.FromArgb(selectedColor.A, selectedColor.R, selectedColor.G, selectedColor.B);
-            // 将颜色应用到WPF控件上
-            // 例如，可以将颜色应用到一个Rectangle控件的Fill属性
-            RecColor.Fill = new System.Windows.Media.SolidColorBrush(wpfColor);
+            InitDataGrid(info);
         }
         /// <summary>
         /// 初始化控件列表
@@ -960,28 +684,6 @@ namespace LCD.View
                 case ENUMMESSTYLE._06_ACR: InitDataGrid_ACR(info); break;
                 case ENUMMESSTYLE._07_warmup: InitDataGrid_warmup(info); break;
             }
-        }
-
-        // 动态添加下拉列到DataGrid
-        public void AddComboBoxColumn(string header, List<string> itemsSource)
-        {
-            var comboBoxColumn = new DataGridTemplateColumn
-            {
-                Header = header
-            };
-
-            FrameworkElementFactory factory = new FrameworkElementFactory(typeof(ComboBox));
-            factory.SetValue(ComboBox.ItemsSourceProperty, itemsSource);
-            //factory.SetValue(ComboBox.SelectedItemProperty, BindingOperations.NewDataBinding(factory, ComboBox.SelectedItemProperty, comboBoxColumn, DataGridTemplateColumn.CellEditingBindingProperty));
-            //factory.AddHandler(ComboBox.SelectionChangedEvent, new SelectionChangedEventHandler(ComboBox_SelectionChanged));
-
-            DataTemplate dataTemplate = new DataTemplate();
-            dataTemplate.VisualTree = factory;
-
-            comboBoxColumn.CellTemplate = dataTemplate;
-            comboBoxColumn.CellEditingTemplate = dataTemplate;
-
-            mydata.Columns.Add(comboBoxColumn);
         }
 
         private void InitDataGrid_POINT(Info info)
@@ -1008,9 +710,6 @@ namespace LCD.View
             //mydata.HorizontalAlignment = HorizontalAlignment.Center;
             mydata.MinColumnWidth = 70;
             mydata.ItemsSource = dv;
-            //测试添加下拉框列，确实可以添加下拉框的啊
-            //List<string> itemsSource = new List<string> { "是", "否" };
-            //AddComboBoxColumn("暂停",itemsSource);
         }
         private void InitDataGrid_warmup(Info info)
         {
@@ -1041,10 +740,6 @@ namespace LCD.View
         }
         private void InitDataGrid_RESPONSE(Info info)
         {
-            if(info==null)
-            {
-                return;
-            }
             if (info.table == null)
             {
                 info.table = new DataTable();
@@ -1069,10 +764,6 @@ namespace LCD.View
 
         private void InitDataGrid_SPECTRUM(Info info)
         {
-            if(info ==null)
-            {
-                return;
-            }
             if (info.table == null)
             {
                 info.table = new DataTable();
@@ -1175,12 +866,8 @@ namespace LCD.View
 
         private void OnBnClickedEnsure(object sender, RoutedEventArgs e)
         {
-            string title = "是否使用当前模板组进行测试？";
-            if (Project.cfg.Lang != 0)
-            {
-                title = "Do you want to use the current template group for testing?";
-            }
-            CustomMessage cstom = new CustomMessage(title);
+
+            CustomMessage cstom = new CustomMessage("是否使用当前模板组进行测试？");
             cstom.ShowDialog();
             if (CustomMessage.IsOK)
             {
@@ -1197,63 +884,12 @@ namespace LCD.View
             int n = mylist.SelectedIndex;
             if (n >= lst.Count || n < 0) { return; }
             Info info = lst[n];
-
-            //这里要获取原来的信息，根据名字来搜索
-            InfoData infoData = Project.lstInfos.FirstOrDefault(p => p.id == info.id);
-            if(infoData == null)
-            {
-                //为null表示新建的，这个时候也需要新建一个InfoData对象
-                infoData = new InfoData();
-                infoData.id = info.id;
-                Project.lstInfos.Add(infoData);//加到队列里面啊，后面才能搜索到
-            }
-            if (infoData.MESTYPE == ENUMMESSTYLE._05_CROSSTALK)
-            {
-                //CustomTemplateCrosstalk cstm = new CustomTemplateCrosstalk(info, infoData);
-                //cstm.ptmodel.tempName = info.Name;
-                //CustomTemplate.dt = info.table;
-                ////定义默认参数
-                //cstm.ShowDialog();
-                //info.table = !CustomTemplate.IsEnsure ? info.table : CustomTemplate.dt;
-            }
-           
-            CustomTemplate cstm = new CustomTemplate(info, infoData);
+            CustomTemplate cstm = new CustomTemplate();
             cstm.ptmodel.tempName = info.Name;
             CustomTemplate.dt = info.table;
             //定义默认参数
             cstm.ShowDialog();
             info.table = !CustomTemplate.IsEnsure ? info.table : CustomTemplate.dt;
-            
-            if(CustomTemplate.IsEnsure)
-            {
-                //更新判断数据啊
-                infoData.Isxchk = cstm.ptmodel.Isxchk;
-                infoData.Isychk =cstm.ptmodel.Isychk;
-                infoData.IsLchk =cstm.ptmodel.IsLchk ;
-                infoData.Lmax = cstm.ptmodel.Lmax;
-                infoData.Lmin = cstm.ptmodel.Lmin;
-                infoData.xmax = cstm.ptmodel.xmax;
-                infoData.xmin = cstm.ptmodel.xmin;
-                infoData.ymax = cstm.ptmodel.ymax;
-                infoData.ymin = cstm.ptmodel.ymin;
-                infoData.IsBalancechk = cstm.ptmodel.IsBalancechk ;
-                infoData.balancemin = cstm.ptmodel.balancemin;
-                infoData.warnR = cstm.ptmodel.color.R;
-                infoData.warnG = cstm.ptmodel.color.G;
-                infoData.warnB = cstm.ptmodel.color.B;
-                //更新產品數據
-                infoData.productLength = cstm.ptmodel.productLength;
-                infoData.productWidth = cstm.ptmodel.productWidth;
-                infoData.IsMeter = cstm.ptmodel.IsMeter ;
-                infoData.Ameter = cstm.ptmodel.Ameter ;
-                infoData.Bmeter = cstm.ptmodel.Bmeter ;
-                infoData.Apercent = cstm.ptmodel.Apercent ;
-                infoData.Bpercent = cstm.ptmodel.Bpercent ;
-                infoData.Cmeter = cstm.ptmodel.Cmeter ;
-                infoData.Dmeter = cstm.ptmodel.Dmeter ;
-                infoData.Cpercent = cstm.ptmodel.Cpercent ;
-                infoData.Dpercent = cstm.ptmodel.Dpercent ;
-            }
 
             DataView dv = new DataView(info.table);
             ///定义数据表
@@ -1279,16 +915,15 @@ namespace LCD.View
                 case 0: MESTYPE = ENUMMESSTYLE._01_POINT; break;
                 case 1: MESTYPE = ENUMMESSTYLE._02_RESPONSE; break;
                 case 2: MESTYPE = ENUMMESSTYLE._03_SPECTRUM; break;
-                case 3: MESTYPE = ENUMMESSTYLE._05_CROSSTALK; break;
-                case 4: MESTYPE = ENUMMESSTYLE._07_warmup; break;
-                //case 5: MESTYPE = ENUMMESSTYLE._06_ACR; break;
-                //case 6: MESTYPE = ENUMMESSTYLE._07_warmup; break;
+                case 3: MESTYPE = ENUMMESSTYLE._04_FLICKER; break;
+                case 4: MESTYPE = ENUMMESSTYLE._05_CROSSTALK; break;
+                case 5: MESTYPE = ENUMMESSTYLE._06_ACR; break;
+                case 6: MESTYPE = ENUMMESSTYLE._07_warmup; break;
             }
 
             if (AutoCreate != null)
             {
-                if (MESTYPE == ENUMMESSTYLE._01_POINT || MESTYPE == ENUMMESSTYLE._07_warmup||
-                    MESTYPE == ENUMMESSTYLE._03_SPECTRUM || MESTYPE == ENUMMESSTYLE._05_CROSSTALK)
+                if (MESTYPE == ENUMMESSTYLE._01_POINT| MESTYPE == ENUMMESSTYLE._07_warmup)
                 {
                     AutoCreate.Visibility = Visibility.Visible;
                 }
@@ -1333,11 +968,6 @@ namespace LCD.View
             Info info = lst[n];
             int index = mydata.SelectedIndex;
             int index_cnt = mydata.SelectedItems.Count;
-
-            if(index <0)
-            {
-                return;
-            }
 
             if (info.table != null)
             {
@@ -1410,13 +1040,11 @@ namespace LCD.View
                 }
                 //lst.RemoveAt(n);
 
+
+
                 Info info = (Info)mylist.SelectedItem;
-                string info1 = "请输入要修改的名称:";
-                if (Project.cfg.Lang != 0)
-                {
-                    info1 = "Please enter the name you want to modify:";
-                }
-                pop_up pop_Up = new pop_up(info.Name,info1);
+
+                pop_up pop_Up = new pop_up(info.Name,"请输入要修改的名称：");
                 pop_Up.ShowDialog();
 
                 info.Name = pop_Up.Time;
@@ -1461,655 +1089,50 @@ namespace LCD.View
 
             //ItemCollection data = mydata.Items;
         }
-
-        private void Btn_select_all(object sender, RoutedEventArgs e)
-        {
-            //全选
-            for(int i=0;i< lst.Count;i++)
-            {
-                lst[i].IsSelected = true;       
-            }            
-            mylist.ItemsSource = null;
-            mylist.ItemsSource = lst;
-        }
-
-        private void Btn_select_reverse(object sender, RoutedEventArgs e)
-        {
-            //反选
-            for (int i = 0; i < lst.Count; i++)
-            {
-                //取反
-                lst[i].IsSelected = !lst[i].IsSelected;
-            }
-            mylist.ItemsSource = null;
-            mylist.ItemsSource = lst;
-        }
-
-        private void OnBnClickedImport(object sender, RoutedEventArgs e)
-        {
-            //導入的是點數據啊啊
-            string filename = "01-" + DateTime.Now.ToString("yyyyMMddHHmmss");
-            string info = "请输入名称：";
-            if (Project.cfg.Lang != 0)
-            {
-                info = "Please input template name:";
-            }
-            pop_up pop_Up = new pop_up(filename, info);
-            pop_Up.ShowDialog();
-            String Temp = pop_Up.Time;
-
-            //create info
-            ENUMMESSTYLE MESTYPE = ENUMMESSTYLE._01_POINT;
-            int id = 0;
-            if (Project.lstInfos.Count == 0)
-            {
-                id = 1;
-            }
-            else
-            {
-                id = Project.lstInfos.Max(p => p.id);
-                id++;
-            }
-            Info ifo = new Info();
-            {
-                ifo.IsSelected = true;
-                ifo.Name = Temp;
-                ifo.MESTYPE = MESTYPE;
-                ifo.id = id;
-            }            
-            DataTemplate sDataTemplate = mylist.ItemTemplate;
-            ItemCollection sCollection = mylist.Items;
-
-            //select the creadted one
-            lst.Add(ifo);
-            int n = lst.Count - 1;
-            this.mylist.SelectedIndex = n;
-
-            //从excel里面导入模版啊
-            OpenFileDialog openFileDialog = new OpenFileDialog();
-            openFileDialog.Filter = "Excel|*.xls|Excel|*.xlsx"; // 设置文件过滤器，这里是所有文件
-            openFileDialog.FilterIndex = 1;
-            openFileDialog.Multiselect = false; 
-            openFileDialog.CheckFileExists = true;
-            openFileDialog.Title = "Select excel file";
-            openFileDialog.RestoreDirectory = true;
-
-            if (openFileDialog.ShowDialog() == true)
-            {
-                // 用户选择了文件，可以处理文件
-                string filePath = openFileDialog.FileName;
-                // 例如，可以在这里将文件路径显示在文本框中
-                // filePathTextBox.Text = filePath;
-
-                //解析excel文件啊
-                if (System.IO.File.Exists(filePath) == false)
-                {
-                    MessageBox.Show("Could not find file:" + filePath, "Error");
-                    return;
-                }
-                parse_excel(filePath,ifo);
-            }
-        }
-
-        private bool parse_excel(string xls_file, Info info)
-        {
-            IWorkbook wk = null;
-            string extension = System.IO.Path.GetExtension(xls_file);
-            try
-            {
-                FileStream fs = System.IO.File.OpenRead(xls_file);
-                if (extension.Equals(".xls"))
-                {
-                    //把xls文件中的数据写入wk中
-                    wk = new HSSFWorkbook(fs);
-                }
-                else
-                {
-                    //把xlsx文件中的数据写入wk中
-                    wk = new XSSFWorkbook(fs);
-                }
-                fs.Close();
-                //读取当前表数据
-                ISheet sheet = wk.GetSheetAt(0);
-
-                int rows = sheet.LastRowNum;
-                if (rows < 4)
-                {
-                    LogHelper.Instance.Write("错误：Excel文件行数太少:" + rows);
-                    return false;
-                }
-                IRow row = sheet.GetRow(2);  //读取第3行的数据
-                //首先判断一下厚度数据有没有啊
-                int thick_row = -1;
-                for(int i=0;i<4;i++) //在前面4行里面找厚度数据
-                {
-                    row = sheet.GetRow(i);
-                    string value = row.GetCell(0).ToString();
-                    if(value == "产品厚度"|| value == "產品厚度")
-                    {
-                        thick_row = i;
-                        break;
-                    }
-                }
-                if(thick_row<0)
-                {
-                    LogHelper.Instance.Write("没有找到产品厚度行");
-                    MessageBox.Show("没有找到产品厚度行");
-                    return false;
-                }
-                if(sheet.GetRow(thick_row).GetCell(1)== null)
-                {
-                    LogHelper.Instance.Write("没有找到产品厚度数据");
-                    MessageBox.Show("没有找到产品厚度数据");
-                    return false;
-                }
-                InfoData ifdata = new InfoData();
-                try
-                {
-                    ifdata.height = Double.Parse(sheet.GetRow(thick_row).GetCell(1).ToString().Trim());
-                }
-                catch(Exception ex)
-                {
-                    LogHelper.Instance.Write("产品厚度数据转换失败");
-                    return false;
-                }
-                ifdata.IsSelected = true;
-                ifdata.Name = comboBoxType.Text + DateTime.Now.ToString("yyyyMMddHHmmss"); ;
-                ifdata.MESTYPE = ENUMMESSTYLE._01_POINT; 
-                ifdata.lstdata = new List<string>();
-                int idmax = 0;
-                idmax = Project.lstInfos.Select(p => p.id).Max();
-                ifdata.id = idmax+1;
-
-                int id_col = -1;
-                int x_col = -1;
-                int y_col = -1;
-                int z_col = -1;
-                int u_col = -1;
-                int v_col = -1;
-                int pg_no_col = -1;
-                int pg_info_col = -1;
-
-                //第三行是各种数据啊
-                row = sheet.GetRow(2);
-                for (int j = 0; j < row.LastCellNum; j++)
-                {
-                    string value = row.GetCell(j).ToString();
-                    if (value.Contains("ID"))
-                    {
-                        id_col = j;
-                        LogHelper.Instance.Write("id列为：" + id_col);                        
-                    }
-                    else if (value.Contains("X"))
-                    {
-                        x_col = j;
-                        LogHelper.Instance.Write("x列号为：" + x_col);                        
-                    }
-                    else if (value.Contains("Y"))
-                    {
-                        y_col = j;
-                        LogHelper.Instance.Write("y列号为：" + y_col);                        
-                    }
-                    else if (value.Contains("Z"))
-                    {
-                        z_col = j;
-                        LogHelper.Instance.Write("z列号为：" + z_col);                        
-                    }
-                    else if (value.Contains("U"))
-                    {
-                        u_col = j;
-                        LogHelper.Instance.Write("u列号为：" + u_col);                        
-                    }
-                    else if (value.Contains("V"))
-                    {
-                        v_col = j;
-                        LogHelper.Instance.Write("v列号为：" + v_col);                        
-                    }                    
-                    else if (value.Contains("PG") && (value.Contains("序号")||
-                         value.Contains("序號")))
-                    {
-                        pg_no_col = j;
-                        LogHelper.Instance.Write("PG(序号)列号为：" + pg_no_col);                        
-                    }
-                    else if (value.Contains("PG") && value.Contains("提示"))
-                    {
-                        pg_info_col = j;
-                        LogHelper.Instance.Write("PG（提示信息）列号为：" + pg_info_col);                        
-                    }
-                }
-                if ((x_col < 0) || (y_col < 0) || (z_col <0)||
-                    (u_col <0) || (v_col <0) ||
-                    (pg_no_col<0) || (pg_info_col<0))
-                {
-                    LogHelper.Instance.Write("Excel文件里面有信息列缺失");
-                    MessageBox.Show("Excel文件里面有信息列缺失");
-                    return false;
-                }
-
-                string strheader = "";
-                List<string> datalist = new List<string>();
-                datalist.Add("ID");
-                datalist.Add("X(mm)");
-                datalist.Add("Y(mm)");
-                datalist.Add("Z(mm)");
-                datalist.Add("U(°)");
-                datalist.Add("V(°)");
-                datalist.Add("PG(序号)");
-                datalist.Add("PG(提示信息)");
-                strheader = string.Join(",",datalist);//先添加的是表头
-                ifdata.lstdata.Add(strheader);
-
-                //添加表頭
-                InitDataGrid_POINT(info);
-                //LastRowNum 是当前表的总行数-1（注意）
-                int id = 1;
-                //数据是从第4行开始的
-                for (int i = 3; i <= sheet.LastRowNum; i++)
-                {
-                    row = sheet.GetRow(i);  //读取当前行数据
-                    if (row != null)
-                    {
-                        if (row.GetCell(x_col) == null)
-                        {
-                            LogHelper.Instance.Write("第" + (i + 1) + "行x数据为空");
-                            break;
-                        }
-                        if (row.GetCell(y_col) == null)
-                        {
-                            LogHelper.Instance.Write("第" + (i + 1) + "行y数据为空");
-                            break;
-                        }
-                        //有了x和y就可以建立数据了啊
-                        datalist.Clear();
-                        datalist.Add(id.ToString());
-                        datalist.Add(row.GetCell(x_col).ToString());
-                        datalist.Add(row.GetCell(y_col).ToString());
-                        if (row.GetCell(z_col) != null)
-                        {
-                            datalist.Add(row.GetCell(z_col).ToString());
-                        }
-                        else
-                        {
-                            datalist.Add("");
-                        }
-
-                        if (row.GetCell(u_col) != null)
-                        {
-                            datalist.Add(row.GetCell(u_col).ToString());
-                        }
-                        else
-                        {
-                            datalist.Add("");
-                        }
-
-                        if (row.GetCell(v_col) != null)
-                        {
-                            datalist.Add(row.GetCell(v_col).ToString());
-                        }
-                        else
-                        {
-                            datalist.Add("");
-                        }
-
-                        if (row.GetCell(pg_no_col) != null)
-                        {
-                            datalist.Add(row.GetCell(pg_no_col).ToString());
-                        }
-                        else
-                        {
-                            datalist.Add("");
-                        }
-
-                        if (row.GetCell(pg_info_col) != null)
-                        {
-                            datalist.Add(row.GetCell(pg_info_col).ToString());
-                        }
-                        else
-                        {
-                            datalist.Add("");
-                        }
-                        string data = string.Join(",", datalist);//添加的是数据
-                        ifdata.lstdata.Add(data);
-                        id++;
-
-                        //加到表格裡面啊
-                        info.table.Rows.Add(datalist.ToArray());
-                    }
-                    else
-                    {
-                        //空数据了啊
-                        break;
-                    }
-                }
-
-
-                ifdata.id = info.id;
-                DataView dv = new DataView(info.table);
-                ///定义数据表
-                mydata.GridLinesVisibility = DataGridGridLinesVisibility.Vertical;
-                mydata.VerticalGridLinesBrush = Brushes.Gray;
-                mydata.CanUserSortColumns = false;
-                mydata.MinColumnWidth = 70;
-                mydata.ItemsSource = dv;
-
-                //展示厚度
-                ProductHeight.Text = ifdata.height.ToString();
-                Project.lstInfos.Add(ifdata);//加到队列里面啊，后面才能搜索到
-
-                //可能lstInfos有更新，首先获取当前模板组内容
-                //Project.lstInfos = Info2Data();
-                ////再增加
-                //Project.lstInfos.Add(ifdata);//当前模板组内容增加一项啊
-                //Project.SaveTemplate("Template.xml");
-
-                ////刷新界面啊
-                //MessageBox.Show("导入成功","提示");
-                //this.Close();
-            }
-            catch (Exception e)
-            {
-                LogHelper.Instance.Write("读取Excel文件异常：" + e.Message);
-                MessageBox.Show("读取Excel文件异常：" + e.Message);
-            }
-
-            return false;
-        }
-
-        private void Color_select(object sender, MouseButtonEventArgs e)
-        {
-            // 创建一个ColorDialog实例
-            System.Windows.Forms.ColorDialog colorDialog = new System.Windows.Forms.ColorDialog();
-            // 显示颜色选择面板
-            var result = colorDialog.ShowDialog();
-            // 检查用户是否选择了颜色
-            if (result == System.Windows.Forms.DialogResult.OK)
-            {
-                // 获取所选颜色的RGB值
-                System.Drawing.Color selectedColor = colorDialog.Color;
-                //update_warn_color(selectedColor);
-                //保存颜色
-                //ptmodel.color = selectedColor;
-                System.Windows.Media.Color wpfColor = System.Windows.Media.Color.FromArgb(selectedColor.A, selectedColor.R, selectedColor.G, selectedColor.B);
-                RecColor.Fill = new System.Windows.Media.SolidColorBrush(wpfColor);
-            }
-        }
-
-        private void BtnOnSave_click(object sender, RoutedEventArgs e)
-        {
-            Info info = (Info)mylist.SelectedItem;
-            if(info == null)
-            {
-                return;
-            }
-            InfoData infoData = Project.lstInfos.FirstOrDefault(p => p.id == info.id);
-            if(infoData == null)
-            {
-                return;
-            }
-            if (Xcheck.IsChecked == true)
-            {
-                if (CustomTemplate.check_input(xmax, "X最大值") == false)
-                {
-                    return;
-                }
-                if (CustomTemplate.check_input(xmin, "X最小值") == false)
-                {
-                    return;
-                }
-                if (double.Parse(xmax.Text) < double.Parse(xmin.Text))
-                {
-                    MessageBox.Show("错误：测量标准中的X最大值比最小值小");
-                    return;
-                }
-            }
-
-            if (Ycheck.IsChecked == true)
-            {
-                if (CustomTemplate.check_input(ymax, "Y最大值") == false)
-                {
-                    return;
-                }
-                if (CustomTemplate.check_input(ymin, "Y最小值") == false)
-                {
-                    return;
-                }
-                if (double.Parse(ymax.Text) < double.Parse(ymin.Text))
-                {
-                    MessageBox.Show("错误：测量标准中的Y最大值比最小值小");
-                    return;
-                }
-            }
-
-            if (Lcheck.IsChecked == true)
-            {
-                if (CustomTemplate.check_input(Lmax, "L最大值") == false)
-                {
-                    return;
-                }
-                if (CustomTemplate.check_input(Lmin, "L最小值") == false)
-                {
-                    return;
-                }
-                if (double.Parse(Lmax.Text) < double.Parse(Lmin.Text))
-                {
-                    MessageBox.Show("错误：测量标准中的L最大值比最小值小");
-                    return;
-                }
-            }
-
-            if (Balancechk.IsChecked == true)
-            {
-                if (CustomTemplate.check_input(balancemin, "一致性") == false)
-                {
-                    return;
-                }
-            }
-            if (Lcheck.IsChecked == true)
-            {
-                infoData.IsLchk = true;
-                infoData.Lmax = double.Parse(Lmax.Text);
-                infoData.Lmin = double.Parse(Lmin.Text);
-            }
-            else
-            {
-                infoData.IsLchk = false;
-            }
-            if (Xcheck.IsChecked == true)
-            {
-                infoData.Isxchk = true;
-                infoData.xmax = double.Parse(xmax.Text);
-                infoData.xmin = double.Parse(xmin.Text);
-            }
-            else
-            {
-                infoData.Isxchk = false;
-            }
-            if (Ycheck.IsChecked == true)
-            {
-                infoData.Isychk = true;
-                infoData.ymax = double.Parse(ymax.Text);
-                infoData.ymin = double.Parse(ymin.Text);
-            }
-            else
-            {
-                infoData.Isychk = false;
-            }
-            if (Balancechk.IsChecked == true)
-            {
-                infoData.balancemin = double.Parse(balancemin.Text);
-                infoData.IsBalancechk = true;
-            }
-            else
-            {
-                infoData.IsBalancechk = false;
-            }
-            SolidColorBrush solidColorBrush = RecColor.Fill as SolidColorBrush;
-            System.Windows.Media.Color color = solidColorBrush.Color;
-            byte r = color.R;
-            byte g = color.G;
-            byte b = color.B;
-            infoData.warnR = r;
-            infoData.warnG = g;
-            infoData.warnB = b;
-            //保存到文件
-            Project.SaveTemplate("Template.xml");
-            string msg = "设置已经保存";
-            if (Project.cfg.Lang != 0)
-            {
-                msg = "Saved";
-            }
-            MessageBox.Show(msg);
-        }
-
-        private void OnBnClickedChange(object sender, RoutedEventArgs e)
-        {
-            int count = mylist.SelectedItems.Count;
-            if(count!=1)
-            {
-                MessageBox.Show("请勾选单个模版后，再进行修改");
-                return;
-            }
-            //修正按钮
-            Info info = (Info)mylist.SelectedItem;
-            if(info == null)
-            {
-                MessageBox.Show("修改失败");
-                return;
-            }
-            double height = 0;
-            try
-            {
-                height = double.Parse(ProductHeight.Text.Trim());
-            }
-            catch
-            {
-                MessageBox.Show("高度输入错误，请重新修改");
-                ProductHeight.Focus();
-                return;
-            }
-            info.height = height;
-            MessageBox.Show("修改成功");
-        }
-
-        private void Copy_Click(object sender, RoutedEventArgs e)
-        {
-            int count = mylist.SelectedItems.Count;
-            if (count != 1)
-            {
-                MessageBox.Show("请选中单个模版后，再进行复制");
-                return;
-            }
-            Info info = (Info)mylist.SelectedItem;
-            if (info == null)
-            {
-                MessageBox.Show("复制失败");
-                return;
-            }
-
-            int idmax = 0;
-            idmax = lst.Select(p => p.id).Max();           
-            Info ifo = new Info();
-            {
-                ifo.IsSelected = true;
-                ifo.Name = info.Name+"_副本";
-                ifo.MESTYPE = info.MESTYPE;
-                ifo.Type = info.Type;
-                ifo.height = info.height;
-                ifo.id = idmax+1;                
-            }
-
-            DataTemplate sDataTemplate = mylist.ItemTemplate;
-            ItemCollection sCollection = mylist.Items;
-            int n = mylist.SelectedIndex;
-            lst.Insert(n+1, ifo);
-            //int n = lst.Count - 1;
-            //this.mylist.SelectedIndex = n;
-           
-
-            //接下来复制数据啊
-            InfoData infoData = Project.lstInfos.FirstOrDefault(p => p.id == info.id);
-            if(infoData != null)
-            {
-                InfoData ifdata = new InfoData();
-                ifdata.height = infoData.height;
-                //ifdata.height = Double.Parse(ProductHeight.Text.Trim());
-                ifdata.IsSelected = infoData.IsSelected;
-                ifdata.Name = ifo.Name;
-                ifdata.MESTYPE = infoData.MESTYPE;
-                ifdata.height = info.height;
-                ifdata.lstdata = new List<string>();
-                //使用新增的id
-                ifdata.id = ifo.id;
-
-                //把点位数据拷贝过来啊
-                ifdata.lstdata = new List<string>(); 
-                infoData.lstdata.ForEach(p => ifdata.lstdata.Add(p));
-
-                ifdata.Isxchk = infoData.Isxchk;
-                ifdata.Isychk = infoData.Isychk;
-                ifdata.IsLchk = infoData.IsLchk;
-                ifdata.Lmax = infoData.Lmax;
-                ifdata.Lmin = infoData.Lmin;
-                ifdata.xmax = infoData.xmax;
-                ifdata.xmin = infoData.xmin;
-                ifdata.ymax = infoData.ymax;
-                ifdata.ymin = infoData.ymin;
-                ifdata.IsBalancechk = infoData.IsBalancechk;
-                ifdata.balancemin = infoData.balancemin;
-                ifdata.warnR = infoData.warnR;
-                ifdata.warnG = infoData.warnG;
-                ifdata.warnB = infoData.warnB;
-
-                ifdata.productLength = infoData.productLength;
-                ifdata.productWidth = infoData.productWidth;
-                ifdata.IsMeter = infoData.IsMeter;
-                ifdata.Ameter = infoData.Ameter;
-                ifdata.Bmeter = infoData.Bmeter;
-                ifdata.Apercent = infoData.Apercent;
-                ifdata.Bpercent = infoData.Bpercent;
-                ifdata.Cmeter = infoData.Cmeter;
-                ifdata.Dmeter = infoData.Dmeter;
-                ifdata.Cpercent = infoData.Cpercent;
-                ifdata.Dpercent = infoData.Dpercent;
-
-                Lst2Table(ifdata.lstdata, ref ifo.table);
-                Project.lstInfos.Add(ifdata);
-            }
-
-
-            //最后修改选中
-            mylist.SelectedIndex = n + 1;
-        }
-
-        private void Rename_Click(object sender, RoutedEventArgs e)
-        {
-            int count = mylist.SelectedItems.Count;
-            if (count != 1)
-            {
-                MessageBox.Show("请选中单个模版后，再进行重命名");
-                return;
-            }
-            //修正按钮
-            OnBnClickedReName(null,null);
-        }
-
-        private void Delete_Click(object sender, RoutedEventArgs e)
-        {
-            int count = lst.Count(p => p.IsSelected == true);
-            if (count > 1)
-            {
-                MessageBox.Show("一次只能删除一个模版");
-                return;
-            }
-            if (count <= 0)
-            {
-                MessageBox.Show("模版没有选中，不能删除");
-                return;
-            }
-            
-            OnBnClickedDelete(null, null);
-        }
     }
 
-    // InfoData 已迁至 LCD.Core/Models/TestRun/InfoData.cs（保留 LCD.View 命名空间）。
+    //测试数据
+    public class InfoData
+    {
+        public double height;
+        
+        public bool IsSelected;
+        public ENUMMESSTYLE MESTYPE;
+        public string Name;
+        public string Name1;
+        public List<string> lstdata;
+        public string productLength;
+        public double productWidth;
+        public bool IsMeter;
+        public double Ameter;
+        public double Bmeter;
+        public double Apercent;
+        public double Bpercent;
+        public int SerNo;
+        public double Xmeter;
+        public double Xpercent;
+        public double Ymeter;
+        public double Ypercent;
+        public bool IsLchk;
+        public double Lmin;
+        public double Lmax;
+        public bool Isxchk;
+        public double xmin;
+        public double xmax;
+        public bool Isychk;
+        public double ymin;
+        public double ymax;
+    }
+
+
+    //public enum ENUMMESSTYLE
+    //{
+    //    _01_POINT,
+    //    _02_RESPONSE,
+    //    _03_SPECTRUM,
+    //    _04_FLICKER,
+    //    _05_CROSSTALK,
+    //    _06_ACR
+    //}
+
 }

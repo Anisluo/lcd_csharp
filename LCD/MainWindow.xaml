@@ -10,7 +10,7 @@
         Closed="Window_Closed"
                xmlns:svgc="http://sharpvectors.codeplex.com/svgc/"
         Background="White"
-        Title="{Binding [AppName], Source={x:Static local:LanguageManager.Instance}}" Height="800" Width="1550" Loaded="Window_Loaded" Icon="/icon.png" >
+        Title="LCD辉度自动测试系统" Height="740" Width="1350" Loaded="Window_Loaded" >
 
     <!--<Window.Resources>
         <ContextMenu x:Key="ContextMenu">
@@ -32,32 +32,27 @@
         </WrapPanel>
 
         <Menu  HorizontalAlignment="Left" Background="Transparent" VerticalAlignment="Center">
-            <MenuItem Header="{Binding [FileF], Source={x:Static local:LanguageManager.Instance}}">
-                <MenuItem Header="{Binding [Open], Source={x:Static local:LanguageManager.Instance}}" Click="Open_OnClick"></MenuItem>
-                <MenuItem Header="{Binding [Close], Source={x:Static local:LanguageManager.Instance}}" Click="Close_Click"></MenuItem>
+            <MenuItem Header="文件（F）">
+                <MenuItem Header="打开" Click="Open_OnClick"></MenuItem>
+                <MenuItem Header="关闭" Click="Close_Click"></MenuItem>
                 <!--<MenuItem Header="导出CSV"></MenuItem>-->
-                <MenuItem Header="{Binding [History], Source={x:Static local:LanguageManager.Instance}}" Click="OnBnClickedHistory"></MenuItem>
+                <MenuItem Header="历史记录" Click="OnBnClickedHistory"></MenuItem>
                 <!--<MenuItem Header="图像"></MenuItem>-->
             </MenuItem>
-            <MenuItem x:Name="MenuPara" Header="{Binding [ParaP], Source={x:Static local:LanguageManager.Instance}}">
-                <MenuItem Header="{Binding [DeviceSet], Source={x:Static local:LanguageManager.Instance}}" Click="OnBnClickedDevice"></MenuItem>
-                <MenuItem Name="Viewangle" Header="{Binding [ViewpointSw], Source={x:Static local:LanguageManager.Instance}}" Click="OnBnClickedFdl"></MenuItem>
-                <MenuItem Name="MPcItemMenuItem" Header="{Binding [PlatformSet], Source={x:Static local:LanguageManager.Instance}}" Click="OnBnClickMPC"></MenuItem>
-                <MenuItem Header="{Binding [SportMode], Source={x:Static local:LanguageManager.Instance}}" Click="OnBnClickMoveStyle"></MenuItem>
-                <MenuItem Header="{Binding [CameraSet], Source={x:Static local:LanguageManager.Instance}}" Click="OnBnClickCamera"></MenuItem>
-                <MenuItem Header="{Binding [DeviceResponseSet], Source={x:Static local:LanguageManager.Instance}}" Click="OnBnClickedResp"></MenuItem>
-                <MenuItem Header="{Binding [PGSet], Source={x:Static local:LanguageManager.Instance}}" Click="OnBnClickedPGView"></MenuItem>
-                <MenuItem Header="{Binding [PowerSet], Source={x:Static local:LanguageManager.Instance}}"
+            <MenuItem Header="参数（P）">
+                <MenuItem Header="仪器设定" Click="OnBnClickedDevice"></MenuItem>
+                <MenuItem Name="MPcItemMenuItem" Header="平台设定" Click="OnBnClickMPC"></MenuItem>
+                <MenuItem Header="运动模式" Click="OnBnClickMoveStyle"></MenuItem>
+                <MenuItem Header="相机设置" Click="OnBnClickCamera"></MenuItem>
+                <MenuItem Header="响应仪器配置" Click="OnBnClickedResp"></MenuItem>
+                <MenuItem Header="PG配置" Click="OnBnClickedPGView"></MenuItem>
+                <MenuItem Header="电源设置"
                           Click="MenuItem_PowerClick"></MenuItem>
-                <MenuItem Header="{Binding [DataFormatSet], Source={x:Static local:LanguageManager.Instance}}" Click="OnBnClickedResultFormat"></MenuItem>
-                <MenuItem Header="{Binding [ReturnZero], Source={x:Static local:LanguageManager.Instance}}"
+                <MenuItem Header="数据格式配置" Click="OnBnClickedResultFormat"></MenuItem>
+                <MenuItem Header="回零"
                           x:Name="CenterMenuitem"
                           Click="OnBnClicked2Center" />
-                <MenuItem Header="{Binding [WarnMachine], Source={x:Static local:LanguageManager.Instance}}"
-                          x:Name="WarnMchineTest"
-                          Click="OnBnClicked2WarnMachine" />
-                <MenuItem Header="{Binding [LoadingPos], Source={x:Static local:LanguageManager.Instance}}" Click="MenuItem_OnClickup"/>
-                <MenuItem Header="{Binding [MoveDebug], Source={x:Static local:LanguageManager.Instance}}" Click="MenuItem_OnClickDebug"/>
+                <MenuItem Header="上料位置" Click="MenuItem_OnClickup"/>
             </MenuItem>
             <!--<MenuItem Header="测量（M）">
                 <MenuItem Header="单点测量"></MenuItem>
@@ -68,21 +63,18 @@
                 <MenuItem Header="5点模板" Click="OnBnClicked5PointView"></MenuItem>
                 <MenuItem Header="9点模板" Click="OnBnClicked9PointView"></MenuItem>
                 <MenuItem Header="13点模板" Click="OnBnClicked13PointView"></MenuItem>
-                -->
-            <!--<MenuItem Header="点位模板" Click="OnBnClickedCustomTemplate"></MenuItem>
+                <MenuItem Header="点位模板" Click="OnBnClickedCustomTemplate"></MenuItem>
                 <MenuItem Header="响应模板" Click="OnBnClickedResponseTemplate"></MenuItem>
-                <MenuItem Header="自定义模板组" Click="OnBnClickedCustomView" ></MenuItem>-->
-            <!--
+                <MenuItem Header="自定义模板组" Click="OnBnClickedCustomView" ></MenuItem>
             </MenuItem>-->
 
             <!--<MenuItem Header="报表（R）">
                 <MenuItem Header="单次报表"></MenuItem>
                 <MenuItem Header="多次报表"></MenuItem>
             </MenuItem>-->
-            <MenuItem Header="{Binding [Helph], Source={x:Static local:LanguageManager.Instance}}">
-                <MenuItem Header="{Binding [LangSet], Source={x:Static local:LanguageManager.Instance}}" Click="OnBtnLangSelect"></MenuItem>
-                <MenuItem Header="{Binding [OpManual], Source={x:Static local:LanguageManager.Instance}}"></MenuItem>
-                <MenuItem Header="{Binding [DeviceSelfCheck], Source={x:Static local:LanguageManager.Instance}}" Click="OnBnClickedSelfCheck"></MenuItem>
+            <MenuItem Header="帮助（H）">
+                <MenuItem Header="操作手册"></MenuItem>
+                <MenuItem Header="设备自诊断" Click="OnBnClickedSelfCheck"></MenuItem>
             </MenuItem>
         </Menu>
 
@@ -114,26 +106,10 @@
             <Button  Width="30" Height="28" Margin="2,0,0,0" Background="Transparent" BorderBrush="Transparent" BorderThickness="0" FontSize="16" Content="1°" Click="OnBnClickedHistory" VerticalAlignment="Center" />
             <Button  Width="30" Height="28" Margin="2,0,0,0" Background="Transparent" BorderBrush="Transparent" BorderThickness="0" FontSize="16" Content="0.2°" Click="OnBnClickedHistory" VerticalAlignment="Center"/>
             <Button  Width="30" Height="28" Margin="2,0,0,0" Background="Transparent" BorderBrush="Transparent" BorderThickness="0" FontSize="16" Content="0.1°" Click="OnBnClickedHistory" VerticalAlignment="Center"/>-->
-            
-            <Button Width="30" Height="28" Margin="10,0,0,0" Background="Transparent" BorderBrush="Transparent" BorderThickness="0" Click="OnBnClickedClear" VerticalAlignment="Center" >
+
+            <Button  Width="30" Height="28" Margin="10,0,0,0" Background="Transparent" BorderBrush="Transparent" BorderThickness="0" Click="OnBnClickedClear" VerticalAlignment="Center" >
                 <svgc:SvgViewbox Source="Image\clear.svg" IsHitTestVisible="False"></svgc:SvgViewbox>
             </Button>
-
-            <StackPanel x:Name="ViewAngleBtns" Orientation="Horizontal">
-                <Button x:Name="ViewAngle2" Width="30" Height="28" Margin="10,0,0,0" Background="Transparent" BorderBrush="Transparent" BorderThickness="0" Click="OnBnClickedView2" VerticalAlignment="Center" >
-                    <svgc:SvgViewbox Source="Image\2.svg" IsHitTestVisible="False"></svgc:SvgViewbox>
-                </Button>
-                <Button  Width="30" Height="28" Margin="10,0,0,0" Background="Transparent" BorderBrush="Transparent" BorderThickness="0" Click="OnBnClickedView1" VerticalAlignment="Center" >
-                    <svgc:SvgViewbox Source="Image\1.svg" IsHitTestVisible="False"></svgc:SvgViewbox>
-                </Button>
-                <Button  Width="30" Height="28" Margin="10,0,0,0" Background="Transparent" BorderBrush="Transparent" BorderThickness="0" Click="OnBnClickedView02" VerticalAlignment="Center" >
-                    <svgc:SvgViewbox Source="Image\02.svg" IsHitTestVisible="False"></svgc:SvgViewbox>
-                </Button>
-                <Button  Width="30" Height="28" Margin="10,0,0,0" Background="Transparent" BorderBrush="Transparent" BorderThickness="0" Click="OnBnClickedView01" VerticalAlignment="Center" >
-                    <svgc:SvgViewbox Source="Image\01.svg" IsHitTestVisible="False"></svgc:SvgViewbox>
-                </Button>
-            </StackPanel>
-
             <Button Visibility="Collapsed" Content="测试" Margin="1" Style="{StaticResource ButtonBaseStyle}" hc:IconElement.Geometry="{StaticResource PlayGeometry}" hc:IconElement.Height="12" Foreground="Black" BorderThickness="1"/>
             <Button Visibility="Collapsed" Content="暂停" Margin="1" Style="{StaticResource ButtonBaseStyle}" hc:IconElement.Geometry="{StaticResource PauseGeometry}" hc:IconElement.Height="12" Foreground="Black" BorderThickness="1"/>
             <Button Visibility="Collapsed" Content="停止" Margin="1" Style="{StaticResource ButtonBaseStyle}" hc:IconElement.Geometry="{StaticResource StopGeometry}" hc:IconElement.Height="12" Foreground="White" Background="DarkRed"/>
@@ -157,17 +133,13 @@
                     <TabItem>
                         <TabItem.ContextMenu>
                             <ContextMenu Name="Tab1Menu"  >
-                                <MenuItem Header="{Binding [ShowAll], Source={x:Static local:LanguageManager.Instance}}" Click="MenuItem_OnClick"></MenuItem>
-                                <MenuItem Header="{Binding [ShowPart], Source={x:Static local:LanguageManager.Instance}}" Click="ShowPortion"></MenuItem>
-                                <MenuItem Header="{Binding [Copy], Source={x:Static local:LanguageManager.Instance}}" Click="Copy_Click"></MenuItem>
+                                <MenuItem Header="显示全部" Click="MenuItem_OnClick"></MenuItem>
+                                <MenuItem Header="显示部分" Click="ShowPortion"></MenuItem>
                             </ContextMenu>
                         </TabItem.ContextMenu>
-                        <TabItem.Header>
-                            <StackPanel Orientation="Horizontal">
+                        <TabItem.Header >
                             <svgc:SvgViewbox Height="24" 
                             Width="40" Source="Image\results.svg" IsHitTestVisible="False"></svgc:SvgViewbox>
-                            <TextBlock Text="Lxy" VerticalAlignment="Center"/>
-                            </StackPanel>
                         </TabItem.Header>
                         <TabItem.Content>
                             <ContentControl Name="Result" Background="White" >
@@ -177,17 +149,13 @@
                     <TabItem>
                         <TabItem.ContextMenu>
                             <ContextMenu Name="Tab1Menu1"  >
-                                <MenuItem Header="{Binding [ShowAll], Source={x:Static local:LanguageManager.Instance}}" Click="spectrumResult"></MenuItem>
-                                <MenuItem Header="{Binding [ShowPart], Source={x:Static local:LanguageManager.Instance}}" Click='spectrumResultFalse'></MenuItem>
-                                <MenuItem Header="{Binding [Copy], Source={x:Static local:LanguageManager.Instance}}" Click="Copy_Click"></MenuItem>
+                                <MenuItem Header="显示全部" Click="spectrumResult"></MenuItem>
+                                <MenuItem Header="显示部分" Click='spectrumResultFalse'></MenuItem>
                             </ContextMenu>
                         </TabItem.ContextMenu>
                         <TabItem.Header >
-                            <StackPanel Orientation="Horizontal">
                             <svgc:SvgViewbox Height="24" 
                             Width="40" Source="Image\results.svg" IsHitTestVisible="False"></svgc:SvgViewbox>
-                                <TextBlock Text="Spectrum" VerticalAlignment="Center"/>
-                            </StackPanel>
                         </TabItem.Header>
                         <TabItem.Content>
                             <ContentControl Name="SpectrumResults" Background="White">
@@ -197,17 +165,13 @@
                     <TabItem>
                         <TabItem.ContextMenu>
                             <ContextMenu Name="Tab1Menu3"  >
-                                <MenuItem Header="{Binding [ShowAll], Source={x:Static local:LanguageManager.Instance}}" Click='warmupResultOK'></MenuItem>
-                                <MenuItem Header="{Binding [ShowPart], Source={x:Static local:LanguageManager.Instance}}" Click="warmupResultFalse"></MenuItem>
-                                <MenuItem Header="{Binding [Copy], Source={x:Static local:LanguageManager.Instance}}" Click="Copy_Click"></MenuItem>
+                                <MenuItem Header="显示全部" Click='warmupResultOK'></MenuItem>
+                                <MenuItem Header="显示部分" Click="warmupResultFalse"></MenuItem>
                             </ContextMenu>
                         </TabItem.ContextMenu>
                         <TabItem.Header >
-                            <StackPanel Orientation="Horizontal">
                             <svgc:SvgViewbox Height="24" 
                             Width="40" Source="Image\results.svg" IsHitTestVisible="False"></svgc:SvgViewbox>
-                                <TextBlock Text="Warm up" VerticalAlignment="Center"/>
-                            </StackPanel>
                         </TabItem.Header>
                         <TabItem.Content>
                             <ContentControl Name="warmup" Background="White">
@@ -217,21 +181,17 @@
                     <TabItem>
                         <TabItem.ContextMenu>
                             <ContextMenu Name="Tab1Menu4">
-                                <MenuItem Header="{Binding [ShowAll], Source={x:Static local:LanguageManager.Instance}}"
+                                <MenuItem Header="显示全部"
                                           Click='warmupResultOK'></MenuItem>
-                                <MenuItem Header="{Binding [ShowPart], Source={x:Static local:LanguageManager.Instance}}"
+                                <MenuItem Header="显示部分"
                                           Click="warmupResultFalse"></MenuItem>
-                                <MenuItem Header="{Binding [Copy], Source={x:Static local:LanguageManager.Instance}}" Click="Copy_Click"></MenuItem>
                             </ContextMenu>
                         </TabItem.ContextMenu>
                         <TabItem.Header>
-                            <StackPanel Orientation="Horizontal">
                             <svgc:SvgViewbox Height="24"
                                              Width="40"
-                                             Source="Image\power123.svg"
+                                             Source="Image\results.svg"
                                              IsHitTestVisible="False"></svgc:SvgViewbox>
-                                <TextBlock Text="Power" VerticalAlignment="Center"/>
-                            </StackPanel>
                         </TabItem.Header>
                         <TabItem.Content>
                             <ContentControl Name="Power"
@@ -239,41 +199,11 @@
                             </ContentControl>
                         </TabItem.Content>
                     </TabItem>
-
-                    <TabItem>
-                        <TabItem.ContextMenu>
-                            <ContextMenu Name="Tab1Menu42">
-                                <MenuItem Header="{Binding [ShowAll], Source={x:Static local:LanguageManager.Instance}}"
-                      Click='warmupResultOK'></MenuItem>
-                                <MenuItem Header="{Binding [ShowPart], Source={x:Static local:LanguageManager.Instance}}"
-                      Click="warmupResultFalse"></MenuItem>
-                                <MenuItem Header="{Binding [Copy], Source={x:Static local:LanguageManager.Instance}}" Click="Copy_Click"></MenuItem>
-                            </ContextMenu>
-                        </TabItem.ContextMenu>
-                        <TabItem.Header>
-                            <StackPanel Orientation="Horizontal">
-                                <svgc:SvgViewbox Height="24"
-                         Width="40"
-                         Source="Image\results.svg"
-                         IsHitTestVisible="False"></svgc:SvgViewbox>
-                                <TextBlock Text="RT-Data" VerticalAlignment="Center"/>
-                            </StackPanel>
-                        </TabItem.Header>
-                        <TabItem.Content>
-                            <ContentControl Name="RiseFallTime"
-                        Background="White">
-                            </ContentControl>
-                        </TabItem.Content>
-                    </TabItem>
-
-                    <TabItem Visibility="Collapsed">
+                    <TabItem >
                         <TabItem.Header >
-                            <StackPanel Orientation="Horizontal">
                             <svgc:SvgViewbox Height="24" 
                             Width="40"
                                              Source="Image\histogram.svg" IsHitTestVisible="False"></svgc:SvgViewbox>
-                                <TextBlock Text="RT-Curve" VerticalAlignment="Center"/>
-                            </StackPanel>
                         </TabItem.Header>
 
                         <TabItem.Content>
@@ -284,14 +214,11 @@
 
                     </TabItem>
 
-                    <TabItem Visibility="Collapsed">
+                    <TabItem>
                         <TabItem.Header >
-                            <StackPanel Orientation="Horizontal">
                             <svgc:SvgViewbox Height="24" 
                             Width="40"
                                              Source="Image\curves.svg" IsHitTestVisible="False"></svgc:SvgViewbox>
-                                <TextBlock Text="RT-Curve" VerticalAlignment="Center"/>
-                            </StackPanel>
                         </TabItem.Header>
                         <TabItem.Content>
                             <ContentControl Name="Waves" Background="White">
@@ -300,35 +227,7 @@
 
                     </TabItem>
 
-                    <TabItem>
-                        <TabItem.Header >
-                            <StackPanel Orientation="Horizontal">
-                            <svgc:SvgViewbox Height="24"  Width="40"
-                         Source="Image\curves.svg" IsHitTestVisible="False"></svgc:SvgViewbox>
-                            <TextBlock Text="RT-Curve" VerticalAlignment="Center"/>
-                            </StackPanel>
-                        </TabItem.Header>
-                        <TabItem.Content>
-                            <ContentControl Name="lines" Background="White">
-                            </ContentControl>
-                        </TabItem.Content>
-                    </TabItem>
-
-                    <TabItem>
-                        <TabItem.Header >
-                            <StackPanel Orientation="Horizontal">
-                                <svgc:SvgViewbox Height="24"  Width="40"
-                                    Source="Image\results.svg" IsHitTestVisible="False"></svgc:SvgViewbox>
-                                <TextBlock Text="CrossTalk" VerticalAlignment="Center"/>
-                            </StackPanel>
-                        </TabItem.Header>
-                        <TabItem.Content>
-                            <ContentControl Name="crosstalk" Background="White">
-                            </ContentControl>
-                        </TabItem.Content>
-                    </TabItem>
-
-
+                    
 
                 </TabControl>
 
@@ -516,7 +415,7 @@
                                     HorizontalAlignment="Center"
                                     VerticalAlignment="Center"
                                     Background="White"
-                                    Content="{Binding [Refer], Source={x:Static local:LanguageManager.Instance}}"
+                                    Content="参考"
                                     x:Name="Button1"
                                     Click="Button1_OnClick"
                                     Style="{StaticResource ButtonBaseStyle}" />
@@ -526,7 +425,7 @@
                                     HorizontalAlignment="Center"
                                     VerticalAlignment="Center"
                                     Background="White"
-                                    Content="{Binding [Modify], Source={x:Static local:LanguageManager.Instance}}"
+                                    Content="修正"
                                     Click="Button2_OnClick"
                                     x:Name="Button2"
                                     Style="{StaticResource ButtonBaseStyle}" />
@@ -588,19 +487,19 @@
                                 <RowDefinition/>
                             </Grid.RowDefinitions>
                             <WrapPanel Grid.Row="0" VerticalAlignment="Center" HorizontalAlignment="Center">
-                                <Button x:Name="TempButton" Background="White" Width="90" Height="28" Click="OnBnClickedSelfTemplate" FontWeight="Bold" Content="{Binding [TestTemplate], Source={x:Static local:LanguageManager.Instance}}" Style="{StaticResource ButtonBaseStyle}"/>
+                                <Button x:Name="TempButton" Background="White" Width="90" Height="28" Click="OnBnClickedSelfTemplate" FontWeight="Bold" Content="测试模板" Style="{StaticResource ButtonBaseStyle}"/>
                             </WrapPanel>
 
                             <WrapPanel Grid.Row="1" VerticalAlignment="Center" HorizontalAlignment="Center">
-                                <Button x:Name="SingleButton" Background="White" Width="90" Click="OnBnClickReadSingleData" FontWeight="Bold" Height="28" Content="{Binding [Test1Point], Source={x:Static local:LanguageManager.Instance}}" Style="{StaticResource ButtonBaseStyle}"/>
+                                <Button Background="White" Width="90" Click="OnBnClickReadSingleData" FontWeight="Bold" Height="28" Content="单点测量" Style="{StaticResource ButtonBaseStyle}"/>
                             </WrapPanel>
 
                             <WrapPanel Grid.Row="2" VerticalAlignment="Center" HorizontalAlignment="Center">
-                                <Button x:Name="SprectrumButon" Width="90" FontWeight="Bold" Height="28" Background="White" Click="OnBnClickSpectrumSingleData" Content="{Binding [TestSpectral], Source={x:Static local:LanguageManager.Instance}}" Style="{StaticResource ButtonBaseStyle}"/>
+                                <Button Width="90" FontWeight="Bold" Height="28" Click="onBnClickSpecturm" Background="White" Content="光谱测量" Style="{StaticResource ButtonBaseStyle}"/>
                             </WrapPanel>
 
                             <WrapPanel Grid.Row="3" VerticalAlignment="Center" HorizontalAlignment="Center">
-                                <Button x:Name="ResetButton" Width="90" Content="{Binding [ResetMsg], Source={x:Static local:LanguageManager.Instance}}" Click="Button_Click" Margin="1" Style="{StaticResource ButtonBaseStyle}" hc:IconElement.Geometry="{StaticResource ResetGeometry}" hc:IconElement.Height="12" Foreground="White" Background="#FF50A0FF"/>
+                                <Button Width="90" Content="复位" Click="Button_Click" Margin="1" Style="{StaticResource ButtonBaseStyle}" hc:IconElement.Geometry="{StaticResource ResetGeometry}" hc:IconElement.Height="12" Foreground="White" Background="#FF50A0FF"/>
                             </WrapPanel>
                         </Grid>
 
@@ -611,7 +510,7 @@
                                 <RowDefinition/>
                             </Grid.RowDefinitions>
                             <WrapPanel Grid.Row="0" VerticalAlignment="Center" HorizontalAlignment="Center">
-                                <Button x:Name="StartTestButton" FontSize="20" 
+                                <Button  FontSize="20" 
                                 FontWeight="Bold"
                                 Background="Green"
                                 Click="OnBnClickedStartRun"
@@ -643,23 +542,23 @@
                                 <RowDefinition/>
                                 <RowDefinition/>
                             </Grid.RowDefinitions>
-
+                            
 
                             <WrapPanel Background="Black" Grid.Row="1" VerticalAlignment="Center" HorizontalAlignment="Center">
-                                <Label Content="{Binding [XAxis], Source={x:Static local:LanguageManager.Instance}}" Foreground="White"></Label>
-                                <TextBlock Width="80" FontSize="16" Name="XPos" Foreground="White" ></TextBlock>
+                                <Label Content="X轴：" Foreground="Green"></Label>
+                                <TextBlock Width="80" FontSize="16" Name="XPos" Foreground="Green" ></TextBlock>
                             </WrapPanel>
 
 
                             <WrapPanel Background="Black" Grid.Row="2" VerticalAlignment="Center" HorizontalAlignment="Center">
-                                <Label Content="{Binding [YAxis], Source={x:Static local:LanguageManager.Instance}}" Foreground="White"></Label>
-                                <TextBlock Width="80" FontSize="16" Name="YPos" Foreground="White"></TextBlock>
+                                <Label Content="Y轴：" Foreground="Green"></Label>
+                                <TextBlock Width="80" FontSize="16" Name="YPos" Foreground="Green"></TextBlock>
                             </WrapPanel>
 
 
                             <WrapPanel Background="Black" Grid.Row="3" VerticalAlignment="Center" HorizontalAlignment="Center">
-                                <Label Content="{Binding [ZAxis], Source={x:Static local:LanguageManager.Instance}}" Foreground="White"></Label>
-                                <TextBlock Width="80" FontSize="16" Name="ZPos" Foreground="White"></TextBlock>
+                                <Label Content="Z轴：" Foreground="Green"></Label>
+                                <TextBlock Width="80" FontSize="16" Name="ZPos" Foreground="Green"></TextBlock>
                             </WrapPanel>
                         </Grid>
 
@@ -671,69 +570,29 @@
                                 <RowDefinition/>
                                 <RowDefinition/>
                             </Grid.RowDefinitions>
-
+                            
 
                             <WrapPanel Background="Black" Grid.Row="1" VerticalAlignment="Center" HorizontalAlignment="Center">
-                                <Label Content="{Binding [UAxis], Source={x:Static local:LanguageManager.Instance}}" Foreground="White"></Label>
-                                <TextBlock Width="80" FontSize="16" Name="UPos" Foreground="White"></TextBlock>
+                                <Label Content="U轴：" Foreground="Green"></Label>
+                                <TextBlock Width="80" FontSize="16" Name="UPos" Foreground="Green"></TextBlock>
                             </WrapPanel>
 
 
                             <WrapPanel Background="Black" Grid.Row="2" VerticalAlignment="Center" HorizontalAlignment="Center">
-                                <Label Content="{Binding [VAxis], Source={x:Static local:LanguageManager.Instance}}" Foreground="White"></Label>
-                                <TextBlock Width="80" FontSize="16" Name="VPos" Foreground="White"></TextBlock>
+                                <Label Content="V轴：" Foreground="Green"></Label>
+                                <TextBlock Width="80" FontSize="16" Name="VPos" Foreground="Green"></TextBlock>
                             </WrapPanel>
 
 
-                            <WrapPanel Visibility="Hidden" Background="Black" Grid.Row="3" VerticalAlignment="Center" HorizontalAlignment="Center">
-                                <Label Content="Ball：" Foreground="White"></Label>
+                            <WrapPanel Background="Black" Grid.Row="3" VerticalAlignment="Center" HorizontalAlignment="Center">
+                                <Label Content="Ball：" Foreground="Green"></Label>
                                 <TextBlock Width="80" 
                                 FontSize="16"
                                            Name="BallPos" 
-                                           Foreground="White"></TextBlock>
+                                           Foreground="Green"></TextBlock>
                             </WrapPanel>
                         </Grid>
 
-                        <Grid Grid.Column="7" x:Name="PowerControllerPanel">
-                            <Grid.RowDefinitions>
-                                <RowDefinition Height="AUto"/>
-                                <RowDefinition/>
-                                <RowDefinition/>
-                                <RowDefinition/>
-                                <RowDefinition/>
-                                <RowDefinition/>
-                                <RowDefinition/>
-                            </Grid.RowDefinitions>
-                            <WrapPanel  Grid.Row="1" VerticalAlignment="Center" HorizontalAlignment="Left">
-                                <Label Content="{Binding [PowerControl], Source={x:Static local:LanguageManager.Instance}}" Foreground="Black"></Label>
-                            </WrapPanel>
-
-                            <WrapPanel Grid.Row="2" VerticalAlignment="Center" HorizontalAlignment="Left">
-                                <Label Width="80" Margin="5,0,0,0" Content="{Binding [VoltageSet], Source={x:Static local:LanguageManager.Instance}}" Foreground="Black"></Label>
-                                <TextBox Width="80" FontSize="16" Name="VoltageSet" Foreground="Black"></TextBox>
-                            </WrapPanel>
-
-                            <WrapPanel Grid.Row="3" VerticalAlignment="Center" HorizontalAlignment="Left">
-                                <Label Width="80" Margin="5,0,0,0" Content="{Binding [CurrentSet], Source={x:Static local:LanguageManager.Instance}}" Foreground="Black"></Label>
-                                <TextBox Width="80" FontSize="16" Name="CurrentSet" Foreground="Black"></TextBox>
-                            </WrapPanel>
-
-                            <WrapPanel Grid.Row="4" VerticalAlignment="Center" HorizontalAlignment="Left">
-                                <Label Width="80" Margin="5,0,0,0" Content="{Binding [RealVoltage], Source={x:Static local:LanguageManager.Instance}}" Foreground="Black"></Label>
-                                <TextBlock Width="80" FontSize="16" Name="RealVoltage" Foreground="Black"></TextBlock>
-                            </WrapPanel>
-
-                            <WrapPanel Grid.Row="5" VerticalAlignment="Center" HorizontalAlignment="Left">
-                                <Label Width="80" Margin="5,0,0,0" Content="{Binding [RealCurrent], Source={x:Static local:LanguageManager.Instance}}" Foreground="Black"></Label>
-                                <TextBlock Width="80" FontSize="16" Name="RealCurrent" Foreground="Black"></TextBlock>
-                            </WrapPanel>
-
-                            <WrapPanel Grid.Row="6" VerticalAlignment="Center" HorizontalAlignment="Left">
-                                <Button Name="PowerOutputBtn" Width="70" Margin="5,0,0,0" FontSize="18" Content="{Binding [PowerOuput], Source={x:Static local:LanguageManager.Instance}}" Style="{StaticResource ButtonBaseStyle}"  Foreground="White" Background="#FF50A0FF"></Button>
-                                <Button  Content="打开" Width="70" Margin="10,0,0,0" FontSize="18" Name="PowerBtn" Style="{StaticResource ButtonBaseStyle}"  Foreground="White" Background="#FF50A0FF"></Button>
-                            </WrapPanel>
-
-                        </Grid>
 
 
                     </Grid>
@@ -746,44 +605,38 @@
                     <RowDefinition Height="40*"/>
                 </Grid.RowDefinitions>
                 <TabControl Margin="0,0,0,2">
-                    <TabItem Header="{Binding [MonitorScreen], Source={x:Static local:LanguageManager.Instance}}">
+                    <TabItem Header="监视画面">
                         <ContentControl Background="Black" Name="cam"/>
                     </TabItem>
-                    <TabItem Header="{Binding [TestDevice], Source={x:Static local:LanguageManager.Instance}}">
+                    <TabItem Header="测试设备">
                         <ContentControl Background="Black" Name="device"></ContentControl>
                     </TabItem>
-                    <TabItem Header="{Binding [CommCheck], Source={x:Static local:LanguageManager.Instance}}">
+                    <TabItem Header="通讯测试">
                         <ContentControl Background="Black" Name="ecom"></ContentControl>
                     </TabItem>
-                    <TabItem Header="{Binding [PGTest], Source={x:Static local:LanguageManager.Instance}}">
+                    <TabItem Header="PG测试">
                         <ContentControl Background="Black"
                                         Name="PG"></ContentControl>
-                    </TabItem>
-                    <TabItem Header="{Binding [CrosstalkInfo], Source={x:Static local:LanguageManager.Instance}}">
-                        <ContentControl Background="Black"
-                         Name="CrosstalkImage">
-                            <Image Source="Image\crosstalk.png" />
-                        </ContentControl>
                     </TabItem>
                 </TabControl>
 
                 <GridSplitter Grid.Row="1" HorizontalAlignment="Stretch" VerticalAlignment="Top" Height="2" />
 
                 <TabControl Grid.Row="1" x:Name="LogIndex">
-                    <TabItem Header="{Binding [LogOutput], Source={x:Static local:LanguageManager.Instance}}">
-                        <RichTextBox Name="xxx" TextChanged="xxx_TextChanged" VerticalScrollBarVisibility="Visible">
+                    <TabItem Header="Log输出">
+                        <RichTextBox Name="xxx" TextChanged="xxx_TextChanged">
                             <FlowDocument Name="mylog" LineHeight="2">
 
                             </FlowDocument>
                         </RichTextBox>
                     </TabItem>
-                    <TabItem Header="{Binding [TestContent], Source={x:Static local:LanguageManager.Instance}}" Visibility="Collapsed">
+                    <TabItem Header="测试内容" Visibility="Collapsed">
                         <TabItem.Content>
                             <ContentControl x:Name="workItem"/>
                         </TabItem.Content>
                     </TabItem>
 
-                    <TabItem Header="{Binding [TestFlow], Source={x:Static local:LanguageManager.Instance}}">
+                    <TabItem Header="测试流程">
                         <TabItem.Content>
                             <ContentControl Grid.Row="1" x:Name="workData"/>
                         </TabItem.Content>
@@ -794,11 +647,7 @@
         </Grid>
 
         <Grid Grid.Row="3">
-            <Grid.ColumnDefinitions>
-                <ColumnDefinition Width="79*"/>
-                <ColumnDefinition Width="76*"/>
-            </Grid.ColumnDefinitions>
-            <StatusBar Name="statusbar" Grid.ColumnSpan="2">
+            <StatusBar Name="statusbar">
                 <StatusBar.Resources>
                     <Style TargetType="TextBlock">
                         <Setter Property="VerticalAlignment" Value="Center"/>
@@ -806,66 +655,50 @@
                 </StatusBar.Resources>
                 <StatusBarItem>
                     <StackPanel Orientation="Horizontal">
-                        <TextBlock  Text="{Binding [XAxis], Source={x:Static local:LanguageManager.Instance}}"/>
-                        <TextBlock Name="x" Text="{Binding [NotConnect], Source={x:Static local:LanguageManager.Instance}}" Foreground="DarkRed" FontSize="10"/>
+                        <TextBlock  Text="X轴:"/>
+                        <TextBlock Name="x" Text="未连接" Foreground="DarkRed" FontSize="10"/>
                     </StackPanel>
                 </StatusBarItem>
                 <StatusBarItem>
                     <StackPanel Orientation="Horizontal">
-                        <TextBlock  Text="{Binding [YAxis], Source={x:Static local:LanguageManager.Instance}}" VerticalAlignment="Center"/>
-                        <TextBlock Name="y" Text="{Binding [NotConnect], Source={x:Static local:LanguageManager.Instance}}" Foreground="DarkRed" FontSize="10"/>
+                        <TextBlock  Text="Y轴:" VerticalAlignment="Center"/>
+                        <TextBlock Name="y" Text="未连接" Foreground="DarkRed" FontSize="10"/>
                     </StackPanel>
                 </StatusBarItem>
                 <StatusBarItem>
                     <StackPanel Orientation="Horizontal">
-                        <TextBlock  Text="{Binding [ZAxis], Source={x:Static local:LanguageManager.Instance}}"/>
-                        <TextBlock Name="z" Text="{Binding [NotConnect], Source={x:Static local:LanguageManager.Instance}}" Foreground="DarkRed" FontSize="10"/>
+                        <TextBlock  Text="Z轴:"/>
+                        <TextBlock Name="z" Text="未连接" Foreground="DarkRed" FontSize="10"/>
                     </StackPanel>
                 </StatusBarItem>
                 <StatusBarItem>
                     <StackPanel Orientation="Horizontal">
-                        <TextBlock  Text="{Binding [UAxis], Source={x:Static local:LanguageManager.Instance}}"/>
-                        <TextBlock Name="u" Text="{Binding [NotConnect], Source={x:Static local:LanguageManager.Instance}}" Foreground="DarkRed" FontSize="10"/>
+                        <TextBlock  Text="U轴:"/>
+                        <TextBlock Name="u" Text="未连接" Foreground="DarkRed" FontSize="10"/>
                     </StackPanel>
                 </StatusBarItem>
                 <StatusBarItem>
                     <StackPanel Orientation="Horizontal">
-                        <TextBlock  Text="{Binding [VAxis], Source={x:Static local:LanguageManager.Instance}}"/>
-                        <TextBlock Name="v" Text="{Binding [NotConnect], Source={x:Static local:LanguageManager.Instance}}" Foreground="DarkRed" FontSize="10"/>
+                        <TextBlock  Text="V轴:"/>
+                        <TextBlock Name="v" Text="未连接" Foreground="DarkRed" FontSize="10"/>
                     </StackPanel>
                 </StatusBarItem>
                 <StatusBarItem>
-                    <StackPanel Orientation="Horizontal"  x:Name="PowerControlStatus">
-                        <TextBlock  Text="{Binding [ControlPowerDash], Source={x:Static local:LanguageManager.Instance}}"/>
-                        <TextBlock Name="PowerControl" Text="{Binding [NotConnect], Source={x:Static local:LanguageManager.Instance}}" Foreground="DarkRed" FontSize="10"/>
-                    </StackPanel>
-                </StatusBarItem>
-                <StatusBarItem Visibility="Collapsed">
                     <StackPanel Orientation="Horizontal">
-                        <TextBlock  Text="{Binding [TestSig1], Source={x:Static local:LanguageManager.Instance}}" />
+                        <TextBlock  Text="测试信号1:" />
                         <TextBlock Name="TestSignal1"
                                    Text=""
                                    Foreground="DarkRed"
                                    FontSize="10" />
                     </StackPanel>
                 </StatusBarItem>
-                <StatusBarItem  Visibility="Collapsed">
+                <StatusBarItem>
                     <StackPanel Orientation="Horizontal">
-                        <TextBlock  Text="{Binding [TestSig2], Source={x:Static local:LanguageManager.Instance}}" />
+                        <TextBlock  Text="V测试信号2:" />
                         <TextBlock Name="TestSignal2"
-                                   Text="{Binding [NotConnect], Source={x:Static local:LanguageManager.Instance}}"
+                                   Text="未连接"
                                    Foreground="DarkRed"
                                    FontSize="10" />
-                    </StackPanel>
-                </StatusBarItem>
-
-                <StatusBarItem x:Name="TimeCountBar" Visibility="Collapsed" >
-                    <StackPanel Orientation="Horizontal">
-                        <TextBlock  Text="{Binding [WarnCount], Source={x:Static local:LanguageManager.Instance}}" />
-                        <TextBlock Name="TimeCount"
-                        Text=""
-                        Foreground="DarkRed"
-                        FontSize="10" />
                     </StackPanel>
                 </StatusBarItem>
                 <!--<StatusBarItem>
@@ -878,8 +711,8 @@
                 </StatusBarItem>-->
                 <StatusBarItem HorizontalAlignment="Right">
                     <StackPanel Orientation="Horizontal">
-                        <TextBlock Name="testst" Text="{Binding [TestStatus], Source={x:Static local:LanguageManager.Instance}}"/>
-                        <TextBlock Text="{Binding [Preparing], Source={x:Static local:LanguageManager.Instance}}" Foreground="DarkRed" FontSize="10"/>
+                        <TextBlock Name="testst" Text="测试状态:"/>
+                        <TextBlock Text="准备中" Foreground="DarkRed" FontSize="10"/>
                     </StackPanel>
                 </StatusBarItem>
                 <!--<StatusBarItem HorizontalAlignment="Right">

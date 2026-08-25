@@ -4,7 +4,6 @@
              xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
              xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
              xmlns:local="clr-namespace:LCD.View"
-             xmlns:app1="clr-namespace:LCD"
              mc:Ignorable="d" 
                     xmlns:wf="clr-namespace:System.Windows.Forms;assembly=System.Windows.Forms"
      xmlns:airspace="clr-namespace:Microsoft.DwayneNeed.Interop;assembly=Microsoft.DwayneNeed"
@@ -18,7 +17,7 @@
                 <RowDefinition/>
                 <RowDefinition Height="Auto"/>
             </Grid.RowDefinitions>
-            <Grid Grid.Row="0" Name="grid0">
+            <Grid Grid.Row="0">
 
                 <Image  Source="{Binding wbBitmap}"
                         Name="pictureHost"
@@ -27,12 +26,12 @@
                         VerticalAlignment="Stretch">
                 </Image>
 
-                <Border x:Name="leftline" Background="Red"
+                <Border Background="Green"
                         Margin="{Binding LeftMargin}"
                         HorizontalAlignment="Left"
                         SnapsToDevicePixels="True"
                         Width="2" />
-                <Border x:Name="topline" Background="Red"
+                <Border Background="Green"
                         Margin="{Binding TopMargin}"
                         VerticalAlignment="Top"
                         SnapsToDevicePixels="True"
@@ -41,13 +40,13 @@
             </Grid>
             <Grid Grid.Row="1">
                 <WrapPanel VerticalAlignment="Center" HorizontalAlignment="Stretch" >
-                    <Label Content="{Binding [CamerPara1], Source={x:Static app1:LanguageManager.Instance}}"
+                    <Label Content="相机参数："
                            Width="90"
                            Background="Black"
                            Foreground="White"
                            Margin="0,0,0,0"
                            FontSize="14"></Label>
-                    <Label Content="{Binding [Exposure1], Source={x:Static app1:LanguageManager.Instance}}"
+                    <Label Content="曝光："
                            Background="Black"
                            Foreground="White"
                            Width="80"
@@ -57,7 +56,7 @@
                                Background="Black"
                                Foreground="White"
                                Name="ScrollBar"
-                               Maximum="800000"
+                               Maximum="200000"
                                ValueChanged="ScrollBar_OnValueChanged" MouseLeave="ScrollBar_OnMouseLeave"></ScrollBar>
                     <!--<TextBox Name="Cam" Width="80" FontSize="14" VerticalAlignment="Center">8000</TextBox>-->
                     <!--<Label Content="ms" Width="50" FontSize="14"></Label>-->

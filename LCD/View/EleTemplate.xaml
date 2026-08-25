@@ -8,12 +8,11 @@
              Background="Transparent"
              d:DesignHeight="20" d:DesignWidth="20">
     <Grid>
-        <Border x:Name="brd" CornerRadius="20" Background="Blue">
+        <Border CornerRadius="20" Background="Yellow">
             <Button Name="mycontent" 
             BorderBrush="Transparent"
             FontSize="8"
             Content="001"
-            Foreground="White"
             Click="OnBnClickedShowData"
                     Background="Transparent">
             </Button>

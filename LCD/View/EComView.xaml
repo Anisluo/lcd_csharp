@@ -4,7 +4,6 @@
         xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:local="clr-namespace:LCD"
-        xmlns:app1="clr-namespace:LCD"
         mc:Ignorable="d"
         Background="White"
         d:DesignWidth="568" d:DesignHeight="390"
@@ -22,7 +21,7 @@
                 <ColumnDefinition/>
             </Grid.ColumnDefinitions>
             <Grid Grid.Row="0" Grid.Column="0" Margin="0,10,0,10">
-                <GroupBox Header="{Binding [CommDevList2], Source={x:Static app1:LanguageManager.Instance}}">
+                <GroupBox Header="通讯设备列表">
                     <Grid>
                         <Grid.ColumnDefinitions></Grid.ColumnDefinitions>
                         <Grid.RowDefinitions>
@@ -33,14 +32,14 @@
                         </Grid.RowDefinitions>
 
                         <ComboBox Grid.Row="1" HorizontalAlignment="Stretch" Margin="10,0,70,0" Height="20" SelectedIndex="{Binding DevTypeIndex}">
-                            <ComboBoxItem Content="{Binding [SerialComm], Source={x:Static app1:LanguageManager.Instance}}"/>
-                            <ComboBoxItem Content="{Binding [UdpComm], Source={x:Static app1:LanguageManager.Instance}}"/>
-                            <ComboBoxItem Content="{Binding [TcpServer], Source={x:Static app1:LanguageManager.Instance}}"/>
-                            <ComboBoxItem Content="{Binding [TcpClient], Source={x:Static app1:LanguageManager.Instance}}"/>
+                            <ComboBoxItem Content="串口通信"/>
+                            <ComboBoxItem Content="UDP通信"/>
+                            <ComboBoxItem Content="TCP服务端"/>
+                            <ComboBoxItem Content="TCP客户端"/>
                         </ComboBox>
-                        <Button Grid.Row="1" Content="{Binding [Add], Source={x:Static app1:LanguageManager.Instance}}" HorizontalAlignment="Right" Margin="0,0,10,0" Width="50" Height="20" Click="AddDevice_Click"/>
+                        <Button Grid.Row="1" Content="添加" HorizontalAlignment="Right" Margin="0,0,10,0" Width="50" Height="20" Click="AddDevice_Click"/>
 
-                        <Button Grid.Row="2" Content="{Binding [Delete], Source={x:Static app1:LanguageManager.Instance}}" Height="20" Margin="10,0" Click="DeletDevice_Click"/>
+                        <Button Grid.Row="2" Content="删除" Height="20" Margin="10,0" Click="DeletDevice_Click"/>
 
                         <ListView x:Name="listView" Grid.Row="3" Margin="10,0" ItemsSource="{Binding TestDevices}" DisplayMemberPath="Key"/>
 
@@ -49,7 +48,7 @@
                 </GroupBox>
             </Grid>
 
-            <GroupBox Header="{Binding [Property], Source={x:Static app1:LanguageManager.Instance}}" Grid.Row="0" Grid.Column="1" Margin="0,10,0,10" DataContext="{Binding SelectedItem, ElementName=listView}">
+            <GroupBox Header="属性" Grid.Row="0" Grid.Column="1" Margin="0,10,0,10" DataContext="{Binding SelectedItem, ElementName=listView}">
                 <Grid>
                     <Grid Visibility="{Binding CommunicationModel,Converter={x:Static local:Converters.ShowCOM},FallbackValue=Collapsed}">
                         <Grid.ColumnDefinitions>
@@ -87,14 +86,14 @@
                             </Style>
                         </Grid.Resources>
 
-                        <TextBlock Grid.Row="0" Text="{Binding [NameDash], Source={x:Static app1:LanguageManager.Instance}}"/>
-                        <TextBlock Grid.Row="1" Text="{Binding [EnableDash], Source={x:Static app1:LanguageManager.Instance}}"/>
-                        <TextBlock Grid.Row="2" Text="{Binding [NoteDash], Source={x:Static app1:LanguageManager.Instance}}"/>
-                        <TextBlock Grid.Row="3" Text="{Binding [SerialDash], Source={x:Static app1:LanguageManager.Instance}}"/>
-                        <TextBlock Grid.Row="4" Text="{Binding [BaudrateDash], Source={x:Static app1:LanguageManager.Instance}}"/>
-                        <TextBlock Grid.Row="5" Text="{Binding [ParityDash], Source={x:Static app1:LanguageManager.Instance}}"/>
-                        <TextBlock Grid.Row="6" Text="{Binding [DataWidDash], Source={x:Static app1:LanguageManager.Instance}}"/>
-                        <TextBlock Grid.Row="7" Text="{Binding [StopBitsDash], Source={x:Static app1:LanguageManager.Instance}}"/>
+                        <TextBlock Grid.Row="0" Text="名称:"/>
+                        <TextBlock Grid.Row="1" Text="启用:"/>
+                        <TextBlock Grid.Row="2" Text="备注:"/>
+                        <TextBlock Grid.Row="3" Text="串口号:"/>
+                        <TextBlock Grid.Row="4" Text="波特率:"/>
+                        <TextBlock Grid.Row="5" Text="校验位:"/>
+                        <TextBlock Grid.Row="6" Text="数据位:"/>
+                        <TextBlock Grid.Row="7" Text="停止位:"/>
 
                         <TextBox Grid.Column="1" Grid.Row="0" Text="{Binding Key}"/>
                         <CheckBox Grid.Column="1" Grid.Row="1" IsChecked="{Binding IsOpen}"/>
@@ -141,12 +140,12 @@
                             </Style>
                         </Grid.Resources>
 
-                        <TextBlock Grid.Row="0" Text="{Binding [NameDash], Source={x:Static app1:LanguageManager.Instance}}"/>
-                        <TextBlock Grid.Row="1" Text="{Binding [EnableDash], Source={x:Static app1:LanguageManager.Instance}}"/>
-                        <TextBlock Grid.Row="2" Text="{Binding [NoteDash], Source={x:Static app1:LanguageManager.Instance}}"/>
-                        <TextBlock Grid.Row="3" Text="{Binding [LocalPort], Source={x:Static app1:LanguageManager.Instance}}"/>
-                        <TextBlock Grid.Row="4" Text="{Binding [DstAddr], Source={x:Static app1:LanguageManager.Instance}}"/>
-                        <TextBlock Grid.Row="5" Text="{Binding [DstPort], Source={x:Static app1:LanguageManager.Instance}}"/>
+                        <TextBlock Grid.Row="0" Text="名称:"/>
+                        <TextBlock Grid.Row="1" Text="启用:"/>
+                        <TextBlock Grid.Row="2" Text="备注:"/>
+                        <TextBlock Grid.Row="3" Text="本地端口:"/>
+                        <TextBlock Grid.Row="4" Text="目标地址:"/>
+                        <TextBlock Grid.Row="5" Text="目标端口:"/>
 
                         <TextBox Grid.Column="1" Grid.Row="0" Text="{Binding Key}"/>
                         <CheckBox Grid.Column="1" Grid.Row="1" IsChecked="{Binding IsOpen}"/>
@@ -191,10 +190,10 @@
                             </Style>
                         </Grid.Resources>
 
-                        <TextBlock Grid.Row="0" Text="{Binding [NameDash], Source={x:Static app1:LanguageManager.Instance}}"/>
-                        <TextBlock Grid.Row="1" Text="{Binding [EnableDash], Source={x:Static app1:LanguageManager.Instance}}"/>
-                        <TextBlock Grid.Row="2" Text="{Binding [NoteDash], Source={x:Static app1:LanguageManager.Instance}}"/>
-                        <TextBlock Grid.Row="3" Text="{Binding [PortDash], Source={x:Static app1:LanguageManager.Instance}}"/>
+                        <TextBlock Grid.Row="0" Text="名称:"/>
+                        <TextBlock Grid.Row="1" Text="启用:"/>
+                        <TextBlock Grid.Row="2" Text="备注:"/>
+                        <TextBlock Grid.Row="3" Text="端口:"/>
 
                         <TextBox Grid.Column="1" Grid.Row="0" Text="{Binding Key}"/>
                         <CheckBox Grid.Column="1" Grid.Row="1" IsChecked="{Binding IsOpen}"/>
@@ -237,11 +236,11 @@
                             </Style>
                         </Grid.Resources>
 
-                        <TextBlock Grid.Row="0" Text="{Binding [NameDash], Source={x:Static app1:LanguageManager.Instance}}"/>
-                        <TextBlock Grid.Row="1" Text="{Binding [EnableDash], Source={x:Static app1:LanguageManager.Instance}}"/>
-                        <TextBlock Grid.Row="2" Text="{Binding [NoteDash], Source={x:Static app1:LanguageManager.Instance}}"/>
-                        <TextBlock Grid.Row="3" Text="{Binding [DstAddr], Source={x:Static app1:LanguageManager.Instance}}"/>
-                        <TextBlock Grid.Row="4" Text="{Binding [DstPort], Source={x:Static app1:LanguageManager.Instance}}"/>
+                        <TextBlock Grid.Row="0" Text="名称:"/>
+                        <TextBlock Grid.Row="1" Text="启用:"/>
+                        <TextBlock Grid.Row="2" Text="备注:"/>
+                        <TextBlock Grid.Row="3" Text="目标地址:"/>
+                        <TextBlock Grid.Row="4" Text="目标端口:"/>
 
                         <TextBox Grid.Column="1" Grid.Row="0" Text="{Binding Key}"/>
                         <CheckBox Grid.Column="1" Grid.Row="1" IsChecked="{Binding IsOpen}"/>
@@ -260,13 +259,13 @@
                 <ColumnDefinition Width="50*"/>
             </Grid.ColumnDefinitions>
 
-            <GroupBox Grid.Row="1" Grid.Column="0" Header="{Binding [SendData2], Source={x:Static app1:LanguageManager.Instance}}">
+            <GroupBox Grid.Row="1" Grid.Column="0" Header="发送数据">
                 <TextBox Text="{Binding SendStr}" TextWrapping="Wrap" VerticalContentAlignment="Top" AcceptsReturn="True"/>
             </GroupBox>
-            <GroupBox Grid.Row="1" Grid.Column="1" Header="{Binding [RecvData2], Source={x:Static app1:LanguageManager.Instance}}" DataContext="{Binding SelectedItem, ElementName=listView}">
+            <GroupBox Grid.Row="1" Grid.Column="1" Header="接收数据" DataContext="{Binding SelectedItem, ElementName=listView}">
                 <TextBox Text="{Binding m_ReadData}" TextWrapping="Wrap"  VerticalContentAlignment="Top" AcceptsReturn="True"/>
             </GroupBox>
         </Grid>
-        <Button Grid.Column="1" Grid.Row="2" Content="{Binding [Send], Source={x:Static app1:LanguageManager.Instance}}" Width="74" Height="24" Click="Send_Click"/>
+        <Button Grid.Column="1" Grid.Row="2" Content="发送" Width="74" Height="24" Click="Send_Click"/>
     </Grid>
 </UserControl>

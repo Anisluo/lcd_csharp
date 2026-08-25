@@ -4,10 +4,9 @@
         xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:local="clr-namespace:LCD.View"
-        xmlns:app1="clr-namespace:LCD"
         ResizeMode="NoResize"
         mc:Ignorable="d"
-        Title="PowerView"
+        Title="PGView"
         Height="450"
         Width="680" Loaded="Window_Loaded" >
     <Grid>
@@ -28,7 +27,7 @@
             <WrapPanel VerticalAlignment="Center"
                        FlowDirection="RightToLeft">
                 <Image Source="../Image/head.png" />
-                <Label Content="{Binding [PowerSet], Source={x:Static app1:LanguageManager.Instance}}"
+                <Label Content="电源设置"
                        VerticalAlignment="Center"
                        FontSize="20" />
             </WrapPanel>
@@ -36,7 +35,7 @@
 
             <Grid Grid.Row="1">
                 <WrapPanel VerticalAlignment="Center" Margin="27,0,0,0">
-                    <TextBlock Text="{Binding [IsEnable], Source={x:Static app1:LanguageManager.Instance}}"
+                    <TextBlock Text="是否启用:"
                                Width="90"
                                FontSize="14"
                                Visibility="Hidden" />
@@ -47,40 +46,11 @@
 
             <Grid Grid.Row="2">
                 <WrapPanel  VerticalAlignment="Center"
-                Margin="20,0,0,0">
-                    <Label Content="{Binding [PowerSelect], Source={x:Static app1:LanguageManager.Instance}}"
-               Width="110"
-               FontSize="14"></Label>
-                    <CheckBox IsChecked="{Binding EnablePowerControl}"  VerticalAlignment="Center"
-               Width="80" Content="{Binding [PowerEnable], Source={x:Static app1:LanguageManager.Instance}}"
-               FontSize="14"></CheckBox>
-                    <ComboBox Width="80"
-                  FontSize="14"
-                  Name="PowerTypes"
-                  VerticalAlignment="Center"
-                  SelectedIndex="{Binding PowerType}"
-                  Text="{Binding PowerTypeText}"></ComboBox>
-
-                 <Label Content="{Binding [SerialPort], Source={x:Static app1:LanguageManager.Instance}}"
-                    Width="80" Margin="20,0,0,0"
-                    FontSize="14"></Label>
-                    
-                    <ComboBox Width="80"
-                      FontSize="14"
-                      Name="powerports"
-                      VerticalAlignment="Center"                      
-                      Text="{Binding PowerSerialName}"></ComboBox>
-
-                </WrapPanel>
-            </Grid>
-
-            <Grid Grid.Row="3">
-                <WrapPanel  VerticalAlignment="Center"
                             Margin="20,0,0,0">
-                    <Label Content="{Binding [ComSet3], Source={x:Static app1:LanguageManager.Instance}}"
-                           Width="110"
+                    <Label Content="通信设定："
+                           Width="90"
                            FontSize="14"></Label>
-                    <Label Content="{Binding [SerialPort], Source={x:Static app1:LanguageManager.Instance}}"
+                    <Label Content="通信口："
                            Width="80"
                            FontSize="14"></Label>
                     <ComboBox Width="80"
@@ -90,7 +60,7 @@
                               SelectedIndex="{Binding comName}"
                               Text="{Binding comNameText}"></ComboBox>
 
-                    <Label Content="{Binding [BaudrateDash], Source={x:Static app1:LanguageManager.Instance}}"
+                    <Label Content="波特率："
                            Margin="20,0,0,0"
                            Width="80"
                            FontSize="14"></Label>
@@ -105,9 +75,9 @@
                     </ComboBox>
                 </WrapPanel>
             </Grid>
-            <Grid Grid.Row="4">
+            <Grid Grid.Row="3">
                 <WrapPanel  VerticalAlignment="Center">
-                    <Label Content="{Binding [DataWidDash], Source={x:Static app1:LanguageManager.Instance}}"
+                    <Label Content="数据位："
                            Margin="110,0,0,0"
                            Width="80"
                            FontSize="14"></Label>
@@ -122,7 +92,7 @@
 
                     </ComboBox>
 
-                    <Label Content="{Binding [StopBitsDash], Source={x:Static app1:LanguageManager.Instance}}"
+                    <Label Content="停止位："
                            Margin="20,0,0,0"
                            Width="80"
                            FontSize="14"></Label>
@@ -135,7 +105,7 @@
                         <ComboBoxItem>1</ComboBoxItem>
                     </ComboBox>
 
-                    <Label Content="{Binding [ParityDash], Source={x:Static app1:LanguageManager.Instance}}"
+                    <Label Content="校验位："
                            Margin="20,0,0,0"
                            Width="80"
                            FontSize="14"></Label>
@@ -155,7 +125,7 @@
                 <WrapPanel FlowDirection="RightToLeft"
                            HorizontalAlignment="Center"
                            VerticalAlignment="Center">
-                    <Button Content="{Binding [OK], Source={x:Static app1:LanguageManager.Instance}}"
+                    <Button Content="确定"
                             Click="Button_Click"
                             FontWeight="Bold"
                             FontSize="16"

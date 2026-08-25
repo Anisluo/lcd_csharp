@@ -130,41 +130,6 @@ namespace LCD.ViewMode
             set { paritytext = value; OnPropertyChanged(); }
         }
 
-        private string powerType;
-
-        public string PowerType
-        {
-            get { return powerType; }
-            set { powerType = value; OnPropertyChanged(); }
-        }
-
-        private string powerTypetext;
-
-        public string PowerTypeText
-        {
-            get { return powerTypetext; }
-            set { powerTypetext = value; OnPropertyChanged(); }
-        }
-
-        public bool enablePowerControl;
-        public bool EnablePowerControl
-        {
-            get { return enablePowerControl; }
-            set
-            {
-                enablePowerControl = value; OnPropertyChanged();
-            }
-        }
-
-        public string powerSerialName;
-        public string PowerSerialName
-        {
-            get { return powerSerialName; }
-            set
-            {
-                powerSerialName = value; OnPropertyChanged();
-            }
-        }
 
     }
 }

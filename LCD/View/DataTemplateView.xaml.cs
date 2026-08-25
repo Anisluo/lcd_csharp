@@ -93,7 +93,6 @@ namespace LCD.View
                     case ENUMMESSTYLE._05_CROSSTALK: Init_POINT(lstdata, InitDataTemplate); break;
                     case ENUMMESSTYLE._06_ACR: Init_POINT(lstdata, InitDataTemplate); break;
                     case ENUMMESSTYLE._07_warmup: Init_POINT(lstdata, InitDataTemplate); break;
-                    case ENUMMESSTYLE.TCO: Init_POINT(lstdata, InitDataTemplate); break;
 
                 }
 

@@ -20,7 +20,6 @@ namespace LCD.View
     public partial class pop_up : Window
     {
         public string Time = "";
-        public bool is_ok {  get; set; }=false;
         public pop_up( string Time,string Tip)
         {
             WindowStartupLocation = WindowStartupLocation.CenterScreen;
@@ -32,13 +31,6 @@ namespace LCD.View
 
         private void Button1_Click(object sender, RoutedEventArgs e)
         {
-            if(lblName.Text.Length == 0)
-            {
-                MessageBox.Show("输入信息不能为空");
-                lblName.Focus();
-                return;
-            }
-            is_ok = true;
             this.Time = lblName.Text;
             this.Close();
         }

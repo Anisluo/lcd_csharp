@@ -92,6 +92,34 @@ namespace LCD.dataBase
           
         }
 
+        public static void RederListAll()
+        {
+            // 先建 ID → 主记录 的字典，O(1) 查找
+            var dict = new Dictionary<int, UserIdMode>();
+            foreach (var m in Project.listBarCode)
+            {
+                m.ProjectModes.Clear();
+                dict[m.ID] = m;
+            }
+
+            // 一条 SQL 读出所有子数据
+            string SQL = "select * from project";
+            using (var reader = Database.Reader(SQL))
+            {
+                while (reader.Read())
+                {
+                    int userId = Convert.ToInt32(reader["UserID"]);
+                    if (!dict.TryGetValue(userId, out var owner)) continue;
+
+                    owner.ProjectModes.Add(new ProjectModeClass
+                    {
+                        ID = Convert.ToInt32(reader["ID"]),
+                        projectName = reader["projectName"].ToString(),
+                        ModeType = Convert.ToInt32(reader["ModeType"])
+                    });
+                }
+            }
+        }
         public static void RederList(int ID)
         {
             
@@ -110,5 +138,15 @@ namespace LCD.dataBase
 
 
         }
+    }
+
+    public class ProjectModeClass 
+    {
+        public int ID { get; set; }
+        public int UserID { get; set; }
+        public string projectName { get; set; }
+        public int ModeType { get; set; }
+        public List<TestDataMode> TestDataModes { get; set; }    = new List<TestDataMode>();
+        public List<SpectrumDataMode> SpectrumDataModes { get; set; }=new List<SpectrumDataMode>();
     }
 }

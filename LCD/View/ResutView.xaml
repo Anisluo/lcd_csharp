@@ -37,15 +37,6 @@
                   ClipboardCopyMode="ExcludeHeader"
                   SelectionUnit="Cell">
             <!--<ColumnDefinition Width="500"/>-->
-            <DataGrid.ContextMenu>
-                <ContextMenu  Name="CMCaozuo">
-                    <MenuItem Name="CopyValue" Header="复制" FontSize="20" Click="CopyVal_Click" />
-                    <!--<Separator/>
-                    <MenuItem Name="CopyRow" Header="行拷贝" FontSize="20" Click="CopyRow_Click" />
-                    <Separator/>
-                    <MenuItem Name="CopyCol" Header="列拷贝" FontSize="20" Click="CopyCol_Click"/>-->
-                </ContextMenu>
-            </DataGrid.ContextMenu>
         </DataGrid>
     </Grid>
 </UserControl>

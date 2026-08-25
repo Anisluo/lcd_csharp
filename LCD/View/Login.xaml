@@ -4,7 +4,6 @@
         xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:local="clr-namespace:LCD.View"
-        xmlns:app1="clr-namespace:LCD"
         ResizeMode="NoResize"
         mc:Ignorable="d"
         WindowStartupLocation="CenterScreen"
@@ -50,7 +49,7 @@
         </Style>
     </Window.Resources>
     <Grid>
-        <Image Source="../Image/Logo1.png"></Image>
+        <Image Source="../Image/Logo.bmp"></Image>
         <Grid Margin="0,160,0,120"  HorizontalAlignment="Center">
             <Grid.RowDefinitions>
                 <RowDefinition/>
@@ -58,13 +57,13 @@
                 <RowDefinition/>
             </Grid.RowDefinitions>
             <WrapPanel  HorizontalAlignment="Center" VerticalAlignment="Center">
-                <Label Content="{Binding [UserName], Source={x:Static app1:LanguageManager.Instance}}" Width="80" Foreground="White" Background="Transparent"></Label>
+                <Label Content="用户名" Width="50" Foreground="White" Background="Transparent"></Label>
                 <ComboBox Width="120" x:Name="UserName" VerticalAlignment="Center">
                     <ComboBoxItem>Admin</ComboBoxItem>
                 </ComboBox>
             </WrapPanel>
             <WrapPanel Grid.Row="1" Margin="2" HorizontalAlignment="Center" VerticalAlignment="Center">
-                <Label Content="{Binding [Password], Source={x:Static app1:LanguageManager.Instance}}" Foreground="White" Width="80" Background="Transparent"></Label>
+                <Label Content="密   码" Foreground="White" Width="50" Background="Transparent"></Label>
                 <TextBox Width="120"
                          Background="White"
                          x:Name="PassWord"
@@ -73,7 +72,7 @@
             </WrapPanel>
 
             <WrapPanel Grid.Row="2"  HorizontalAlignment="Center" VerticalAlignment="Center">
-                <Button Content="{Binding [OK], Source={x:Static app1:LanguageManager.Instance}}"  Background="Transparent" 
+                <Button Content="确定"  Background="Transparent" 
                 Foreground="White" FontWeight="Bold"
                 Width="100"
                 Click="OnBnClickedEnsure"

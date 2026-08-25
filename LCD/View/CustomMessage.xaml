@@ -4,10 +4,9 @@
         xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:local="clr-namespace:LCD.View"
-        xmlns:app1="clr-namespace:LCD"
         ResizeMode="NoResize"
         mc:Ignorable="d"
-        Title="{Binding [NoticeMsg], Source={x:Static app1:LanguageManager.Instance}}" Height="250" Width="450">
+        Title="提示信息！" Height="250" Width="450">
     <Grid>
         <Grid.RowDefinitions>
             <RowDefinition Height="50"/>
@@ -17,7 +16,7 @@
         </Grid.RowDefinitions>
         <WrapPanel VerticalAlignment="Center" FlowDirection="RightToLeft">
             <Image Source="../Image/head.png"></Image>
-            <Label Content="{Binding [NoticeMsg2], Source={x:Static app1:LanguageManager.Instance}}"  FontSize="20" Margin="0,0,70,0" VerticalAlignment="Center"></Label>
+            <Label Content="提示信息"  FontSize="20" Margin="0,0,70,0" VerticalAlignment="Center"></Label>
         </WrapPanel>
         <TextBlock Grid.Row="1" HorizontalAlignment="Center" 
                    VerticalAlignment="Center" 
@@ -25,8 +24,8 @@
         </TextBlock>
 
         <WrapPanel Grid.Row="2" HorizontalAlignment="Center" VerticalAlignment="Center">
-            <Button Content="{Binding [OK], Source={x:Static app1:LanguageManager.Instance}}" Click="OnBnClickedEnsure" Background="White" Width="120" ></Button>
-            <Button Content="{Binding [Cancel], Source={x:Static app1:LanguageManager.Instance}}" Margin="50,0,0,0" 
+            <Button Content="确定" Click="OnBnClickedEnsure" Background="White" Width="120" ></Button>
+            <Button Content="取消" Margin="50,0,0,0" 
             Click="OnBnClickedCancel"
                     Background="White"  Width="120"></Button>
         </WrapPanel>

@@ -4,11 +4,10 @@
         xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:local="clr-namespace:LCD.View"
-        xmlns:app1="clr-namespace:LCD"
         mc:Ignorable="d"
         ResizeMode="NoResize"
            xmlns:svgc="http://sharpvectors.codeplex.com/svgc/"
-        Title="{Binding [StdMatrixSet], Source={x:Static app1:LanguageManager.Instance}}" Height="850" Width="800">
+        Title="标准点阵设置" Height="850" Width="800">
     <Grid>
         <Grid.RowDefinitions>
             <RowDefinition Height="50"/>
@@ -18,7 +17,7 @@
         </Grid.RowDefinitions>
         <WrapPanel VerticalAlignment="Center" FlowDirection="RightToLeft">
             <Image Source="../Image/head.png"></Image>
-            <Label x:Name="label_name" Content="{Binding [CustomMatrix], Source={x:Static app1:LanguageManager.Instance}}" VerticalAlignment="Center" FontSize="20"></Label>
+            <Label Content="自定义点阵" VerticalAlignment="Center" FontSize="20"></Label>
         </WrapPanel>
         <!--//设置标注点阵模板-->
         <Grid Grid.Row="1">
@@ -30,7 +29,6 @@
             <Grid Margin="20">
                 <Grid.RowDefinitions>
                     <RowDefinition Height="30"/>
-                    <RowDefinition Height="100"/>
                     <RowDefinition Height="30"/>
                     <RowDefinition Height="30"/>
                     <RowDefinition Height="30"/>
@@ -44,112 +42,76 @@
                 </Grid.RowDefinitions>
 
                 <WrapPanel Grid.Row="0" VerticalAlignment="Center">
-                    <Label Content="{Binding [TemplateName], Source={x:Static app1:LanguageManager.Instance}}" Width="90"></Label>
+                    <Label Content="模板名称" Width="90"></Label>
                     <TextBox Width="220" VerticalAlignment="Center" Text="{Binding tempName}"></TextBox>
                 </WrapPanel>
                 
-                <StackPanel x:Name="PointNum" Grid.Row="1" Orientation="Vertical" VerticalAlignment="Center">
-                    <StackPanel Orientation="Horizontal" Margin="0,2,0,2">
-                        <Label Content="{Binding [MatrixType], Source={x:Static app1:LanguageManager.Instance}}" Width="70" VerticalAlignment="Center"></Label>
-                        <RadioButton x:Name="point5" GroupName="PointType" Checked="PointChecked" Content="{Binding [Point5], Source={x:Static app1:LanguageManager.Instance}}" Width="55" Margin="6,0,0,0" VerticalAlignment="Center" IsChecked="True"></RadioButton>
-                        <RadioButton x:Name="point9" GroupName="PointType" Checked="PointChecked" Content="{Binding [Point9], Source={x:Static app1:LanguageManager.Instance}}" Width="55" Margin="6,0,0,0" VerticalAlignment="Center"></RadioButton>
-                        <RadioButton x:Name="point13" GroupName="PointType" Checked="PointChecked" Content="{Binding [Point13], Source={x:Static app1:LanguageManager.Instance}}" Width="55" Margin="6,0,0,0" VerticalAlignment="Center"></RadioButton>
-                        <RadioButton x:Name="point13_diag" GroupName="PointType" Checked="PointChecked" Content="{Binding [Point13_Diag], Source={x:Static app1:LanguageManager.Instance}}" Width="85" Margin="6,0,0,0" VerticalAlignment="Center"></RadioButton>
-                    </StackPanel>
-                    <StackPanel Orientation="Horizontal" Margin="0,2,0,2">
-                        <Label Width="70"></Label>
-                        <RadioButton x:Name="point15" GroupName="PointType" Checked="PointChecked" Content="{Binding [Point15], Source={x:Static app1:LanguageManager.Instance}}" Width="55" Margin="6,0,0,0" VerticalAlignment="Center"></RadioButton>
-                        <RadioButton x:Name="point17" GroupName="PointType" Checked="PointChecked" Content="{Binding [Point17], Source={x:Static app1:LanguageManager.Instance}}" Width="85" Margin="6,0,0,0" VerticalAlignment="Center"></RadioButton>
-                        <RadioButton x:Name="point17_ary" GroupName="PointType" Checked="PointChecked" Content="{Binding [Point17_ary], Source={x:Static app1:LanguageManager.Instance}}" Width="85" Margin="6,0,0,0" VerticalAlignment="Center"></RadioButton>
-                    </StackPanel>
-                    <StackPanel Orientation="Horizontal" Margin="0,2,0,2">
-                        <Label Width="70"></Label>
-                        <RadioButton x:Name="point25" GroupName="PointType" Checked="PointChecked" Content="{Binding [Point25], Source={x:Static app1:LanguageManager.Instance}}" Width="55" Margin="6,0,0,0" VerticalAlignment="Center"></RadioButton>
-                        <RadioButton x:Name="pointother" GroupName="PointType" Checked="PointChecked" Content="{Binding [CustomPoint], Source={x:Static app1:LanguageManager.Instance}}" Width="65" Margin="6,0,0,0" VerticalAlignment="Center"></RadioButton>
-                        <RadioButton x:Name="point_crosstalk" GroupName="PointType" Checked="PointChecked" Content="CrossTalk" Width="90" Margin="6,0,0,0" VerticalAlignment="Center"></RadioButton>
-                    </StackPanel>
-                </StackPanel>
-
-
-                <WrapPanel Grid.Row="2" VerticalAlignment="Center">
-                    <Label Content="{Binding [ScreenLen], Source={x:Static app1:LanguageManager.Instance}}" Width="90"></Label>
-                    <TextBox Width="120" VerticalAlignment="Center" Text="{Binding productLength, UpdateSourceTrigger=PropertyChanged}"></TextBox>
-                    <Label Content="{Binding [MM], Source={x:Static app1:LanguageManager.Instance}}"></Label>
+                <WrapPanel Grid.Row="1" VerticalAlignment="Center">
+                    <Label Content="屏幕长度" Width="90"></Label>
+                    <TextBox Width="120" VerticalAlignment="Center" Text="{Binding productLength}"></TextBox>
+                    <Label Content="毫米"></Label>
                 </WrapPanel>
+                <WrapPanel Grid.Row="2" VerticalAlignment="Center">
+                    <Label Content="屏幕宽度" Width="90"></Label>
+                    <TextBox Width="120"  VerticalAlignment="Center" Text="{Binding productWidth}" ></TextBox>
+                    <Label Content="毫米"></Label>
+                </WrapPanel>
+
                 <WrapPanel Grid.Row="3" VerticalAlignment="Center">
-                    <Label Content="{Binding [ScreenWidth], Source={x:Static app1:LanguageManager.Instance}}" Width="90"></Label>
-                    <TextBox Width="120"  VerticalAlignment="Center" Text="{Binding productWidth, UpdateSourceTrigger=PropertyChanged}"  ></TextBox>
-                    <Label Content="{Binding [MM], Source={x:Static app1:LanguageManager.Instance}}"></Label>
+                    <Label Content="定位方式" Width="90"></Label>
+                    <RadioButton Content="毫米定位" Width="80" VerticalAlignment="Center"></RadioButton>
+                    <RadioButton Content="百分比定位" Width="80" Margin="50,0,0,0" VerticalAlignment="Center"></RadioButton>
                 </WrapPanel>
 
                 <WrapPanel Grid.Row="4" VerticalAlignment="Center">
-                    <Label Content="{Binding [PositionType], Source={x:Static app1:LanguageManager.Instance}}" Width="90"></Label>
-                    <RadioButton x:Name="isMeter"  Content="{Binding [LocateMM], Source={x:Static app1:LanguageManager.Instance}}" Width="80" VerticalAlignment="Center" IsChecked="True" Checked="RadioMode_Checked" ></RadioButton>
-                    <RadioButton x:Name="isPercent" Content="{Binding [LocatePercent], Source={x:Static app1:LanguageManager.Instance}}" Width="80" Margin="50,0,0,0" VerticalAlignment="Center" Checked="RadioMode_Checked"></RadioButton>
+                    <Label Content="定位参数" Width="90"></Label>
+                    <Label Content="A =" Width="30" VerticalAlignment="Center"></Label>
+                    <TextBox  Width="60" Text="{Binding Ameter}" VerticalAlignment="Center"></TextBox>
+                    <Label Content="毫米" Width="40" VerticalAlignment="Center"></Label>
+                    <TextBox  Width="60"
+                    Text="{Binding Apercent}"
+                              VerticalAlignment="Center"></TextBox>
+                    <Label Content="%" Width="40" VerticalAlignment="Center"></Label>
                 </WrapPanel>
 
                 <WrapPanel Grid.Row="5" VerticalAlignment="Center">
-                    <Label Content="{Binding [LocatePara], Source={x:Static app1:LanguageManager.Instance}}" Width="90"></Label>
-                    <Label Content="A =" Width="30" VerticalAlignment="Center"></Label>
-                    <TextBox  x:Name="ameter" Width="60" Text="{Binding Ameter, UpdateSourceTrigger=PropertyChanged}" VerticalAlignment="Center"></TextBox>
-                    <Label Content="{Binding [MM], Source={x:Static app1:LanguageManager.Instance}}" Width="40" VerticalAlignment="Center"></Label>
-                    <TextBox x:Name="apercent" Width="60"
-                    Text="{Binding Apercent,UpdateSourceTrigger=PropertyChanged}"
+                    <Label Content="B =" Margin="90,0,0,0" Width="30" VerticalAlignment="Center"></Label>
+                    <TextBox  Width="60" 
+                    Text="{Binding Bmeter}"
+                              VerticalAlignment="Center"></TextBox>
+                    <Label Content="毫米" Width="40" VerticalAlignment="Center"></Label>
+                    <TextBox  Width="60" 
+                    Text="{Binding Bpercent}"
                               VerticalAlignment="Center"></TextBox>
                     <Label Content="%" Width="40" VerticalAlignment="Center"></Label>
                 </WrapPanel>
 
                 <WrapPanel Grid.Row="6" VerticalAlignment="Center">
-                    <Label Content="B =" Margin="90,0,0,0" Width="30" VerticalAlignment="Center"></Label>
-                    <TextBox x:Name="bmeter" Width="60" 
-                    Text="{Binding Bmeter,UpdateSourceTrigger=PropertyChanged}"
+                    <Label Content="行 =" Margin="90,0,0,0" Width="30" VerticalAlignment="Center"></Label>
+                    <TextBox  Width="60"
+                    Text="{Binding row}"
                               VerticalAlignment="Center"></TextBox>
-                    <Label Content="{Binding [MM], Source={x:Static app1:LanguageManager.Instance}}" Width="40" VerticalAlignment="Center"></Label>
-                    <TextBox x:Name="bpercent"  Width="60" 
-                    Text="{Binding Bpercent,UpdateSourceTrigger=PropertyChanged}"
+                </WrapPanel>
+                <WrapPanel Grid.Row="7" VerticalAlignment="Center">
+                    <Label Content="列 =" Margin="90,0,0,0" Width="30" VerticalAlignment="Center"></Label>
+                    <TextBox  Width="60" 
+                    Text="{Binding column}"
                               VerticalAlignment="Center"></TextBox>
-                    <Label Content="%" Width="40" VerticalAlignment="Center"></Label>
-                </WrapPanel>
-
-                <WrapPanel x:Name="ParaC" Grid.Row="7" VerticalAlignment="Center">
-                    <Label Content="C =" Margin="90,0,0,0" Width="30" VerticalAlignment="Center"></Label>
-                    <TextBox Name="cmeter" Width="60" 
-                    Text="{Binding Cmeter,UpdateSourceTrigger=PropertyChanged}"
-                    VerticalAlignment="Center"></TextBox>
-                    <Label Content="{Binding [MM], Source={x:Static app1:LanguageManager.Instance}}" Width="40" VerticalAlignment="Center"></Label>
-                    <TextBox x:Name="cpercent" Width="60" 
-                    Text="{Binding Cpercent,UpdateSourceTrigger=PropertyChanged}"
-                    VerticalAlignment="Center"></TextBox>
-                    <Label Content="%" Width="40" VerticalAlignment="Center"></Label>
-                </WrapPanel>
-                
-                <WrapPanel x:Name="ParaD" Grid.Row="8" VerticalAlignment="Center">
-                    <Label Content="D =" Margin="90,0,0,0" Width="30" VerticalAlignment="Center"></Label>
-                    <TextBox Name="dmeter" Width="60" 
-                    Text="{Binding Dmeter,UpdateSourceTrigger=PropertyChanged}"
-                     VerticalAlignment="Center"></TextBox>
-                    <Label Content="{Binding [MM], Source={x:Static app1:LanguageManager.Instance}}" Width="40" VerticalAlignment="Center"></Label>
-                    <TextBox x:Name="dpercent" Width="60" 
-                    Text="{Binding Dpercent,UpdateSourceTrigger=PropertyChanged}"
-                    VerticalAlignment="Center"></TextBox>
-                    <Label Content="%" Width="40" VerticalAlignment="Center"></Label>
                 </WrapPanel>
 
 
-                <WrapPanel x:Name="ParaRow" Grid.Row="7" VerticalAlignment="Center">
-                    <Label Content="{Binding [RowsEq], Source={x:Static app1:LanguageManager.Instance}}" Margin="90,0,0,0" Width="30" VerticalAlignment="Center"></Label>
-                    <TextBox x:Name="row"  Width="60" 
-                    Text="{Binding row,UpdateSourceTrigger=PropertyChanged}"
-                    VerticalAlignment="Center"></TextBox>                                     
-                </WrapPanel>
-                <WrapPanel x:Name="ParaCol" Grid.Row="8" VerticalAlignment="Center">
-                    <Label Content="{Binding [ColsEq], Source={x:Static app1:LanguageManager.Instance}}" Margin="90,0,0,0" Width="30" VerticalAlignment="Center"></Label>
-                    <TextBox x:Name="colum" Width="60" 
-                    Text="{Binding column,UpdateSourceTrigger=PropertyChanged}"
-                    VerticalAlignment="Center"></TextBox>
+                <WrapPanel Grid.Row="8" Margin="0,0,20,0" HorizontalAlignment="Right" VerticalAlignment="Center">
+                    <Button  Width="40" 
+                    Click="OnBnClickGenerateTemplate"
+                    Background="Transparent"
+                    BorderBrush="Transparent"
+                    HorizontalAlignment="Center"
+                    Height="40" >
+                        <svgc:SvgViewbox Source="..\Image\generate.svg" IsHitTestVisible="False"></svgc:SvgViewbox>
+                    </Button>
                 </WrapPanel>
 
-                <Border Grid.Row="10" Grid.RowSpan="2" BorderThickness="2" BorderBrush="Gray" CornerRadius="8">
+                <Border Grid.Row="9" Grid.RowSpan="2" BorderThickness="2" BorderBrush="Gray" CornerRadius="8">
                     <Grid Grid.Row="8" Grid.RowSpan="2" HorizontalAlignment="Center" VerticalAlignment="Center">
                         <Canvas Width="300" Height="300" Background="Transparent"
                         Panel.ZIndex="0"
@@ -158,64 +120,55 @@
                         Name="myinnerCanvas"
                          MouseLeftButtonDown="myinnerCanvas_MouseLeftButtonDown"
                          MouseLeftButtonUp="myinnerCanvas_MouseLeftButtonUp"
-                        >
-                            
-                        </Canvas>
+                            ></Canvas>
                     </Grid>
                 </Border>
             </Grid>
             <Grid Grid.Column="1">
                 <Grid.RowDefinitions>
-                    <RowDefinition Height="9*"/>
-                    <RowDefinition Height="8*"/>
-                    <RowDefinition Height="*"/>
-                    <RowDefinition Height="*"/>
-                    <RowDefinition Height="*"/>
-                    <RowDefinition Height="*"/>
-                    <RowDefinition Height="*"/>
-                    <RowDefinition Height="*"/>
-                    <RowDefinition Height="*"/>
-                    <RowDefinition Height="*"/>
+                    <RowDefinition Height="2*"/>
+                    <RowDefinition Height="30"/>
+                    <RowDefinition Height="30"/>
+                    <RowDefinition Height="30"/>
+                    <RowDefinition Height="30"/>
+                    <RowDefinition Height="30"/>
+                    <RowDefinition Height="30"/>
+                    <RowDefinition Height="30"/>
                     <RowDefinition/>
                 </Grid.RowDefinitions>
 
-                <Grid Grid.Row="0">
-                    <Image x:Name="image" Source="../Image/25Points.jpg"></Image>
-                </Grid>
-
-                <Grid Grid.Row="1">
-                    <DataGrid Name="PointData"
-                      Margin="40,10,30,10"        
-                      CanUserAddRows="False"
-                      ColumnWidth="*"
-                      ClipboardCopyMode="ExcludeHeader"
-                      SelectionUnit="Cell"/>
+                <Grid>
+                    <Image Source="../Image/25Points.jpg"></Image>
                 </Grid>
 
                 <WrapPanel Grid.Row="2" VerticalAlignment="Center">
-                    <Label Content="{Binding [PointsInfo], Source={x:Static app1:LanguageManager.Instance}}" Width="90"></Label>
-                    <Label Content="{Binding [SerialNo], Source={x:Static app1:LanguageManager.Instance}}" Width="50" VerticalAlignment="Center"></Label>
-                    <TextBox x:Name="SerNo" Width="60"                    
+                    <Label Content="测量点信息" Width="90"></Label>
+                    <Label Content="序号" Width="50" VerticalAlignment="Center"></Label>
+                    <TextBox  Width="60"
+                    Text="{Binding SerNo}"
                               VerticalAlignment="Center"></TextBox>
-                    <Button Name="Buttonsave" Width="90"  Click="Buttonsave_no_Click" VerticalAlignment="Center" Content="{Binding [SaveSnData], Source={x:Static app1:LanguageManager.Instance}}"> </Button>
                 </WrapPanel>
 
                 <WrapPanel Grid.Row="3" VerticalAlignment="Center">
                     <Label Content="X =" Margin="90,0,0,0" Width="50" VerticalAlignment="Center"></Label>
-                    <TextBox  x:Name="Xmeter" Width="60" 
+                    <TextBox  Width="60" 
+                    Text="{Binding Xmeter}"
                               VerticalAlignment="Center"></TextBox>
-                    <Label Content="{Binding [MM], Source={x:Static app1:LanguageManager.Instance}}" Width="40" VerticalAlignment="Center"></Label>
-                    <TextBox  x:Name="Xpercent" Width="60" 
+                    <Label Content="毫米" Width="40" VerticalAlignment="Center"></Label>
+                    <TextBox  Width="60" 
+                    Text="{Binding Xpercent}"
                               VerticalAlignment="Center"></TextBox>
                     <Label Content="%" Width="40" VerticalAlignment="Center"></Label>
                 </WrapPanel>
                 
                 <WrapPanel Grid.Row="4" VerticalAlignment="Center">
                     <Label Content="Y =" Margin="90,0,0,0" Width="50" VerticalAlignment="Center"></Label>
-                    <TextBox x:Name="Ymeter"  Width="60"
+                    <TextBox  Width="60"
+                    Text="{Binding Ymeter}"
                               VerticalAlignment="Center"></TextBox>
-                    <Label Content="{Binding [MM], Source={x:Static app1:LanguageManager.Instance}}" Width="40" VerticalAlignment="Center"></Label>
-                    <TextBox x:Name="Ypercent" Width="60" 
+                    <Label Content="毫米" Width="40" VerticalAlignment="Center"></Label>
+                    <TextBox  Width="60" 
+                    Text="{Binding Ypercent}"
                               VerticalAlignment="Center"></TextBox>
                     <Label Content="%" Width="40" VerticalAlignment="Center"></Label>
                 </WrapPanel>
@@ -224,72 +177,55 @@
 
                 <WrapPanel Grid.Row="5" VerticalAlignment="Center">
 
-                    <Label Content="{Binding [TestStd], Source={x:Static app1:LanguageManager.Instance}}" Width="90"></Label>
-                    <CheckBox Content="L:" x:Name="Lcheck"
-                    IsChecked="False"
-                                 VerticalAlignment="Center" Width="50"></CheckBox>
-                    <TextBox x:Name="Lmin" Width="60" 
-                             Text=""
+                    <Label Content="测量标准：" Width="90"></Label>
+                    <RadioButton Content="L:" 
+                    IsChecked="{Binding IsLchk}"
+                                 VerticalAlignment="Center" Width="50"></RadioButton>
+                    <TextBox Width="60" 
+                    Text="{Binding Lmin}"
                              VerticalAlignment="Center" FontSize="14"></TextBox>
                     <Label Content="&lt;" Width="20" VerticalAlignment="Center" />
                     <Label Content="L"></Label>
                     <Label Content="&lt;" Width="20" />
-                    <TextBox x:Name="Lmax" Width="60" 
-                             Text=""
+                    <TextBox Width="60" 
+                    Text="{Binding Lmax}"
                              VerticalAlignment="Center" FontSize="14"></TextBox>
                 </WrapPanel>
 
 
                 <WrapPanel Grid.Row="6" VerticalAlignment="Center">
-                    <CheckBox x:Name="Xcheck" Content="x:" VerticalAlignment="Center" 
+                    <RadioButton Content="x:" VerticalAlignment="Center" 
                     Margin="90,0,0,0"
-                    IsChecked="False"
-                                 Width="50"></CheckBox>
-                    <TextBox x:Name="xmin" Width="60"
-                    Text=""
+                    IsChecked="{Binding Isxchk}"
+                                 Width="50"></RadioButton>
+                    <TextBox Width="60"
+                    Text="{Binding xmin}"
                              VerticalAlignment="Center" FontSize="14"></TextBox>
                     <Label Content="&lt;" Width="20" VerticalAlignment="Center" />
                     <Label Content="x"></Label>
                     <Label Content="&lt;" Width="20" />
-                    <TextBox x:Name="xmax" Width="60"
-                   Text=""
+                    <TextBox Width="60"
+                   Text="{Binding xmax}"
                      VerticalAlignment="Center" FontSize="14"></TextBox>
                 </WrapPanel>
 
 
 
                 <WrapPanel Grid.Row="7" VerticalAlignment="Center">
-                    <CheckBox x:Name="Ycheck" Content="y:"
+                    <RadioButton Content="y:"
                     Margin="90,0,0,0"
-                    IsChecked="False"
-                                 VerticalAlignment="Center" Width="50"></CheckBox>
-                    <TextBox x:Name="ymin" Width="60"
-                    Text=""
+                    IsChecked="{Binding Isychk}"
+                                 VerticalAlignment="Center" Width="50"></RadioButton>
+                    <TextBox Width="60"
+                    Text="{Binding ymin}"
                              VerticalAlignment="Center" FontSize="14"></TextBox>
                     <Label Content="&lt;" Width="20" VerticalAlignment="Center" />
                     <Label Content="y"></Label>
                     <Label Content="&lt;" Width="20" />
-                    <TextBox x:Name="ymax" Width="60" 
-                    Text=""
+                    <TextBox Width="60" 
+                    Text="{Binding ymax}"
                              VerticalAlignment="Center" FontSize="14"></TextBox>
                 </WrapPanel>
-
-                <WrapPanel Grid.Row="8" VerticalAlignment="Center">
-                    <CheckBox  x:Name="Balancechk" Content="{Binding [ConformityReq], Source={x:Static app1:LanguageManager.Instance}}"
-                        Margin="90,0,0,0"
-                        IsChecked="False"
-                        VerticalAlignment="Center" Width="150"></CheckBox>
-                    <TextBox x:Name="balancemin" Width="60"
-                         Text=""
-                         VerticalAlignment="Center" FontSize="14"></TextBox>
-                    <Label Content="%" />
-                </WrapPanel>
-
-                <WrapPanel Grid.Row="9" VerticalAlignment="Center">
-                    <Label Width="90" Content="{Binding [UnFitColor], Source={x:Static app1:LanguageManager.Instance}}" />
-                    <Rectangle x:Name="RecColor" Fill="Red" Width="100" MouseLeftButtonDown="Color_select"/>
-                </WrapPanel>
-                
             </Grid>
 
         </Grid>
@@ -298,7 +234,7 @@
             HorizontalAlignment="Center"
                        FlowDirection="RightToLeft">
 
-                <Button Content="{Binding [OK], Source={x:Static app1:LanguageManager.Instance}}"
+                <Button Content="确定"
                 Width="120"
                 Height="30"
                 Click="OnBnClickSaveTemplate"
@@ -306,12 +242,12 @@
                 FontWeight="Bold"
                 FontSize="16"
                         Margin="0,0,90,0"></Button>
-                <Button Content="{Binding [SaveAs], Source={x:Static app1:LanguageManager.Instance}}" 
+                <Button Content="另存为文件" 
                 Width="120"
                 Height="30"
                 Opacity="1"
                 FontWeight="Bold"
-                FontSize="16" Click="Button_Click" ></Button>
+                FontSize="16" ></Button>
             </WrapPanel>
         </Grid>
 

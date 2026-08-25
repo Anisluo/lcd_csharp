@@ -1,6 +1,4 @@
 ﻿/********************/
-using LCD.Core.Abstractions;
-using LCD.Core.Runtime;
 using LCD.Ctrl;
 using LCD.Data;
 using LCD.dataBase;
@@ -26,54 +24,28 @@ namespace LCD
     public class Project
     {
         /// <summary>
-        /// 急停按钮。实际存储在 LCD.Core.Runtime.MotionRuntime，保留这里作为转发入口以兼容历史调用。
+        /// 急停按钮
         /// </summary>
-        public static bool Stop
-        {
-            get => MotionRuntime.Stop;
-            set => MotionRuntime.Stop = value;
-        }
+        public static bool Stop=false;
 
-        public static double Xorg { get => MotionRuntime.Xorg; set => MotionRuntime.Xorg = value; }
-        public static double Yorg { get => MotionRuntime.Yorg; set => MotionRuntime.Yorg = value; }
-        public static double Zorg { get => MotionRuntime.Zorg; set => MotionRuntime.Zorg = value; }
-        public static double Uorg { get => MotionRuntime.Uorg; set => MotionRuntime.Uorg = value; }
-        public static double Vorg { get => MotionRuntime.Vorg; set => MotionRuntime.Vorg = value; }
-        public static double Ballorg { get => MotionRuntime.Ballorg; set => MotionRuntime.Ballorg = value; }
+        public static double Xorg;
+        public static double Yorg;
+        public static double Zorg;
+        public static double Uorg;
+        public static double Vorg;
+        public static double Ballorg;
 
-        public static TestMachine testMachine { get { return UiRegistry.DeviceView == null ? null : UiRegistry.DeviceView.TestDevice; } set { if (UiRegistry.DeviceView != null) UiRegistry.DeviceView.TestDevice = value; } }
+        public static TestMachine testMachine { get { return deviceview == null ? null : deviceview.TestDevice; } set { if (deviceview != null) deviceview.TestDevice = value; } }
 
-        public static IPatternGenerator PG
-        {
-            get => DeviceRuntime.PG;
-            set => DeviceRuntime.PG = value;
-        }
-
+        public static PG PG { get; set; }
         public static LCD.Ctrl.Power power { get; set; }
 
-        internal static DeviceView deviceview
-        {
-            get => UiRegistry.DeviceView;
-            set => UiRegistry.DeviceView = value;
-        }
+        internal static DeviceView deviceview;
 
-        public static PGDebug PGDebug
-        {
-            get => UiRegistry.PGDebug;
-            set => UiRegistry.PGDebug = value;
-        }
+        public static PGDebug PGDebug;
 
-        public static CamView cam
-        {
-            get => UiRegistry.Cam;
-            set => UiRegistry.Cam = value;
-        }
-
-        public static V110 V110
-        {
-            get => UiRegistry.V110;
-            set => UiRegistry.V110 = value;
-        }
+        public static CamView cam = null;
+        public static V110 V110=null;
 
         public static void ShowMessage(LogLevel logLevel, string _Str_)
         {
@@ -94,39 +66,21 @@ namespace LCD
         }
 
         /// <summary>
-        /// 初始化格式。实际存储在 TestRunState.ResultFormat。
+        /// 初始化格式
         /// </summary>
-        public static SortedDictionary<string, bool> resultFormat
-        {
-            get => TestRunState.ResultFormat;
-            set => TestRunState.ResultFormat = value;
-        }
+        public static SortedDictionary<string, bool> resultFormat = new SortedDictionary<string, bool>();
 
         /// <summary>
         /// 全局急停信号
         /// </summary>
-        public static bool FstStop
-        {
-            get => MotionRuntime.FstStop;
-            set => MotionRuntime.FstStop = value;
-        }
-        public static bool TstPause
-        {
-            get => TestRunState.TstPause;
-            set => TestRunState.TstPause = value;
-        }
+        public static bool FstStop { get; set; } = false;
 
-        public static List<ResultData> lstDatas
-        {
-            get => TestRunState.Results;
-            set => TestRunState.Results = value;
-        }
+        public static List<ResultData> lstDatas = new List<ResultData>();//测试结果
 
-        public static bool TestFlag
-        {
-            get => TestRunState.TestFlag;
-            set => TestRunState.TestFlag = value;
-        }
+
+        
+
+        public static bool TestFlag = false;
         /// <summary>
         /// 初始化结果数据格式
         /// </summary>
@@ -160,13 +114,9 @@ namespace LCD
         }
 
         /// <summary>
-        /// 富文本格式。实际存储在 UiRegistry.LogDocument。
+        /// 富文本格式
         /// </summary>
-        public static System.Windows.Documents.FlowDocument myrichtextbox
-        {
-            get => UiRegistry.LogDocument;
-            set => UiRegistry.LogDocument = value;
-        }
+        public static System.Windows.Documents.FlowDocument myrichtextbox = null;
 
         /// <summary>
         /// 配置文件
@@ -174,50 +124,24 @@ namespace LCD
         public static Config cfg { get; set; } = new Config();
 
         public static PointF PtCenter { get; set; } = new PointF(0, 0, 0);
+        public static List<UserIdMode> listBarCode { get; set; }=new List<UserIdMode>();
 
-        public static List<UserIdMode> listBarCode
-        {
-            get => SessionState.ListBarCode;
-            set => SessionState.ListBarCode = value;
-        }
 
-        public static List<TestDataMode> TestDataModes
-        {
-            get => SessionState.TestDataModes;
-            set => SessionState.TestDataModes = value;
-        }
+        
+        public static List<TestDataMode> TestDataModes { get; set; }=new List<TestDataMode>();
 
-        public static List<SpectrumDataMode> ListSpectrumData
-        {
-            get => SessionState.ListSpectrumData;
-            set => SessionState.ListSpectrumData = value;
-        }
+        public static List<SpectrumDataMode> ListSpectrumData { get; set; }=new List<SpectrumDataMode>();
 
-        public static List<UserIdMode> SaveTestData
-        {
-            get => SessionState.SaveTestData;
-            set => SessionState.SaveTestData = value;
-        }
 
-        public static int BarCodeID
-        {
-            get => SessionState.BarCodeID;
-            set => SessionState.BarCodeID = value;
-        }
+        public static List<UserIdMode> SaveTestData { get; set; }=new List<UserIdMode>();
 
-        public static int ProjectID
-        {
-            get => SessionState.ProjectID;
-            set => SessionState.ProjectID = value;
-        }
+
+        public static  int BarCodeID { get; set; }
+        public static int ProjectID { get; set; }
         /// <summary>
-        /// 测试模板信息。实际存储在 TestRunState.Infos。
+        /// 测试模板信息
         /// </summary>
-        public static List<InfoData> lstInfos
-        {
-            get => TestRunState.Infos;
-            set => TestRunState.Infos = value;
-        }
+        public static List<InfoData> lstInfos = new List<InfoData>();
 
         //添加日志，进行测试
         public static void WriteLog(string message, LogLevel level = LogLevel.Info)
@@ -232,42 +156,21 @@ namespace LCD
                                Console.WriteLine($"{DateTime.Now}>>{message}");
                                myrichtextbox.Blocks.Add(para);
                            });
-            LogHelper.Instance.Write(message);
         }
 
         /// <summary>
-        /// 结果视图。以下 6 个 ResutView 引用存储在 UiRegistry，以下为转发属性。
+        /// 结果视图
         /// </summary>
-        public static ResutView Results
-        {
-            get => UiRegistry.Results;
-            set => UiRegistry.Results = value;
-        }
-        public static ResutView SpectrumResults
-        {
-            get => UiRegistry.SpectrumResults;
-            set => UiRegistry.SpectrumResults = value;
-        }
-        public static ResutView ResponseResults
-        {
-            get => UiRegistry.ResponseResults;
-            set => UiRegistry.ResponseResults = value;
-        }
-        public static ResutView CrossTalkResults
-        {
-            get => UiRegistry.CrossTalkResults;
-            set => UiRegistry.CrossTalkResults = value;
-        }
-        public static ResutView warmupResult
-        {
-            get => UiRegistry.WarmupResult;
-            set => UiRegistry.WarmupResult = value;
-        }
-        public static ResutView PowerResult
-        {
-            get => UiRegistry.PowerResult;
-            set => UiRegistry.PowerResult = value;
-        }
+        public static ResutView Results { get; set; }
+        /// <summary>
+        /// 光谱
+        /// </summary>
+        public static ResutView SpectrumResults { get; set; }
+
+
+        public static ResutView warmupResult { get; set; }
+
+        public static ResutView PowerResult { get; set; }
 
         /// <summary>
         /// 项目初始化
@@ -283,17 +186,6 @@ namespace LCD
         }
 
         /// <summary>
-        /// 相对路径（如 "Template.xml"/"Config.xml"）统一按 exe 安装目录解析，
-        /// 避免启动工作目录不在 bin/Debug 时找不到文件。
-        /// </summary>
-        private static string ResolveDataPath(string name)
-        {
-            if (string.IsNullOrEmpty(name)) return name;
-            if (Path.IsPathRooted(name)) return name;
-            return Path.Combine(AppDomain.CurrentDomain.BaseDirectory, name);
-        }
-
-        /// <summary>
         /// 初始化测试设备
         /// </summary>
         private static void InitDevice()
@@ -306,29 +198,19 @@ namespace LCD
                 case ENUMMACHINE.CS2000: Project.testMachine = CS2000.GetInstance(); break;
                 default: Project.testMachine = BM7A.GetInstance(); break;
             }
-            if (testMachine == null)
-            {
-                Project.WriteLog4(LogLevel.Error, "testMachine为空");
-                return;
-            }
-            // Inject serial-port config before Init() runs (MainWindow / DevicesView both
-            // call testMachine.Init() shortly after this). Phase 3 moved this responsibility
-            // out of the driver; without this assignment Init() bails out with
-            // "BM7A.Init: Config 未设置，无法打开串口".
-            testMachine.Config = config.GetBusConfigFor(Project.cfg.TESTMACHINE);
+            if (testMachine == null) { Project.WriteLog4(LogLevel.Error, "testMachine为空"); }
             testMachine.AutoCheck();
         }
 
         /// <summary>
         /// 初始化配置
         /// </summary>
-        public static void InitConfig()
+        private static void InitConfig()
         {
             try
             {
-                StreamReader sr = File.OpenText(ResolveDataPath("Config.xml"));
+                StreamReader sr = File.OpenText("Config.xml");
                 string xml = sr.ReadToEnd();
-                sr.Close();
                 Project.cfg = XmlUtil.Deserialize(typeof(Config), xml) as Config;
                 Project.PtCenter.X = Project.cfg.XCenter;
                 Project.PtCenter.Y = Project.cfg.YCenter;
@@ -356,7 +238,7 @@ namespace LCD
             {
                 Config cfg = Project.cfg;
                 string xml = XmlUtil.Serializer(typeof(Config), cfg);
-                StreamWriter sw = File.CreateText(ResolveDataPath(fname));
+                StreamWriter sw = File.CreateText(fname);
                 sw.Write(xml);
                 sw.Close();
             }
@@ -368,18 +250,10 @@ namespace LCD
 
         public static void LoadTempLate(String Name)
         {
-            string path = ResolveDataPath(Name);
-            if (!File.Exists(path))
-            {
-                // 首次启动没有模板文件属正常情况 —— 保持空列表，不再弹错误框。
-                Project.WriteLog($"模板文件不存在，使用空列表: {path}");
-                return;
-            }
             try
             {
-                StreamReader sr = File.OpenText(path);
+                StreamReader sr = File.OpenText(Name);//"Template.xml"
                 string xml = sr.ReadToEnd();
-                sr.Close();
                 Project.lstInfos = XmlUtil.Deserialize(typeof(List<InfoData>), xml) as List<InfoData>;
             }
             catch (Exception e)
@@ -387,18 +261,18 @@ namespace LCD
                 Project.WriteLog(e.Message);
                 MessageBox.Show(""+e.Message);
             }
-
+            
         }
 
         /// <summary>
-        /// 保存模板
+        /// 保存模板  
         /// </summary>
         public static void SaveTemplate(String Name)//lstInfos
         {
             try
             {
                 string Xml = XmlUtil.Serializer(typeof(List<InfoData>),Project.lstInfos);
-                StreamWriter sw = File.CreateText(ResolveDataPath(Name));
+                StreamWriter sw = File.CreateText(Name);
                 sw.Write(Xml);
                 sw.Close();
             }
@@ -419,7 +293,7 @@ namespace LCD
             try
             {
                 string xml = XmlUtil.Serializer(typeof(List<InfoData>), lstInfos);
-                StreamWriter sw = File.CreateText(ResolveDataPath(fname));
+                StreamWriter sw = File.CreateText(fname);
                 sw.Write(xml);
                 sw.Close();
             }
@@ -471,25 +345,16 @@ namespace LCD
         /// 下料角度
         /// </summary>
         public double Angle;
-        public int LightScreenSignal;
-        public bool LightScreenAlarmEnable;
         public Axies ax_x;//运动轴1
         public Axies ax_y;//运动轴2
         public Axies ax_z;//运动轴3
         public Axies ax_u;//运动轴4
         public Axies ax_v;//运动轴5
         public Axies ax_ball;//运动轴6
-        public uint AxiesDoneDelay; //运动轴运行结束后的延时时间
         public int EQType;
         public int ZSeft;
         public int USeftMin;
         public int USeftMax;
-        public double UProductH;
-        public double UMaxAngle;
-        public double VMaxAngle;
-        public int UReverse;
-        public int VReverse;
-        public bool IsFlipped => EQType == 5; // 仪器固定旋转式
 
         public Machine machine;//机械参数
 
@@ -497,8 +362,6 @@ namespace LCD
         public ComDevice CS2000;
         public ComDevice USB2000;
         public ComDevice SR3A;
-        public ComDevice SR5A;
-		public ComDevice MS01;
         public ComDevice Demo;
         public IPDevice softPG =new IPDevice();
         public OtherPG otherPG =new OtherPG();
@@ -552,12 +415,9 @@ namespace LCD
         public EnumMoveSpeed movSpeed_Ball { get; set; }
 
         public CamTypeEnum CamType { get; set; }
-        public int CamIndex { get; set; }
-        public int CamRotation { get; set; }
-        public ComDevice Comm { get; set; }//通讯设置
         public LogConfigModel LogCfg { get; set; } = new LogConfigModel();
-        public int Lang { get; set; } //语言设置,默认是0表示中文，其他英文
-        public bool ShowLab { get; set; }
+
+
     }
 
 
@@ -634,8 +494,67 @@ namespace LCD
         public int port;
         public double expTime;
     }
-    // Axies + AXiesName 已迁至 LCD.Core/Data/Axies.cs（保留 LCD.Data 命名空间）。
-    // ENUMMESSTYLE 已迁至 LCD.Core/Models/TestRun/ENUMMESSTYLE.cs（保留 LCD.Data 命名空间）。
+    public class Axies
+    {
+        public bool BackLash;
+        /// <summary>
+        /// 报警启用
+        /// </summary>
+        public bool AlarmEnable;
+        public AXiesName Name;
+        public double HomeSpend;
+        public int SpendIndex;
+        public bool IsEnable;
+        public int value;
+        public int secondvalue;
+        public bool IsSecondValue;//判断是否有使能轴号
+        public int direction;
+        public double center;
+        public double homespeed;
+        public double SpeedFast;
+        /// <summary>
+        /// 平均速度
+        /// </summary>
+        public double SpeedMedium;
+        public double SpeedLow;
+        /// <summary>
+        /// 脉冲/mm
+        /// </summary>
+        public double StepsPerMM;//单位毫米对应的脉冲量
+        public double acSpeed;
+        /// <summary>
+        /// 软极限
+        /// </summary>
+        public double LowerLimit;
+        /// <summary>
+        /// 最大范围
+        /// </summary>
+        public long UpperLimit;
+
+
+    }
+
+    public enum AXiesName
+    {
+        X轴,
+        Y轴,
+        Z轴,
+        U轴,
+        V轴,
+        Ball轴
+    }
+    public enum ENUMMESSTYLE//
+    {
+        _01_POINT,
+        _02_RESPONSE,
+        _03_SPECTRUM,
+        _04_FLICKER,
+        _05_CROSSTALK,
+        _06_ACR,
+        _07_warmup,
+        None,
+        Power
+    }
 
     //机械参数
     public class Machine
@@ -647,11 +566,12 @@ namespace LCD
     public class Power
     {
         public bool Enabled { get; set; }
-        public string PowerType { get; set; } //电源型号
-        public string PowerSerialName { get; set; }//电源控制的串口名称
-        public bool EnablePowerControl { get; set; }//是否启动电源控制
         public SerialPortDevice Bus { get; set; } = new SerialPortDevice();
     }
 
-    // ResultData 已迁至 LCD.Core/Models/TestRun/ResultData.cs（保留 LCD.Data 命名空间）。
+    public class ResultData
+    {
+        public string Name;
+        public DataTable table;
+    }
 }

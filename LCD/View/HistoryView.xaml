@@ -4,11 +4,10 @@
         xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:local="clr-namespace:LCD.View"
-        xmlns:app1="clr-namespace:LCD"
         mc:Ignorable="d"
                 xmlns:svgc="http://sharpvectors.codeplex.com/svgc/"
         ResizeMode="NoResize"
-        Title="{Binding [HistoryView], Source={x:Static app1:LanguageManager.Instance}}" Height="750" Width="800">
+        Title="HistoryView" Height="750" Width="800">
 
 
     <Grid>
@@ -21,7 +20,7 @@
         </Grid.RowDefinitions>
         <WrapPanel VerticalAlignment="Center" FlowDirection="RightToLeft">
             <Image Source="../Image/head.png"></Image>
-            <Label Content="{Binding [HistoryLog], Source={x:Static app1:LanguageManager.Instance}}" VerticalAlignment="Center" FontSize="20"></Label>
+            <Label Content="历史记录" VerticalAlignment="Center" FontSize="20"></Label>
         </WrapPanel>
 
 
@@ -133,10 +132,10 @@
                 <Button Width="120"
                         Height="40"
                         Click="Button_Click"
-                        Content="{Binding [Delete], Source={x:Static app1:LanguageManager.Instance}}"
+                        Content="删除"
                         FontSize="17"
                         FontWeight="Bold"></Button>
-                <Button Width="120" Height="40" Margin="100,0,0,0" Click="OnBnClickedOutput" Content="{Binding [Export], Source={x:Static app1:LanguageManager.Instance}}" FontSize="17" FontWeight="Bold"></Button>
+                <Button Width="120" Height="40" Margin="100,0,0,0" Click="OnBnClickedOutput" Content="导出" FontSize="17" FontWeight="Bold"></Button>
             </WrapPanel>
         </Grid>
 

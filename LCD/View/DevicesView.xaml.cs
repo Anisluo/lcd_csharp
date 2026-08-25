@@ -1,6 +1,5 @@
 ﻿using LCD.Data;
 using System.IO.Ports;
-using System.Web.UI.WebControls;
 using System.Windows;
 
 namespace LCD.View
@@ -26,6 +25,12 @@ namespace LCD.View
             //遍历comNames
             string[] portNames = SerialPort.GetPortNames();
             if (portNames != null) { myports.ItemsSource = portNames; }
+
+            
+
+
+
+
 
 
             //测试模式
@@ -138,7 +143,7 @@ namespace LCD.View
 
 
                 case Ctrl.ENUMMACHINE.SR3A:
-                
+
                     Project.testMachine = Ctrl.SR3A.GetInstance();
                     SR3A.IsChecked = true;
                     {
@@ -176,94 +181,11 @@ namespace LCD.View
                     }
                     break;
 
-                case Ctrl.ENUMMACHINE.SR5A:
-
-                    Project.testMachine = Ctrl.SR3A.GetInstance();
-                    SR5A.IsChecked = true;
-                    {
-                        if (Project.cfg.SR5A == null)
-                        {
-                            Project.cfg.SR5A = new ComDevice();
-                            Project.cfg.SR5A.lum = 1;
-                            Project.cfg.SR5A.bardRate = 38400;
-                        }
-
-                        devModel.lum = Project.cfg.SR5A.lum;
-                        devModel.cx = Project.cfg.SR5A.cx;
-                        devModel.cy = Project.cfg.SR5A.cy;
-                        devModel.comName = Project.cfg.SR5A.comName;
-                        devModel.dataBit = Project.cfg.SR5A.dataBit;
-                        devModel.stopBit = Project.cfg.SR5A.stopBit;
-                        devModel.bardRate = Project.cfg.SR5A.bardRate;
-                        devModel.Parity = Project.cfg.SR5A.parity;
-                        devModel.startDelay = Project.cfg.SR5A.startDelay;
-                        devModel.mesDelay = Project.cfg.SR5A.mesDelay;
-                        devModel.resetDelay = Project.cfg.SR5A.resetDelay;
-
-                        General.Visibility = Visibility.Hidden;
-                        General_Com.Visibility = Visibility.Visible;
-                        USB2000.Visibility = Visibility.Hidden;
-
-                        //myports.Text = Project.cfg.SR3A.comName;
-                        //_bardRate.Text = Project.cfg.SR3A.bardRateText;
-                        //_dataBit.Text = Project.cfg.SR3A.dataBitText;
-                        //_stopBit.Text = Project.cfg.SR3A.stopBitText;
-                        //_Parity.Text = Project.cfg.SR3A.parityText;
-
-
-                        //USB2000.Visibility = Visibility.Hidden;
-                    }
-                    break;
-				case Ctrl.ENUMMACHINE.MS01:
-
-                    Project.testMachine = Ctrl.MS01.GetInstance();
-                    MS01.IsChecked = true;
-                    {
-                        if (Project.cfg.MS01 == null)
-                        {
-                            Project.cfg.MS01 = new ComDevice();
-                            Project.cfg.MS01.lum = 1;
-                            Project.cfg.MS01.bardRate = 115200;
-                        }
-
-                        devModel.lum = Project.cfg.MS01.lum;
-                        devModel.cx = Project.cfg.MS01.cx;
-                        devModel.cy = Project.cfg.MS01.cy;
-                        devModel.comName = Project.cfg.MS01.comName;
-                        devModel.dataBit = Project.cfg.MS01.dataBit;
-                        devModel.stopBit = Project.cfg.MS01.stopBit;
-                        devModel.bardRate = Project.cfg.MS01.bardRate;
-                        devModel.Parity = Project.cfg.MS01.parity;
-                        devModel.startDelay = Project.cfg.MS01.startDelay;
-                        devModel.mesDelay = Project.cfg.MS01.mesDelay;
-                        devModel.resetDelay = Project.cfg.MS01.resetDelay;
-
-                        General.Visibility = Visibility.Hidden;
-                        General_Com.Visibility = Visibility.Visible;
-                        USB2000.Visibility = Visibility.Hidden;
-                    }
-                    break;
-
-                case Ctrl.ENUMMACHINE.Admesy:
-                    Admesy.IsChecked = true;
-                    break;
-
 
                 default: break;
             }
 
             
-            if(Project.cfg != null)
-            {
-                if(Project.cfg.Comm != null)
-                {
-                    myports.Text = Project.cfg.Comm.comName ;
-                    _bardRate.Text = Project.cfg.Comm.bardRateText;
-                    _dataBit.Text = Project.cfg.Comm.dataBitText;
-                    _stopBit.Text = Project.cfg.Comm.stopBitText ;
-                    _Parity.Text = Project.cfg.Comm.parityText;
-                }
-            }
             //Parity.SelectedIndex = devModel.parity;
         }
         /// <summary>
@@ -304,7 +226,6 @@ namespace LCD.View
                         Project.cfg.BM7A.mesDelay = devModel.mesDelay;
                         Project.cfg.BM7A.resetDelay = devModel.resetDelay;
                         Project.testMachine = Ctrl.BM7A.GetInstance();
-                        Project.testMachine.Config = Project.cfg.BM7A.ToBusConfig();
                         Project.testMachine.Init();
 
 
@@ -355,7 +276,6 @@ namespace LCD.View
                         Project.cfg.USB2000.mesDelay = devModel.mesDelay;
                         Project.cfg.USB2000.resetDelay = devModel.resetDelay;
                         Project.testMachine = Ctrl.USB2000.GetInstance();
-                        Project.testMachine.Config = Project.cfg.USB2000.ToBusConfig();
                         Project.testMachine.Init();
 
                         //General.Visibility = Visibility.Hidden;
@@ -391,89 +311,15 @@ namespace LCD.View
                         Project.cfg.SR3A.stopBitText = _stopBit.Text;
                         Project.cfg.SR3A.parityText = _Parity.Text;
 
-                        Project.testMachine.Config = Project.cfg.SR3A.ToBusConfig();
                         Project.testMachine.Init();
                     }
                     break;
 
-                case Ctrl.ENUMMACHINE.SR5A:
-                    SR5A.IsChecked = true;
-                    {
-                        if (Project.cfg.SR5A == null) { Project.cfg.SR5A = new ComDevice(); }
-                        Project.cfg.SR5A.lum = devModel.lum;
-                        Project.cfg.SR5A.cx = devModel.cx;
-                        Project.cfg.SR5A.cy = devModel.cy;
-                        Project.cfg.SR5A.comName = myports.Text;
-                        Project.cfg.SR5A.bardRate = _bardRate.SelectedIndex;
-                        Project.cfg.SR5A.dataBit = _dataBit.SelectedIndex;
-                        Project.cfg.SR5A.stopBit = _stopBit.SelectedIndex;
-                        Project.cfg.SR5A.parity = _Parity.SelectedIndex;
-                        Project.cfg.SR5A.startDelay = devModel.startDelay;
-                        Project.cfg.SR5A.mesDelay = devModel.mesDelay;
-                        Project.cfg.SR5A.resetDelay = devModel.resetDelay;
-                        Project.testMachine = Ctrl.SR3A.GetInstance();
 
-
-                        //General.Visibility = Visibility.Hidden;
-                        //General_Com.Visibility = Visibility.Hidden;
-                        //USB2000.Visibility = Visibility.Visible;
-
-                        Project.cfg.SR5A.bardRateText = _bardRate.Text;
-                        Project.cfg.SR5A.dataBitText = _dataBit.Text;
-                        Project.cfg.SR5A.stopBitText = _stopBit.Text;
-                        Project.cfg.SR5A.parityText = _Parity.Text;
-
-                        Project.testMachine.Config = Project.cfg.SR5A.ToBusConfig();
-                        Project.testMachine.Init();
-                    }
-                    break;
-
-                case Ctrl.ENUMMACHINE.MS01:
-                    MS01.IsChecked = true;
-                    {
-                        if (Project.cfg.MS01 == null) 
-                        { 
-                            Project.cfg.MS01 = new ComDevice(); 
-                        }
-                        Project.cfg.MS01.lum = devModel.lum;
-                        Project.cfg.MS01.cx = devModel.cx;
-                        Project.cfg.MS01.cy = devModel.cy;
-                        Project.cfg.MS01.comName = myports.Text;
-                        Project.cfg.MS01.bardRate = _bardRate.SelectedIndex;
-                        Project.cfg.MS01.dataBit = _dataBit.SelectedIndex;
-                        Project.cfg.MS01.stopBit = _stopBit.SelectedIndex;
-                        Project.cfg.MS01.parity = _Parity.SelectedIndex;
-                        Project.cfg.MS01.startDelay = devModel.startDelay;
-                        Project.cfg.MS01.mesDelay = devModel.mesDelay;
-                        Project.cfg.MS01.resetDelay = devModel.resetDelay;
-                        Project.testMachine = Ctrl.MS01.GetInstance();
-
-                        Project.cfg.MS01.bardRateText = _bardRate.Text;
-                        Project.cfg.MS01.dataBitText = _dataBit.Text;
-                        Project.cfg.MS01.stopBitText = _stopBit.Text;
-                        Project.cfg.MS01.parityText = _Parity.Text;
-
-                        Project.testMachine.Config = Project.cfg.MS01.ToBusConfig();
-                        Project.testMachine.Init();
-                    }
-                    break;
-
-                case Ctrl.ENUMMACHINE.Admesy:
-                    Admesy.IsChecked = true;
-                    break;
 
 
                 default: break;
             }
-
-            //Project.cfg.Comm.comName= myports.Text;
-            //Project.cfg.Comm.bardRateText = _bardRate.Text;
-            //Project.cfg.Comm.dataBit = int.Parse(_dataBit.Text);
-            //Project.cfg.Comm.dataBitText = _dataBit.Text;
-            //Project.cfg.Comm.stopBit = int.Parse(_stopBit.Text);
-            //Project.cfg.Comm.stopBitText = _stopBit.Text;
-            //Project.cfg.Comm.parity = _Parity.SelectedIndex;
-            //Project.cfg.Comm.parityText = _Parity.Text;
         }
         private void OnBnClickedEnsure(object sender, RoutedEventArgs e)
         {
@@ -486,7 +332,14 @@ namespace LCD.View
         {
             if (BM7A.IsChecked == true)
             {
-                select_one_radio(BM7A);
+                BM5A.IsChecked = false;
+                PR655.IsChecked = false;
+                CS200.IsChecked = false;
+                CS2000.IsChecked = false;
+                BM5AS.IsChecked = false;
+                demo.IsChecked = false;
+                SR3A.IsChecked = false;
+                BM5A.IsChecked = false;
                 MACHINE = Ctrl.ENUMMACHINE.BMA7;
 
                 myports.Text= Project.cfg.BM7A.comName ;
@@ -504,7 +357,13 @@ namespace LCD.View
         {
             if (BM5A.IsChecked == true)
             {
-                select_one_radio(BM5A);
+                BM7A.IsChecked = false;
+                PR655.IsChecked = false;
+                CS200.IsChecked = false;
+                CS2000.IsChecked = false;
+                BM5AS.IsChecked = false;
+                demo.IsChecked = false;
+                SR3A.IsChecked = false;
                 MACHINE = Ctrl.ENUMMACHINE.BM5A;
 
                 General.Visibility = Visibility.Visible;
@@ -517,7 +376,14 @@ namespace LCD.View
         {
             if (PR655.IsChecked == true)
             {
-                select_one_radio(PR655);
+                BM7A.IsChecked = false;
+                BM5A.IsChecked = false;
+                CS200.IsChecked = false;
+                CS2000.IsChecked = false;
+                BM5AS.IsChecked = false;
+                demo.IsChecked = false;
+                SR3A.IsChecked = false;
+                BM5A.IsChecked = false;
                 MACHINE = Ctrl.ENUMMACHINE.PR655;
 
                 General.Visibility = Visibility.Visible;
@@ -530,7 +396,14 @@ namespace LCD.View
         {
             if (CS2000.IsChecked == true)
             {
-                select_one_radio(CS2000);
+                BM7A.IsChecked = false;
+                BM5A.IsChecked = false;
+                PR655.IsChecked = false;
+                CS200.IsChecked = false;
+                BM5AS.IsChecked = false;
+                demo.IsChecked = false;
+                SR3A.IsChecked = false;
+                BM5A.IsChecked = false;
                 MACHINE = Ctrl.ENUMMACHINE.CS2000;
 
                 myports.Text = Project.cfg.CS2000.comName;
@@ -543,52 +416,46 @@ namespace LCD.View
                 General.Visibility = Visibility.Visible;
                 General_Com.Visibility = Visibility.Visible;
                 USB2000.Visibility = Visibility.Hidden;
-            }
-        }
 
-      
-
-        private void OnBnClickedAdmesy(object sender, RoutedEventArgs e)
-        {
-            if (Admesy.IsChecked == true)
-            {
-                select_one_radio(Admesy);
-                MACHINE = Ctrl.ENUMMACHINE.Admesy;
-
-                General.Visibility = Visibility.Visible;
-                General_Com.Visibility = Visibility.Visible;
-                USB2000.Visibility = Visibility.Hidden;
             }
         }
         private void OnBnClickedSR3A(object sender, RoutedEventArgs e)
         {
             if (SR3A.IsChecked == true)
             {
-                select_one_radio(SR3A);
+                BM7A.IsChecked = false;
+                BM5A.IsChecked = false;
+                PR655.IsChecked = false;
+                CS2000.IsChecked = false;
+                CS200.IsChecked = false;
+                BM5AS.IsChecked = false;
+                demo.IsChecked = false;
+                BM5A.IsChecked = false;
                 MACHINE = Ctrl.ENUMMACHINE.SR3A;
-                select_sr3a();
+
+                myports.Text = Project.cfg.SR3A.comName;
+                _bardRate.Text = Project.cfg.SR3A.bardRateText ;
+                 _dataBit.Text= Project.cfg.SR3A.dataBitText ;
+                _stopBit.Text= Project.cfg.SR3A.stopBitText ;
+                 _Parity.Text= Project.cfg.SR3A.parityText ;
+
+                General.Visibility = Visibility.Visible;
+                General_Com.Visibility = Visibility.Visible;
                 USB2000.Visibility = Visibility.Hidden;
             }
         }
-
-        private void select_sr3a()
-        {
-            myports.Text = Project.cfg.SR3A.comName;
-            _bardRate.Text = Project.cfg.SR3A.bardRateText;
-            _dataBit.Text = Project.cfg.SR3A.dataBitText;
-            _stopBit.Text = Project.cfg.SR3A.stopBitText;
-            _Parity.Text = Project.cfg.SR3A.parityText;
-
-            General.Visibility = Visibility.Visible;
-            General_Com.Visibility = Visibility.Visible;
-            USB2000.Visibility = Visibility.Hidden;
-        }
-
         private void OnBnClickedBM5AS(object sender, RoutedEventArgs e)
         {
             if (BM5AS.IsChecked == true)
             {
-                select_one_radio(BM5AS);
+                BM7A.IsChecked = false;
+                BM5A.IsChecked = false;
+                PR655.IsChecked = false;
+                CS2000.IsChecked = false;
+                CS200.IsChecked = false;
+                SR3A.IsChecked = false;
+                demo.IsChecked = false;
+                BM5A.IsChecked = false;
                 MACHINE = Ctrl.ENUMMACHINE.BM5AS;
 
                 General.Visibility = Visibility.Visible;
@@ -601,7 +468,14 @@ namespace LCD.View
 
             if (CS200.IsChecked == true)
             {
-                select_one_radio(CS200);
+                BM7A.IsChecked = false;
+                BM5A.IsChecked = false;
+                PR655.IsChecked = false;
+                BM5AS.IsChecked = false;
+                CS2000.IsChecked = false;
+                SR3A.IsChecked = false;
+                demo.IsChecked = false;
+                BM5A.IsChecked = false;
                 MACHINE = Ctrl.ENUMMACHINE.USB2000;
 
                 General.Visibility = Visibility.Hidden;
@@ -613,91 +487,19 @@ namespace LCD.View
         {
             if (demo.IsChecked == true)
             {
-                select_one_radio(demo);
+                BM7A.IsChecked = false;
+                BM5A.IsChecked = false;
+                PR655.IsChecked = false;
+                BM5AS.IsChecked = false;
+                CS2000.IsChecked = false;
+                SR3A.IsChecked = false;
+                CS200.IsChecked = false;
+                BM5A.IsChecked = false;
                 MACHINE = Ctrl.ENUMMACHINE.Demo;
 
                 General.Visibility = Visibility.Visible;
                 General_Com.Visibility = Visibility.Visible;
                 USB2000.Visibility = Visibility.Hidden;
-            }
-        }
-
-        private void select_one_radio(System.Windows.Controls.RadioButton radio)
-        {
-            System.Windows.Controls.RadioButton[] buttons = new System.Windows.Controls.RadioButton[] { BM7A ,
-                BM5A ,
-                PR655,
-            CS2000,
-            Admesy,
-            MS01,
-            CS200,
-            BM5AS,
-            demo,
-            BM5A,
-            SR3A,
-            SR5A
-        };
-
-            for(int i=0;i<buttons.Length;i++)
-            {
-                if(radio != buttons[i])
-                {
-                    buttons[i].IsChecked = false;
-                }
-                else
-                {
-                    buttons[i].IsChecked=true;
-                }
-            }
-        }
-
-        private void OnBnClickedSR5A(object sender, RoutedEventArgs e)
-        {
-            if (SR5A.IsChecked == true)
-            {
-                select_one_radio(SR5A);
-                MACHINE = Ctrl.ENUMMACHINE.SR5A;
-                select_sr5a();
-                USB2000.Visibility = Visibility.Hidden;
-            }
-        }
-
-        private void select_sr5a()
-        {
-            myports.Text = Project.cfg.SR5A.comName;
-            _bardRate.Text = Project.cfg.SR5A.bardRateText;
-            _dataBit.Text = Project.cfg.SR5A.dataBitText;
-            _stopBit.Text = Project.cfg.SR5A.stopBitText;
-            _Parity.Text = Project.cfg.SR5A.parityText;
-
-            General.Visibility = Visibility.Visible;
-            General_Com.Visibility = Visibility.Visible;
-            USB2000.Visibility = Visibility.Hidden;
-        }
-		 private void select_ms01()
-        {
-            MACHINE = Ctrl.ENUMMACHINE.MS01;
-
-            if (Project.cfg.MS01 != null)
-            {
-                myports.Text = Project.cfg.MS01.comName;
-                _bardRate.Text = Project.cfg.MS01.bardRateText;
-                _dataBit.Text = Project.cfg.MS01.dataBitText;
-                _stopBit.Text = Project.cfg.MS01.stopBitText;
-                _Parity.Text = Project.cfg.MS01.parityText;
-            }
-
-            General.Visibility = Visibility.Visible;
-            General_Com.Visibility = Visibility.Visible;
-            USB2000.Visibility = Visibility.Hidden;
-        }
-
-        private void OnBnClickedMs01(object sender, RoutedEventArgs e)
-        {
-            if (MS01.IsChecked == true)
-            {
-                select_one_radio(MS01);
-                select_ms01();
             }
         }
     }

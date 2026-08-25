@@ -3,26 +3,16 @@
 using System;
 using System.Collections.Generic;
 using System.Diagnostics;
-using System.Diagnostics.Eventing.Reader;
-using System.Globalization;
 using System.Threading;
 using System.Threading.Tasks;
 using System.Windows;
 using System.Windows.Controls;
-using System.Windows.Documents;
 using System.Windows.Input;
 using System.Windows.Media;
-using System.Windows.Threading;
-using LCD.Core.Abstractions;
-using LCD.Core.Models;
 using LCD.Ctrl;
 using LCD.Data;
 using LCD.dataBase;
-using LCD.Dll;
-using LCD.Drv.Power;
 using LCD.View;
-using NPOI.SS.Formula.Functions;
-using SharpDX.Mathematics.Interop;
 using static LCD.Ctrl.MovCtrl;
 
 //设置位置坐标系统
@@ -46,7 +36,7 @@ namespace LCD
 
         private bool Sta = false;
 
-        public bool IszERO = false;
+        private bool IszERO = false;
 
         private bool Starterror1 = true;
         private bool Starterror2 = true;
@@ -56,24 +46,7 @@ namespace LCD
         private ResutView spectrumResults = null;
         private ResutView warmupResult = null;
         private ResutView PowerResult = null;
-        private ResutView ResponseResult = null;
-        private ResutView CrosstalkResult = null;
         public double dltx = 0, dlty = 0, dltz = 0, dltw = 0, dltq = 0, dltm = 0;
-        private OxyplotView oxyplotView;
-
-        //这两个参数是暖机测试的
-        private bool auto_test = false;
-        private int warn_minutes = 0;
-        private int warn_seconds = 0;
-
-        //暖机测试的定时器
-        private DispatcherTimer warn_timer = null;
-
-        //程控电源接口
-        private IPowerSupply ipowerDevice = null;
-
-        private Thread power_query_thread;
-        
         public MainWindow()
         {
             InitializeComponent();
@@ -81,18 +54,6 @@ namespace LCD
             Database.Open();
 
             Enabled(false);
-
-            //设置语言测试
-            //LanguageManager.Instance.ChangeLanguage(new CultureInfo("en"));
-            Project.InitConfig();//读取配置文件，使得地下的语言设置能取到值
-            if (Project.cfg.Lang != 0)
-            {
-                LanguageManager.Instance.ChangeLanguage(new CultureInfo("en"));
-            }
-            else
-            {
-                LanguageManager.Instance.ChangeLanguage(new CultureInfo("zh"));
-            }
 
             #region 测试
 
@@ -148,21 +109,6 @@ namespace LCD
             Project.PowerResult= PowerResult;
             Power.Content = Project.PowerResult;
 
-            ResponseResult = new ResutView(ENUMMESSTYLE._02_RESPONSE);
-            Project.ResponseResults = ResponseResult;
-            RiseFallTime.Content = ResponseResult;
-
-            //设置crosstalk的输出啊
-            CrosstalkResult = new ResutView(ENUMMESSTYLE._05_CROSSTALK);
-            Project.CrossTalkResults = CrosstalkResult;
-            crosstalk.Content = CrosstalkResult;
-
-            //显示图形啊
-            oxyplotView = new OxyplotView();
-            lines.Content = oxyplotView;
-            //重新绘制图形
-            oxyplotView._model.InvalidatePlot(true);
-
             //工作视图
             View.WortItemView wt = new View.WortItemView();
             workItem.Content = wt;
@@ -198,23 +144,10 @@ namespace LCD
             Project.WriteLog("************************");
             Project.WriteLog("检查设备连接");
 
-            
-            //Project.WriteLog("光幕信号："+ Project.cfg.LightScreenSignal);
-
             AddAxiesRoute();//添加运动轴路由事件
 
             mypanel.DataContext = PtInfo;
             mvctrl = MovCtrl.GetInstance();
-            // 注入 6 轴配置与运动相关标志（取代 MovCtrl 直接读 Project.cfg.ax_X）
-            mvctrl.AxX = Project.cfg.ax_x;
-            mvctrl.AxY = Project.cfg.ax_y;
-            mvctrl.AxZ = Project.cfg.ax_z;
-            mvctrl.AxU = Project.cfg.ax_u;
-            mvctrl.AxV = Project.cfg.ax_v;
-            mvctrl.AxBall = Project.cfg.ax_ball;
-            mvctrl.IsFlipped = Project.cfg.IsFlipped;
-            mvctrl.LightScreenAlarmEnable = Project.cfg.LightScreenAlarmEnable;
-            mvctrl.LightScreenSignal = Project.cfg.LightScreenSignal;
 
             var t2 = sw.Elapsed.TotalSeconds;
             //心跳函数
@@ -227,15 +160,6 @@ namespace LCD
             thread1.SetApartmentState(ApartmentState.STA);
             thread1.IsBackground = true;
             thread1.Start();
-
-            power_query_thread = new Thread(power_query);
-            power_query_thread.Start();
-
-            if(Project.cfg.power.EnablePowerControl==false)
-            {
-                PowerControllerPanel.Visibility = Visibility.Collapsed;
-                PowerControlStatus.Visibility = Visibility.Collapsed;
-            }
 
             //System.Timers.Timer timer1 = new System.Timers.Timer();//声明timer对象
             //timer1.Interval = 500;//100ms刷新一次  150
@@ -254,26 +178,8 @@ namespace LCD
             //ProcessCtrl pctrl = ProcessCtrl.GetInstance();
             pctrl = ProcessCtrl.GetInstance();
             pctrl.AddSingleResult += new ProcessCtrl.AddSingleResultDelegate(Project.Results.AddSingleData);
-            pctrl.AddResponseResult += new ProcessCtrl.AddSingleResultDelegate(Project.ResponseResults.AddSingleData);
             pctrl.SpectrumResults += new ProcessCtrl.AddSingleResultDelegate(Project.SpectrumResults.AddSingleData);
             pctrl.warmupResult += new ProcessCtrl.AddSingleResultDelegate(Project.warmupResult.AddSingleData);
-            pctrl.crosstalkResult += new ProcessCtrl.AddSingleResultDelegate(Project.CrossTalkResults.AddSingleData);
-
-            //设置测量标准检查的回调函数啊
-            pctrl.RunPointTestStd += new ProcessCtrl.RunTestStdDelegate(Project.Results.Update_Color);
-            //设置绘图回调函数
-            pctrl.UpdateResponseLine += new ProcessCtrl.UpdateResponseLinesDelegate(oxyplotView.draw);
-
-
-            //测试一下,测试是成功的啊
-            //IData objs = new IData();
-            //objs.X = 0;
-            //objs.Z = 0;
-            //objs.High = 255;
-            //objs.Low = 0;
-            //objs.RiseTime = 30;
-            //objs.FallTime = 20;
-            //Project.ResponseResults.AddSingleData(objs, "response");
 
             pctrl.PowerResult+=new ProcessCtrl.SingleResultDelegate(Project.PowerResult.SingleData);
 
@@ -288,9 +194,40 @@ namespace LCD
 
             var t3 = sw.Elapsed.TotalSeconds;
 
-            init_test_machine();
+            if (Project.cfg.TESTMACHINE == ENUMMACHINE.BMA7)
+            {
+                Project.testMachine = Ctrl.BM7A.GetInstance();
+            }
+            else if (Project.cfg.TESTMACHINE == ENUMMACHINE.BM5A)
+            {
+
+            }
+            else if (Project.cfg.TESTMACHINE == ENUMMACHINE.PR655)
+            {
+
+            }
+            else if (Project.cfg.TESTMACHINE == ENUMMACHINE.CS2000)
+            {
+                Project.testMachine = Ctrl.CS2000.GetInstance();
+            }
+            else if (Project.cfg.TESTMACHINE == ENUMMACHINE.SR3A)
+            {
+                Project.testMachine = Ctrl.SR3A.GetInstance();
+            }
+            else if (Project.cfg.TESTMACHINE == ENUMMACHINE.BM5AS)
+            {
+                //Project.testMachine = Ctrl.BM7A.GetInstance();
+            }
+            else if (Project.cfg.TESTMACHINE == ENUMMACHINE.CS2000)
+            {
+                Project.testMachine = Ctrl.CS2000.GetInstance();
+            }
+            else if (Project.cfg.TESTMACHINE == ENUMMACHINE.Demo)
+            {
+
+            }
             Project.testMachine.Init();
-            set_fdl_menu_visable();
+
 
             switch (Project.cfg.PGType)
             {
@@ -298,17 +235,17 @@ namespace LCD
 
                     break;
                 case ENUMPG.OtherPG:
-                    Project.PG = new LCD.Drv.PG.PatternGeneratorNC816();
-                    int A = Project.PG.Initialize(Project.cfg.otherPG.SDevice.ip);
+                    Project.PG = new PG(Project.cfg.otherPG.CommunicationType);
+                    int A = Project.PG.init(Project.cfg.otherPG.SDevice.ip);
                     if (A == 1)
                     {
                         Project.WriteLog("PG连接成功");
                         try
                         {
-                            String Info = Project.PG.GetDeviceInfo();
+                            String Info = Project.PG.getDeviceInformaction();
                             Project.WriteLog(Info);
 
-                            Project.PG.RefreshPatternList();
+                            Project.PG.getDevicePatternList();
 
 
                             Project.PGDebug = new View.PGDebug();
@@ -357,13 +294,7 @@ namespace LCD
             if (Project.cfg.power.Enabled == true)
             {
                 Project.power = new Ctrl.Power();
-                Project.power.Init();                
-            }
-
-
-            if(Project.cfg.power.EnablePowerControl)
-            {
-                initial_power_controller();
+                Project.power.Init();
             }
 
             //相机视图
@@ -378,9 +309,9 @@ namespace LCD
                 cam.Content = Project.V110;
             }
 
-            update_view_angle_settings();
+             
 
-                Zero();
+            Zero();
 
             List<string> ShowInfo = null;
             ENUMMESSTYLE ShowTestType = ENUMMESSTYLE._01_POINT;
@@ -400,91 +331,25 @@ namespace LCD
             datatemp.Init(ShowInfo, ShowTestType, TempName);
         }
 
-        private void update_view_angle_settings()
-        {
-            if ((Project.cfg.TESTMACHINE != Ctrl.ENUMMACHINE.SR3A) && (
-                           Project.cfg.TESTMACHINE != Ctrl.ENUMMACHINE.SR5A) &&
-                           (Project.cfg.TESTMACHINE != Ctrl.ENUMMACHINE.CS2000))
-            {
-                show_view_angle_btns(false);
-            }
-            else
-            {
-                show_view_angle_btns(true);
-                if (Project.cfg.TESTMACHINE == Ctrl.ENUMMACHINE.CS2000)
-                {
-                    ViewAngle2.Visibility = Visibility.Collapsed;
-                }
-                else
-                {
-                    ViewAngle2.Visibility = Visibility.Visible;
-                }
-            }
-        }
 
-        private void initial_power_controller()
-        {
-            //初始化电源控制器
-            switch (Project.cfg.power.PowerType)
-            {
-                case "M8800":
-                    ipowerDevice = new PowerM88();
-                    Project.WriteLog("电源设备是M8800");
-                    break;
-                case "PLD6003":
-                    ipowerDevice = new PowerPld6003();
-                    Project.WriteLog("电源设备是PLD6003");
-                    break;
-                case "NGI36150":
-                    ipowerDevice = new PowerNGI36150();
-                    Project.WriteLog("电源设备是NGI36150");
-                    break;
-                default:
-                    ipowerDevice = new PowerM88();
-                    Project.WriteLog("默认电源设备是M88");
-                    break;
-            }
-            if (string.IsNullOrEmpty(Project.cfg.power.PowerSerialName) == false)
-            {
-                bool st  = ipowerDevice.Open(Project.cfg.power.PowerSerialName);
-                update_power_control_status(st);
-            }
-            else
-            {
-                Project.WriteLog("错误：未配置电源控制的串口");
-            }
-        }
 
         private void Pctrl_UpDataUi(object obj)//增加Tab需要更改
         {
             ENUMMESSTYLE eNUMMESSTYLE = (ENUMMESSTYLE)obj;
 
-            if (eNUMMESSTYLE == ENUMMESSTYLE._01_POINT || eNUMMESSTYLE == ENUMMESSTYLE.TCO)
+            if (eNUMMESSTYLE == ENUMMESSTYLE._01_POINT)
             {
                 this.Dispatcher.Invoke(new Action(() =>
                 {
                     this.ResTab.SelectedIndex = 0;
-                }));               
-            }
-            else if(eNUMMESSTYLE == ENUMMESSTYLE._02_RESPONSE)
-            {
-                this.Dispatcher.Invoke(new Action(() =>
-                {
-                    this.ResTab.SelectedIndex = 7;
                 }));
+               
             }
             else if (eNUMMESSTYLE == ENUMMESSTYLE._03_SPECTRUM)
             {
                 this.Dispatcher.Invoke(new Action(() =>
                 {
                     this.ResTab.SelectedIndex = 1;
-                }));
-            }
-            else if (eNUMMESSTYLE == ENUMMESSTYLE._05_CROSSTALK)
-            {
-                this.Dispatcher.Invoke(new Action(() =>
-                {
-                    this.ResTab.SelectedIndex = 8;
                 }));
             }
             else if (eNUMMESSTYLE == ENUMMESSTYLE._07_warmup)
@@ -503,8 +368,8 @@ namespace LCD
             }
         }
 
-        public ProcessCtrl pctrl = null;
-        public MovCtrl mvctrl = null;
+        private ProcessCtrl pctrl = null;
+        private MovCtrl mvctrl = null;
 
         //速度1设置
         private void OnBnClickedSpeedLow_1(object sender, RoutedEventArgs e)
@@ -580,12 +445,7 @@ namespace LCD
         }
 
         private bool IsZStop = false;
-        private bool MoniterXError = false;
-        private bool MoniterYError = false;
-        private bool MoniterZError = false;
-        private bool MoniterUError = false;
-        private bool MoniterVError = false;
-        private int MoniterErrorCount = 0;
+        private bool MoniterError = false;
         private double zz = 0;
         private double uu = 0;
         double CCC = 0;
@@ -601,56 +461,14 @@ namespace LCD
             
             MessageBox.Show(str, caption, MessageBoxButton.OK,MessageBoxImage.Information);
         }
-
-        private void reset_zero()
-        {
-            if(IszERO == true)
-            {
-                IszERO = false;
-            }
-        }
-
-        private void power_query()
-        {
-            while(true)
-            {
-                if (Project.cfg.power.EnablePowerControl)
-                {
-                    PowerReading result = null;
-                    try
-                    {
-                        result = ipowerDevice?.Query();
-                    }
-                    catch (Exception ex)
-                    {
-                        LogHelper.Instance.Write("电源查询异常:" + ex.Message + ex.StackTrace);
-                        continue;
-                    }
-
-                    //显示的时候才dispatch
-                    this.Dispatcher?.Invoke(new Action(() => {
-                        if (result != null)
-                        {
-                            RealVoltage.Text = result.Voltage.ToString("0.0000");
-                            RealCurrent.Text = result.Current.ToString("0.0000");
-                            update_power_control_status(true);
-                        }
-                        else
-                        {
-                            PowerControl.Text = "未连接";
-                            update_power_control_status(false);
-                        }
-                    }));
-                }
-                Thread.Sleep(2000);
-            }
-        }
         private void Timer_Elapsed()//object sender, System.Timers.ElapsedEventArgs e
         {
-
+            
             while (true)
             {
-                //action.Invoke(100, 100);             
+                //action.Invoke(100, 100);
+
+             
                 this.Dispatcher?.Invoke(new Action(() =>
                 {
                     if ((DateTime.Now - loginTime).Minutes > 5)
@@ -663,152 +481,74 @@ namespace LCD
                         mvctrl.UpdateCurAbsPos(ref dx, ref dy, ref dz, ref du, ref dv, ref dball);//更新五轴位置
                         Data2UI(dx, dy, dz, du, dv, dball);
                         int xerror = 10, yerror = 10, zerror = 10, uerror = 10, verror = 10, ballerror = 10, TestSignal1error = 10, TestSignal2error = 10;
-                        int lightscreen = 0;
-                        mvctrl.UpdataIO(ref xerror, ref yerror, ref zerror, ref uerror, ref verror, ref ballerror, ref TestSignal1error, ref TestSignal2error,ref lightscreen);
-                        
-                        if(lightscreen != 0)
-                        {
-                            if (MoniterXError == false)
-                            {
-                                if (Project.cfg.LightScreenAlarmEnable)
-                                {
-                                    Project.WriteLog("检测到光幕信号，停止运行");
-                                    Project.TstPause = true;//设置急停标志
-                                    MPC08EDLL.decel_stop4(Project.cfg.ax_x.value,
-                                        Project.cfg.ax_y.value,
-                                        Project.cfg.ax_z.value,
-                                        Project.cfg.ax_u.value);
-                                    MPC08EDLL.decel_stop(Project.cfg.ax_v.value);
-                                    //检测一下回零线程是否在运行，如果在运行的话就停止该线程
-                                    if(thr1!=null)
-                                    {
-                                        try
-                                        {
-                                            thr1.Abort();
-                                        }
-                                        catch
-                                        {
-
-                                        }
-                                    }
-                                    this.Dispatcher.BeginInvoke(new Action<string>(ShowErrors), new object[] { "检测到光幕信号，已经停止运行" });
-                                    MoniterXError = true;
-                                    MoniterYError = true;
-                                    MoniterZError = true;
-                                    MoniterUError = true;
-                                    MoniterVError = true;
-                                }
-                            }
-                        }
-
+                        mvctrl.UpdataIO(ref xerror, ref yerror, ref zerror, ref uerror, ref verror, ref ballerror, ref TestSignal1error, ref TestSignal2error);
                         //Console.WriteLine($"【{DateTime.Now}】：【{xerror}】【{yerror}】【{zerror}】【{uerror}】【{verror}】【{ballerror}】【{TestSignal1error}】【{TestSignal2error}】");
                         if (xerror == 0)
-                        {                          
-                            if (Project.cfg.Lang != 0)
-                            {
-                                x.Text = "Connected";
-                            }
-                            else
-                            {
-                                x.Text = "连接成功";
-                            }
+                        {
+                            
+                            x.Text = "连接成功";
                             x.Foreground = new SolidColorBrush(Colors.Green); //"DarkRed"; // "DarkRed"
                         }
                         else
                         {
-                            if ((MoniterXError == false)&&(Project.cfg.ax_x.IsEnable))
+                            if (MoniterError == false)
                             {
+                                
                                 ////MessageBox.Show("电机报警，请检查");
                                 //ShowError.BeginInvoke("电机报警，请检查",null,null);
-                                MPC08EDLL.decel_stop(Project.cfg.ax_x.value);
-                                if (MoniterErrorCount == 0)
-                                {
-                                    Project.WriteLog("X轴硬件报警，请排除故障后重新回零再做测试");
-                                }
-                                reset_zero();
+
                                 if (Project.cfg.ax_x.AlarmEnable)
                                 {
-                                    MoniterXError = true;
-                                    this.Dispatcher.BeginInvoke(new Action<string>(ShowErrors), new object[] { "X轴硬件报警，请排除故障后重新回零再做测试" });
-                                }   
-                                inc_reset_error_count();
+                                    MoniterError = true;
+                                    this.Dispatcher.BeginInvoke(new Action<string>(ShowErrors), new object[] { "电机报警，请检查" });
+                                }
                             }
 
                             x.Text = "未连接";
-                            if (Project.cfg.Lang != 0)
-                            {
-                                x.Text = "Not connect";
-                            }
                             x.Foreground = new SolidColorBrush(Colors.DarkRed);
                         }
                         if (yerror == 0)
                         {
                            // MoniterError = false;
                             y.Text = "连接成功";
-                            if (Project.cfg.Lang != 0)
-                            {
-                                y.Text = "Connected";
-                            }
                             y.Foreground = new SolidColorBrush(Colors.Green); //"DarkRed"; // "DarkRed"
                         }
                         else
                         {
-                            if ((MoniterYError == false)&&(Project.cfg.ax_y.IsEnable))
+                            if (MoniterError == false)
                             {
-                                MPC08EDLL.decel_stop(Project.cfg.ax_y.value);
-                                if (MoniterErrorCount == 0)
-                                {
-                                    Project.WriteLog("Y轴硬件报警，请排除故障后重新回零再做测试");
-                                }
-                                reset_zero();
+                                
                                 if (Project.cfg.ax_y.AlarmEnable)
-                                {                                    
-                                    MoniterYError = true;
-                                    this.Dispatcher.BeginInvoke(new Action<string>(ShowErrors), new object[] { "Y轴硬件报警，请排除故障后重新回零再做测试" });
+                                {
+                                    MoniterError = true;
+                                    this.Dispatcher.BeginInvoke(new Action<string>(ShowErrors), new object[] { "电机报警，请检查" });
                                 }
-                                inc_reset_error_count();
+
                             }
 
                             y.Text = "未连接";
-                            if (Project.cfg.Lang != 0)
-                            {
-                                y.Text = "Not connect";
-                            }
                             y.Foreground = new SolidColorBrush(Colors.DarkRed);
                         }
                         if (zerror == 0)
                         {
                             //MoniterError = false;
                             z.Text = "连接成功";
-                            if (Project.cfg.Lang != 0)
-                            {
-                                z.Text = "Connected";
-                            }
                             z.Foreground = new SolidColorBrush(Colors.Green); //"DarkRed"; // "DarkRed"
                         }
                         else
                         {
-                            if ((MoniterZError == false)&&(Project.cfg.ax_z.IsEnable))
+                            if (MoniterError == false)
                             {
-                                MPC08EDLL.decel_stop(Project.cfg.ax_z.value);
-                                if (MoniterErrorCount == 0)
-                                {
-                                    Project.WriteLog("Z轴硬件报警，请排除故障后重新回零再做测试");
-                                }
-                                reset_zero();
+                                
                                 if (Project.cfg.ax_z.AlarmEnable)
                                 {
-                                    MoniterZError = true;
-                                    this.Dispatcher.BeginInvoke(new Action<string>(ShowErrors), new object[] { "Z轴硬件报警，请排除故障后重新回零再做测试" });
+                                    MoniterError = true;
+                                    this.Dispatcher.BeginInvoke(new Action<string>(ShowErrors), new object[] { "电机报警，请检查" });
                                 }
-                                inc_reset_error_count();
+
                             }
 
                             z.Text = "未连接";
-                            if (Project.cfg.Lang != 0)
-                            {
-                                z.Text = "Not connect";
-                            }
                             z.Foreground = new SolidColorBrush(Colors.DarkRed);
                         }
                         if (uerror == 0)
@@ -816,70 +556,44 @@ namespace LCD
 
                             //MoniterError = false;
                             u.Text = "连接成功";
-                            if (Project.cfg.Lang != 0)
-                            {
-                                u.Text = "Connected";
-                            }
                             u.Foreground = new SolidColorBrush(Colors.Green); //"DarkRed"; // "DarkRed"
                         }
                         else
                         {
-                            if ((MoniterUError == false)&&(Project.cfg.ax_u.IsEnable))
+                            if (MoniterError == false)
                             {
-                                MPC08EDLL.decel_stop(Project.cfg.ax_u.value);
-                                if (MoniterErrorCount == 0)
-                                {
-                                    Project.WriteLog("U轴硬件报警，请排除故障后重新回零再做测试");
-                                }
-                                reset_zero();
+                                
                                 if (Project.cfg.ax_u.AlarmEnable)
                                 {
-                                    MoniterUError = true;
-                                    this.Dispatcher.BeginInvoke(new Action<string>(ShowErrors), new object[] { "U轴硬件报警，请排除故障后重新回零再做测试" });
+                                    MoniterError = true;
+                                    this.Dispatcher.BeginInvoke(new Action<string>(ShowErrors), new object[] { "电机报警，请检查" });
                                 }
-                                inc_reset_error_count();
+
                             }
 
                             u.Text = "未连接";
-                            if (Project.cfg.Lang != 0)
-                            {
-                                u.Text = "Not connect";
-                            }
                             u.Foreground = new SolidColorBrush(Colors.DarkRed);
                         }
                         if (verror == 0)
                         {
                            // MoniterError = false;
                             v.Text = "连接成功";
-                            if (Project.cfg.Lang != 0)
-                            {
-                                v.Text = "Connected";
-                            }
                             v.Foreground = new SolidColorBrush(Colors.Green); //"DarkRed"; // "DarkRed"
                         }
                         else
                         {
-                            if ((MoniterVError == false)&&(Project.cfg.ax_u.IsEnable))
+                            if (MoniterError == false)
                             {
-                                MPC08EDLL.decel_stop(Project.cfg.ax_v.value);
-                                if (MoniterErrorCount == 0)
-                                {
-                                    Project.WriteLog("V轴硬件报警，请排除故障后重新回零再做测试");
-                                }
-                                inc_reset_error_count();
-                                reset_zero();
+                               
                                 if (Project.cfg.ax_v.AlarmEnable)
                                 {
-                                    MoniterVError = true;
-                                    this.Dispatcher.BeginInvoke(new Action<string>(ShowErrors), new object[] { "V轴硬件报警，请排除故障后重新回零再做测试" });
+                                    MoniterError = true;
+                                    this.Dispatcher.BeginInvoke(new Action<string>(ShowErrors), new object[] { "电机报警，请检查" });
                                 }
+
                             }
 
                             v.Text = "未连接";
-                            if (Project.cfg.Lang != 0)
-                            {
-                                v.Text = "Not connect";
-                            }
                             v.Foreground = new SolidColorBrush(Colors.DarkRed);
                         }
                         if (TestSignal1error == 0)
@@ -908,87 +622,9 @@ namespace LCD
                         }
 
 
-                        if (xerror==0&&yerror==0&&zerror==0&&uerror==0&&verror==0&&lightscreen==0)
-                        {                                                      
-                            //out1和out2接到2个灯上，ou1是红灯，out2是绿灯
-                            /*
-                             ：int outport_bit(int cardno,int bitno,int status)；
-                            cardno：控制卡编号，取值范围从 1 到卡最大编号；
-                            bitno：表示第几个输出口，取值范围为 1~16。
-                            Status：设置的状态；（1：ON；0：OFF）
-                             */
-                            //亮绿灯，灭红灯
-                            MPC08EDLL.outport_bit(mvctrl.board_cnt1, 1,1);
-                            MPC08EDLL.outport_bit(mvctrl.board_cnt1, 2, 0);
-
-                            if (IsThreadRunning(tesThread) && Project.TstPause)
-                            {
-
-                                string info = "是否继续测试?";
-                                string title = "提示";
-                                if (Project.cfg.Lang != 0)
-                                {
-                                    info = "Continue testing ?";
-                                    title = "Notice";
-                                }
-                                //这里要弹出对话框确认一下是否继续啊
-                                this.Dispatcher.Invoke(() =>
-                                 {
-                                     System.Windows.MessageBoxResult dr = System.Windows.MessageBox.Show(info,title,MessageBoxButton.YesNo);
-                                     if(dr == MessageBoxResult.Yes)
-                                     {
-                                         Project.TstPause = false;
-                                         Project.WriteLog("继续测试");
-                                     }
-                                     else
-                                     {
-                                         try
-                                         {
-                                             tesThread.Abort();
-                                         }
-                                         catch
-                                         {
-
-                                         }
-                                         Project.TstPause = false;
-                                         Project.WriteLog("停止测试");
-                                     }
-                                 });                               
-                            }
-                            else
-                            {
-                                Project.TstPause = false;
-                            }
-                            if (MoniterXError)
-                            {
-                                MoniterXError = false;
-                                Project.WriteLog("X轴故障恢复");
-                            }
-                            if (MoniterYError)
-                            {
-                                MoniterYError = false;
-                                Project.WriteLog("Y轴故障恢复");
-                            }
-                            if (MoniterZError)
-                            {
-                                MoniterZError = false;
-                                Project.WriteLog("Z轴故障恢复");
-                            }
-                            if (MoniterUError)
-                            {
-                                MoniterUError = false;
-                                Project.WriteLog("U轴故障恢复");
-                            }
-                            if (MoniterVError)
-                            {
-                                MoniterVError = false;
-                                Project.WriteLog("V轴故障恢复");
-                            }
-                        }
-                        else
+                        if (xerror==0&&yerror==0&&zerror==0&&uerror==0&&verror==0)
                         {
-                            MPC08EDLL.outport_bit(mvctrl.board_cnt1, 1, 0);
-                            MPC08EDLL.outport_bit(mvctrl.board_cnt1, 2, 1);
+                            MoniterError = false;
                         }
 
                     }
@@ -996,35 +632,10 @@ namespace LCD
                     {
                         ShowWar();
                     }
-                    //轮训电源的电压电流
-                    
                 }));
-                Thread.Sleep(400);                
+                Thread.Sleep(500);
             }
             
-        }
-
-        private void update_power_control_status(bool st)
-        {
-            if(st)
-            {
-                PowerControl.Text = "已连接";
-                PowerControl.Foreground = new SolidColorBrush(Colors.Green); //"DarkRed"; // "DarkRed"
-            }
-            else
-            {
-                PowerControl.Text = "未连接";
-                PowerControl.Foreground = new SolidColorBrush(Colors.DarkRed); //"DarkRed"; // "DarkRed"
-            }
-        }
-
-        private void inc_reset_error_count()
-        {
-            MoniterErrorCount++;
-            if (MoniterErrorCount >= 10)
-            {
-                MoniterErrorCount = 0;
-            }
         }
 
         private static void Messagebox(Double DZ,Double DU)
@@ -1118,35 +729,28 @@ namespace LCD
         /// <param name="e"></param>
         private void OnBnClickReadSingleData(object sender, RoutedEventArgs e)
         {
-            if (Project.cfg.power.EnablePowerControl)
-            {
-                //设置电源输出
-                set_power_voltage_current_output();
-                Project.WriteLog("打开电源输出");
-            }
+
             Thread thr = new Thread(() =>
             {
                 Project.WriteLog("开始单点测试");
-                bool st = pctrl.ProcessPointSingle();
-                if (st)
-                {
-                    Project.WriteLog("单点测试完成");
-                }
-                else
-                {
-                    Project.WriteLog("单点测试未完成");
-                }
-                if (Project.cfg.power.EnablePowerControl)
-                {
-                    ipowerDevice?.SetOutput(false);
-                    Project.WriteLog("关闭电源输出");
-                }
+                pctrl.ProcessPointSingle();
+                Project.WriteLog("单点测试完成");
             })
             { IsBackground = true };
             thr.Start();
 
         }
+        private void onBnClickSpecturm(object sender, RoutedEventArgs e) {
+            Thread thr = new Thread(() =>
+            {
+                Project.WriteLog("开始光谱测试");
+                pctrl.ProcessSpectrumSingle();
+                Project.WriteLog("光谱测试完成");
+            })
+            { IsBackground = true };
+            thr.Start();
 
+        }
 
 
 
@@ -1237,12 +841,12 @@ namespace LCD
 
 
 
-        //private void OnBnClickedCustomTemplate(object sender,
-        //    RoutedEventArgs e)
-        //{
-        //    View.CustomTemplate custom = new View.CustomTemplate();
-        //    custom.ShowDialog();
-        //}
+        private void OnBnClickedCustomTemplate(object sender,
+            RoutedEventArgs e)
+        {
+            View.CustomTemplate custom = new View.CustomTemplate();
+            custom.ShowDialog();
+        }
 
         private void OnBnClickMPC(object sender, RoutedEventArgs e)
         {
@@ -1262,14 +866,8 @@ namespace LCD
 
         private void OnBnClickedDevice(object sender, RoutedEventArgs e)
         {
-            ////需要重新启动一下设备啊，首先关闭
-            Project.testMachine.Close();
             View.DevicesView dev = new View.DevicesView();
             dev.ShowDialog();
-            set_fdl_menu_visable();
-            update_view_angle_settings();          
-            init_test_machine();
-            Project.testMachine.Init();
         }
 
 
@@ -1325,15 +923,11 @@ namespace LCD
         //向左
         private void Right_MouseDown(object sender, RoutedEventArgs e)
         {
-            if (MoniterXError)
-            {
-                MessageBox.Show("X轴故障，请排除故障后再试");
-                return;
-            }
             if (IszERO == false)
             {
-                show_motor_zero_msg();
+                MessageBox.Show("请先回零电机");
                 return;
+
             }
             MovCtrl mvctrl = MovCtrl.GetInstance();
             mvctrl.MoveXAxisUp(MovSpeed);
@@ -1348,15 +942,11 @@ namespace LCD
         //向右
         private void Left_MouseDown(object sender, RoutedEventArgs e)
         {
-            if (MoniterXError)
-            {
-                MessageBox.Show("X轴故障，请排除故障后再试");
-                return;
-            }
             if (IszERO == false)
             {
-                show_motor_zero_msg();
+                MessageBox.Show("请先回零电机");
                 return;
+
             }
             MovCtrl mvctrl = MovCtrl.GetInstance();
             mvctrl.MoveXAxisDown(MovSpeed);
@@ -1376,17 +966,15 @@ namespace LCD
         /// <param name="e"></param>
         private void Up_MouseDown(object sender, RoutedEventArgs e)
         {
-            if (MoniterYError)
-            {
-                MessageBox.Show("Y轴故障，请排除故障后再试");
-                return;
-            }
+
 
             if (IszERO == false)
             {
-                show_motor_zero_msg();
+                MessageBox.Show("请先回零电机");
                 return;
-            }            
+
+
+            }
 
             MovCtrl mvctrl = MovCtrl.GetInstance();
             mvctrl.MoveYAxiesDown(MovSpeed);
@@ -1418,15 +1006,11 @@ namespace LCD
         /// <param name="e"></param>
         private void Down_MouseDown(object sender, RoutedEventArgs e)
         {
-            if (MoniterYError)
-            {
-                MessageBox.Show("Y轴故障，请排除故障后再试");
-                return;
-            }
             if (IszERO == false)
             {
-                show_motor_zero_msg();
+                MessageBox.Show("请先回零电机");
                 return;
+
             }
             MovCtrl mvctrl = MovCtrl.GetInstance();
             mvctrl.MoveYAxiesUp(MovSpeed);
@@ -1451,18 +1035,15 @@ namespace LCD
 
         private void In_MouseDown(object sender, RoutedEventArgs e)
         {
-            if (MoniterZError)
-            {
-                MessageBox.Show("Z轴故障，请排除故障后再试");
-                return;
-            }
+
             MovCtrl mvctrl = MovCtrl.GetInstance();
             double dx = 0, dy = 0, dz = 0, du = 0, dv = 0, dball = 0;
             mvctrl.UpdateCurAbsPos(ref dx, ref dy, ref dz, ref du, ref dv, ref dball);//更新五轴位置
             if (IszERO == false)
             {
-                show_motor_zero_msg();
+                MessageBox.Show("请先回零电机");
                 return;
+
             }
 
            
@@ -1475,29 +1056,14 @@ namespace LCD
             MovCtrl mvctrl = MovCtrl.GetInstance();
             mvctrl.MoveStop(Project.cfg.ax_z.value);
         }
-
-        public void show_motor_zero_msg()
-        {
-            string msg = "请先回零电机？";
-            if (Project.cfg.Lang != 0)
-            {
-                msg = "Motor return to zero,please";
-            }
-            MessageBox.Show(msg);
-        }
         private void Out_MouseDown(object sender, RoutedEventArgs e)//zzz
         {
-            if (MoniterZError)
-            {
-                MessageBox.Show("Z轴故障，请排除故障后再试");
-                return;
-            }
             MovCtrl mvctrl = MovCtrl.GetInstance();
             double dx = 0, dy = 0, dz = 0, du = 0, dv = 0, dball = 0;
             mvctrl.UpdateCurAbsPos(ref dx, ref dy, ref dz, ref du, ref dv, ref dball);//更新五轴位置
             if (IszERO == false)
             {
-                show_motor_zero_msg();
+                MessageBox.Show("请先回零电机");
                 return;
 
             }
@@ -1543,14 +1109,9 @@ namespace LCD
 
         private void URotatLeft_MouseDown(object sender, RoutedEventArgs e)
         {
-            if (MoniterUError)
-            {
-                MessageBox.Show("U轴故障，请排除故障后再试");
-                return;
-            }
             if (IszERO == false)
             {
-                show_motor_zero_msg();
+                MessageBox.Show("请先回零电机");
                 return;
 
             }
@@ -1563,14 +1124,7 @@ namespace LCD
                 this.Dispatcher.BeginInvoke(new Action<Double, Double>(Messagebox), new object[] { dz, du });
                 return;
             }
-            if (Project.cfg.UReverse == 0)
-            {
-                mvctrl.MoveUAxiesDown(RotateSpeed);
-            }
-            else
-            {
-                mvctrl.MoveUAxiesUp(RotateSpeed);
-            }
+            mvctrl.MoveUAxiesDown(RotateSpeed);
         }
 
         private void URotatLeft_MouseUp(object sender, RoutedEventArgs e)
@@ -1581,15 +1135,11 @@ namespace LCD
 
         private void URotatRight_MouseDown(object sender, RoutedEventArgs e)
         {
-            if (MoniterUError)
-            {
-                MessageBox.Show("U轴故障，请排除故障后再试");
-                return;
-            }
             if (IszERO == false)
             {
-                show_motor_zero_msg();
+                MessageBox.Show("请先回零电机");
                 return;
+
             }
             MovCtrl mvctrl = MovCtrl.GetInstance();
             double dx = 0, dy = 0, dz = 0, du = 0, dv = 0, dball = 0;
@@ -1600,14 +1150,7 @@ namespace LCD
                 this.Dispatcher.BeginInvoke(new Action<Double, Double>(Messagebox), new object[] { dz, du });
                 return;
             }
-            if (Project.cfg.UReverse == 0)
-            {
-                mvctrl.MoveUAxiesUp(RotateSpeed);
-            }
-            else
-            {
-                mvctrl.MoveUAxiesDown(RotateSpeed);
-            }
+            mvctrl.MoveUAxiesUp(RotateSpeed);
         }
 
         private void URotatRight_MouseUp(object sender, RoutedEventArgs e)
@@ -1618,25 +1161,14 @@ namespace LCD
 
         private void VRotatLeft_MouseDown(object sender, RoutedEventArgs e)
         {
-            if (MoniterVError)
-            {
-                MessageBox.Show("V轴故障，请排除故障后再试");
-                return;
-            }
             if (IszERO == false)
             {
-                show_motor_zero_msg();
+                MessageBox.Show("请先回零电机");
                 return;
+
             }
             MovCtrl mvctrl = MovCtrl.GetInstance();
-            if (Project.cfg.VReverse == 0)
-            {
-                mvctrl.MoveVAxiesDown(RotateSpeed);
-            }
-            else
-            {
-                mvctrl.MoveVAxiesUp(RotateSpeed);
-            }
+            mvctrl.MoveVAxiesDown(RotateSpeed);
         }
 
 
@@ -1675,7 +1207,6 @@ namespace LCD
             {
                 Project.WriteLog(exception.Message);
             }
-            SetMenuOptEnableStatus(true);
         }
 
         private void VRotatLeft_MouseDown(object sender, MouseButtonEventArgs e)
@@ -1701,25 +1232,13 @@ namespace LCD
         /// <param name="e"></param>
         private void VRotatRight_MouseDown(object sender, RoutedEventArgs e)
         {
-            if (MoniterVError)
-            {
-                MessageBox.Show("V轴故障，请排除故障后再试");
-                return;
-            }
             if (IszERO == false)
             {
-                show_motor_zero_msg();
+                MessageBox.Show("请先回零电机");
                 return;
             }
             MovCtrl mvctrl = MovCtrl.GetInstance();
-            if (Project.cfg.VReverse == 0)
-            {
-                mvctrl.MoveVAxiesUp(RotateSpeed);
-            }
-            else
-            {
-                mvctrl.MoveVAxiesDown(RotateSpeed);
-            }
+            mvctrl.MoveVAxiesUp(RotateSpeed);
         }
 
         private void VRotatRight_MouseUp(object sender, RoutedEventArgs e)
@@ -1732,15 +1251,7 @@ namespace LCD
         private void btnO_Click(object sender, RoutedEventArgs e)
         {
 
-            string info = "确定设置当前点位为相对原点?";
-            string title = "提示";
-            if (Project.cfg.Lang != 0)
-            {
-                info = "Confirm to set the current point as the relative origin ?";
-                title = "Notice";
-            }
-
-            MessageBoxResult messageBoxResult= MessageBox.Show(info,title,MessageBoxButton.YesNo);
+            MessageBoxResult messageBoxResult= MessageBox.Show("确定设置当前点位为相对原点","",MessageBoxButton.YesNo);
 
             if (messageBoxResult != MessageBoxResult.Yes )
             {
@@ -1803,27 +1314,6 @@ namespace LCD
             hst.ShowDialog();
         }
 
-        private void reset_org()
-        {
-            if (Project.cfg.ax_x.IsEnable)
-                Project.Xorg = 0;
-
-            if (Project.cfg.ax_y.IsEnable)
-                Project.Yorg = 0;
-
-            if (Project.cfg.ax_z.IsEnable)
-                Project.Zorg = 0;
-
-            if (Project.cfg.ax_u.IsEnable)
-                Project.Uorg = 0;
-
-            if (Project.cfg.ax_v.IsEnable)
-                Project.Vorg = 0;
-
-            if (Project.cfg.ax_ball.IsEnable)
-                Project.Ballorg = 0;
-        }
-
         private void OnBnClicked2Center(object sender, RoutedEventArgs e)
         {
             Zero();
@@ -1831,14 +1321,7 @@ namespace LCD
         Thread thr1 = null;
         private void Zero()
         {
-            string info = "请确保周围安全后点击OK按钮";
-            string title = "电机回零";
-            if (Project.cfg.Lang != 0)
-            {
-                info = "Please make sure it's safe,then click OK button";
-                title = "Motor return to zero";
-            }
-            MessageBoxResult message = MessageBox.Show(info, title, MessageBoxButton.OKCancel);
+            MessageBoxResult message = MessageBox.Show("请确保周围安全后点击OK按钮", "电机回零", MessageBoxButton.OKCancel);
 
             if (message == MessageBoxResult.Cancel)
             {
@@ -1847,18 +1330,10 @@ namespace LCD
             thr1 = new Thread(() =>
                 {
                     Project.WriteLog("运动轴初始化开始");
-
-                    reset_org();
-
                     MovCtrl mvctrl = MovCtrl.GetInstance();
                     mvctrl.MoveHome();
                     Console.WriteLine($"【x】：{Project.cfg.XCenter}【Y】：{Project.cfg.YCenter}【Z】：{Project.cfg.ZCenter}【u】：{Project.cfg.UCenter}【v】：{Project.cfg.VCenter}【ball】：{Project.cfg.BallCenter}");
 
-                    if(Project.TstPause)
-                    {
-                        Project.WriteLog("已经停止运行");
-                        return;
-                    }
 
 
                     mvctrl.Move2Points(Project.cfg.XCenter,
@@ -1868,11 +1343,6 @@ namespace LCD
                         Project.cfg.VCenter,
                         Project.cfg.BallCenter, true);
 
-                    if (Project.TstPause)
-                    {
-                        Project.WriteLog("已经停止运行");
-                        return;
-                    }
                     //改为回到参考点
                     //屏蔽回中心指令
                     //mvctrl.Move2Points(Project.cfg.XCenter,
@@ -1882,51 +1352,9 @@ namespace LCD
                     //    Project.cfg.VCenter,
                     //    Project.cfg.BallCenter, true);
 
-                    if (Project.TstPause)
-                    {
-                        Project.WriteLog("已经停止运行");
-                        return;
-                    }
 
-                    while (mvctrl.CheckFiveAxeMoveFinish() == false)
-                    {
-                        if (Project.cfg.ax_u.IsEnable || Project.cfg.ax_v.IsEnable)
-                        {
-                            //这里读取uv的值啊，如果uv的值超过最大设置，超过报警啊
-                            double dx = 0, dy = 0, dz = 0, du = 0, dv = 0, dball = 0;
-                            mvctrl.UpdateCurAbsPos(ref dx, ref dy, ref dz, ref du, ref dv, ref dball);//更新五轴位置
-                            double current_u = du - Project.Uorg;
-                            double current_v = dv - Project.Vorg;
-                            if ((Project.cfg.ax_u.IsEnable) && (current_u > Project.cfg.UMaxAngle))
-                            {
-                                mvctrl.StopAll();
-                                if (current_u > Project.cfg.UMaxAngle)
-                                {
-                                    Project.WriteLog("U轴运动超过最大限制");
-                                    this.Dispatcher.BeginInvoke(new Action<string>(ShowErrors), new object[] { "错误：U轴运动超过最大限制" });
-                                }
-                                return;
-                            }
-                            if ((Project.cfg.ax_v.IsEnable) && (current_v > Project.cfg.VMaxAngle))
-                            {
-                                mvctrl.StopAll();
-                                if (current_v > Project.cfg.VMaxAngle)
-                                {
-                                    Project.WriteLog("V轴运动超过最大限制");
-                                    this.Dispatcher.BeginInvoke(new Action<string>(ShowErrors), new object[] { "错误：V轴运动超过最大限制" });
-                                }
-                                return;
-                            }
-                        }
-                        Thread.Sleep(50);
 
-                        if (Project.TstPause)
-                        {
-                            Project.WriteLog("已经停止运行");
-                            return;
-                        }
-                    }
-                    //mvctrl.WaitFiveAxeMoveFinish();
+                    mvctrl.WaitFiveAxeMoveFinish();
                     //double dx = 0, dy = 0, dz = 0, du = 0, dv = 0, dball = 0;
                     //mvctrl.UpdateCurAbsPos(ref dx, ref dy, ref dz, ref du, ref dv, ref dball);//更新五轴位置
                     IszERO = true;
@@ -2007,32 +1435,8 @@ namespace LCD
             }
         }
 
-        private void SetMenuOptEnableStatus(bool st)
-        {
-            MenuPara.IsEnabled = st;
-            //mypanel.IsEnabled = st;
-            btnUP.IsEnabled = st;
-            btnDown.IsEnabled = st;
-            btnLeft.IsEnabled = st;
-            btnRight.IsEnabled = st;
-            btnZero.IsEnabled = st;
-            btnULeft.IsEnabled = st;
-            btnURight.IsEnabled = st;
-            btnVRight.IsEnabled = st;
-            btnVLeft.IsEnabled = st;
-            Button1.IsEnabled = st;
-            Button2.IsEnabled = st;
-            TempButton.IsEnabled = st;
-            SingleButton.IsEnabled = st;
-            SprectrumButon.IsEnabled = st;
-            ResetButton.IsEnabled = st;
-            StartTestButton.IsEnabled = st;
-        }
-
-
         private void OnBnClickedStartRun(object sender, RoutedEventArgs e)
-        {           
-
+        {
             //action.BeginInvoke(100, 100,null,null);
             if (Flag == false)
             {
@@ -2043,7 +1447,8 @@ namespace LCD
             }
             if (IszERO == false)
             {
-                show_motor_zero_msg();
+
+                MessageBox.Show("请先回零电机");
                 return;
 
             }
@@ -2057,144 +1462,37 @@ namespace LCD
             }
             
 
-            if (MoniterXError||MoniterYError||MoniterZError||MoniterUError||MoniterVError)
+            if (MoniterError == true)
             {
                 MessageBox.Show("请检查电机状态");
                 return;
             }
-
-            if (warn_timer != null)
-            {
-                if (warn_timer.IsEnabled)
-                {
-                    string info = "当前暖机时间尚未完成，是否立即开启测试?";
-                    string title = "提示";
-                    if (Project.cfg.Lang != 0)
-                    {
-                        info = "Please input product ID:";
-                        title = "Confirm";
-                    }
-                    MessageBoxResult dr = MessageBox.Show(info, title, MessageBoxButton.OKCancel);
-                    if (dr == MessageBoxResult.Cancel)
-                    {
-                        return;
-                    }
-                    //停止定时器
-                    warn_timer.Stop();
-                    TimeCountBar.Visibility = Visibility.Collapsed;
-                    Project.WriteLog("提前结束暖机");
-                }
-            }
-
-            if(Project.cfg.power.EnablePowerControl)
-            {
-                if (check_voltage_cureent_input(VoltageSet, "电压") == false)
-                {
-                    return;
-                }
-                if (check_voltage_cureent_input(CurrentSet, "电流") == false)
-                {
-                    return;
-                }
-            }
-
-
             Project.Results.Clear();//清出表格
             Project.SpectrumResults.Clear();
-            Project.ResponseResults.Clear();
             Project.warmupResult.Clear();
             Project.PowerResult.Clear();
-            Project.CrossTalkResults.Clear();
-
             Project.FstStop = false;
 
-            string timestr = DateTime.Now.ToString("yyyyMMddhhmmss");
-            string Temp = timestr;
-            if (auto_test==false) //自动测试的时候，不弹出窗口
-            {
-                string info = "请输入产品ID:";
-                if (Project.cfg.Lang != 0)
-                {
-                    info = "Please input product ID:";
-                }
-                pop_up barCode = new pop_up(timestr, info);
-                //需要自动开始测试啊
-                barCode.ShowDialog();
-                if(barCode.is_ok==false)
-                {
-                    return;
-                }
+            //pop_up barCode = new pop_up("","请输入产品ID:");
 
-                Temp = barCode.Time.Replace(" ", "");
-                //string Temp = DateTime.Now.ToString("yyyyMMddHHmmss");
-                if (Temp == "")
-                {
-                    return;
-                }
-            } 
-            else
-            {
-                //把自动测试的标志恢复一下
-                TimeCount.Text = "测试中";
-                if (Project.cfg.Lang != 0)
-                {
-                    TimeCount.Text = "Testing";
-                }
-            }
-            SetMenuOptEnableStatus(false);
+            //barCode.ShowDialog();
 
-            if (Project.cfg.power.EnablePowerControl)
+            //string Temp = barCode.Time.Replace(" ","");
+            string Temp = DateTime.Now.ToString("yyyyMMddHHmmss");
+            if (Temp=="")
             {
-                if (Project.lstInfos.Count > 0)
-                {
-                    if (Project.lstInfos[0].MESTYPE == ENUMMESSTYLE._01_POINT)
-                    {
-                        //设置电源输出
-                        set_power_voltage_current_output();
-                        Project.WriteLog("打开电源输出");
-                    }
-                }
+                return;
             }
 
             tesThread = new Thread(() =>
             {
                 pctrl.Run(Temp);//开启线程执行测试
-
-                //如果是自动测试，取消自动测试状态和隐藏底部的状态栏
-                if(auto_test)
-                {
-                    auto_test = false;
-
-                    this.Dispatcher.Invoke(new Action(() =>
-                    {
-                        TimeCountBar.Visibility = Visibility.Collapsed;
-                    }));
-                }
-                //使能菜单和左下角的操作按钮
-                this.Dispatcher.Invoke(new Action(() =>
-                {
-                    SetMenuOptEnableStatus(true);
-                }));
-
-                if (Project.cfg.power.EnablePowerControl)
-                {
-                    ipowerDevice?.SetOutput(false);
-                    Project.WriteLog("关闭电源输出");
-                }
             })
             { IsBackground = true };
             tesThread.Start();
             LogIndex.SelectedIndex = 2;
         }
 
-        bool IsThreadRunning(Thread thread)
-        {
-            if(thread ==null)
-            {
-                return false;
-            }
-            return (thread.ThreadState & (System.Threading.ThreadState.Running | System.Threading.ThreadState.WaitSleepJoin)) != 0;
-        }
         private void OnBnClickedSwitchUser(object sender, RoutedEventArgs e)
         {
             View.Login login = new View.Login();
@@ -2208,8 +1506,8 @@ namespace LCD
         }
 
         private void Window_Closed(object sender, EventArgs e)
-        {            
-            //((View.CamView)(cam.Content)).CloseCam();
+        {
+            ((View.CamView)(cam.Content)).CloseCam();
             Environment.Exit(0);
         }
 
@@ -2239,100 +1537,7 @@ namespace LCD
 
         private void Window_Loaded(object sender, RoutedEventArgs e)
         {
-            PowerBtn.Click += PowerBtn_Click;
-            PowerOutputBtn.Click += PowerOutputBtn_Click;
-        }
-
-        private void PowerOutputBtn_Click(object sender, RoutedEventArgs e)
-        {
-            if (Project.cfg.power.EnablePowerControl == false)
-            {
-                MessageBox.Show("没有启用程控电源，不能输出");
-                return;
-            }
-            if (check_voltage_cureent_input(VoltageSet, "电压") == false)
-            {
-                return;
-            }
-            if (check_voltage_cureent_input(CurrentSet, "电流") == false)
-            {
-                return;
-            }
-            //设置输出，不打开
-            set_power_voltag_current();
-        }
-
-        private bool check_voltage_cureent_input(TextBox box,string name)
-        {
-            double voltage = 0;
-            if(box.Text.Length <=0)
-            {
-                MessageBox.Show("请输入"+name);
-                box.Focus();
-                return false;
-            }
-            try
-            {
-                voltage = double.Parse(box.Text);
-            }
-            catch
-            {
-                MessageBox.Show("请输入正确的" + name);
-                box.Focus();
-                return false;
-            }
-            if(voltage <0)
-            {
-                MessageBox.Show("请输入" + name);
-                box.Focus();
-                return false;
-            }
-            return true;
-        }
-
-        private void PowerBtn_Click(object sender, RoutedEventArgs e)
-        {
-            if(PowerBtn.Content.ToString() == "打开")
-            {
-                if (Project.cfg.power.EnablePowerControl == false)
-                {
-                    MessageBox.Show("没有启用程控电源，不能打开");
-                    return;
-                }
-                //按照实际参数来输出啊
-                if (check_voltage_cureent_input(VoltageSet, "电压") == false)
-                {
-                    return;
-                }
-                if (check_voltage_cureent_input(CurrentSet, "电流") == false)
-                {
-                    return;
-                }
-                ipowerDevice?.SetOutput(true);
-                PowerBtn.Content = "关闭";
-            }
-            else
-            {
-                PowerBtn.Content = "打开";
-                ipowerDevice?.SetOutput(false);
-            }
-        }
-
-        private void set_power_voltage_current_output()
-        {
-            set_power_voltag_current();            
-        }
-
-        private void set_power_voltag_current()
-        {
-            double voltage = 0, current = 0;
-            voltage = double.Parse(VoltageSet.Text);
-            current = double.Parse(CurrentSet.Text);
-            //设置电压和电流
-            ipowerDevice?.SetVoltage(voltage);
-            ipowerDevice?.SetCurrent(current);
-            ipowerDevice?.SetOutput(true);
-            PowerBtn.Content = "关闭";
+            
         }
 
         private void spectrumResult(object sender, RoutedEventArgs e)
@@ -2394,291 +1599,16 @@ namespace LCD
         {
             View.Power dev = new View.Power();
             dev.ShowDialog();
-            //设置了啊，重新启动一下电源设备
-            if (Project.cfg.power.EnablePowerControl)
-            {
-                PowerControllerPanel.Visibility = Visibility.Visible;
-                PowerControlStatus.Visibility = Visibility.Visible;
-                ipowerDevice?.Close();
-                initial_power_controller();               
-            }
-            else
-            {
-                PowerControllerPanel.Visibility = Visibility.Collapsed;
-                PowerControlStatus.Visibility = Visibility.Collapsed;
-            }
         }
 
         private void Window_Closing(object sender, System.ComponentModel.CancelEventArgs e)
         {
-            // 弹窗提示是否确定要退出
-            string msg = "确定要退出吗？";
-            string title = "提示";
-            if (Project.cfg.Lang != 0)
-            {
-                msg = "Confirm to exit ?";
-                title = "Notice";
-            }
-            MessageBoxResult result = MessageBox.Show(msg, title, MessageBoxButton.OKCancel, MessageBoxImage.Question, MessageBoxResult.Cancel);
-            System.Console.WriteLine(result);
-            if (result == MessageBoxResult.Cancel)
-            {
-                e.Cancel = true; // 中断点击事件
-                return;
-            }
-            try
-            {
-                power_query_thread?.Abort();
-            }
-            catch { }
-            //LogHelper.Instance.Write("1..");
-            //软件关闭的时候关闭电源
-            ipowerDevice?.SetOutput(false);
-            //LogHelper.Instance.Write("2..");
-            ipowerDevice?.Close();
-            //LogHelper.Instance.Write("3..");
             Project.cam.CloseCam();
-            //LogHelper.Instance.Write("4..");
-            LogHelper.Instance.dispose();
-        }
-
-        private void OnBnClickSpectrumSingleData(object sender, RoutedEventArgs e)
-        {
-            Thread thr = new Thread(() =>
-            {
-                Project.WriteLog("开始单次光谱测试");
-                bool st = pctrl.ProcessSpectrumSingle();
-                if (st)
-                {
-                    Project.WriteLog("单次光谱测试完成");
-                }
-                else
-                {
-                    Project.WriteLog("单次光谱测试未完成");
-                }
-            })
-            { 
-                IsBackground = true 
-            };
-            thr.Start();
-        }
-
-        private void init_test_machine()
-        {
-            TestMachine machine = LightMeterFactory.Create(Project.cfg.TESTMACHINE);
-            if (machine != null) Project.testMachine = machine;
-        }
-
-        private void set_fdl_menu_visable()
-        {
-            bool st = false;
-            if ((Project.cfg.TESTMACHINE == Ctrl.ENUMMACHINE.SR3A) || (Project.cfg.TESTMACHINE == ENUMMACHINE.SR5A))
-            {
-                st = true;
-            }
-            if (st)
-            {
-                Viewangle.Visibility = Visibility.Visible;
-            }
-            else
-            {
-                Viewangle.Visibility = Visibility.Collapsed;
-            }
-        }
-
-        private void OnBnClickedFdl(object sender, RoutedEventArgs e)
-        {
-            View.ViewangleView dev = new View.ViewangleView();
-            dev.ShowDialog();
-        }
-
-        private void OnBnClickZaddPara(object sender, RoutedEventArgs e)
-        {
-
-        }
-
-        private void OnBtnLangSelect(object sender, RoutedEventArgs e)
-        {
-            View.LangSelect lang = new View.LangSelect();
-            lang.ShowDialog();
-        }
-
-        private void OnBnClicked2WarnMachine(object sender, RoutedEventArgs e)
-        {
-            WarnMachineConfig form = new WarnMachineConfig();
-            form.ShowDialog();
-            if(form.is_set)
-            {
-                auto_test = true;
-                warn_minutes = form.minutes;
-                warn_seconds = 0;
-                Project.WriteLog("启动暖机测试");
-                warn_timer = new DispatcherTimer();
-                // 设置计时器的时间间隔
-                warn_timer.Interval = TimeSpan.FromSeconds(1);
-                Project.WriteLog("暖机时间："+form.minutes+"分钟");
-                warn_timer.Tick += Timer_Tick; // 订阅Tick事件
-                warn_timer.Start(); // 启动计时器
-                //显示底部的倒计时啊
-                TimeCountBar.Visibility = Visibility.Visible;
-            }
-            else
-            {
-                auto_test = false;
-                warn_minutes = 0;
-                warn_seconds = 0;
-                //隐藏
-                TimeCountBar.Visibility = Visibility.Collapsed;
-            }
-        }
-
-        private void Timer_Tick(object sender, EventArgs e)
-        {
-            warn_seconds++;
-            int last = warn_minutes * 60 - warn_seconds;
-            if (last > 0)
-            {
-                TimeCount.Text = last / 60 + ":" + last % 60;
-            }
-            else
-            {
-                //隐藏
-                TimeCountBar.Visibility= Visibility.Collapsed;
-                Project.WriteLog("暖机时间达到,启动测试");
-                //只触发一次啊
-                DispatcherTimer timer = (DispatcherTimer)sender;
-                timer.Stop();
-                //启动测试啊
-                OnBnClickedStartRun(null, null);
-            }
-        }
-
-        //5轴运动调试功能，弹出调试界面啊
-        private void MenuItem_OnClickDebug(object sender, RoutedEventArgs e)
-        {
-            MoveDebugView view = new MoveDebugView(this);
-            view.Show();
-        }
-		
-	    private void Copy_Click(object sender, RoutedEventArgs e)
-        {
-            //参数没有用到啊，随便传
-            Results.CopyAction?.Invoke(false);
-        }
-
-        private void URotatRight_MouseDown(object sender, MouseButtonEventArgs e)
-        {
-
-        }
-
-        private void URotatLeft_MouseDown(object sender, MouseButtonEventArgs e)
-        {
-
-        }
-
-        private void URotatRight_MouseUp(object sender, MouseButtonEventArgs e)
-        {
-
-        }
-
-        private void show_view_angle_btns(bool visiable)
-        {
-            if(visiable)
-            {
-                ViewAngleBtns.Visibility = Visibility.Visible;
-            }
-            else
-            {
-                ViewAngleBtns.Visibility = Visibility.Collapsed;
-            }
-        }
-
-        private void OnBnClickedView2(object sender, RoutedEventArgs e)
-        {
-            if (Project.cfg.TESTMACHINE == Ctrl.ENUMMACHINE.CS2000)
-            {
-                //cs2000_send_cmd("STSS,0\r\n");
-            }
-            else
-                sr3a_send_fdl_cmd("FLD1");
-        }
-
-        public static void sr3a_send_fdl_cmd(string cmd)
-        {
-            SR3A sr3 = (SR3A)Project.testMachine;
-            if (sr3.IsOpen == false)
-            {
-                sr3.Init();
-            }
-            bool st = sr3.SenFdlCmd(cmd);
-            if (st)
-            {
-                MessageBox.Show("发送成功", "提示");
-            }
-            else
-            {
-                MessageBox.Show("发送失败", "提示");
-            }
-        }
-
-        public static void cs2000_send_cmd(string cmd)
-        {
-            CS2000 sr3 = (CS2000)Project.testMachine;
-            if (sr3.IsOpen == false)
-            {
-                sr3.Init();
-            }
-            bool st = sr3.SendCmd(cmd);
-            if (st)
-            {
-                MessageBox.Show("发送成功", "提示");
-            }
-            else
-            {
-                MessageBox.Show("发送失败", "提示");
-            }
-        }
-
-        private void OnBnClickedView1(object sender, RoutedEventArgs e)
-        {
-            if (Project.cfg.TESTMACHINE == Ctrl.ENUMMACHINE.CS2000)
-            {
-                cs2000_send_cmd("STSS,0\r\n");
-            }
-            else
-                sr3a_send_fdl_cmd("FLD2");            
-        }
-
-        private void OnBnClickedView02(object sender, RoutedEventArgs e)
-        {
-            if (Project.cfg.TESTMACHINE == Ctrl.ENUMMACHINE.CS2000)
-            {
-                cs2000_send_cmd("STSS,1\r\n");
-            }
-            else
-                sr3a_send_fdl_cmd("FLD3");            
-        }
-
-        private void OnBnClickedView01(object sender, RoutedEventArgs e)
-        {
-            if (Project.cfg.TESTMACHINE == Ctrl.ENUMMACHINE.CS2000)
-            {
-                cs2000_send_cmd("STSS,2\r\n");
-            }
-            else
-                sr3a_send_fdl_cmd("FLD4");            
         }
 
         private void xxx_TextChanged(object sender, TextChangedEventArgs e)
         {
-            try
-            {
-                xxx.ScrollToEnd();
-            }
-            catch(Exception ex)
-            {
-
-            }
+            xxx.ScrollToEnd();
         }
 
         //private void mylog_DataContextChanged(object sender, DependencyPropertyChangedEventArgs e)
@@ -2727,7 +1657,7 @@ namespace LCD
 
             if (dltX != 0.0)
             {
-                dltw = -Math.Atan(Tran) / Math.PI * 180;
+                dltw = Math.Atan(Tran) / Math.PI * 180;
                 Console.WriteLine($"修正角度{dltw}");
 
             }

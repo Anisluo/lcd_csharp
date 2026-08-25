@@ -4,10 +4,9 @@
         xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:local="clr-namespace:LCD.View"
-        xmlns:app1="clr-namespace:LCD"
         ResizeMode="NoResize"
         mc:Ignorable="d"
-        Title="{Binding [InstSet], Source={x:Static app1:LanguageManager.Instance}}" Height="750" Width="780" DataContext="{Binding Mode=OneWay, RelativeSource={RelativeSource Self}}">
+        Title="仪器设置" Height="750" Width="680" DataContext="{Binding Mode=OneWay, RelativeSource={RelativeSource Self}}">
     <Grid>
         <Grid.RowDefinitions>
             <RowDefinition Height="50"/>
@@ -21,7 +20,7 @@
 
         <WrapPanel VerticalAlignment="Center" FlowDirection="RightToLeft">
             <Image Source="../Image/head.png"></Image>
-            <Label Content="{Binding [InstrSet], Source={x:Static app1:LanguageManager.Instance}}" VerticalAlignment="Center" FontSize="20"></Label>
+            <Label Content="仪器设置" VerticalAlignment="Center" FontSize="20"></Label>
         </WrapPanel>
 
 
@@ -35,12 +34,10 @@
                 <ColumnDefinition/>
                 <ColumnDefinition/>
                 <ColumnDefinition/>
-                <ColumnDefinition/>
-                <ColumnDefinition/>
             </Grid.ColumnDefinitions>
             <Border BorderBrush="Gray" BorderThickness="2" 
             CornerRadius="8"
-                    Height="170" Width="130">
+                    Height="170" Width="150">
                 <StackPanel HorizontalAlignment="Center">
                     <Image  Height="130" Grid.Column="0" Grid.Row="0" Source="../Image/BM7.png">
                     </Image>
@@ -57,7 +54,7 @@
                 Grid.Column="1" Grid.Row="0"
                         BorderThickness="2" 
             CornerRadius="8"
-                    Height="170" Width="130">
+                    Height="170" Width="150">
                 <StackPanel HorizontalAlignment="Center">
                     <Image Grid.Column="0"
                     Height="130"
@@ -77,7 +74,7 @@
                 Grid.Column="2" Grid.Row="0"
                         BorderThickness="2" 
             CornerRadius="8"
-                    Height="170" Width="130">
+                    Height="170" Width="150">
                 <StackPanel HorizontalAlignment="Center">
                     <Image Grid.Column="0"
                     Height="130"
@@ -97,13 +94,13 @@
                 Grid.Column="3" Grid.Row="0"
                         BorderThickness="2" 
             CornerRadius="8"
-                    Height="170" Width="130">
+                    Height="170" Width="150">
                 <StackPanel HorizontalAlignment="Center">
                     <Image Grid.Column="0" 
                     Height="130"
                            Grid.Row="0" Source="../Image/CS2000.png">
                     </Image>
-                    <RadioButton Content="CS-2000/3000"
+                    <RadioButton Content="CS-2000"
                     FontWeight="Bold"
                     x:Name="CS2000"
                               Click="OnBnClickedCS2000"
@@ -112,46 +109,10 @@
             </Border>
 
             <Border BorderBrush="Gray" 
-                Grid.Column="4" Grid.Row="0"
-                        BorderThickness="2" 
-            CornerRadius="8"
-                    Height="170" Width="130">
-                <StackPanel HorizontalAlignment="Center">
-                    <Image Grid.Column="0" 
-                    Height="130"
-                           Grid.Row="0" Source="../Image/CS2000.png">
-                    </Image>
-                    <RadioButton Content="Admesy"
-                    FontWeight="Bold"
-                    x:Name="Admesy"
-                              Click="OnBnClickedAdmesy"
-                                 Margin="0,10,0,0" HorizontalAlignment="Center" />
-                </StackPanel>
-            </Border>
-
-            <Border BorderBrush="Gray" 
-                Grid.Column="5" Grid.Row="0"
-                BorderThickness="2" 
-                CornerRadius="8"
-                Height="170" Width="130">
-                <StackPanel HorizontalAlignment="Center">
-                    <Image Grid.Column="0" 
-                    Height="130"
-                    Grid.Row="0" Source="../Image/CS2000.png">
-                    </Image>
-                    <RadioButton Content="MS01"
-                    FontWeight="Bold"
-                    x:Name="MS01"
-                    Click="OnBnClickedMs01"
-                     Margin="0,10,0,0" HorizontalAlignment="Center" />
-                </StackPanel>
-            </Border>
-
-            <Border BorderBrush="Gray" 
                 Grid.Column="0" Grid.Row="1"
                         BorderThickness="2" 
             CornerRadius="8"
-                    Height="170" Width="130">
+                    Height="170" Width="150">
                 <StackPanel HorizontalAlignment="Center">
                     <Image Grid.Column="0"
                     Height="130"
@@ -165,31 +126,15 @@
                 </StackPanel>
             </Border>
 
+
+
+
+
             <Border BorderBrush="Gray" 
                 Grid.Column="1" Grid.Row="1"
-                BorderThickness="2" 
-                CornerRadius="8"
-                Height="170" Width="130">
-                <StackPanel HorizontalAlignment="Center">
-                    <Image Grid.Column="0"
-                    Height="130"
-                    Grid.Row="0" Source="../Image/SR3A.png">
-                    </Image>
-                    <RadioButton Content="SR-5/5A"
-                        FontWeight="Bold"
-                        x:Name="SR5A"
-                        Click="OnBnClickedSR5A"
-                     Margin="0,10,0,0" HorizontalAlignment="Center" />
-                </StackPanel>
-            </Border>
-
-
-
-            <Border BorderBrush="Gray" 
-                Grid.Column="2" Grid.Row="1"
                         BorderThickness="2" 
             CornerRadius="8"
-                    Height="170" Width="130">
+                    Height="170" Width="150">
                 <StackPanel HorizontalAlignment="Center">
                     <Image Grid.Column="0" 
                     Height="130"
@@ -206,10 +151,10 @@
 
 
             <Border BorderBrush="Gray" 
-                Grid.Column="3" Grid.Row="1"
+                Grid.Column="2" Grid.Row="1"
                         BorderThickness="2" 
             CornerRadius="8"
-                    Height="170" Width="130">
+                    Height="170" Width="150">
                 <StackPanel HorizontalAlignment="Center">
                     <Image Grid.Column="0"
                     Height="130"
@@ -224,17 +169,17 @@
             </Border>
 
             <Border BorderBrush="Gray" 
-                Grid.Column="4" Grid.Row="1"
+                Grid.Column="3" Grid.Row="1"
                         BorderThickness="2" 
             CornerRadius="8"
-                    Height="170" Width="130">
+                    Height="170" Width="150">
                 <StackPanel HorizontalAlignment="Center">
                     <Image Grid.Column="0" 
                     Height="130"
                            Grid.Row="0" 
                            Source="../Image/Demo.png">
                     </Image>
-                    <RadioButton Content="{Binding [DemoMode], Source={x:Static app1:LanguageManager.Instance}}"
+                    <RadioButton Content="演示模式"
                     FontWeight="Bold"
                                  Name="demo"
                                  Click="OnBnClickedDemo"
@@ -245,19 +190,19 @@
 
         <Grid Grid.Row="2" >
             <WrapPanel VerticalAlignment="Center">
-                <Label Content="{Binding [CorrectFactor], Source={x:Static app1:LanguageManager.Instance}}" Width="90" Margin="20,0,0,0" FontSize="14"></Label>
-                <Label Content="{Binding [Brightness], Source={x:Static app1:LanguageManager.Instance}}" Width="50" FontSize="14"></Label>
+                <Label Content="修正系数：" Width="90" Margin="20,0,0,0" FontSize="14"></Label>
+                <Label Content="亮度：" Width="50" FontSize="14"></Label>
                 <TextBox Width="80" 
                 Text="{Binding lum}"
                          FontSize="14" VerticalAlignment="Center"></TextBox>
 
-                <Label Content="{Binding [ColorX], Source={x:Static app1:LanguageManager.Instance}}" Width="70" FontSize="14"></Label>
+                <Label Content="色坐标x：" Width="70" FontSize="14"></Label>
                 <TextBox Width="80" 
                 Text="{Binding cx}"
                          VerticalAlignment="Center" FontSize="14"></TextBox>
 
 
-                <Label Content="{Binding [ColorY], Source={x:Static app1:LanguageManager.Instance}}" Width="70" FontSize="14"></Label>
+                <Label Content="色坐标y：" Width="70" FontSize="14"></Label>
                 <TextBox Width="80" 
                 Text="{Binding cy}"
                          FontSize="14" VerticalAlignment="Center"></TextBox>
@@ -274,26 +219,26 @@
                 <RowDefinition/>
             </Grid.RowDefinitions>
             <WrapPanel  VerticalAlignment="Center">
-                <Label Content="{Binding [TestSetDash], Source={x:Static app1:LanguageManager.Instance}}" Width="90"  FontSize="14"></Label>
-                <Label Content="{Binding [StartDelay], Source={x:Static app1:LanguageManager.Instance}}" Width="80" FontSize="14"></Label>
+                <Label Content="测量设定：" Width="90"  FontSize="14"></Label>
+                <Label Content="启动延时：" Width="80" FontSize="14"></Label>
                 <TextBox Width="80" FontSize="14" Text="{Binding startDelay}" VerticalAlignment="Center"></TextBox>
-                <Label Content="{Binding [MS], Source={x:Static app1:LanguageManager.Instance}}" Width="80" FontSize="14"></Label>
-                <Label Content="{Binding [HotDelay], Source={x:Static app1:LanguageManager.Instance}}"></Label>
+                <Label Content="毫秒(ms)" Width="80" FontSize="14"></Label>
+                <Label Content="设备热机等待时间"></Label>
             </WrapPanel>
 
             <WrapPanel Grid.Row="1"  VerticalAlignment="Center">
-                <Label Content="{Binding [TimeOutDash], Source={x:Static app1:LanguageManager.Instance}}" Margin="90,0,0,0" Width="80" FontSize="14"></Label>
+                <Label Content="超时时间：" Margin="90,0,0,0" Width="80" FontSize="14"></Label>
                 <TextBox Width="80" FontSize="14" Text="{Binding mesDelay}" VerticalAlignment="Center"></TextBox>
-                <Label Content="{Binding [MS], Source={x:Static app1:LanguageManager.Instance}}" Width="80" FontSize="14"></Label>
-                <Label Content="{Binding [InstrTestTimeout], Source={x:Static app1:LanguageManager.Instance}}"></Label>
+                <Label Content="毫秒(ms)" Width="80" FontSize="14"></Label>
+                <Label Content="设备测量超时时间"></Label>
             </WrapPanel>
 
 
             <WrapPanel Grid.Row="2"  VerticalAlignment="Center">
-                <Label Content="{Binding [RestartTime], Source={x:Static app1:LanguageManager.Instance}}" Margin="90,0,0,0" Width="80" FontSize="14"></Label>
+                <Label Content="重启时间：" Margin="90,0,0,0" Width="80" FontSize="14"></Label>
                 <TextBox Width="80" FontSize="14" VerticalAlignment="Center" Text="{Binding resetDelay}"></TextBox>
-                <Label Content="{Binding [MS], Source={x:Static app1:LanguageManager.Instance}}" Width="80" FontSize="14"></Label>
-                <Label Content="{Binding [InstrRestartTime], Source={x:Static app1:LanguageManager.Instance}}"></Label>
+                <Label Content="毫秒(ms)" Width="80" FontSize="14"></Label>
+                <Label Content="设备重启时间"></Label>
             </WrapPanel>
 
             <!--<WrapPanel Grid.Row="3"  VerticalAlignment="Center">
@@ -316,11 +261,11 @@
                 <RowDefinition/>
             </Grid.RowDefinitions>
             <WrapPanel  VerticalAlignment="Center">
-                <Label Content="{Binding [ParaSetDash], Source={x:Static app1:LanguageManager.Instance}}" Width="90"  FontSize="14"></Label>
-                <Label Content="{Binding [IntegrationTime], Source={x:Static app1:LanguageManager.Instance}}" Width="80" FontSize="14"></Label>
+                <Label Content="参数设置：" Width="90"  FontSize="14"></Label>
+                <Label Content="积分时间：" Width="80" FontSize="14"></Label>
                 <TextBox Width="80" FontSize="14" Text="{Binding startDelay}" VerticalAlignment="Center"></TextBox>
-                <Label Content="{Binding [MS], Source={x:Static app1:LanguageManager.Instance}}" Width="80" FontSize="14"></Label>
-                <Label Content="{Binding [U2000IntTime], Source={x:Static app1:LanguageManager.Instance}}"></Label>
+                <Label Content="毫秒(ms)" Width="80" FontSize="14"></Label>
+                <Label Content="USB2000积分时间"></Label>
             </WrapPanel>
         </Grid>
 
@@ -334,14 +279,14 @@
                 <RowDefinition/>
             </Grid.RowDefinitions>
             <WrapPanel  VerticalAlignment="Center" >
-                <Label Content="{Binding [CommSetDash], Source={x:Static app1:LanguageManager.Instance}}" Width="90"  FontSize="14"></Label>
-                <Label Content="{Binding [CommPortDash], Source={x:Static app1:LanguageManager.Instance}}" Width="80" FontSize="14"></Label>
+                <Label Content="通信设定：" Width="90"  FontSize="14"></Label>
+                <Label Content="通信口：" Width="80" FontSize="14"></Label>
                 <ComboBox Width="80" FontSize="14" 
                 Name="myports"
                           VerticalAlignment="Center"
                           Text="{Binding comName,Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"></ComboBox>
 
-                <Label Content="{Binding [BaudDash], Source={x:Static app1:LanguageManager.Instance}}" Margin="20,0,0,0" Width="80" FontSize="14"></Label>
+                <Label Content="波特率：" Margin="20,0,0,0" Width="80" FontSize="14"></Label>
                 <ComboBox Width="80"
                           x:Name="_bardRate"
                           SelectedIndex="{Binding bardRate,Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"
@@ -354,7 +299,7 @@
             </WrapPanel>
 
             <WrapPanel  Grid.Row="1" VerticalAlignment="Center">
-                <Label Content="{Binding [DataWidDash], Source={x:Static app1:LanguageManager.Instance}}" Margin="90,0,0,0" Width="80" FontSize="14"></Label>
+                <Label Content="数据位：" Margin="90,0,0,0" Width="80" FontSize="14"></Label>
                 <ComboBox Width="80"
                           x:Name="_dataBit"
                           SelectedIndex="{Binding dataBit,Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"
@@ -366,7 +311,7 @@
 
                 </ComboBox>
 
-                <Label Content="{Binding [StopBitsDash], Source={x:Static app1:LanguageManager.Instance}}" Margin="20,0,0,0" Width="80" FontSize="14"></Label>
+                <Label Content="停止位：" Margin="20,0,0,0" Width="80" FontSize="14"></Label>
                 <ComboBox Width="80"
                           x:Name="_stopBit"
                           SelectedIndex="{Binding stopBit,Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"
@@ -376,7 +321,7 @@
                     <ComboBoxItem>1</ComboBoxItem>
                 </ComboBox>
                 <!--Name="Parity"-->
-                <Label Content="{Binding [ParityDash], Source={x:Static app1:LanguageManager.Instance}}" Margin="20,0,0,0" Width="80" FontSize="14"></Label>
+                <Label Content="校验位：" Margin="20,0,0,0" Width="80" FontSize="14"></Label>
                 <ComboBox Width="80"
                           x:Name="_Parity"
                           SelectedIndex="{Binding Parity,Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"
@@ -394,7 +339,7 @@
             <WrapPanel FlowDirection="RightToLeft" 
             HorizontalAlignment="Center"
                        VerticalAlignment="Center">
-                <Button Content="{Binding [OK], Source={x:Static app1:LanguageManager.Instance}}"
+                <Button Content="确定"
                 Click="OnBnClickedEnsure"
                         Width="120" Height="30"></Button>
             </WrapPanel>

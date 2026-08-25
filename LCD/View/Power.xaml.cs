@@ -26,28 +26,13 @@ namespace LCD.View
             InitializeComponent();
 
             string[] portNames = SerialPort.GetPortNames();
-            if (portNames != null) { 
-                myports.ItemsSource = portNames; 
-                powerports.ItemsSource = portNames;
-            }
-
-            PowerTypes.Items.Add("M8800");
-            PowerTypes.Items.Add("PLD6003");
-            PowerTypes.Items.Add("NGI36150");
+            if (portNames != null) { myports.ItemsSource = portNames; }
 
             this.DataContext = powerViewMode;
         }
         public PowerViewMode powerViewMode { get; set; } = new PowerViewMode();
         private void Button_Click(object sender, RoutedEventArgs e)
         {
-            if (powerViewMode.EnablePowerControl)
-            {
-                if (powerports.SelectedIndex<0)
-                {
-                    MessageBox.Show("请选择程控电源串口");
-                    return;
-                }
-            }
             Project.cfg.power.Enabled = powerViewMode.IsCheckBox;
             Project.cfg.power.Bus.ComName = powerViewMode.comName;
             Project.cfg.power.Bus.comName = powerViewMode.comNameText;
@@ -59,12 +44,9 @@ namespace LCD.View
             Project.cfg.power.Bus.StopBit = powerViewMode.stopBitText;
             Project.cfg.power.Bus.parity = powerViewMode.Parity;
             Project.cfg.power.Bus.Parity=powerViewMode.ParityText;
-            Project.cfg.power.PowerType = powerViewMode.PowerTypeText;
-            Project.cfg.power.EnablePowerControl = powerViewMode.EnablePowerControl;
-            Project.cfg.power.PowerSerialName = powerViewMode.PowerSerialName;
+
             Project.SaveConfig("Config.xml");//保存为配置文件
 
-            this.Close();
         }
 
         private void Window_Loaded(object sender, RoutedEventArgs e)
@@ -79,11 +61,7 @@ namespace LCD.View
           powerViewMode.stopBit=Project.cfg.power.Bus.stopBit ;  
           powerViewMode.stopBitText=Project.cfg.power.Bus.StopBit ;  
           powerViewMode.Parity=Project.cfg.power.Bus.parity  ;
-          powerViewMode.ParityText= Project.cfg.power.Bus.Parity;
-          powerViewMode.PowerType = Project.cfg.power.PowerType;
-          powerViewMode.PowerTypeText = Project.cfg.power.PowerType;
-            powerViewMode.EnablePowerControl = Project.cfg.power.EnablePowerControl ;
-            powerViewMode.PowerSerialName = Project.cfg.power.PowerSerialName ;
+          powerViewMode.ParityText= Project.cfg.power.Bus.Parity;   
         }
     }
 }

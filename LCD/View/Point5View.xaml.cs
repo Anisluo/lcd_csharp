@@ -85,10 +85,6 @@ namespace LCD.View
             public double ymax { get; set; }
         }
 
-        private void Buttonsave_Click(object sender, RoutedEventArgs e)
-        {
-
-        }
     }
 
 

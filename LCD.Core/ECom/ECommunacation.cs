@@ -224,9 +224,7 @@ namespace VisionCore
             }
 
             if (IsConnected) { Log.Info(Key + " 启动成功"); }
-            else {
-                Log.Info(Key + " 启动失败"); 
-            }
+            else { Log.Warn(Key + " 启动失败"); }
             return IsConnected;
         }
 

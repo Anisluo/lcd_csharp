@@ -4,7 +4,6 @@
         xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:local="clr-namespace:LCD.View"
-        xmlns:app1="clr-namespace:LCD"
         mc:Ignorable="d"
         ResizeMode="NoResize"
         Title="SelfCheck" Height="450" Width="430">
@@ -18,7 +17,7 @@
 
         <WrapPanel VerticalAlignment="Center" FlowDirection="RightToLeft">
             <Image Source="../Image/head.png"></Image>
-            <Label Content="{Binding [DevSelfDialog], Source={x:Static app1:LanguageManager.Instance}}" VerticalAlignment="Center" FontSize="20"></Label>
+            <Label Content="设备自诊断" VerticalAlignment="Center" FontSize="20"></Label>
         </WrapPanel>
         <Grid Grid.Row="1">
             <DataGrid Name="mydata">
@@ -29,7 +28,7 @@
         <WrapPanel Grid.Row="2" HorizontalAlignment="Center" VerticalAlignment="Center">
             <Button Background="White" HorizontalAlignment="Center"
             VerticalAlignment="Center"
-            Content="{Binding [Diag], Source={x:Static app1:LanguageManager.Instance}}"
+            Content="诊断"
             Click="OnBnClickedEnsure"
             Width="120"
                     ></Button>

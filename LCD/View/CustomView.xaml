@@ -4,12 +4,11 @@
         xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:local="clr-namespace:LCD.View"
-        xmlns:app1="clr-namespace:LCD"
         xmlns:svgc="http://sharpvectors.codeplex.com/svgc/"
         xmlns:Tree="wpf"
         mc:Ignorable="d"
         ResizeMode="NoResize"
-        Title="{Binding [CustomTemplate], Source={x:Static app1:LanguageManager.Instance}}" Height="850" Width="1300">
+        Title="自定义模板" Height="850" Width="1200">
     <Window.Resources>
     </Window.Resources>
     <Grid>
@@ -21,7 +20,7 @@
         </Grid.RowDefinitions>
         <WrapPanel VerticalAlignment="Center" FlowDirection="RightToLeft">
             <Image Source="../Image/head.png"></Image>
-            <Label Content="{Binding [CustomTemplate], Source={x:Static app1:LanguageManager.Instance}}"  FontSize="20" VerticalAlignment="Center"></Label>
+            <Label Content="自定义点位模板"  FontSize="20" VerticalAlignment="Center"></Label>
         </WrapPanel>
 
         <Grid Grid.Row="1">
@@ -42,7 +41,7 @@
             VerticalAlignment="Center"
                        Grid.Column="0">
 
-                            <Label Content="{Binding [TemplateType], Source={x:Static app1:LanguageManager.Instance}}" 
+                            <Label Content="模板类型" 
             Foreground="Black"
             FontSize="16"
             FontWeight="Bold"
@@ -65,12 +64,10 @@
                                 <ComboBoxItem>01-Point</ComboBoxItem>
                                 <ComboBoxItem>02-Response</ComboBoxItem>
                                 <ComboBoxItem>03-Spectrum</ComboBoxItem>
+                                <ComboBoxItem>04-Flicker</ComboBoxItem>
                                 <ComboBoxItem>05-CrossTalk</ComboBoxItem>
-                                <!--<ComboBoxItem>04-Flicker</ComboBoxItem>
-                                <ComboBoxItem>05-CrossTalk</ComboBoxItem>
-                                <ComboBoxItem>06-ACR</ComboBoxItem>-->
+                                <ComboBoxItem>06-ACR</ComboBoxItem>
                                 <ComboBoxItem>07-warmup</ComboBoxItem>
-                                <ComboBoxItem>08-TCO</ComboBoxItem>
                             </ComboBox>
 
 
@@ -135,21 +132,7 @@
                                                  IsHitTestVisible="False"></svgc:SvgViewbox>
                             </Button>
 
-                            <Button  Height="40" 
-                            Name="buttonImport"
-                            Content="导入"
-                            Click="OnBnClickedImport"
-                            FontWeight="Bold"
-                            VerticalAlignment="Center" 
-                            Margin="10,0,0,0"
-                            BorderBrush="Transparent"
-                            IsEnabled="True"                     
-                            HorizontalAlignment="Right" 
-                            Foreground="White" Background="#FF50A0FF"
-                            Width="40" >
-                            </Button>
-
-
+               
 
                         </WrapPanel>
                     </Border>
@@ -165,26 +148,14 @@
             VerticalAlignment='Center'
                        Grid.Column="0" FlowDirection="LeftToRight">
 
-                            <Label Content="{Binding [ProductThick], Source={x:Static app1:LanguageManager.Instance}}"
+                            <Label Content="产品厚度："
                                    Height="30"
                                    Margin="10,0,0,0"
                                    VerticalAlignment="Bottom" />
                             <TextBox Width="100"
                                      Height="30" x:Name="ProductHeight" />
 
-                            <Button  Height="30" 
-                                 Name="buttonChange"
-                                 Content="修正"
-                                 Click="OnBnClickedChange"
-                                 FontWeight="Bold"
-                                 VerticalAlignment="Center" 
-                                 Margin="20,0,0,0"
-                                 BorderBrush="Transparent"
-                                 IsEnabled="True"                     
-                                 HorizontalAlignment="Right" 
-                                 Foreground="White" Background="#FF50A0FF"
-                                 Width="50" >
-                            </Button>
+                            
 
                             <Button  
                             Background="Transparent"
@@ -241,13 +212,13 @@
                 BorderThickness="2"
                         CornerRadius="5"></Border>
 
-
+                
                 <Grid Name="gridMain" Grid.Row="3">
                     <Grid>
                         <Grid.ColumnDefinitions>
-                            <ColumnDefinition Width="380"/>
+                            <ColumnDefinition Width="220"/>
                             <ColumnDefinition Width="65*"/>
-                            <ColumnDefinition Width="300" />
+                            <ColumnDefinition Width="220" />
                         </Grid.ColumnDefinitions>
                         <Border Grid.Row="0" Grid.Column="0" 
                                 BorderBrush="LightGray"
@@ -255,48 +226,27 @@
                                 CornerRadius="8" Margin="5">
                             <Grid Name="gridLeftColumn" Grid.Row="0" Grid.Column="0">
 
-                                <Grid.RowDefinitions>
-                                    <RowDefinition Height="*"/>
-                                    <RowDefinition Height="10*"/>
-                                </Grid.RowDefinitions>
 
-                                <Grid Grid.Row="0">
-                                    <StackPanel Orientation="Horizontal">
-                                        <Button Content="{Binding [SelectAll], Source={x:Static app1:LanguageManager.Instance}}" Click="Btn_select_all" Width="75" Height="40" Margin="20,0,0,0"/>
-                                        <Button Content="{Binding [SelectReverse], Source={x:Static app1:LanguageManager.Instance}}" Click="Btn_select_reverse" Width="75" Height="40" Margin="10,0,0,0" />
-                                    </StackPanel>
-                                </Grid>
 
-                                <Grid Grid.Row="1">
-                                    <ListBox Name="mylist" SelectionChanged="mylist_SelectionChanged">
-                                        <ListBox.ItemTemplate>
-                                            <DataTemplate>
-                                                <WrapPanel Margin="4">
-                                                    <CheckBox
+                                <ListBox Name="mylist" SelectionChanged="mylist_SelectionChanged">
+                                    <ListBox.ItemTemplate>
+                                        <DataTemplate>
+                                            <WrapPanel Margin="4">
+                                                <CheckBox
                                                 MouseRightButtonDown="CheckBox_MouseRightButtonDown"
                                                 FontSize="14"
                                                 Width="20"
                                                           IsChecked="{Binding IsSelected}" Focusable="True" 
                                                           />
-                                                    <TextBlock Width="180" Text="{Binding Name}" >
-                                                    </TextBlock>
-                                                    <TextBlock Width="40" Text="{Binding Type}" >
-                                                    </TextBlock>
-                                                    <Button Content="{Binding [Rename], Source={x:Static app1:LanguageManager.Instance}}" Click="OnBnClickedReName" BorderBrush="Transparent" Margin="10,0,0,0" Background="Transparent"></Button>
-                                                    <Button Content="{Binding [Delete], Source={x:Static app1:LanguageManager.Instance}}" BorderBrush="Transparent" Click="OnBnClickedDelete" Margin="10,0,0,0" Background="Transparent"></Button>
-                                                </WrapPanel>
-                                            </DataTemplate>
-                                        </ListBox.ItemTemplate>
-                                        <ListBox.ContextMenu>
-                                            <ContextMenu>
-                                                <MenuItem Header="复制" Click="Copy_Click"/>
-                                                <MenuItem Header="重命名" Click="Rename_Click"/>
-                                                <MenuItem Header="删除" Click="Delete_Click"/>
-                                            </ContextMenu>
-                                        </ListBox.ContextMenu>
-                                    </ListBox>
-                                </Grid>
-
+                                                <TextBlock Width="180" Text="{Binding Name}" MouseDown="UIElement_OnMouseDown"
+                                                           >
+                                                </TextBlock>
+                                                <Button Content="重命名" Click="OnBnClickedReName" BorderBrush="Transparent" Margin="40,0,0,0" Background="Transparent"></Button>
+                                                <Button Content="删除" BorderBrush="Transparent" Click="OnBnClickedDelete" Margin="10,0,0,0" Background="Transparent"></Button>
+                                            </WrapPanel>
+                                        </DataTemplate>
+                                    </ListBox.ItemTemplate>
+                                </ListBox>
                             </Grid>
                         </Border>
                         <GridSplitter Width="5"></GridSplitter>
@@ -314,10 +264,8 @@
 
                         <Grid Grid.Column="2">
                             <Grid.RowDefinitions>
-                                <RowDefinition Height="3*"/>
-                                <RowDefinition Height="2*"/>
-                                <RowDefinition Height="3*"/>
-                                <RowDefinition Height="5*"/>
+                                <RowDefinition Height="Auto"/>
+                                <RowDefinition Height="Auto"/>
                                 <RowDefinition/>
                             </Grid.RowDefinitions>
                             <Grid Grid.Row="0">
@@ -457,85 +405,84 @@
                                     <ColumnDefinition/>
                                     <ColumnDefinition/>
                                 </Grid.ColumnDefinitions>
-                                <WrapPanel Background="White"
+                                <WrapPanel Background="Black"
                                            Orientation="Horizontal"
                                            Grid.Row="0"
                                            Grid.Column="0"
                                            VerticalAlignment="Center"
                                            HorizontalAlignment="Left">
-                                    <Label Content="{Binding [XAxis], Source={x:Static app1:LanguageManager.Instance}}"
+                                    <Label Content="X轴："
                                            Width="30"
-                                           Foreground="Black"></Label>
+                                           Foreground="Green"></Label>
                                     <TextBlock Width="80"
                                                FontSize="16"
                                                Name="XPos"
-                                               Foreground="Black"></TextBlock>
+                                               Foreground="Green"></TextBlock>
                                 </WrapPanel>
-                                <WrapPanel Background="White"
+                                <WrapPanel Background="Black"
                                            Grid.Row="1"
                                            VerticalAlignment="Center"
                                            HorizontalAlignment="Left">
-                                    <Label Content="{Binding [YAxis], Source={x:Static app1:LanguageManager.Instance}}"
+                                    <Label Content="Y轴："
                                            Width="30"
-                                           Foreground="Black"></Label>
+                                           Foreground="Green"></Label>
                                     <TextBlock Width="80"
                                                FontSize="16"
                                                Name="YPos"
-                                               Foreground="Black"></TextBlock>
+                                               Foreground="Green"></TextBlock>
                                 </WrapPanel>
-                                <WrapPanel Background="White"
+                                <WrapPanel Background="Black"
                                            Grid.Row="2"
                                            VerticalAlignment="Center"
                                            HorizontalAlignment="Left">
-                                    <Label Content="{Binding [ZAxis], Source={x:Static app1:LanguageManager.Instance}}"
+                                    <Label Content="Z轴："
                                            Width="30"
-                                           Foreground="Black"></Label>
+                                           Foreground="Green"></Label>
                                     <TextBlock Width="80"
                                                FontSize="16"
                                                Name="ZPos"
-                                               Foreground="Black"></TextBlock>
+                                               Foreground="Green"></TextBlock>
                                 </WrapPanel>
-                                <WrapPanel Background="White"
+                                <WrapPanel Background="Black"
                                            Grid.Row="0"
                                            Grid.Column="1"
                                            VerticalAlignment="Center"
                                            HorizontalAlignment="Left">
-                                    <Label Content="{Binding [UAxis], Source={x:Static app1:LanguageManager.Instance}}"
+                                    <Label Content="U轴："
                                            Width="30"
-                                           Foreground="Black"></Label>
+                                           Foreground="Green"></Label>
                                     <TextBlock Width="80"
                                                FontSize="16"
                                                Name="UPos"
-                                               Foreground="Black"></TextBlock>
+                                               Foreground="Green"></TextBlock>
                                 </WrapPanel>
-                                <WrapPanel Background="White"
+                                <WrapPanel Background="Black"
                                            Grid.Row="1"
                                            Grid.Column="1"
                                            VerticalAlignment="Center"
                                            HorizontalAlignment="Left">
-                                    <Label Content="{Binding [VAxis], Source={x:Static app1:LanguageManager.Instance}}"
+                                    <Label Content="V轴："
                                            Width="30"
-                                           Foreground="Black"></Label>
+                                           Foreground="Green"></Label>
                                     <TextBlock Width="80"
                                                FontSize="16"
                                                Name="VPos"
-                                               Foreground="Black"></TextBlock>
+                                               Foreground="Green"></TextBlock>
                                 </WrapPanel>
-                                <WrapPanel Background="White"
+                                <WrapPanel Background="Black"
                                            Grid.Row="2"
                                            Grid.Column="1"
                                            VerticalAlignment="Center"
                                            HorizontalAlignment="Left">
                                     <Label Content="Ball"
                                            Width="30"
-                                           Foreground="Black"></Label>
+                                           Foreground="Green"></Label>
                                     <TextBlock Width="80"
                                                FontSize="16"
                                                Name="BallPos"
-                                               Foreground="Black"></TextBlock>
+                                               Foreground="Green"></TextBlock>
                                 </WrapPanel>
                             </Grid>
-
                             <ListBox Name="mylist1" Grid.Row="2" >
                                 <ListBox.ItemTemplate>
                                     <DataTemplate>
@@ -550,95 +497,6 @@
                                     </DataTemplate>
                                 </ListBox.ItemTemplate>
                             </ListBox>
-
-                            <Grid Grid.Row="3">
-                                <Grid.RowDefinitions>
-                                    <RowDefinition Height="30"/>
-                                    <RowDefinition Height="30"/>
-                                    <RowDefinition Height="30"/>
-                                    <RowDefinition Height="30"/>
-                                    <RowDefinition Height="30"/>
-                                    <RowDefinition Height="30"/>
-                                    <RowDefinition Height="40"/>
-                                    <RowDefinition/>
-                                </Grid.RowDefinitions>
-
-                                <WrapPanel Grid.Row="0" VerticalAlignment="Center">
-                                    <Label Content="{Binding [TestStd], Source={x:Static app1:LanguageManager.Instance}}" Width="90"></Label>
-                                </WrapPanel>
-
-                                <WrapPanel Grid.Row="1" VerticalAlignment="Center">
-                                    <CheckBox Content="L:" x:Name="Lcheck"
-                                    IsChecked="False"
-                                    Margin="40,0,0,0"
-                                    VerticalAlignment="Center" Width="50"></CheckBox>
-                                    <TextBox x:Name="Lmin" Width="60" 
-                                     Text=""
-                                     VerticalAlignment="Center" FontSize="14"></TextBox>
-                                    <Label Content="&lt;" Width="20" VerticalAlignment="Center" />
-                                    <Label Content="L"></Label>
-                                    <Label Content="&lt;" Width="20" />
-                                    <TextBox x:Name="Lmax" Width="60" 
-                                    Text=""
-                                    VerticalAlignment="Center" FontSize="14"></TextBox>
-                                </WrapPanel>
-
-
-                                <WrapPanel Grid.Row="2" VerticalAlignment="Center">
-                                    <CheckBox x:Name="Xcheck" Content="x:" VerticalAlignment="Center" 
-                                     Margin="40,0,0,0"
-                                     IsChecked="False"
-                                     Width="50"></CheckBox>
-                                    <TextBox x:Name="xmin" Width="60"
-                                        Text=""
-                                     VerticalAlignment="Center" FontSize="14"></TextBox>
-                                    <Label Content="&lt;" Width="20" VerticalAlignment="Center" />
-                                    <Label Content="x"></Label>
-                                    <Label Content="&lt;" Width="20" />
-                                    <TextBox x:Name="xmax" Width="60"
-                                    Text=""
-                                     VerticalAlignment="Center" FontSize="14"></TextBox>
-                                </WrapPanel>
-
-
-
-                                <WrapPanel Grid.Row="3" VerticalAlignment="Center">
-                                    <CheckBox x:Name="Ycheck" Content="y:"
-                                     Margin="40,0,0,0"
-                                     IsChecked="False"
-                                     VerticalAlignment="Center" Width="50"></CheckBox>
-                                    <TextBox x:Name="ymin" Width="60"
-                                    Text=""
-                                    VerticalAlignment="Center" FontSize="14"></TextBox>
-                                    <Label Content="&lt;" Width="20" VerticalAlignment="Center" />
-                                    <Label Content="y"></Label>
-                                    <Label Content="&lt;" Width="20" />
-                                    <TextBox x:Name="ymax" Width="60" 
-                                    Text=""
-                                    VerticalAlignment="Center" FontSize="14"></TextBox>
-                                </WrapPanel>
-
-                                <WrapPanel Grid.Row="4" VerticalAlignment="Center">
-                                    <CheckBox  x:Name="Balancechk" Content="{Binding [ConformityReq], Source={x:Static app1:LanguageManager.Instance}}"
-                                     Margin="40,0,0,0"
-                                     IsChecked="False"
-                                     VerticalAlignment="Center" Width="150"></CheckBox>
-                                    <TextBox x:Name="balancemin" Width="60"
-                                     Text=""
-                                     VerticalAlignment="Center" FontSize="14"></TextBox>
-                                    <Label Content="%" />
-                                </WrapPanel>
-
-                                <WrapPanel Grid.Row="5" VerticalAlignment="Center">
-                                    <Label Width="90" Content="{Binding [UnFitColor], Source={x:Static app1:LanguageManager.Instance}}" Margin="40,0,0,0" />
-                                    <Rectangle x:Name="RecColor" Fill="Red" Width="100" MouseLeftButtonDown="Color_select"/>
-                                </WrapPanel>
-
-                                <WrapPanel Grid.Row="6" VerticalAlignment="Center" Height="40">
-                                    <Button Width="120" Content="{Binding [Save], Source={x:Static app1:LanguageManager.Instance}}"  Click="BtnOnSave_click" Background="White" FontWeight="Bold" Height="30" Margin="80,0,0,0"></Button>
-                                </WrapPanel>
-
-                            </Grid>
                         </Grid>
                     </Grid>
                     <!--<GridSplitter Width="1" IsEnabled="False"></GridSplitter>-->
@@ -650,13 +508,12 @@
         <!--定义确定按钮实现长度位置-->
         <Grid Grid.Row="2">
             <WrapPanel VerticalAlignment="Center"  HorizontalAlignment="Center">
-                <Button Width="120" Content="{Binding [Load], Source={x:Static app1:LanguageManager.Instance}}" Background="White" FontWeight="Bold" Margin="0,0,50,0" Click="LoadConfiger"></Button>
-                <Button Width="120" Content="{Binding [SaveAs], Source={x:Static app1:LanguageManager.Instance}}" Background="White" 
+                <Button Width="120" Content="载入" Background="White" FontWeight="Bold" Margin="0,0,50,0" Click="LoadConfiger"></Button>
+                <Button Width="120" Content="另存为" Background="White" 
                 Click="OnBnClickedSaveAs"
                         FontWeight="Bold" Margin="0,0,50,0"></Button>
-                <Button Width="120" Content="{Binding [OK], Source={x:Static app1:LanguageManager.Instance}}"  Click="OnBnClickedEnsure" Background="White" FontWeight="Bold" Height="30" ></Button>
+                <Button Width="120" Content="确定"  Click="OnBnClickedEnsure" Background="White" FontWeight="Bold" Height="30" ></Button>
             </WrapPanel>
         </Grid>
     </Grid>
 </Window>
-

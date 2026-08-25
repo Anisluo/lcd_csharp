@@ -4,7 +4,6 @@
         xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:local="clr-namespace:LCD.View"
-        xmlns:app1="clr-namespace:LCD"
         mc:Ignorable="d"
         ResizeMode="NoResize"
         Title="CritView" Height="450" Width="500">
@@ -17,7 +16,7 @@
         </Grid.RowDefinitions>
         <WrapPanel VerticalAlignment="Center" FlowDirection="RightToLeft">
             <Image Source="../Image/head.png"></Image>
-            <Label Content="{Binding [SetResultFormat], Source={x:Static app1:LanguageManager.Instance}}"  
+            <Label Content="设置结果格式"  
                    FontSize="20" 
                    VerticalAlignment="Center"></Label>
         </WrapPanel>
@@ -36,11 +35,11 @@
                 <WrapPanel VerticalAlignment="Center"
                            HorizontalAlignment="Center">
 
-                    <Button Height="20" Content="{Binding [SelectAll], Source={x:Static app1:LanguageManager.Instance}}" 
+                    <Button Height="20" Content="全选" 
                     Click="OnBnClickedSelectALL"
                             Background="White" Width="100"/>
                     <Button Height="20" 
-                            Content="{Binding [SelectNone], Source={x:Static app1:LanguageManager.Instance}}"
+                            Content="全不选"
                             Margin="40,0,0,0"
                             Click="OnBnClickedUnSelectALL"
                             Background="White" 
@@ -182,7 +181,7 @@
                         <RowDefinition/>
                     </Grid.RowDefinitions>
                     <WrapPanel Grid.Row="0">
-                        <Label Content="{Binding [EqliCalc], Source={x:Static app1:LanguageManager.Instance}}"></Label>
+                        <Label Content="均衡性计算"></Label>
                     </WrapPanel>
 
                     <WrapPanel Grid.Row="1" VerticalAlignment="Center">
@@ -215,7 +214,7 @@
               >
                 <Button Width="120" Height="30"
                 Click="OnBnClickedEnsure"
-                        Content="{Binding [OK], Source={x:Static app1:LanguageManager.Instance}}"></Button>
+                        Content="确定"></Button>
             </WrapPanel>
     </Grid>
 </Window>

@@ -4,7 +4,6 @@
         xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:local="clr-namespace:LCD.View"
-        xmlns:app1="clr-namespace:LCD"
         ResizeMode="NoResize"
         mc:Ignorable="d"
         Title="PGView" Height="450" Width="680">
@@ -24,7 +23,7 @@
         <WrapPanel VerticalAlignment="Center"
                    FlowDirection="RightToLeft">
             <Image Source="../Image/head.png"/>
-            <Label Content="{Binding [PgSettings], Source={x:Static app1:LanguageManager.Instance}}" 
+            <Label Content="PG设置" 
                    VerticalAlignment="Center" 
                    FontSize="20"/>
         </WrapPanel>
@@ -69,7 +68,7 @@
                            Grid.Row="0" Source="../Image/BM5A.png">
                     </Image>-->
                     <Border Height="130"></Border>
-                    <RadioButton Content="{Binding [ExternPg], Source={x:Static app1:LanguageManager.Instance}}"
+                    <RadioButton Content="外接PG"
                     FontWeight="Bold" 
                     Name="otherPG"
                     Click="OnBnClickedSoftPG"
@@ -87,7 +86,7 @@
                     Height="170" Width="150">
                 <StackPanel HorizontalAlignment="Center">
                     <Border Height="130"></Border>
-                    <RadioButton Content="{Binding [NoPg], Source={x:Static app1:LanguageManager.Instance}}"
+                    <RadioButton Content="无PG"
                     FontWeight="Bold" 
                     Name="demoPG"
                     Click="OnBnClickedSoftPG"
@@ -101,8 +100,8 @@
         </Grid>
         <Grid Grid.Row="2">
             <WrapPanel  VerticalAlignment="Center" Visibility="{Binding BusType}">
-                <Label Content="{Binding [BusType], Source={x:Static app1:LanguageManager.Instance}}" Margin="20,0,0,0"></Label>
-                <Label Content="{Binding [CommType], Source={x:Static app1:LanguageManager.Instance}}" Margin="35,0,0,0" Width="80" FontSize="14"></Label>
+                <Label Content="总线类型" Margin="20,0,0,0"></Label>
+                <Label Content="通讯方式：" Margin="35,0,0,0" Width="80" FontSize="14"></Label>
                 <ComboBox Width="80" 
                 SelectedIndex="{Binding BusTypeIndex}" 
                          SelectionChanged="ComboBox_SelectionChanged"
@@ -118,8 +117,8 @@
         </Grid>
         <Grid Grid.Row="3">
             <WrapPanel VerticalAlignment="Center">
-                <Label Content="{Binding [PgPara], Source={x:Static app1:LanguageManager.Instance}}" Width="90" Margin="20,0,0,0" FontSize="14"></Label>
-                <Label Content="{Binding [InstrFormat], Source={x:Static app1:LanguageManager.Instance}}" Width="80" FontSize="14"></Label>
+                <Label Content="PG参数：" Width="90" Margin="20,0,0,0" FontSize="14"></Label>
+                <Label Content="指令格式：" Width="80" FontSize="14"></Label>
                 <TextBox Width="280" FontSize="14" VerticalAlignment="Center">8000</TextBox>
             </WrapPanel>
         </Grid>
@@ -131,15 +130,15 @@
                 <RowDefinition/>
             </Grid.RowDefinitions>
             <WrapPanel  VerticalAlignment="Center">
-                <Label Content="{Binding [ComSet3], Source={x:Static app1:LanguageManager.Instance}}" Width="90"  Margin="20,0,0,0" FontSize="14"></Label>
-                <Label Content="{Binding [IpAddr], Source={x:Static app1:LanguageManager.Instance}}" Width="80" FontSize="14"></Label>
+                <Label Content="通信设定：" Width="90"  Margin="20,0,0,0" FontSize="14"></Label>
+                <Label Content="IP地址：" Width="80" FontSize="14"></Label>
                 <TextBox Width="180"
                 Name="ip"
                          FontSize="14"
                 Text="{Binding ip}"
                          VerticalAlignment="Center"></TextBox>
 
-                <Label Content="{Binding [PortDash], Source={x:Static app1:LanguageManager.Instance}}" Margin="20,0,0,0" Width="80" FontSize="14"></Label>
+                <Label Content="端口：" Margin="20,0,0,0" Width="80" FontSize="14"></Label>
                 <TextBox Width="80"
                 Name="port"
                          FontSize="14" 
@@ -154,13 +153,13 @@
         </Grid>
         <Grid Grid.Row="5" Visibility="{Binding SerialPortVisibility}">
             <WrapPanel  VerticalAlignment="Center" Margin="20,0,0,0">
-                <Label Content="{Binding [ComSet3], Source={x:Static app1:LanguageManager.Instance}}" Width="90"  FontSize="14"></Label>
-                <Label Content="{Binding [SerialPort], Source={x:Static app1:LanguageManager.Instance}}" Width="80" FontSize="14"></Label>
+                <Label Content="通信设定：" Width="90"  FontSize="14"></Label>
+                <Label Content="通信口：" Width="80" FontSize="14"></Label>
                 <ComboBox Width="80" FontSize="14" 
                 Name="myports"
                           VerticalAlignment="Center" Text="{Binding comName}"></ComboBox>
 
-                <Label Content="{Binding [BaudrateDash], Source={x:Static app1:LanguageManager.Instance}}" Margin="20,0,0,0" Width="80" FontSize="14"></Label>
+                <Label Content="波特率：" Margin="20,0,0,0" Width="80" FontSize="14"></Label>
                 <ComboBox Width="80"
                 SelectedIndex="{Binding bardRate}"
                           FontSize="14" VerticalAlignment="Center">
@@ -172,7 +171,7 @@
         </Grid>
         <Grid Grid.Row="6" Visibility="{Binding SerialPortVisibility}">
             <WrapPanel  VerticalAlignment="Center">
-                <Label Content="{Binding [DataWidDash], Source={x:Static app1:LanguageManager.Instance}}" Margin="110,0,0,0" Width="80" FontSize="14"></Label>
+                <Label Content="数据位：" Margin="110,0,0,0" Width="80" FontSize="14"></Label>
                 <ComboBox Width="80" 
                 SelectedIndex="{Binding dataBit}"
                           FontSize="14" VerticalAlignment="Center">
@@ -182,7 +181,7 @@
 
                 </ComboBox>
 
-                <Label Content="{Binding [StopBitsDash], Source={x:Static app1:LanguageManager.Instance}}" Margin="20,0,0,0" Width="80" FontSize="14"></Label>
+                <Label Content="停止位：" Margin="20,0,0,0" Width="80" FontSize="14"></Label>
                 <ComboBox Width="80" 
                 SelectedIndex="{Binding stopBit}"
                           FontSize="14" VerticalAlignment="Center">
@@ -190,7 +189,7 @@
                     <ComboBoxItem>1</ComboBoxItem>
                 </ComboBox>
 
-                <Label Content="{Binding [ParityDash], Source={x:Static app1:LanguageManager.Instance}}" Margin="20,0,0,0" Width="80" FontSize="14"></Label>
+                <Label Content="校验位：" Margin="20,0,0,0" Width="80" FontSize="14"></Label>
                 <ComboBox Width="80"
                 SelectedIndex="{Binding Parity}"
                 
@@ -206,7 +205,7 @@
             <WrapPanel FlowDirection="RightToLeft" 
             HorizontalAlignment="Center"
                        VerticalAlignment="Center">
-                <Button Content="{Binding [OK], Source={x:Static app1:LanguageManager.Instance}}"
+                <Button Content="确定"
                 Click="OnBnClickedEnsure"
                 FontWeight="Bold"
                 FontSize="16"

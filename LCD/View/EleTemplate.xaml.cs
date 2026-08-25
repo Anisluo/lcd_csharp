@@ -20,58 +20,31 @@ namespace LCD.View
     /// </summary>
     public partial class EleTemplate : UserControl
     {
-        public delegate void ShowDataDelegate(object sender,int SerNo,double x, double px, double y, double py);
+        public delegate void ShowDataDelegate(double x, double px, double y, double py);
         public event ShowDataDelegate ShowData;
 
-        public int SerNo;
         public double xmeter;
         public double ymeter;
         public double xpercent;
         public double ypercent;
-        private bool is_selected = false;
-
-        public int id = 0;
 
         public EleTemplate()
         {
             InitializeComponent();
         }
 
-        public void SetId(int id)
+        private void SetContent(int id)
         {
-            this.id = id;
-        }
-
-        public void SetContent(int serno)
-        {
-            //默认的SerNo就是ID啊
-            SerNo = serno;
-            mycontent.Content = serno.ToString();//使用2个占位符
-        }
-
-        public void SetColor(Brush color)
-        {
-            brd.Background = color;
-            var background1 = brd.Background as SolidColorBrush;
-            if (background1.Color == Colors.Red)
-            {
-                is_selected =  true;
-            }
-            else
-            {
-                is_selected = false;
-            }
-        }
-
-        public bool is_select()
-        {
-            return is_selected;
+            mycontent.Content = id.ToString("000");//使用三个占位符
         }
 
         //显示数据
-        public void OnBnClickedShowData(object sender, RoutedEventArgs e)
+        private void OnBnClickedShowData(object sender, RoutedEventArgs e)
         {
-            ShowData(this,SerNo,xmeter, xpercent, ymeter, ypercent);
+            ShowData(xmeter, xpercent, ymeter, ypercent);
         }
+
+
+
     }
 }

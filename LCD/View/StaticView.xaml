@@ -4,7 +4,6 @@
              xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
              xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
              xmlns:local="clr-namespace:LCD.View"
-             xmlns:app1="clr-namespace:LCD"
              xmlns:ext="http://schemas.abtsoftware.co.uk/scichart/exampleExternals"
              xmlns:s3D="http://schemas.abtsoftware.co.uk/scichart3D"
                 xmlns:system="clr-namespace:System;assembly=mscorlib"

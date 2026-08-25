@@ -130,17 +130,6 @@ namespace LCD.Ctrl
 
             return Result;
         }
-
-        public void Close()
-        {
-            if(serialPort != null)
-            {
-                if(serialPort.IsConnected)
-                {
-                    serialPort.DisConnect();
-                }
-            }
-        }
         
     }
     public class Result

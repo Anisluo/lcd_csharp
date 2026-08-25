@@ -2,14 +2,10 @@
 using System.Collections.Generic;
 using System.Data;
 using System.Linq;
-using System.Reflection.Emit;
 using System.Text;
 using System.Threading;
 using System.Threading.Tasks;
 using System.Windows;
-using System.Windows.Interop;
-using System.Windows.Threading;
-using LCD.Core.Services;
 using LCD.Data;
 using LCD.dataBase;
 using LCD.View;
@@ -19,7 +15,7 @@ namespace LCD.Ctrl
     /// <summary>
     /// 程序处理
     /// </summary>
-    public class ProcessCtrl
+    class ProcessCtrl
     {
         public event Action<string, string> ShowMessage; 
         /// <summary>
@@ -39,19 +35,8 @@ namespace LCD.Ctrl
 
         public delegate void AddSingleResultDelegate(IData myobj,string TestItme);
         public event AddSingleResultDelegate AddSingleResult;
-        public event AddSingleResultDelegate AddResponseResult;
         public event AddSingleResultDelegate SpectrumResults;
         public event AddSingleResultDelegate warmupResult;
-        public event AddSingleResultDelegate crosstalkResult;
-
-        public delegate void UpdateResponseLinesDelegate(List<double> slist, RiseFallPositon positon);
-        public event UpdateResponseLinesDelegate UpdateResponseLine;
-
-        //执行测量标准检查啊
-        public delegate void RunTestStdDelegate(InfoData info);
-        //点测试的测量标准检查
-        public event RunTestStdDelegate RunPointTestStd;
-
         /// <summary>
         /// Power
         /// </summary>
@@ -66,7 +51,47 @@ namespace LCD.Ctrl
         public delegate void ShowIndexDelegate(int index);
         public event ShowIndexDelegate ShowIndex;//显示index指标
 
-        public void OnMove2Point(double dx, double dy, double dz, double du, double dv, double dball,bool Home)
+        /// <summary>
+        /// 计算补偿点位
+        /// </summary>
+        /// <param name="dx"></param>
+        /// <param name="dy"></param>
+        /// <param name="dz"></param>
+        /// <param name="du"></param>
+        /// <param name="dv"></param>
+        /// <param name="dball"></param>
+      
+
+        private void CalcNewPoint_Mode1(ref double dx,
+            ref double dy,
+            ref double dz,
+            ref double du,
+            ref double dv,
+            ref double dball)
+        {
+            dx += Project.Xorg;
+            dy += Project.Yorg;
+            dz += Project.Zorg;
+            du += Project.Uorg;
+
+            double deltdr = Project.cfg.machine.h0 * (Math.Sin(dv / 180 * Math.PI));//计算delta dr长度
+            dx += deltdr * Math.Cos(du);
+            dy += deltdr * Math.Sin(du);
+            dv += Project.Vorg;
+            dball += Project.Ballorg;
+        }
+
+
+        public void OnSinglePt()
+        {
+            TestMachine tst = Project.testMachine;
+            IData str = tst.MeasureLxy();
+
+
+        }
+
+
+        private void OnMove2Point(double dx, double dy, double dz, double du, double dv, double dball,bool Home)
         {
 
             double zz = 0;
@@ -97,9 +122,7 @@ namespace LCD.Ctrl
             if (Project.cfg.ax_y.IsEnable)
             {
                 if (Project.cfg.ax_y.IsSecondValue) { mvctrl.MoveAbsoluteByVector(Project.cfg.ax_y, dy); }
-                else {
-                    Project.WriteLog("Y轴单轴运动");//20260311，兼容普通运动方式和Y轴插补运动
-                    mvctrl.MoveAbsolute(Project.cfg.ax_y, dy-Project.Yorg, Home,Y); }
+                else { mvctrl.MoveAbsolute(Project.cfg.ax_y, dy, Home,Y); }
             }
 
             
@@ -122,15 +145,6 @@ namespace LCD.Ctrl
             }
 
             mvctrl.WaitFiveAxeMoveFinish();//等待移动完成
-            if(Project.cfg.AxiesDoneDelay>0)
-            {
-                Thread.Sleep((int)Project.cfg.AxiesDoneDelay);
-            }
-            else
-            {
-                LogHelper.Instance.Write("轴运行结束等待时间未设置");
-                Thread.Sleep(20);//这是默认延时时间
-            }
         }
 
         public static ProcessCtrl obj;
@@ -140,34 +154,6 @@ namespace LCD.Ctrl
             if (obj == null) { obj = new ProcessCtrl(); }
             return obj;
         }
-
-        private void check_pause()
-        {
-            while(Project.TstPause)
-            {
-                Thread.Sleep(10);
-            }
-        }
-
-        private void RebindMachineIfNeeded(params ENUMMACHINE[] machines)
-        {
-            ENUMMACHINE current = Project.cfg.TESTMACHINE;
-            bool match = false;
-            for (int i = 0; i < machines.Length; i++)
-            {
-                if (machines[i] == current) { match = true; break; }
-            }
-            if (!match) return;
-            Project.testMachine = LightMeterFactory.Create(current);
-            if (Project.testMachine == null) return;
-            Project.testMachine.Config = Project.cfg.GetBusConfigFor(current);
-            if (Project.testMachine.IsOpen == false)
-            {
-                Project.testMachine.Init();
-                if (current == ENUMMACHINE.MS01) Project.testMachine.AutoCheck();
-            }
-        }
-
         /// <summary>
         /// 执行测试
         /// </summary>
@@ -176,7 +162,6 @@ namespace LCD.Ctrl
             for (int i = 0; i < Project.lstInfos.Count; i++)
             {
                 if (Project.FstStop) { return; }
-                check_pause();
 
                 if (!Project.lstInfos[i].IsSelected)
                 {
@@ -209,23 +194,40 @@ namespace LCD.Ctrl
             if (Project.TestFlag==false)
             {
                 Project.TestFlag = true;
-
-                Project.testMachine = LightMeterFactory.Create(Project.cfg.TESTMACHINE);
-                if (Project.testMachine != null)
+                if (Project.cfg.TESTMACHINE == ENUMMACHINE.BMA7)
                 {
-                    Project.testMachine.Config = Project.cfg.GetBusConfigFor(Project.cfg.TESTMACHINE);
+                    Project.testMachine = Ctrl.BM7A.GetInstance();
+                }
+                else if (Project.cfg.TESTMACHINE == ENUMMACHINE.BM5A)
+                {
 
-                    if (Project.testMachine.IsOpen == false)
-                    {
-                        Project.testMachine.Init();
-                    }
-                    if (Project.cfg.TESTMACHINE == ENUMMACHINE.MS01)
-                    {
-                        Project.testMachine.AutoCheck();
-                    }
+                }
+                else if (Project.cfg.TESTMACHINE == ENUMMACHINE.PR655)
+                {
+
+                }
+                else if (Project.cfg.TESTMACHINE == ENUMMACHINE.CS2000)
+                {
+                    Project.testMachine = Ctrl.CS2000.GetInstance();
+                }
+                else if (Project.cfg.TESTMACHINE == ENUMMACHINE.SR3A)
+                {
+                    Project.testMachine = Ctrl.SR3A.GetInstance();
+                }
+                else if (Project.cfg.TESTMACHINE == ENUMMACHINE.BM5AS)
+                {
+                    //Project.testMachine = Ctrl.BM7A.GetInstance();
+                }
+                else if (Project.cfg.TESTMACHINE == ENUMMACHINE.CS2000)
+                {
+                    Project.testMachine = Ctrl.CS2000.GetInstance();
+                }
+                else if (Project.cfg.TESTMACHINE == ENUMMACHINE.Demo)
+                {
+
                 }
 
-                check_pause();
+               
 
                 user_id user = new user_id();
 
@@ -244,10 +246,8 @@ namespace LCD.Ctrl
                 //ts.Init();//需要去掉，因为仪器默认开机初始化==已经打开了
                 for (int i = 0; i < Project.lstInfos.Count; i++)
                 {
-				     if (Project.FstStop) { return; }
-                    check_pause();
+                    if (Project.FstStop) { return; }
 
-                    //没有选中的不需要执行啊
                     if (!Project.lstInfos[i].IsSelected)
                     {
                         continue; ;
@@ -262,39 +262,28 @@ namespace LCD.Ctrl
                     });
 
 
-                    check_pause();
+
 
                     string TestName = Project.lstInfos[i].Name;
                     DataTable dt = InitDataTemplate(Project.lstInfos[i].lstdata, Project.lstInfos[i].MESTYPE, TestName);//委托到Ui
                     InitResult(Project.lstInfos[i].MESTYPE);//刷新数据
 
-                    check_pause();
+
 
 
                     UpDataUi(Project.lstInfos[i].MESTYPE);
 
-                    check_pause();
 
-                    double height = Project.lstInfos[i].height;
 
                     switch (Project.lstInfos[i].MESTYPE)
                     {
-                        case ENUMMESSTYLE._01_POINT:
-                            RebindMachineIfNeeded(ENUMMACHINE.SR3A, ENUMMACHINE.SR5A);
-                            ProcessPointTemplateXYZ(dt, ENUMMESSTYLE._01_POINT, TestName, Project.lstInfos[i].id,height); break;
-
-                        case ENUMMESSTYLE._02_RESPONSE:
-                            RebindMachineIfNeeded(ENUMMACHINE.Admesy);
-                            ProcessPointTemplateXY(dt, ENUMMESSTYLE._01_POINT, TestName);
-                            break;
-                        case ENUMMESSTYLE._03_SPECTRUM:
-                            RebindMachineIfNeeded(ENUMMACHINE.SR3A, ENUMMACHINE.SR5A, ENUMMACHINE.MS01);
-                            ProcessPointTemplateXYZ(dt, ENUMMESSTYLE._03_SPECTRUM, TestName, Project.lstInfos[i].id,height); ; break;
-                        case ENUMMESSTYLE._04_FLICKER: ProcessPointTemplateXY(dt, ENUMMESSTYLE._01_POINT, TestName); ; break;
-                        case ENUMMESSTYLE._05_CROSSTALK: ProcessPointTemplateXY(dt, ENUMMESSTYLE._05_CROSSTALK, TestName); ; break;
-                        case ENUMMESSTYLE._06_ACR: ProcessPointTemplateXY(dt, ENUMMESSTYLE._01_POINT, TestName); ; break;
-                        case ENUMMESSTYLE._07_warmup: ProcessPointTemplateXYZ(dt, ENUMMESSTYLE._07_warmup, TestName, Project.lstInfos[i].id, height); ; break;
-                        case ENUMMESSTYLE.TCO: ProcessPointTemplateXYZ(dt, ENUMMESSTYLE._01_POINT, TestName, Project.lstInfos[i].id, height); break;
+                        case ENUMMESSTYLE._01_POINT: ProcessPointTemplateXYZ(dt, ENUMMESSTYLE._01_POINT, TestName); ; break;
+                        case ENUMMESSTYLE._02_RESPONSE: ProcessPointTemplateXY(); ; break;
+                        case ENUMMESSTYLE._03_SPECTRUM: ProcessPointTemplateXYZ(dt, ENUMMESSTYLE._03_SPECTRUM, TestName); ; break;
+                        case ENUMMESSTYLE._04_FLICKER: ProcessPointTemplateXY(); ; break;
+                        case ENUMMESSTYLE._05_CROSSTALK: ProcessPointTemplateXY(); ; break;
+                        case ENUMMESSTYLE._06_ACR: ProcessPointTemplateXY(); ; break;
+                        case ENUMMESSTYLE._07_warmup: ProcessPointTemplateXYZ(dt, ENUMMESSTYLE._07_warmup, TestName); ; break;
                         case ENUMMESSTYLE.Power:
 
                             MessageBox.Show("请将产品设置为待机状态");
@@ -306,19 +295,6 @@ namespace LCD.Ctrl
                                 ModeType = (int)ENUMMESSTYLE.Power,
                                 projectName = "PowerTest"
                             });
-
-                            if(Project.power == null)
-                            {
-                                Project.power = new Ctrl.Power();
-                                Project.power.Init();
-                            }
-                            else
-                            {
-                                if(Project.power.IsOpen==false)
-                                {
-                                    Project.power.Init();
-                                }
-                            }
 
                             Project.WriteLog("功率测试开始");
 
@@ -338,7 +314,7 @@ namespace LCD.Ctrl
                             //}
 
                             break;
-                        default: ProcessPointTemplateXY(dt, ENUMMESSTYLE._01_POINT, TestName);  break;
+                        default: ProcessPointTemplateXY(); ; break;
                     }
                     DataTable table = GetTable();
                     ResultData rest = new ResultData();
@@ -348,17 +324,7 @@ namespace LCD.Ctrl
                     Project.WriteLog("模板：" + Project.lstInfos[i].Name + "测量完成!");
                 }
                 Project.TestFlag = false;
-                check_pause();
-                //OnMove2Point(0, Project.Yorg, 0, 0, 0, 0,false);
-                if (Project.cfg.ax_y.IsSecondValue) {
-                    OnMove2Point(0, Project.Yorg, 0, 0, 0, 0,false);
-                    //OnMove2Point(0, 0+Project.cfg.yorg, 0, 0, 0, 0, false);
-                }
-                else
-                {
-                    OnMove2Point(0, 0, 0, 0, 0, 0, false);
-                }
-                  
+                OnMove2Point(0, Project.Yorg, 0, 0, 0, 0,false);
                 Project.TestFlag = false;
                 Project.WriteLog("模板组测量完毕！");
                 Project.WriteLog("返回起始点位置！");
@@ -372,251 +338,22 @@ namespace LCD.Ctrl
             //返回至起始点位置
 
             //}
-
-            //测试结束了啊，把选中标志都清除掉,这个功能不要用了
-            //for (int i = 0; i < Project.lstInfos.Count; i++)
-            //{
-            //    if (Project.lstInfos[i].IsSelected)
-            //    {
-            //        Project.lstInfos[i].IsSelected = false;
-            //    }
-            //}
-            ////最后保存一下啊
-            //Project.SaveTemplate("Template.xml");
         }
 
         //测试策略
         //处理两轴点位数据
-        public void ProcessPointTemplateXY(DataTable dt, ENUMMESSTYLE eNUMMESSTYLE, string testitem)
+        public void ProcessPointTemplateXY()
         {
-            //在这里测试响应啊
-            Console.WriteLine();
-
-            //05的需要测两次
-            int count = 0;
-            CROSSTALK_BACK:            
-
-            for (int i = 0; i < dt.Rows.Count; i++)
-            {
-                check_pause();
-
-                double dx = dt.Columns.Contains("X(mm)") && double.TryParse(dt.Rows[i]["X(mm)"].ToString(), out dx) ? dx : 0.0;
-                double dy = dt.Columns.Contains("Y(mm)") && double.TryParse(dt.Rows[i]["Y(mm)"].ToString(), out dy) ? dy : 0.0;
-                double dz = dt.Columns.Contains("Z(mm)") && double.TryParse(dt.Rows[i]["Z(mm)"].ToString(), out dz) ? dz : 0.0;
-                double du = dt.Columns.Contains("U(°)") && double.TryParse(dt.Rows[i]["U(°)"].ToString(), out du) ? du : 0.0;
-                double dv = dt.Columns.Contains("V(°)") && double.TryParse(dt.Rows[i]["V(°)"].ToString(), out dv) ? dv : 0.0;
-                double dball = dt.Columns.Contains("Ball(mm)") && double.TryParse(dt.Rows[i]["Ball(mm)"].ToString(), out dball) ? dball : 0.0;
-
-                string SerialNumber = dt.Columns.Contains("PG(序号)") ? dt.Rows[i]["PG(序号)"].ToString() : "//";
-                string PGHint = dt.Columns.Contains("PG(提示信息)") ? dt.Rows[i]["PG(提示信息)"].ToString() : "";
-                ShowIndex(i);
 
 
-                var pG = Project.PG;
-                bool Ok = false;
-                if (pG != null)
-                {
-                    if (SerialNumber.IndexOf(".") != -1)
-                    {
-                        string[] TempStr = SerialNumber.Split('.');
-                        byte r = byte.Parse(TempStr[0]);
-                        byte g = byte.Parse(TempStr[1]);
-                        byte b = byte.Parse(TempStr[2]);
-                        Ok = pG.SetColor(r, g, b);
-                        if (Ok)
-                        {
-                            Project.WriteLog("RGB切换成功");
-                        }
-                        else
-                        {
-                            Project.WriteLog("RGB切换失败");
-                        }
-                    }
-                    else if (SerialNumber.IndexOf("//") != -1)
-                    {
-                        MessageBox.Show("请手动切换PG");
-                    }
-                    else if (SerialNumber == "")
-                    {
-
-                    }
-                    else
-                    {
-                        Ok = pG.ChangePattern(Project.PG.PatternList[int.Parse(SerialNumber)]);
-                        if (Ok)
-                        {
-                            Project.WriteLog("图片切换成功");
-                        }
-                        else
-                        {
-                            Project.WriteLog("图片切换失败");
-                        }
-                    }
-
-                    //pG.Send(SerialNumber);
-                }
-                else
-                {
-                    if (SerialNumber.IndexOf("//") != -1)
-                    {
-                        MessageBox.Show("请手动切换PG");
-                    }
-                }
-
-                //CalcNewPoint(ref dx, ref dy, ref dz, ref du, ref dv, ref dball);
-
-                #region 测试注销
-
-
-
-
-                EquipmentType equipmentType = (EquipmentType)Project.cfg.EQType;
-
-                //if (equipmentType == EquipmentType.Type_D)
-                {
-                    Console.WriteLine($"【x】：{dx}【Y】：{dy}【Z】：{dz}【u】：{du}【v】：{dv}【ball】：{dball}");
-                    check_pause();
-                    OnMove2Point(dx, dy, dz, du, dv, dball, false);
-                }
-                //else
-                //{
-                //    PointF pointF = new PointF(dx, dy, dz, du, dv, equipmentType);
-
-                //    double Temp1 = Project.lstInfos[0].height;
-
-                //    PointF point = pointF.UpdateByAlgorithm1(Temp1, Project.PtCenter);
-
-                //    Project.WriteLog($"补偿前:X--》{point.X} Y--》{point.Y} Z--》{point.Z} U--》{point.U} V--》{point.V} ");
-                //    OnMove2Point(point.X, point.Y, point.Z, point.U, point.V, dball, false);
-                //}
-
-                Project.WriteLog("移动到指定点位");
-
-                #endregion
-
-                TestMachine ts = Project.testMachine;
-                IData str = null;
-                try
-                {
-                    //重新改下结果
-                    //eNUMMESSTYLE = ENUMMESSTYLE._02_RESPONSE;
-                    if (eNUMMESSTYLE ==ENUMMESSTYLE._01_POINT)
-                    {
-                        str = ts.Measure();
-                        if (str != null)
-                        {
-                            Project.WriteLog("Response测试完成");
-
-                            str.X = dx;
-                            str.Y = dy;
-                            str.Z = dz;
-                            str.CoordX = dx;
-                            str.CoordY = dy;
-                            str.CoordZ = dz;
-                            str.CoordU = du;
-                            str.CoordV = dv;
-                            double low = dt.Columns.Contains("Low(灰阶)") && double.TryParse(dt.Rows[i]["Low(灰阶)"].ToString(), out low) ? low : 0.0;
-                            double high = dt.Columns.Contains("High(灰阶)") && double.TryParse(dt.Rows[i]["High(灰阶)"].ToString(), out high) ? high : 0.0;
-                            str.Low = low;
-                            str.High = high;
-
-                            AddResponseResult(str, testitem);
-
-                            Admesy admesy = (Admesy)ts;
-                            if (UpdateResponseLine != null)
-                            {
-                                if (admesy.vlist != null)
-                                {
-                                    UpdateResponseLine(admesy.vlist, admesy.positon);
-                                }
-                                else
-                                {
-                                    Project.WriteLog("Admesy测量数据为空,不能绘图");
-                                }
-                            }
-                            else
-                            {
-                                Project.WriteLog("UpdateResponseLine为空,不能绘图");
-                            }
-                        }
-                        else
-                        {
-                            Project.WriteLog("测试失败，请检查设备连接");
-                            //Project.WriteLog("Response测试失败,");
-                            break;
-                        }
-                    }
-                    else if(eNUMMESSTYLE == ENUMMESSTYLE._02_RESPONSE)
-                    {
-                        
-                    }
-                    else if (eNUMMESSTYLE == ENUMMESSTYLE._05_CROSSTALK)
-                    {
-                        str = ts.MeasureLxy();
-                        if (str == null)
-                        {
-                            Project.WriteLog("测试失败，请检查设备连接或者串口打开失败");
-                            break;
-                        }
-                        else
-                        {
-                            str.Point_Count = dt.Rows.Count;
-                            str.Remark = PGHint;
-                            str.CoordX = dx;
-                            str.CoordY = dy;
-                            str.CoordZ = dz;
-                            str.CoordU = du;
-                            str.CoordV = dv;
-                            //计算lab
-                            IData lab = ColorService.ToLab(str.X, str.Y, str.Z);
-                            str.Lcolor = lab.Lcolor;
-                            str.Acolor = lab.Acolor;
-                            str.Bcolor = lab.Bcolor;
-                            if (count == 0)
-                            {
-                                str.CT_done = false;
-                            }
-                            else
-                            {
-                                str.CT_done = true;
-                            }
-                            //计算lab啊
-                            crosstalkResult(str, testitem);
-                        }
-                    }
-                }
-                catch (Exception e)
-                {
-                    Project.WriteLog("读取失败-->" + e.Message+Environment.NewLine+e.StackTrace);
-                    //Console.WriteLine("读取失败-->" + e.Message);
-                }
-            }
-
-            count++;
-            if ((eNUMMESSTYLE == ENUMMESSTYLE._05_CROSSTALK)&&(count==1))
-            {
-
-                //提示切换PG
-                App.Current.Dispatcher.Invoke((Action)(() =>
-                {
-                    ShowMsg form = new ShowMsg("请切换串扰 PG");
-                    form.WindowStartupLocation = WindowStartupLocation.CenterScreen;
-                    form.Topmost = true;
-                    form.ShowDialog();
-                }));
-                
-
-                goto CROSSTALK_BACK;
-            }
         }
 
         //处理三轴点位数据
-        public void ProcessPointTemplateXYZ(DataTable dt, ENUMMESSTYLE eNUMMESSTYLE,string testitem,int id,double height)
+        public void ProcessPointTemplateXYZ(DataTable dt, ENUMMESSTYLE eNUMMESSTYLE,string testitem)
         {
             for (int i = 0; i < dt.Rows.Count; i++)
             {
-			     if (Project.FstStop) { return; }
-                check_pause();
+                if (Project.FstStop) { return; }
 
                 double dx = dt.Columns.Contains("X(mm)") && double.TryParse(dt.Rows[i]["X(mm)"].ToString(), out dx) ? dx : 0.0;
                 double dy = dt.Columns.Contains("Y(mm)") && double.TryParse(dt.Rows[i]["Y(mm)"].ToString(), out dy) ? dy : 0.0;
@@ -634,7 +371,7 @@ namespace LCD.Ctrl
                 ShowIndex(i);
 
 
-                var pG = Project.PG;
+                PG pG = Project.PG;
                 bool Ok=false;
                 if (pG != null)
                 {
@@ -644,7 +381,7 @@ namespace LCD.Ctrl
                         byte r = byte.Parse(TempStr[0]);
                         byte g = byte.Parse(TempStr[1]);
                         byte b = byte.Parse(TempStr[2]);
-                        Ok= pG.SetColor(r, g, b);
+                        Ok= pG.colorControl(r, g, b);
                         if (Ok)
                         {
                             Project.WriteLog("RGB切换成功");
@@ -664,7 +401,7 @@ namespace LCD.Ctrl
                     }
                     else
                     {
-                        Ok=pG.ChangePattern(Project.PG.PatternList[int.Parse(SerialNumber)]);
+                        Ok=pG.changePattern(Project.PG.PatternList.ItemStrings[int.Parse(SerialNumber)].name);
                         if (Ok)
                         {
                             Project.WriteLog("图片切换成功");
@@ -691,61 +428,25 @@ namespace LCD.Ctrl
 
 
 
-                check_pause();
+
                 EquipmentType equipmentType = (EquipmentType)Project.cfg.EQType;
 
                 if (equipmentType == EquipmentType.Type_D)
                 {
                     Console.WriteLine($"【x】：{dx}【Y】：{dy}【Z】：{dz}【u】：{du}【v】：{dv}【ball】：{dball}");
-                    check_pause();
+
                     OnMove2Point(dx, dy, dz, du, dv, dball, false);//移动到指定位置
                 }
                 else
                 {
                     PointF pointF = new PointF(dx, dy, dz, du, dv, equipmentType);
 
-                    //double height = Project.lstInfos[i].height;
-                    double Temp1 = height;// Project.lstInfos[0].height;
+                    double Temp1 = Project.lstInfos[0].height;
 
-                    if(Project.cfg.ax_z.CompensationDirection)
-                    {                        
-                        Temp1 = -Temp1;
-                        Project.WriteLog("厚度补偿取反："+ Temp1);
-                    }
-                    PointF point = null;
-                    
+                    PointF point = pointF.UpdateByAlgorithm1(Temp1, Project.PtCenter);
 
-
-                    if ((du == 0) && (dv == 0))
-                    {
-                        //u和v为0的时候，不调整z的值
-                        point = new PointF(dx, dy, dz, du, dv, equipmentType);
-
-                        if (Project.cfg.ax_y.IsSecondValue)
-                        {
-                            point.Y += Project.Yorg;
-                        }
-
-
-                    }
-                    else
-                    {
-                        point = pointF.UpdateByAlgorithm1(Temp1, Project.PtCenter);
-                        //底下是新方法计算
-                        //var xyz = PointF.RotatePoint(dx,dy,Temp1,du,dv, Project.PtCenter);
-                        //point = new PointF( xyz.newX-(Project.Xorg - Project.PtCenter.X) , 
-                        //                    xyz.newY-(Project.Yorg - Project.PtCenter.Y),
-                        //                    xyz.newH- (Project.Zorg - Project.PtCenter.Z), 
-                        //                    du+ Project.Uorg - Project.PtCenter.U, 
-                        //                    dv + Project.Vorg - Project.PtCenter.V, 
-                        //                    equipmentType);
-                        //
-                 
-                    }
-                    check_pause();
                     Project.WriteLog($"补偿前:X--》{point.X} Y--》{point.Y} Z--》{point.Z} U--》{point.U} V--》{point.V} ");
                     OnMove2Point(point.X, point.Y, point.Z, point.U, point.V, dball, false);
-
                 }
 
 
@@ -764,8 +465,6 @@ namespace LCD.Ctrl
 
                 #endregion
 
-                check_pause();
-
                 TestMachine ts = Project.testMachine;
                 IData str = null;
                 try
@@ -774,50 +473,17 @@ namespace LCD.Ctrl
                     {
                         
                         str = ts.MeasureLxy();
-                        if (str == null)
-                        {
-                            Project.WriteLog("测试失败，请检查设备连接或者串口打开失败");
-                            break;
-                        }
-                        else
-                        {
-                            str.Remark = PGHint;
-                            str.CoordX = dx;
-                            str.CoordY = dy; 
-                            str.CoordZ = dz;
-                            str.CoordU = du;
-                            str.CoordV = dv;
-                            //计算lab
-                            IData lab = ColorService.ToLab(str.X,str.Y,str.Z);
-                            str.Lcolor = lab.Lcolor;
-                            str.Acolor =lab.Acolor;
-                            str.Bcolor = lab.Bcolor;
-                            //计算lab啊
-                            AddSingleResult(str, testitem);
-                        }
+                        str.Remark = PGHint;
+                        AddSingleResult(str, testitem);
                     }
                     else if (eNUMMESSTYLE== ENUMMESSTYLE._03_SPECTRUM)
                     {
                         //Console.WriteLine("_03_SPECTRUM");
 
                         str = ts.MeasureSpectrum();
-                        if(str == null)
-                        {
-                            Project.WriteLog("测试失败，请检查设备连接");
-                            break;
-                        }
                         str.Remark = PGHint;
-                        str.CoordX = dx;
-                        str.CoordY = dy;
-                        str.CoordZ = dz;
-                        str.CoordU = du;
-                        str.CoordV = dv;
-                        //计算lab
-                        IData lab = ColorService.ToLab(str.X, str.Y, str.Z);
-                        str.Lcolor = lab.Lcolor;
-                        str.Acolor = lab.Acolor;
-                        str.Bcolor = lab.Bcolor;
                         SpectrumResults?.Invoke(str, testitem);
+
 
                     }
                     else if(eNUMMESSTYLE== ENUMMESSTYLE._07_warmup)
@@ -828,27 +494,14 @@ namespace LCD.Ctrl
 
                         for (int k = 0; k < Cont; k++)
                         {
-						     if (Project.FstStop) { return; }
-                            check_pause();
+                            if (Project.FstStop) { return; }
 
                             str = ts.MeasureLxy();
-                            if(str==null)
-                            {
-                                Project.WriteLog("测试失败，请检查设备连接");
-                                break;
-                            }
-                            if (str != null)
-                            {
-                                str.Remark = PGHint;
-                                str.CoordX = dx;
-                                str.CoordY = dy;
-                                str.CoordZ = dz;
-                                str.CoordU = du;
-                                str.CoordV = dv;
-                                warmupResult?.Invoke(str, testitem);
+                            str.Remark = PGHint;
+                            warmupResult?.Invoke(str, testitem);
 
-                                System.Threading.Thread.Sleep((int)(sometimes * 1000));
-                            }
+                            System.Threading.Thread.Sleep((int)(sometimes*1000));
+
                         }
                         
                     }
@@ -856,7 +509,7 @@ namespace LCD.Ctrl
                 }
                 catch (Exception e)
                 {
-                    Project.WriteLog("读取失败-->" + e.Message + Environment.NewLine + e.StackTrace);
+                    Project.WriteLog("读取失败-->" + e.Message);
                     //Console.WriteLine("读取失败-->" + e.Message);
                 }
 
@@ -867,80 +520,120 @@ namespace LCD.Ctrl
                 //object[] res = { 100, 100, 100, 100, 100, 100, 100, 100, 100 };
                 //AddSingleResult(str, testitem);
             }
-
-            //测数完成。如果是点测试，分析数据啊，就是测量标准判断啊
-            if(eNUMMESSTYLE == ENUMMESSTYLE._01_POINT)
-            {
-                InfoData infoData = Project.lstInfos.FirstOrDefault(p => p.id == id);
-                if(infoData != null)
-                {
-                    //这里只能回调啊，由ResutView类那边去计算啊
-                    //把InfoData，传递过去
-                    if (infoData.Isxchk|| infoData.Isychk || infoData.IsLchk||infoData.IsBalancechk)
-                    {
-                        //设置了测量标准啊，需要掉用resutView去检测啊
-                        //调 Update_Color 这个函数啊
-                        if(RunPointTestStd != null)
-                        {
-                            RunPointTestStd(infoData);
-                        }
-                    }
-                }
-                Project.Results.save_point_statics();
-            }
         }
 
-        public bool ProcessPointSingle()
+        public void ProcessPointSingle()
         {
-            TestMachine ts = Project.testMachine;           
-            if (ts.IsOpen==false)
-            {
-               ts.Init();
-            }
+            TestMachine ts = Project.testMachine;
             IData str = ts.MeasureLxy();
-            if (str != null)
-            {
-                str.CoordX = str.X;
-                str.CoordY = str.Y;
-                str.CoordZ = str.Z;
-                str.CoordU = str.u;
-                str.CoordV = str.v;
-                IData lab = ColorService.ToLab(str.X, str.Y, str.Z);
-                str.Lcolor = lab.Lcolor;
-                str.Acolor = lab.Acolor;
-                str.Bcolor = lab.Bcolor;
-                //string[] res = ParseLxy(str);
-                AddSingleResult(str, "");
-                return true;
-            }
-            return false;
+            //string[] res = ParseLxy(str);
+            AddSingleResult(str,"");
         }
-
-        public bool ProcessSpectrumSingle()
+        public void ProcessSpectrumSingle()
         {
-            TestMachine ts = Project.testMachine;           
-            if (ts.IsOpen == false)
-            {
-                ts.Init();
-            }
+            TestMachine ts = Project.testMachine;
             IData str = ts.MeasureSpectrum();
-            if (str != null)
-            {
-                str.CoordX = str.X;
-                str.CoordY = str.Y;
-                str.CoordZ = str.Z;
-                str.CoordU = str.u;
-                str.CoordV = str.v;
-                IData lab = ColorService.ToLab(str.X, str.Y, str.Z);
-                str.Lcolor = lab.Lcolor;
-                str.Acolor = lab.Acolor;
-                str.Bcolor = lab.Bcolor;
-                //string[] res = ParseLxy(str);
-                SpectrumResults(str, "");
-                return true;
-            }
-            return false;
+            //string[] res = ParseLxy(str);
+            
+            SpectrumResults(str, "");
+            //AddSingleResult(str, "");
         }
 
+        private string[] ParseLxy(string str)
+        {
+            switch (Project.cfg.TESTMACHINE)
+            {
+                case ENUMMACHINE.BMA7: return ParseLxy_BM7A(str);
+                case ENUMMACHINE.USB2000: return ParseLxy_Common(str);
+                default: return ParseLxy_Common(str);
+            }
+        }
+
+
+        private string[] ParseLxy_Common(string str)
+        {
+            if (str == "") { return null; }
+            string[] strs = str.Split(',');
+            string[] data = new string[9];
+            data[0] = strs[0];//L
+            data[1] = strs[1];//X
+            data[2] = strs[2];//Y
+            data[3] = strs[3];//Z
+            data[4] = strs[4];//cx
+            data[5] = strs[5];//cy
+            data[6] = strs[6];//u'
+            data[7] = strs[7];//v'
+            data[8] = strs[8];//Tc
+            return data;
+        }
+
+
+
+        private string[] ParseLxy_BM7A(string str)
+        {
+            if (str == "") { return null; }
+            string[] strs = str.Split('\n');
+
+            string[] data = new string[9];
+            data[0] = strs[12].Replace("\r", "");//L
+            data[1] = strs[13].Replace("\r", "");//X
+            data[2] = strs[14].Replace("\r", "");//Y
+            data[3] = strs[15].Replace("\r", "");//Z
+            data[4] = strs[16].Replace("\r", "");//cx
+            data[5] = strs[17].Replace("\r", "");//cy
+            data[6] = strs[18].Replace("\r", "");//u'
+            data[7] = strs[19].Replace("\r", "");//v'
+            data[8] = strs[20].Replace("\r", "");//Tc
+            return data;
+        }
+
+
+
+
+        //处理五轴点位数据
+        public void ProcessPointTemplateXYZUV()
+        {
+
+        }
+
+        //处理crosstop测试数据
+        public void ProcessXYCrossTop()
+        {
+
+        }
+
+        //处理五轴加积分球
+        public void ProcessPointTemplateXYZUVBall()
+        {
+
+        }
+
+        //处理响应测试
+        public void ProcessResponseXY()
+        {
+
+        }
+
+        //处理ACR测试
+        public void ProcessACRXY()
+        {
+
+        }
+
+        //处理
+        //Edit
     }
+
+    //定义测量类型
+    //public enum EnumMeasureStyle
+    //{
+    //    Point_XY,
+    //    Point_XYZ,
+    //    Point_XYZUV,
+    //    CrossTop,
+    //    Response,
+    //    Spectrum,
+    //}
+
+
 }

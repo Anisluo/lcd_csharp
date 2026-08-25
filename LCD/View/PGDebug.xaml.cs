@@ -25,11 +25,11 @@ namespace LCD.View
         {
             InitializeComponent();
             list.Clear();
-            for (int i = 0; i < Project.PG.PatternList.Count; i++)
+            for (int i = 0; i < Project.PG.PatternList.Size; i++)
             {
                 PGViewsModel infoList = new PGViewsModel();
                 infoList.Name2 = i.ToString();
-                infoList.Name1 = Project.PG.PatternList[i];
+                infoList.Name1 = Project.PG.PatternList.ItemStrings[i].name;
                 list.Add(infoList);
             }
             mylist1.ItemsSource = list;
@@ -49,7 +49,7 @@ namespace LCD.View
                 MessageBox.Show("请输入数字");
             }
 
-            Project.PG.ChangePattern(Project.PG.PatternList[Imag]);
+            Project.PG.changePattern(Project.PG.PatternList.ItemStrings[Imag].name);
 
         }
 
@@ -66,7 +66,7 @@ namespace LCD.View
             {
                 MessageBox.Show("请输入数字");
             }
-            Project.PG.SetColor(r,g,b);
+            Project.PG.colorControl(r,g,b);
         }
     }
 }

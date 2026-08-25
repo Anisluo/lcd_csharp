@@ -87,24 +87,52 @@ namespace LCD.dataBase
             return Database.Command(Sql);
         }
 
+        //public void RederList()
+        //{
+        //    Project.listBarCode.Clear();
+        //    string SQL = "select *   from user_id";
+        //    SQLiteDataReader sqLiteData= Database.Reader(SQL);
+        //    while (sqLiteData.Read())
+        //    {
+        //        UserIdMode sMode=new UserIdMode();
+        //        sMode.ID = Int32.Parse(sqLiteData["ID"].ToString());
+        //        sMode.BarCode = sqLiteData["BarCode"].ToString();
+
+        //        Project.listBarCode.Add(sMode);
+
+        //        ProjectMode.RederList(sMode.ID);
+        //    }
+
+
+        //}
+
         public void RederList()
         {
             Project.listBarCode.Clear();
-            string SQL = "select *   from user_id order by ID desc";
-            SQLiteDataReader sqLiteData= Database.Reader(SQL);
-            while (sqLiteData.Read())
-            {
-                UserIdMode sMode=new UserIdMode();
-                sMode.ID = Int32.Parse(sqLiteData["ID"].ToString());
-                sMode.BarCode = sqLiteData["BarCode"].ToString();
-                
-                Project.listBarCode.Add(sMode);
 
-                ProjectMode.RederList(sMode.ID);
+            using (var sqLiteData = Database.Reader("select ID, BarCode from user_id"))
+            {
+                while (sqLiteData.Read())
+                {
+                    Project.listBarCode.Add(new UserIdMode
+                    {
+                        ID = Convert.ToInt32(sqLiteData["ID"]),
+                        BarCode = sqLiteData["BarCode"].ToString()
+                    });
+                }
             }
 
-            
+            ProjectMode.RederListAll();   // 2 次查询搞定全部
         }
-       
+
+    }
+
+    public class UserIdMode
+    {
+        public int ID { get; set; }
+        public string BarCode { get; set; }
+        public string CreationTime { get; set; }
+
+        public List<ProjectModeClass> ProjectModes { get; set; }=new List<ProjectModeClass>();
     }
 }

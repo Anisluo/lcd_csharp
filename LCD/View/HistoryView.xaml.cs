@@ -39,7 +39,6 @@ namespace LCD.View
             //Init();
             mainWindow = new LCD.View.MainWindowVM();
             this.DataContext = mainWindow;
-            //Init();
         }
 
         public void Init()
@@ -175,23 +174,14 @@ namespace LCD.View
                 dataRow["Cy"] = objs.Cy;
                 dataRow["u"] = objs.u;
                 dataRow["v"] = objs.v;
-                dataRow["CCT"] = DisplayFormat.FromString(objs.CCT);
+                dataRow["CCT"] = objs.CCT;
                 dataRow["完成时间"] = objs.Time;
                 dataRow["备注"] = objs.Remark;
 
             }
             else if (enummesstyle == ENUMMESSTYLE._02_RESPONSE)
             {
-                dataRow = ResultDatatemp.NewRow();
-                dataRow["Num"] = objs.Num;
-                dataRow["X"] = objs.X;
-                dataRow["Y"] = objs.Y;
-                dataRow["Z"] = objs.Z;
-                dataRow["Low"] = objs.Low;
-                dataRow["High"] = objs.High;
-                dataRow["RiseTime"] = objs.RiseTime;
-                dataRow["FallTime"] = objs.FallTime;
-                dataRow["完成时间"] = objs.Time;
+
             }
             else if (enummesstyle == ENUMMESSTYLE._03_SPECTRUM)
             {
@@ -206,7 +196,7 @@ namespace LCD.View
                 dataRow["Cy"] = objs.Cy;
                 dataRow["u"] = objs.u;
                 dataRow["v"] = objs.v;
-                dataRow["CCT"] = DisplayFormat.FromString(objs.CCT);
+                dataRow["CCT"] = objs.CCT;
                 dataRow["完成时间"] = objs.Time;
                 dataRow["备注"] = objs.Remark;
                 for (int i = 0; i < 400; i++)
@@ -227,12 +217,7 @@ namespace LCD.View
             }
             else if (enummesstyle == ENUMMESSTYLE._05_CROSSTALK)
             {
-                dataRow = ResultDatatemp.NewRow();
-                dataRow["Num"] = objs.Num;
-                dataRow["La"] = objs.La;
-                dataRow["Lb"] = objs.Lb;
-                dataRow["CT"] = objs.CT;
-                dataRow["完成时间"] = objs.Time;
+
             }
             else if (enummesstyle==ENUMMESSTYLE._07_warmup)
             {
@@ -246,7 +231,7 @@ namespace LCD.View
                 dataRow["Cy"] = objs.Cy;
                 dataRow["u"] = objs.u;
                 dataRow["v"] = objs.v;
-                dataRow["CCT"] = DisplayFormat.FromString(objs.CCT);
+                dataRow["CCT"] = objs.CCT;
                 dataRow["完成时间"] = objs.Time;
                 dataRow["备注"] = objs.Remark;
             }
@@ -257,7 +242,10 @@ namespace LCD.View
                 dataRow["Num"] = objs.Num;
                 dataRow["电压"] = objs.Voltage;
                 dataRow["电流"] = objs.ElectricCurrent;
-                dataRow["功率"] = objs.Power;             
+                dataRow["功率"] = objs.Power;
+               
+
+                
             }
 
 
@@ -300,7 +288,7 @@ namespace LCD.View
             dataRow["Cy"] = objs.Cy;
             dataRow["u"] = objs.u;
             dataRow["v"] = objs.v;
-            dataRow["CCT"] = DisplayFormat.FromString(objs.CCT);
+            dataRow["CCT"] = objs.CCT;
             dataRow["完成时间"] = objs.Time;
             dataRow["备注"] = objs.Remark;
 
@@ -348,16 +336,7 @@ namespace LCD.View
             }
             else if (enummesstyle == ENUMMESSTYLE._02_RESPONSE)
             {
-                ResultDatatemp = new DataTable();
-                ResultDatatemp.Columns.Add("Num");
-                ResultDatatemp.Columns.Add("X");
-                ResultDatatemp.Columns.Add("Y");
-                ResultDatatemp.Columns.Add("Z");
-                ResultDatatemp.Columns.Add("Low");
-                ResultDatatemp.Columns.Add("High");
-                ResultDatatemp.Columns.Add("RiseTime");
-                ResultDatatemp.Columns.Add("FallTime");
-                ResultDatatemp.Columns.Add("完成时间");
+
             }
             else if (enummesstyle == ENUMMESSTYLE._03_SPECTRUM)
             {
@@ -386,12 +365,7 @@ namespace LCD.View
             }
             else if (enummesstyle == ENUMMESSTYLE._05_CROSSTALK)
             {
-                ResultDatatemp = new DataTable();
-                ResultDatatemp.Columns.Add("Num");
-                ResultDatatemp.Columns.Add("La");
-                ResultDatatemp.Columns.Add("Lb");
-                ResultDatatemp.Columns.Add("CT");
-                ResultDatatemp.Columns.Add("完成时间");
+
             }
             else if ((enummesstyle == ENUMMESSTYLE._07_warmup))
             {
@@ -510,33 +484,12 @@ namespace LCD.View
 
         private void CheckBox_Click(object sender, RoutedEventArgs e)
         {
-            //if (((LCD.View.CheckBoxTreeViewModel)((System.Windows.Controls.CheckBox)(sender)).DataContext).Parent==null)
-            //{
-            //    return;
-            //}
-            //((LCD.View.CheckBoxTreeViewModel)((System.Windows.Controls.CheckBox)(sender)).DataContext).Parent.IsChecked = true;
-            ////((MainWindowVM)this.DataContext).Items[0].IsChecked=true;
-            LCD.View.CheckBoxTreeViewModel treeView = ((LCD.View.CheckBoxTreeViewModel)((System.Windows.Controls.CheckBox)(sender)).DataContext);
-            var treeViewItem = treeView.Children;
-            if (treeViewItem != null)
+            if (((LCD.View.CheckBoxTreeViewModel)((System.Windows.Controls.CheckBox)(sender)).DataContext).Parent==null)
             {
-                bool st = (bool)treeView.IsChecked;
-                set_child(treeViewItem, st);
+                return;
             }
-        }
-
-        private void set_child(List<CheckBoxTreeViewModel> currNode, bool selected)
-        {
-            if (currNode != null)
-            {
-                if (currNode.Count > 0)
-                {
-                    for (int i = 0; i < currNode.Count; i++)
-                    {
-                        currNode[i].IsChecked = selected;
-                    }
-                }
-            }
+            ((LCD.View.CheckBoxTreeViewModel)((System.Windows.Controls.CheckBox)(sender)).DataContext).Parent.IsChecked = true;
+            //((MainWindowVM)this.DataContext).Items[0].IsChecked=true;
         }
     }
 

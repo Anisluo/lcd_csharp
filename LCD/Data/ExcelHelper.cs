@@ -71,11 +71,6 @@ namespace LCD.Data
                                 tempTable.Columns.Add("ID");
                                 tempTable.Columns.Add("测试项");
                                 tempTable.Columns.Add("Num");
-                                tempTable.Columns.Add("Coor-X");
-                                tempTable.Columns.Add("Coor-Y");
-                                tempTable.Columns.Add("Coor-Z");
-                                tempTable.Columns.Add("Coor-U");
-                                tempTable.Columns.Add("Coor-V");
                                 tempTable.Columns.Add("L");
                                 tempTable.Columns.Add("X");
                                 tempTable.Columns.Add("Y");
@@ -84,12 +79,6 @@ namespace LCD.Data
                                 tempTable.Columns.Add("Cy");
                                 tempTable.Columns.Add("u");
                                 tempTable.Columns.Add("v");
-                                if(Project.cfg.ShowLab)
-                                {
-                                    tempTable.Columns.Add("L*");
-                                    tempTable.Columns.Add("a*");
-                                    tempTable.Columns.Add("b*");
-                                }
                                 tempTable.Columns.Add("CCT");
                                 tempTable.Columns.Add("备注");
                                 for (int t = 0; t < 401; t++)
@@ -107,66 +96,19 @@ namespace LCD.Data
                                 tempTable.Columns.Add("功率");
                                 tempTable.Columns.Add("备注");
                             }
-                            else if (list[index].ProjectModes[i].ModeType == 1)
-                            {
-                                tempTable.Columns.Add("ID");
-                                tempTable.Columns.Add("测试项");
-                                tempTable.Columns.Add("Num");
-                                tempTable.Columns.Add("Coor-X");
-                                tempTable.Columns.Add("Coor-Y");
-                                tempTable.Columns.Add("Coor-Z");
-                                tempTable.Columns.Add("Coor-U");
-                                tempTable.Columns.Add("Coor-V");
-                                tempTable.Columns.Add("X");
-                                tempTable.Columns.Add("Y");
-                                tempTable.Columns.Add("Z");
-                                tempTable.Columns.Add("Low");
-                                tempTable.Columns.Add("High");
-                                tempTable.Columns.Add("RiseTime");
-                                tempTable.Columns.Add("FallTime");
-                                tempTable.Columns.Add("完成时间");
-                            }
-                            else if(list[index].ProjectModes[i].ModeType == 4)
-                            {
-                                tempTable.Columns.Add("ID");
-                                tempTable.Columns.Add("测试项");
-                                tempTable.Columns.Add("Num");
-                                tempTable.Columns.Add("La");
-                                tempTable.Columns.Add("Lb");
-                                tempTable.Columns.Add("CT");
-                                tempTable.Columns.Add("完成时间");
-                            }
                             else
                             {
                                 tempTable.Columns.Add("ID");
                                 tempTable.Columns.Add("测试项");
                                 tempTable.Columns.Add("Num");
-                                if (list[index].ProjectModes[i].ModeType == 0)
-                                {
-                                    tempTable.Columns.Add("Coor-X");
-                                    tempTable.Columns.Add("Coor-Y");
-                                    tempTable.Columns.Add("Coor-Z");
-                                    tempTable.Columns.Add("Coor-U");
-                                    tempTable.Columns.Add("Coor-V");
-                                }
                                 tempTable.Columns.Add("L");
-                                tempTable.Columns.Add("Cx");
-                                tempTable.Columns.Add("Cy");
                                 tempTable.Columns.Add("X");
                                 tempTable.Columns.Add("Y");
-                                tempTable.Columns.Add("Z");                                
+                                tempTable.Columns.Add("Z");
+                                tempTable.Columns.Add("Cx");
+                                tempTable.Columns.Add("Cy");
                                 tempTable.Columns.Add("u");
                                 tempTable.Columns.Add("v");
-
-                                if (list[index].ProjectModes[i].ModeType == 0)
-                                {
-                                    if (Project.cfg.ShowLab)
-                                    {
-                                        tempTable.Columns.Add("L*");
-                                        tempTable.Columns.Add("a*");
-                                        tempTable.Columns.Add("b*");
-                                    }
-                                }
                                 tempTable.Columns.Add("CCT");
                                 tempTable.Columns.Add("备注");
                             }
@@ -206,7 +148,7 @@ namespace LCD.Data
                         int AAA = 0;
                         for (int j = 0; j < list[index].ProjectModes[i].TestDataModes.Count; j++)//数据
                         {
-
+                            
 
                             if (list[index].ProjectModes[i].ModeType == 2)
                             {
@@ -215,14 +157,9 @@ namespace LCD.Data
 
                                 #region CH
 
-                                dataRow["ID"] = "'" + list[index].BarCode.ToString();
+                                dataRow["ID"] = list[index].BarCode;
                                 dataRow["测试项"] = list[index].ProjectModes[i].projectName;
                                 dataRow["Num"] = double.Parse(list[index].ProjectModes[i].TestDataModes[j].Num == "" ? "0" : list[index].ProjectModes[i].TestDataModes[j].Num);
-                                dataRow["Coor-X"] = list[index].ProjectModes[i].TestDataModes[j].CoordX;
-                                dataRow["Coor-Y"] = list[index].ProjectModes[i].TestDataModes[j].CoordY;
-                                dataRow["Coor-Z"] = list[index].ProjectModes[i].TestDataModes[j].CoordZ;
-                                dataRow["Coor-U"] = list[index].ProjectModes[i].TestDataModes[j].CoordU;
-                                dataRow["Coor-V"] = list[index].ProjectModes[i].TestDataModes[j].CoordV;
                                 dataRow["L"] = double.Parse(list[index].ProjectModes[i].TestDataModes[j].L == "" ? "0" : list[index].ProjectModes[i].TestDataModes[j].L);
                                 dataRow["X"] = double.Parse(list[index].ProjectModes[i].TestDataModes[j].X == "" ? "0" : list[index].ProjectModes[i].TestDataModes[j].X);
                                 dataRow["Y"] = double.Parse(list[index].ProjectModes[i].TestDataModes[j].Y == "" ? "0" : list[index].ProjectModes[i].TestDataModes[j].Y);
@@ -231,13 +168,7 @@ namespace LCD.Data
                                 dataRow["Cy"] = double.Parse(list[index].ProjectModes[i].TestDataModes[j].Cy == "" ? "0" : list[index].ProjectModes[i].TestDataModes[j].Cy);
                                 dataRow["u"] = double.Parse(list[index].ProjectModes[i].TestDataModes[j].u == "" ? "0" : list[index].ProjectModes[i].TestDataModes[j].u);
                                 dataRow["v"] = double.Parse(list[index].ProjectModes[i].TestDataModes[j].v == "" ? "0" : list[index].ProjectModes[i].TestDataModes[j].v);
-                                if (Project.cfg.ShowLab)
-                                {
-                                    dataRow["L*"] = list[index].ProjectModes[i].TestDataModes[j].Lcolor;
-                                    dataRow["a*"] = list[index].ProjectModes[i].TestDataModes[j].Acolor;
-                                    dataRow["b*"] = list[index].ProjectModes[i].TestDataModes[j].Bcolor;
-                                }
-                                dataRow["CCT"] = DisplayFormat.CellFromString(list[index].ProjectModes[i].TestDataModes[j].CCT);
+                                dataRow["CCT"] = double.Parse(list[index].ProjectModes[i].TestDataModes[j].CCT == "" ? "0" : list[index].ProjectModes[i].TestDataModes[j].CCT);
                                 dataRow["备注"] = list[index].ProjectModes[i].TestDataModes[j].Remark.Trim() == "" ? "0" : list[index].ProjectModes[i].TestDataModes[j].Remark;
                                 AAA = j * 400;
 
@@ -245,9 +176,9 @@ namespace LCD.Data
                                 {
 
                                     List<SpectrumDataMode> sdList = Project.ListSpectrumData;
-                                    if ($"{Project.ListSpectrumData[k].DataName}" == "779")
+                                    if ($"{Project.ListSpectrumData[k].DataName}"=="779")
                                     {
-
+                                        
                                     }
                                     String AA = Project.ListSpectrumData[k].DataName;
                                     String BB = Project.ListSpectrumData[k].dataValue;
@@ -260,83 +191,35 @@ namespace LCD.Data
                             else if (list[index].ProjectModes[i].ModeType == 8)
                             {
                                 dataRow = data.dt.NewRow();
-                                dataRow["ID"] = "'" + list[index].BarCode.ToString();
+                                dataRow["ID"] = list[index].BarCode;
                                 dataRow["测试项"] = list[index].ProjectModes[i].projectName;
-                                dataRow["Num"] = double.Parse(list[index].ProjectModes[i].TestDataModes[j].Num == "" ? "0" : list[index].ProjectModes[i].TestDataModes[j].Num);
-                                dataRow["电压"] = double.Parse(list[index].ProjectModes[i].TestDataModes[j].Voltage == "" ? "0" : list[index].ProjectModes[i].TestDataModes[j].Voltage);
-                                dataRow["电流"] = double.Parse(list[index].ProjectModes[i].TestDataModes[j].ElectricCurrent.Trim() == "" ? "0" : list[index].ProjectModes[i].TestDataModes[j].ElectricCurrent);
-                                dataRow["功率"] = double.Parse(list[index].ProjectModes[i].TestDataModes[j].Power.Trim() == "" ? "0" : list[index].ProjectModes[i].TestDataModes[j].Power);
+                                dataRow["Num"] =  double.Parse (list[index].ProjectModes[i].TestDataModes[j].Num == "" ? "0" : list[index].ProjectModes[i].TestDataModes[j].Num );
+                                dataRow["电压"] = double.Parse (list[index].ProjectModes[i].TestDataModes[j].Voltage == "" ? "0" : list[index].ProjectModes[i].TestDataModes[j].Voltage );
+                                dataRow["电流"] = double.Parse (list[index].ProjectModes[i].TestDataModes[j].ElectricCurrent.Trim() == "" ? "0" : list[index].ProjectModes[i].TestDataModes[j].ElectricCurrent );
+                                dataRow["功率"] = double.Parse(list[index].ProjectModes[i].TestDataModes[j].Power.Trim() == "" ? "0" : list[index].ProjectModes[i].TestDataModes[j].Power );
                                 dataRow["备注"] = list[index].ProjectModes[i].TestDataModes[j].Remark.Trim() == "" ? "0" : list[index].ProjectModes[i].TestDataModes[j].Remark;
-                                data.dt.Rows.InsertAt(dataRow, data.dt.Rows.Count + 1);
-                            }
-                            else if (list[index].ProjectModes[i].ModeType == 1)
-                            {
-                                dataRow = data.dt.NewRow();
-                                dataRow["ID"] = "'" + list[index].BarCode.ToString();
-                                dataRow["测试项"] = list[index].ProjectModes[i].projectName;
-                                dataRow["Num"] = double.Parse(list[index].ProjectModes[i].TestDataModes[j].Num == "" ? "0" : list[index].ProjectModes[i].TestDataModes[j].Num);
-                                dataRow["Coor-X"] = list[index].ProjectModes[i].TestDataModes[j].CoordX;
-                                dataRow["Coor-Y"] = list[index].ProjectModes[i].TestDataModes[j].CoordY;
-                                dataRow["Coor-Z"] = list[index].ProjectModes[i].TestDataModes[j].CoordZ;
-                                dataRow["Coor-U"] = list[index].ProjectModes[i].TestDataModes[j].CoordU;
-                                dataRow["Coor-V"] = list[index].ProjectModes[i].TestDataModes[j].CoordV;
-                                dataRow["X"] = double.Parse(list[index].ProjectModes[i].TestDataModes[j].X == "" ? "0" : list[index].ProjectModes[i].TestDataModes[j].X);
-                                dataRow["Y"] = double.Parse(list[index].ProjectModes[i].TestDataModes[j].Y == "" ? "0" : list[index].ProjectModes[i].TestDataModes[j].Y);
-                                dataRow["Z"] = double.Parse(list[index].ProjectModes[i].TestDataModes[j].Z == "" ? "0" : list[index].ProjectModes[i].TestDataModes[j].Z);
-                                dataRow["Low"] = double.Parse(list[index].ProjectModes[i].TestDataModes[j].Low == "" ? "0" : list[index].ProjectModes[i].TestDataModes[j].Low);
-                                dataRow["High"] = double.Parse(list[index].ProjectModes[i].TestDataModes[j].High == "" ? "0" : list[index].ProjectModes[i].TestDataModes[j].High);
-                                dataRow["RiseTime"] = list[index].ProjectModes[i].TestDataModes[j].RiseTime;
-                                dataRow["FallTime"] = list[index].ProjectModes[i].TestDataModes[j].FallTime;
-                                dataRow["完成时间"] = list[index].ProjectModes[i].TestDataModes[j].Time;
-                                data.dt.Rows.InsertAt(dataRow, data.dt.Rows.Count + 1);
-                            }
-                            else if (list[index].ProjectModes[i].ModeType == 4)
-                            {
-                                dataRow = data.dt.NewRow();
-                                dataRow["ID"] = "'" + list[index].BarCode.ToString();
-                                dataRow["测试项"] = list[index].ProjectModes[i].projectName;
-                                dataRow["Num"] = double.Parse(list[index].ProjectModes[i].TestDataModes[j].Num == "" ? "0" : list[index].ProjectModes[i].TestDataModes[j].Num);
-                                dataRow["La"] = double.Parse(list[index].ProjectModes[i].TestDataModes[j].La == "" ? "0" : list[index].ProjectModes[i].TestDataModes[j].La);
-                                dataRow["Lb"] = double.Parse(list[index].ProjectModes[i].TestDataModes[j].Lb.Trim() == "" ? "0" : list[index].ProjectModes[i].TestDataModes[j].Lb);
-                                dataRow["CT"] = double.Parse(list[index].ProjectModes[i].TestDataModes[j].CT.Trim() == "" ? "0" : list[index].ProjectModes[i].TestDataModes[j].CT);
-                                dataRow["完成时间"] = list[index].ProjectModes[i].TestDataModes[j].Time;
                                 data.dt.Rows.InsertAt(dataRow, data.dt.Rows.Count + 1);
                             }
                             else
                             {
                                 dataRow = data.dt.NewRow();
-                                dataRow["ID"] = "'" + list[index].BarCode.ToString();
+                                dataRow["ID"] = list[index].BarCode;
                                 dataRow["测试项"] = list[index].ProjectModes[i].projectName;
-                                dataRow["Num"] = list[index].ProjectModes[i].TestDataModes[j].Num.ToString().Trim();
-                                if (list[index].ProjectModes[i].ModeType == 0)
-                                { 
-                                    dataRow["Coor-X"] = list[index].ProjectModes[i].TestDataModes[j].CoordX;
-                                    dataRow["Coor-Y"] = list[index].ProjectModes[i].TestDataModes[j].CoordY;
-                                    dataRow["Coor-Z"] = list[index].ProjectModes[i].TestDataModes[j].CoordZ;
-                                    dataRow["Coor-U"] = list[index].ProjectModes[i].TestDataModes[j].CoordU;
-                                    dataRow["Coor-V"] = list[index].ProjectModes[i].TestDataModes[j].CoordV;
-                                }
-                                dataRow["L"] =   list[index].ProjectModes[i].TestDataModes[j].L.ToString().Trim();
-                                dataRow["X"] =   list[index].ProjectModes[i].TestDataModes[j].X.ToString().Trim();
-                                dataRow["Y"] =   list[index].ProjectModes[i].TestDataModes[j].Y.ToString().Trim();
-                                dataRow["Z"] =  list[index].ProjectModes[i].TestDataModes[j].Z.ToString().Trim();
-                                dataRow["Cx"] =  list[index].ProjectModes[i].TestDataModes[j].Cx.ToString().Trim();
-                                dataRow["Cy"] = list[index].ProjectModes[i].TestDataModes[j].Cy.ToString().Trim();
-                                dataRow["u"] =   list[index].ProjectModes[i].TestDataModes[j].u.ToString().Trim();
-                                dataRow["v"] =   list[index].ProjectModes[i].TestDataModes[j].v.ToString().Trim();
-                                if (list[index].ProjectModes[i].ModeType == 0)
-                                {
-                                    if (Project.cfg.ShowLab)
-                                    {
-                                        dataRow["L*"] = list[index].ProjectModes[i].TestDataModes[j].Lcolor;
-                                        dataRow["a*"] = list[index].ProjectModes[i].TestDataModes[j].Acolor;
-                                        dataRow["b*"] = list[index].ProjectModes[i].TestDataModes[j].Bcolor;
-                                    }
-                                }
-                                dataRow["CCT"] = DisplayFormat.FromString(list[index].ProjectModes[i].TestDataModes[j].CCT.ToString().Trim());
-                                dataRow["备注"] = list[index].ProjectModes[i].TestDataModes[j].Remark.Trim();
+                                dataRow["Num"] =double.Parse ( list[index].ProjectModes[i].TestDataModes[j].Num == "" ? "0":list[index].ProjectModes[i].TestDataModes[j].Num);
+                                dataRow["L"] =  double.Parse ( list[index].ProjectModes[i].TestDataModes[j].L==""?      "0":list[index].ProjectModes[i].TestDataModes[j].L);
+                                dataRow["X"] =  double.Parse ( list[index].ProjectModes[i].TestDataModes[j].X == "" ?   "0":list[index].ProjectModes[i].TestDataModes[j].X );
+                                dataRow["Y"] =  double.Parse ( list[index].ProjectModes[i].TestDataModes[j].Y == "" ?   "0":list[index].ProjectModes[i].TestDataModes[j].Y );
+                                dataRow["Z"] =  double.Parse ( list[index].ProjectModes[i].TestDataModes[j].Z == "" ?   "0":list[index].ProjectModes[i].TestDataModes[j].Z );
+                                dataRow["Cx"] = double.Parse ( list[index].ProjectModes[i].TestDataModes[j].Cx == "" ?  "0":list[index].ProjectModes[i].TestDataModes[j].Cx );
+                                dataRow["Cy"] = double.Parse ( list[index].ProjectModes[i].TestDataModes[j].Cy == "" ?  "0":list[index].ProjectModes[i].TestDataModes[j].Cy );
+                                dataRow["u"] =  double.Parse ( list[index].ProjectModes[i].TestDataModes[j].u == "" ?   "0":list[index].ProjectModes[i].TestDataModes[j].u );
+                                dataRow["v"] =  double.Parse ( list[index].ProjectModes[i].TestDataModes[j].v == "" ?   "0":list[index].ProjectModes[i].TestDataModes[j].v );
+                                dataRow["CCT"] = double.Parse(list[index].ProjectModes[i].TestDataModes[j].CCT == "" ? "0":list[index].ProjectModes[i].TestDataModes[j].CCT);
+                                dataRow["备注"] = list[index].ProjectModes[i].TestDataModes[j].Remark.Trim() == "" ? "0" : list[index].ProjectModes[i].TestDataModes[j].Remark;
                                 data.dt.Rows.InsertAt(dataRow, data.dt.Rows.Count + 1);
                             }
+
+
                             
                         }
 

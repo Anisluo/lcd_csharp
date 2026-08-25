@@ -4,22 +4,21 @@
         xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:local="clr-namespace:LCD.View"
-        xmlns:app1="clr-namespace:LCD"
        ResizeMode="NoResize"
         mc:Ignorable="d"
-        Title="{Binding [MovePlatSet], Source={x:Static app1:LanguageManager.Instance}}" Height="700" Width="1000">
+        Title="运动平台设置" Height="700" Width="993">
     <Grid>
         <Grid.RowDefinitions>
             <RowDefinition Height="40"/>
-            <RowDefinition Height="1.4*"/>
+            <RowDefinition Height="1.5*"/>
             <RowDefinition Height="0."/>
-            <RowDefinition Height="90"/>
+            <RowDefinition Height="40"/>
             <RowDefinition Height="30"/>
             <RowDefinition Height="10"/>
         </Grid.RowDefinitions>
         <WrapPanel VerticalAlignment="Center" FlowDirection="RightToLeft">
             <Image Source="../Image/head.png"></Image>
-            <Label Content="{Binding [MovePlatSet], Source={x:Static app1:LanguageManager.Instance}}"  FontSize="20" VerticalAlignment="Center"></Label>
+            <Label Content="运动平台设置"  FontSize="20" VerticalAlignment="Center"></Label>
         </WrapPanel>
 
         <Grid Grid.Row="1">
@@ -28,15 +27,13 @@
                 <RowDefinition />
             </Grid.RowDefinitions>
             <WrapPanel>
-                <Label Content="{Binding [PluseEqu], Source={x:Static app1:LanguageManager.Instance}}" Width="80"></Label>
-                <Label Margin="10,0,0,0" Content="{Binding [PluseEquMean], Source={x:Static app1:LanguageManager.Instance}}"></Label>
+                <Label Content="脉冲当量：" Width="80"></Label>
+                <Label Margin="10,0,0,0" Content="脉冲当量是指：平台运动1毫米，需要向电机发送多少脉冲"></Label>
 
-                <Label Margin="100,0,0,0" Content="{Binding [InPosSig1En], Source={x:Static app1:LanguageManager.Instance}}"/>
+                <Label Margin="100,0,0,0" Content="到位信号1启用"/>
                 <CheckBox IsChecked="{Binding Signal1Enable}" VerticalAlignment="Center"/>
-                <Label Content="{Binding [InPosSig2En], Source={x:Static app1:LanguageManager.Instance}}" Margin="40,0,0,0"/>
+                <Label Content="到位信号2启用"/>
                 <CheckBox IsChecked="{Binding Signal2Enable}" VerticalAlignment="Center"/>
-                
-               
             </WrapPanel>
 
 
@@ -46,7 +43,7 @@
                       CanUserAddRows="False"
                       >
                 <DataGrid.Columns>
-                    <DataGridTemplateColumn Header="{Binding [MotorAxisNo], Source={x:Static app1:LanguageManager.Instance}}">
+                    <DataGridTemplateColumn Header="电机轴号">
                         <DataGridTemplateColumn.CellTemplate>
                             <DataTemplate>
                                 <WrapPanel Orientation="Horizontal">
@@ -56,7 +53,7 @@
                             </DataTemplate>
                         </DataGridTemplateColumn.CellTemplate>
                     </DataGridTemplateColumn>
-                    <DataGridTemplateColumn Header="{Binding [PluseEqu2], Source={x:Static app1:LanguageManager.Instance}}">
+                    <DataGridTemplateColumn Header="脉冲当量">
                         <DataGridTemplateColumn.CellTemplate>
                             <DataTemplate>
                                 <TextBox Width="70"
@@ -64,7 +61,7 @@
                             </DataTemplate>
                         </DataGridTemplateColumn.CellTemplate>
                     </DataGridTemplateColumn>
-                    <DataGridTemplateColumn Header="{Binding [AxisNo], Source={x:Static app1:LanguageManager.Instance}}">
+                    <DataGridTemplateColumn Header="轴号:">
                         <DataGridTemplateColumn.CellTemplate>
                             <DataTemplate>
                                 <TextBox Width="20"
@@ -72,7 +69,7 @@
                             </DataTemplate>
                         </DataGridTemplateColumn.CellTemplate>
                     </DataGridTemplateColumn>
-                    <DataGridTemplateColumn Header="{Binding [ReverseZero], Source={x:Static app1:LanguageManager.Instance}}">
+                    <DataGridTemplateColumn Header="反向归零">
                         <DataGridTemplateColumn.CellTemplate>
                             <DataTemplate>
                                 <WrapPanel Orientation="Horizontal">
@@ -81,7 +78,7 @@
                             </DataTemplate>
                         </DataGridTemplateColumn.CellTemplate>
                     </DataGridTemplateColumn>
-                    <DataGridTemplateColumn Header="{Binding [InterName], Source={x:Static app1:LanguageManager.Instance}}">
+                    <DataGridTemplateColumn Header="插补">
                         <DataGridTemplateColumn.CellTemplate>
                             <DataTemplate>
                                 <WrapPanel Orientation="Horizontal">
@@ -100,7 +97,7 @@
                                 <TextBox Height="22"
                      FontSize="16"
                      Width="80"
-                     Text="{Binding center,Mode=TwoWay,UpdateSourceTrigger=PropertyChanged}" />
+                     Text="{Binding center,StringFormat={}{0:F2},Mode=TwoWay,UpdateSourceTrigger=PropertyChanged}" />
                             </DataTemplate>
                         </DataGridTemplateColumn.CellTemplate>
                     </DataGridTemplateColumn>-->
@@ -108,35 +105,35 @@
 
 
 
-                    <DataGridTemplateColumn Header="{Binding [Middle], Source={x:Static app1:LanguageManager.Instance}}">
+                    <DataGridTemplateColumn Header="中心">
                         <DataGridTemplateColumn.CellTemplate>
                             <DataTemplate>
                                 <TextBox Height="22"
                                          FontSize="16"
                                          Width="80"
-                                         Text="{Binding center,Mode=TwoWay,UpdateSourceTrigger=PropertyChanged}" />
+                                         Text="{Binding center,StringFormat={}{0:F2},Mode=TwoWay,UpdateSourceTrigger=PropertyChanged}" />
                             </DataTemplate>
                         </DataGridTemplateColumn.CellTemplate>
                     </DataGridTemplateColumn>
-
-
-
-
-
-                    <DataGridTemplateColumn Header="{Binding [Speed], Source={x:Static app1:LanguageManager.Instance}}">
+                    
+                    
+                    
+                    
+                    
+                    <DataGridTemplateColumn Header="速度">
                         <DataGridTemplateColumn.CellTemplate>
                             <DataTemplate>
                                 <WrapPanel>
                                     <ComboBox SelectedIndex="{Binding SendIndex,Mode=TwoWay,UpdateSourceTrigger=PropertyChanged}" Width="60">
-                                        <ComboBoxItem Content="{Binding [LowSpd], Source={x:Static app1:LanguageManager.Instance}}"></ComboBoxItem>
-                                        <ComboBoxItem Content="{Binding [MiddleSpd], Source={x:Static app1:LanguageManager.Instance}}"></ComboBoxItem>
-                                        <ComboBoxItem Content="{Binding [HighSpd], Source={x:Static app1:LanguageManager.Instance}}"></ComboBoxItem>
+                                        <ComboBoxItem>低速</ComboBoxItem>
+                                        <ComboBoxItem>中速</ComboBoxItem>
+                                        <ComboBoxItem>高速</ComboBoxItem>
                                     </ComboBox>
                                 </WrapPanel>
                             </DataTemplate>
                         </DataGridTemplateColumn.CellTemplate>
                     </DataGridTemplateColumn>
-                    <DataGridTemplateColumn Header="{Binding [InitialSpd], Source={x:Static app1:LanguageManager.Instance}}">
+                    <DataGridTemplateColumn Header="初始速度">
                         <DataGridTemplateColumn.CellTemplate>
                             <DataTemplate>
                                 <WrapPanel>
@@ -147,7 +144,7 @@
                             </DataTemplate>
                         </DataGridTemplateColumn.CellTemplate>
                     </DataGridTemplateColumn>
-                    <DataGridTemplateColumn  Header="{Binding [HighSpd2], Source={x:Static app1:LanguageManager.Instance}}">
+                    <DataGridTemplateColumn  Header="高速速度">
                         <DataGridTemplateColumn.CellTemplate>
                             <DataTemplate>
                                 <WrapPanel>
@@ -157,7 +154,7 @@
                             </DataTemplate>
                         </DataGridTemplateColumn.CellTemplate>
                     </DataGridTemplateColumn>
-                    <DataGridTemplateColumn Header="{Binding [AccSpd], Source={x:Static app1:LanguageManager.Instance}}">
+                    <DataGridTemplateColumn Header="加速度">
                         <DataGridTemplateColumn.CellTemplate>
                             <DataTemplate>
                                 <WrapPanel>
@@ -168,7 +165,7 @@
                         </DataGridTemplateColumn.CellTemplate>
                     </DataGridTemplateColumn>
 
-                    <DataGridTemplateColumn Header="{Binding [ReturnSpd], Source={x:Static app1:LanguageManager.Instance}}">
+                    <DataGridTemplateColumn Header="回零速度">
                         <DataGridTemplateColumn.CellTemplate>
                             <DataTemplate>
                                 <WrapPanel>
@@ -178,7 +175,7 @@
                             </DataTemplate>
                         </DataGridTemplateColumn.CellTemplate>
                     </DataGridTemplateColumn>
-                    <DataGridTemplateColumn Header="{Binding [SoftLimit], Source={x:Static app1:LanguageManager.Instance}}">
+                    <DataGridTemplateColumn Header="软极限">
                         <DataGridTemplateColumn.CellTemplate>
                             <DataTemplate>
                                 <WrapPanel>
@@ -188,7 +185,7 @@
                             </DataTemplate>
                         </DataGridTemplateColumn.CellTemplate>
                     </DataGridTemplateColumn>
-                    <DataGridTemplateColumn Header="{Binding [AlarmEn], Source={x:Static app1:LanguageManager.Instance}}">
+                    <DataGridTemplateColumn Header="报警启用">
                         <DataGridTemplateColumn.CellTemplate>
                             <DataTemplate>
                                 <WrapPanel>
@@ -200,7 +197,7 @@
                         </DataGridTemplateColumn.CellTemplate>
                     </DataGridTemplateColumn>
 
-                    <DataGridTemplateColumn Header="{Binding [ReturnEn], Source={x:Static app1:LanguageManager.Instance}}">
+                    <DataGridTemplateColumn Header="回零启用">
                         <DataGridTemplateColumn.CellTemplate>
                             <DataTemplate>
                                 <WrapPanel>
@@ -212,15 +209,6 @@
                         </DataGridTemplateColumn.CellTemplate>
                     </DataGridTemplateColumn>
 
-                    <DataGridTemplateColumn Header="{Binding [AddPlusEnable], Source={x:Static app1:LanguageManager.Instance}}">
-                        <DataGridTemplateColumn.CellTemplate>
-                            <DataTemplate>
-                                <WrapPanel>
-                                    <CheckBox IsChecked="{Binding CompensationDirection ,Mode=TwoWay,UpdateSourceTrigger=PropertyChanged}"/>
-                                </WrapPanel>
-                            </DataTemplate>
-                        </DataGridTemplateColumn.CellTemplate>
-                    </DataGridTemplateColumn>
 
                 </DataGrid.Columns>
             </DataGrid>
@@ -230,73 +218,31 @@
         </Grid>
        
         <WrapPanel Grid.Row="3" FlowDirection="LeftToRight" HorizontalAlignment="Left" VerticalAlignment="Center">
-            <Grid>
-                <Grid.RowDefinitions>
-                    <RowDefinition Height="1*"/>
-                    <RowDefinition Height="1*"/>
-                </Grid.RowDefinitions>
-
-                <WrapPanel Grid.Row="0" FlowDirection="LeftToRight" HorizontalAlignment="Left" VerticalAlignment="Center">
-                    <Label Content="{Binding [DevTypes], Source={x:Static app1:LanguageManager.Instance}}" 
-           Margin="0,0,10,0" VerticalAlignment="Center" Width="55"></Label>
-                    <ComboBox Width="70" SelectedIndex="{Binding EQType}">
-                        <ComboBoxItem Content="{Binding [Type_A], Source={x:Static app1:LanguageManager.Instance}}"></ComboBoxItem>
-                        <ComboBoxItem Content="{Binding [Type_B], Source={x:Static app1:LanguageManager.Instance}}"></ComboBoxItem>
-                        <ComboBoxItem Content="{Binding [Type_C], Source={x:Static app1:LanguageManager.Instance}}"></ComboBoxItem>
-                        <ComboBoxItem Content="{Binding [NoComp], Source={x:Static app1:LanguageManager.Instance}}"></ComboBoxItem>
-                        <ComboBoxItem Content="仪器旋转式"></ComboBoxItem>
-                        <ComboBoxItem Content="仪器固定旋转式"></ComboBoxItem>
-                    </ComboBox>
-                    <Label Content="{Binding [ZSafeDis], Source={x:Static app1:LanguageManager.Instance}}"/>
-                    <TextBox Text="{Binding ZSeft}" Width="70"></TextBox>
-                    <Label Content="mm"/>
-                    <Label Content="{Binding [USafeDis], Source={x:Static app1:LanguageManager.Instance}}" />
-                    <TextBox Text="{Binding USeftMin}"
-         Width="70"></TextBox>
-                    <Label Content="°"></Label>
-                    <Label Content="{Binding [UMaxAngle], Source={x:Static app1:LanguageManager.Instance}}" />
-                    <TextBox Text="{Binding USeftMax}"
-         Width="70"></TextBox>
-                    <Label Content="°"></Label>
-
-
-                    <Label Content="{Binding [UProductH], Source={x:Static app1:LanguageManager.Instance}}"></Label>
-
-
-                    <TextBox Text="{Binding UProductH}"/>
-                    
-                    <Label Content="mm"></Label>
-
-                    <Label Content="{Binding [LightDectPort], Source={x:Static app1:LanguageManager.Instance}}"/>
-                    <TextBox x:Name="LightDectPort" Text="" Width="60"/>
-                </WrapPanel>
-                <WrapPanel Grid.Row="1" FlowDirection="LeftToRight" HorizontalAlignment="Left" VerticalAlignment="Center">
-                    <Label Content="{Binding [MoveDoneDelay], Source={x:Static app1:LanguageManager.Instance}}"  Margin="0,0,10,0" VerticalAlignment="Center" Width="100"></Label>
-                    <TextBox Text="{Binding MoveEndDelay}" Width="80"></TextBox>
-                    <Label Content="{Binding [MaxUangel], Source={x:Static app1:LanguageManager.Instance}}"  Margin="0,0,10,0" VerticalAlignment="Center" Width="90"></Label>
-                    <TextBox Text="{Binding UMaxAngle}" Width="80"></TextBox>
-                    <Label Content="°"/>
-                    <Label Content="{Binding [MaxVangel], Source={x:Static app1:LanguageManager.Instance}}"/>
-                    <TextBox Text="{Binding VMaxAngle}" Width="80"></TextBox>
-                    <Label Content="°"/>
-                    <Label Content="{Binding [UReverse], Source={x:Static app1:LanguageManager.Instance}}"/>
-                    <ComboBox x:Name="uaxis" Width="100" SelectedIndex="{Binding UReverse}">
-                        <ComboBoxItem>不反向</ComboBoxItem>
-                        <ComboBoxItem>反向</ComboBoxItem>
-                     </ComboBox>
-                    <Label Content="{Binding [VReverse], Source={x:Static app1:LanguageManager.Instance}}" />
-                    <ComboBox x:Name="vaxis" Width="100" SelectedIndex="{Binding VReverse}">
-                        <ComboBoxItem>不反向</ComboBoxItem>
-                        <ComboBoxItem>反向</ComboBoxItem>
-                    </ComboBox>
-                    <CheckBox Content="{Binding [ShowLab], Source={x:Static app1:LanguageManager.Instance}}" x:Name="ShowLab" Width="100" Margin="5,5,0,0" />
-                </WrapPanel>
-            </Grid>
-            
+            <Label Content="设备类型" 
+                       Margin="0,0,90,0" VerticalAlignment="Center" Width="60"></Label>
+            <ComboBox Width="100" SelectedIndex="{Binding EQType}">
+                <ComboBoxItem>TYPE-A</ComboBoxItem>
+                <ComboBoxItem>TYPE-B</ComboBoxItem>
+                <ComboBoxItem>TYPE-C</ComboBoxItem>
+                <ComboBoxItem>无补偿</ComboBoxItem>
+            </ComboBox>
+            <Label Content="Z轴安全距离"/>
+            <TextBox Text="{Binding ZSeft}" Width="80"></TextBox>
+            <Label Content="mm"/>
+            <Label Content="U轴最小安全角度" />
+            <TextBox Text="{Binding USeftMin}"
+                     Width="80"></TextBox>
+            <Label Content="°"></Label>
+            <Label Content="U轴最大安全角度" />
+            <TextBox Text="{Binding USeftMax}"
+                     Width="80"></TextBox>
+            <Label Content="°"></Label>
+            <Label Content="下料角度"/>
+            <TextBox Text="{Binding Angle}" Width="80"/>
         </WrapPanel>
         <WrapPanel Grid.Row="4" FlowDirection="RightToLeft" HorizontalAlignment="Center" 
         VerticalAlignment="Center" >
-            <Button Content="{Binding [OK], Source={x:Static app1:LanguageManager.Instance}}" 
+            <Button Content="确定" 
             Click="OnBnClickedEnsure"
                     Width="120" Background="White"></Button>
         </WrapPanel>

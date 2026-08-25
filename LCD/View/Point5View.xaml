@@ -124,8 +124,7 @@
                 <WrapPanel Grid.Row="2" VerticalAlignment="Center">
                     <Label Content="测量点信息" Width="90"></Label>
                     <Label Content="序号" Width="50" VerticalAlignment="Center"></Label>
-                    <TextBox x:Name="SerNo" Width="60" Text="{Binding SerNo}" VerticalAlignment="Center"></TextBox>
-                    <Button Name="Buttonsave" Width="60"  Click="Buttonsave_Click" VerticalAlignment="Center"  >保存序号</Button>
+                    <TextBox  Width="60" Text="{Binding SerNo}" VerticalAlignment="Center"></TextBox>
                 </WrapPanel>
 
                 <WrapPanel Grid.Row="3" VerticalAlignment="Center">

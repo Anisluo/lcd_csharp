@@ -4,7 +4,6 @@
         xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:local="clr-namespace:LCD.View"
-        xmlns:app1="clr-namespace:LCD"
         mc:Ignorable="d"
              d:DesignWidth="568"
              d:DesignHeight="390">
@@ -25,7 +24,7 @@
                 <RowDefinition />
             </Grid.RowDefinitions>
             <Grid Grid.Row="0">
-                <TextBlock Text="{Binding [PgSettings], Source={x:Static app1:LanguageManager.Instance}}"
+                <TextBlock Text="PG设置"
                            HorizontalAlignment="Center"
                            FontSize="20" />
             </Grid>
@@ -34,7 +33,7 @@
                            HorizontalAlignment="Left"
                            VerticalAlignment="Center"
                            Margin="10,0,0,0">
-                    <TextBlock Text="{Binding [PicSwitch], Source={x:Static app1:LanguageManager.Instance}}" />
+                    <TextBlock Text="图片切换：" />
                     <TextBox Width="50"
                              Name="ImageSwitching"
                              Text="{Binding ImageSwitching}"></TextBox>
@@ -43,7 +42,7 @@
             <Grid Grid.Row="2">
                 <Border BorderThickness="0,0,0,1"
                         BorderBrush="Black">
-                    <Button Content="{Binding [PicSw], Source={x:Static app1:LanguageManager.Instance}}" Background="White" Margin="5" Click="Button_Click"></Button>
+                    <Button Content="图片切换" Background="White" Margin="5" Click="Button_Click"></Button>
                 </Border>
             </Grid>
             <Grid Grid.Row="3">
@@ -51,7 +50,7 @@
                            HorizontalAlignment="Left"
                            VerticalAlignment="Center"
                            Margin="10,0,0,0">
-                    <TextBlock Text="{Binding [RgbSw], Source={x:Static app1:LanguageManager.Instance}}" />
+                    <TextBlock Text="RGB切换：" />
                 </WrapPanel>
             </Grid>
             <Grid Grid.Row="4">
@@ -89,7 +88,7 @@
             <Grid Grid.Row="7">
                 <Border BorderThickness="0,0,0,1"
                         BorderBrush="Black">
-                    <Button Content="{Binding [RgbSw2], Source={x:Static app1:LanguageManager.Instance}}" Margin="5"
+                    <Button Content="RGB切换" Margin="5"
                             Background="White" Click="Button_Click_1"></Button>
                 </Border>
             </Grid>

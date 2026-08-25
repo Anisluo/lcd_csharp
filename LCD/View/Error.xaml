@@ -4,7 +4,6 @@
         xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:local="clr-namespace:LCD.View"
-        xmlns:app1="clr-namespace:LCD"
         mc:Ignorable="d"
         Title="Error" Height="100" Width="400">
     <Grid>
@@ -15,16 +14,16 @@
         </Grid.RowDefinitions>
         <Grid Grid.Row="0">
             <WrapPanel Orientation="Horizontal" VerticalAlignment="Center" HorizontalAlignment="Center">
-                <TextBlock Name="Tite" Text="{Binding [Title], Source={x:Static app1:LanguageManager.Instance}}" FontSize="20" Foreground="Red" VerticalAlignment="Center" HorizontalAlignment="Center"></TextBlock>
+                <TextBlock Name="Tite" Text="标题" FontSize="20" Foreground="Red" VerticalAlignment="Center" HorizontalAlignment="Center"></TextBlock>
             </WrapPanel>
         </Grid>
         <Grid Grid.Row="1">
-            <TextBlock Text="{Binding [Infos], Source={x:Static app1:LanguageManager.Instance}}" Name="Info" VerticalAlignment="Center" HorizontalAlignment="Left" Margin="20,0,0,0"></TextBlock>
+            <TextBlock Text="信息" Name="Info" VerticalAlignment="Center" HorizontalAlignment="Left" Margin="20,0,0,0"></TextBlock>
         </Grid>
         <Grid Grid.Row="3">
             <WrapPanel Orientation="Vertical"  VerticalAlignment="Center">
-                <Button x:Name="OKButton" Click="OKButton_OnClick" Width="100" Margin="50,0,0,0" Background="Green"  VerticalAlignment="Center" HorizontalAlignment="Center"  Content="{Binding [OK], Source={x:Static app1:LanguageManager.Instance}}"></Button>
-                <Button x:Name="CancelButton" Click="CancelButton_OnClick" Width="100" Margin="100,0,0,0" Content="{Binding [Cancel], Source={x:Static app1:LanguageManager.Instance}}" Background="Red" VerticalAlignment="Center" HorizontalAlignment="Right" ></Button>
+                <Button x:Name="OKButton" Click="OKButton_OnClick" Width="100" Margin="50,0,0,0" Background="Green"  VerticalAlignment="Center" HorizontalAlignment="Center"  Content="确定"></Button>
+                <Button x:Name="CancelButton" Click="CancelButton_OnClick" Width="100" Margin="100,0,0,0" Content="取消" Background="Red" VerticalAlignment="Center" HorizontalAlignment="Right" ></Button>
             </WrapPanel>
         </Grid>
     </Grid>

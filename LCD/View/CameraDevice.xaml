@@ -4,10 +4,9 @@
         xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:local="clr-namespace:LCD.View"
-        xmlns:app1="clr-namespace:LCD"
         mc:Ignorable="d"
         ResizeMode="NoResize"
-        Title="{Binding [CmaeraSet], Source={x:Static app1:LanguageManager.Instance}}" Height="450" Width="600">
+        Title="CameraDevice" Height="450" Width="600">
     <Grid>
         <Grid.RowDefinitions>
             <RowDefinition Height="50"/>
@@ -22,7 +21,7 @@
 
         <WrapPanel VerticalAlignment="Center" FlowDirection="RightToLeft">
             <Image Source="../Image/head.png"></Image>
-            <Label Content="{Binding [CameraSet], Source={x:Static app1:LanguageManager.Instance}}" VerticalAlignment="Center" FontSize="20"></Label>
+            <Label Content="相机设置" VerticalAlignment="Center" FontSize="20"></Label>
         </WrapPanel>
 
 
@@ -67,9 +66,9 @@
         </Grid>-->
         <Grid Grid.Row="2" Name="Offs">
             <WrapPanel x:Name="Offset" VerticalAlignment="Center" HorizontalAlignment="Center">
-                <Label Content="{Binding [Xpercent], Source={x:Static app1:LanguageManager.Instance}}" Margin="20,0,0,0" FontSize="14"></Label>
+                <Label Content="X偏移:" Margin="20,0,0,0" FontSize="14"></Label>
                 <TextBox Width="80" Text="{Binding X,UpdateSourceTrigger=PropertyChanged}" FontSize="14" VerticalAlignment="Center"></TextBox>
-                <Label Content="{Binding [YPercent], Source={x:Static app1:LanguageManager.Instance}}" FontSize="14"></Label>
+                <Label Content="Y偏移:" FontSize="14"></Label>
                 <TextBox Width="80" Text="{Binding Y,UpdateSourceTrigger=PropertyChanged}" FontSize="14" VerticalAlignment="Center"></TextBox>
 
                 <!--<TextBox Name="Cam" Width="80" FontSize="14" VerticalAlignment="Center">8000</TextBox>-->
@@ -77,22 +76,14 @@
             </WrapPanel>
         </Grid>
         <Grid Grid.Row="3" Name="XIANG">
-            <WrapPanel x:Name="Offset2" VerticalAlignment="Center" HorizontalAlignment="Center">
-                <Label Content="{Binding [RotationAngle], Source={x:Static app1:LanguageManager.Instance}}" Width="80" Margin="0,0,0,0" FontSize="14"></Label>
-                <ComboBox Name="Rotation"  Width="80" Margin="20,0,0,0" SelectedIndex="0" >
-                    <ComboBoxItem>0</ComboBoxItem>
-                    <ComboBoxItem>90</ComboBoxItem>
-                    <ComboBoxItem>180</ComboBoxItem>
-                    <ComboBoxItem>270</ComboBoxItem>
-                </ComboBox>
-                <Button Content="OK"
-                    Click="OnRotation"
-                    FontWeight="Bold"
-                    FontSize="16"
-                    Background="White"
-                     Margin="20,0,0,0"
-                Width="80" Height="30"></Button>
-            </WrapPanel>
+            <!--<WrapPanel VerticalAlignment="Center">
+                <Label Content="相机参数：" Width="90" Margin="20,0,0,0" FontSize="14"></Label>
+                <Label Content="曝光：" Width="80" FontSize="14"></Label>
+                <ScrollBar Orientation="Horizontal" Width="350" Name="ScrollBar" Maximum="200000" ValueChanged="ScrollBar_OnValueChanged"
+                           ></ScrollBar>
+                --><!--<TextBox Name="Cam" Width="80" FontSize="14" VerticalAlignment="Center">8000</TextBox>-->
+                <!--<Label Content="ms" Width="50" FontSize="14"></Label>--><!--
+            </WrapPanel>-->
         </Grid>
 
 
@@ -139,13 +130,8 @@
         </Grid>
         <Grid Grid.Row="5">
             <WrapPanel HorizontalAlignment="Left" VerticalAlignment="Center" Margin="20,0,0,0" Orientation="Horizontal">
-                <Label Content="{Binding [CameraModel], Source={x:Static app1:LanguageManager.Instance}}" FontSize="16"/>
+                <Label Content="相机选择:" FontSize="16"/>
                 <ComboBox Name="Camer"  Width="100" Margin="20,0,0,0">
-                    <ComboBoxItem>海康</ComboBoxItem>
-                </ComboBox>
-
-                <Label Content="{Binding [CameraIndex], Source={x:Static app1:LanguageManager.Instance}}" FontSize="16" Margin="30,0,0,0"/>
-                <ComboBox Name="CamerIndex"  Width="100" Margin="20,0,0,0">
                     <ComboBoxItem>海康</ComboBoxItem>
                 </ComboBox>
             </WrapPanel>
@@ -154,7 +140,7 @@
             <WrapPanel FlowDirection="RightToLeft" 
             HorizontalAlignment="Center"
                        VerticalAlignment="Center">
-                <Button Content="{Binding [OK], Source={x:Static app1:LanguageManager.Instance}}"
+                <Button Content="确定"
                 Click="OnBnClickedEnsure"
                 FontWeight="Bold"
                 FontSize="16"
