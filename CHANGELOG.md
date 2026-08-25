@@ -7,6 +7,16 @@
 ## 2026-08-25
 
 ### main
+- **合入国显的两笔通用修复**（从 guoxian 血脉 cherry-pick）：
+  - `harden startup against missing optional hardware DLLs and incomplete Config`
+    （a04b0a6）—— 加固缺硬件 DLL / 配置不全时的启动；新增 `LCD.Drv/OmniDriverStub.cs`
+    （桩替代专有 NETOmniDriver SDK）与 `shims/`（Microsoft.DwayneNeed 垫片），改动
+    App.xaml.cs / Data/Project.cs / MainWindow.xaml.cs / View/CamView.xaml.cs /
+    LCD.Drv 相关。**使 main 在无相机等硬件的开发机上也能构建/启动。**
+  - `auto-create SQLite schema on Database.Open()`（31b4c58）—— `dataBase/Database.cs`
+    首次打开自动建表，**修复点击测试闪退**。
+  - 国显专属改动（Ctrl/ProcessCtrl.cs、LCD.Core/DisplayFormat.cs、LCD.Drv/BM7A.cs）
+    未合入，保留在 guoxian。
 - **新增多版本分支管理**：建立 `guoxian`（国显）、`suqian`（宿迁）两个分支，`main` 保持
   现代重构版基线。三分支均只提交源码（遵循 `.gitignore`）。
 - **新增 `BRANCHES.md`**：三个客户版本的分支索引与维护约定。
