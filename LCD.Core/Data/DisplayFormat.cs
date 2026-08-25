@@ -5,14 +5,16 @@ namespace LCD.Data
 {
     /// <summary>
     /// Display formatter for measurement values that may be unmeasurable.
-    /// Renders <see cref="double.NaN"/> (and the string "NaN" round-tripped through
-    /// SQL persistence) as "*" — matches the BM-7A convention of returning
-    /// asterisks for Tc / Duv when the colour falls outside the CCT locus
-    /// (e.g. pure-blue test patterns).
+    /// BM-7A returns "*****" for Tc / Duv when the colour falls outside the
+    /// CCT locus (e.g. pure-blue test patterns). Operators asked for every
+    /// "*" reading to surface as 0 throughout the app, so the live path now
+    /// parses asterisks to 0 at the BM7A driver (see BM7A.SafeParse) and
+    /// this helper folds the older "NaN" / "*****" strings still sitting in
+    /// MyData.db down to the same 0 token on read.
     /// </summary>
     public static class DisplayFormat
     {
-        public const string NaToken = "*";
+        public const string NaToken = "0";
 
         /// <summary>Format a numeric reading: "*" when NaN, otherwise the default ToString.</summary>
         public static string From(double v)

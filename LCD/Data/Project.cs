@@ -340,6 +340,18 @@ namespace LCD
             {
                 Project.cfg=new Config();
             }
+            // Older Config.xml files may not contain <ax_*> or <BM7A>/etc. nodes.
+            // XmlSerializer leaves missing reference-type fields as null, which then
+            // crashes reset_org / SetHomeSignal / MoveHome with NullReferenceException
+            // when Zero() runs. Fill in empty defaults so downstream code can assume
+            // non-null axes (with IsEnable=false → all motion is skipped).
+            if (Project.cfg == null) Project.cfg = new Config();
+            if (Project.cfg.ax_x == null) Project.cfg.ax_x = new Axies { Name = AXiesName.X轴, value = 0 };
+            if (Project.cfg.ax_y == null) Project.cfg.ax_y = new Axies { Name = AXiesName.Y轴, value = 1 };
+            if (Project.cfg.ax_z == null) Project.cfg.ax_z = new Axies { Name = AXiesName.Z轴, value = 2 };
+            if (Project.cfg.ax_u == null) Project.cfg.ax_u = new Axies { Name = AXiesName.U轴, value = 3 };
+            if (Project.cfg.ax_v == null) Project.cfg.ax_v = new Axies { Name = AXiesName.V轴, value = 4 };
+            if (Project.cfg.ax_ball == null) Project.cfg.ax_ball = new Axies { Name = AXiesName.Ball轴, value = 5 };
             //保存测试结果
             
 

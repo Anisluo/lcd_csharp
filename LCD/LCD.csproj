@@ -93,9 +93,6 @@
     <Reference Include="MvCameraControl.Net">
       <HintPath>Dll\MvCameraControl.Net.dll</HintPath>
     </Reference>
-    <Reference Include="NETOmniDriver-NET40">
-      <HintPath>bin\Debug\Debug\NETOmniDriver-NET40.dll</HintPath>
-    </Reference>
     <Reference Include="NPOI.Core, Version=2.7.0.0, Culture=neutral, PublicKeyToken=0df73ec7942b34e1, processorArchitecture=MSIL">
       <HintPath>..\packages\NPOI.2.7.0\lib\net472\NPOI.Core.dll</HintPath>
     </Reference>

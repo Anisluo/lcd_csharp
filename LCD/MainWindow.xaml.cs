@@ -380,7 +380,21 @@ namespace LCD
 
             update_view_angle_settings();
 
-                Zero();
+            try
+            {
+                if (MovCtrl.GetInstance().IsHardwareAvailable)
+                {
+                    Zero();
+                }
+                else
+                {
+                    Project.WriteLog("启动跳过电机回零: MPC08运动控制卡未检测到");
+                }
+            }
+            catch (Exception zex)
+            {
+                Project.WriteLog("启动电机回零失败: " + zex.Message);
+            }
 
             List<string> ShowInfo = null;
             ENUMMESSTYLE ShowTestType = ENUMMESSTYLE._01_POINT;
@@ -650,7 +664,8 @@ namespace LCD
 
             while (true)
             {
-                //action.Invoke(100, 100);             
+                try {
+                //action.Invoke(100, 100);
                 this.Dispatcher?.Invoke(new Action(() =>
                 {
                     if ((DateTime.Now - loginTime).Minutes > 5)
@@ -999,9 +1014,10 @@ namespace LCD
                     //轮训电源的电压电流
                     
                 }));
-                Thread.Sleep(400);                
+                } catch (Exception) { /* swallow per-tick errors so timer thread survives */ }
+                Thread.Sleep(400);
             }
-            
+
         }
 
         private void update_power_control_status(bool st)
@@ -1161,11 +1177,16 @@ namespace LCD
         }
 
 
+        private static bool _axCfgMissingLogged = false;
         private void Data2UI(double dx, double dy, double dz, double du, double dv, double dball)
         {
             if (Project.cfg.ax_x==null| Project.cfg.ax_y==null| Project.cfg.ax_z==null| Project.cfg.ax_v==null| Project.cfg.ax_ball == null)
             {
-                Project.WriteLog("参数加载失败");
+                if (!_axCfgMissingLogged)
+                {
+                    Project.WriteLog("参数加载失败 (后续相同错误将被抑制)");
+                    _axCfgMissingLogged = true;
+                }
                 return;
             }
             if (Project.cfg.ax_x.IsEnable)

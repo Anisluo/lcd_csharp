@@ -99,7 +99,12 @@ namespace LCD.Ctrl
                 if (Project.cfg.ax_y.IsSecondValue) { mvctrl.MoveAbsoluteByVector(Project.cfg.ax_y, dy); }
                 else {
                     Project.WriteLog("Y轴单轴运动");//20260311，兼容普通运动方式和Y轴插补运动
-                    mvctrl.MoveAbsolute(Project.cfg.ax_y, dy-Project.Yorg, Home,Y); }
+                    //
+                    //mvctrl.MoveAbsolute(Project.cfg.ax_y, dy-Project.Yorg, Home,Y); }
+                    mvctrl.MoveAbsolute(Project.cfg.ax_y, dy, Home, Y);
+                }
+
+
             }
 
             

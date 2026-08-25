@@ -107,12 +107,22 @@ namespace LCD.View
         {
             if (m_MyCamera != null)
             {
-                MVCC_FLOATVALUE mVCC = new MVCC_FLOATVALUE();
-                int val = m_MyCamera.MV_CC_GetExposureTime_NET(ref mVCC);
-                if (val == 0)
+                try
                 {
-                    //设置最小值啊
-                    ScrollBar.Minimum = mVCC.fMin;
+                    MVCC_FLOATVALUE mVCC = new MVCC_FLOATVALUE();
+                    int val = m_MyCamera.MV_CC_GetExposureTime_NET(ref mVCC);
+                    if (val == 0)
+                    {
+                        ScrollBar.Minimum = mVCC.fMin;
+                    }
+                }
+                catch (System.DllNotFoundException)
+                {
+                    global::LCD.Project.WriteLog("相机初始化跳过: MvCameraControl.dll未安装");
+                }
+                catch (System.Exception ex)
+                {
+                    global::LCD.Project.WriteLog("相机加载异常: " + ex.Message);
                 }
             }
         }

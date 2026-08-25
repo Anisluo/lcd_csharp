@@ -324,23 +324,22 @@ namespace LCD.Ctrl
         }
 
         /// <summary>
-        /// Safe numeric parse for BM-7A response lines. Returns <see cref="double.NaN"/>
-        /// when the line is asterisks (instrument reports "*****" for unmeasurable
-        /// quantities like CCT on pure blue), empty, or otherwise non-numeric.
-        /// Callers should check <see cref="double.IsNaN"/> rather than treating NaN
-        /// as a real reading.
+        /// Safe numeric parse for BM-7A response lines. Returns 0 when the line
+        /// is asterisks (instrument reports "*****" for unmeasurable quantities
+        /// like CCT on pure blue), empty, or otherwise non-numeric — operators
+        /// asked for "*" readings to be treated as 0 throughout the pipeline.
         /// </summary>
         private static double SafeParse(string s)
         {
-            if (string.IsNullOrWhiteSpace(s)) return double.NaN;
+            if (string.IsNullOrWhiteSpace(s)) return 0.0;
             var t = s.Trim();
-            if (t.Length == 0 || t[0] == '*') return double.NaN;
+            if (t.Length == 0 || t[0] == '*') return 0.0;
             double v;
             if (double.TryParse(t, System.Globalization.NumberStyles.Float,
                                 System.Globalization.CultureInfo.InvariantCulture, out v))
                 return v;
-            Log.Warn("BM7A 数值解析失败: \"" + t + "\" → NaN");
-            return double.NaN;
+            Log.Warn("BM7A 数值解析失败: \"" + t + "\" → 0");
+            return 0.0;
         }
 
         private static string GetLine(string[] lines, int idx)
