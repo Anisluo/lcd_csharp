@@ -51,6 +51,12 @@ namespace LCD.View
         /// </summary>
         public void InitCam()
         {
+#if DEBUG
+            // Debug 版：本机未安装海康 MV 系列相机驱动 (MvCameraControl.dll)，跳过相机初始化，
+            // 避免 DllNotFound 异常。Release 版正常启用相机。（详见 CHANGELOG）
+            Project.WriteLog("Debug 版：跳过 MV 相机初始化（本机未装相机驱动）");
+            return;
+#else
             try
             {
 
@@ -142,7 +148,7 @@ namespace LCD.View
             {
                 Console.WriteLine(e);
             }
-
+#endif
         }
 
         public void CloseCam()

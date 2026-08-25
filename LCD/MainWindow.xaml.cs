@@ -224,7 +224,7 @@ namespace LCD
             }
             else if (Project.cfg.TESTMACHINE == ENUMMACHINE.Demo)
             {
-
+                Project.testMachine = new Ctrl.DemoMachine();
             }
             Project.testMachine.Init();
 

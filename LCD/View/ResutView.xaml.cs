@@ -439,10 +439,10 @@ namespace LCD.View
                     {
                         Project_id = Project.ProjectID,
                         DataName = $"{i + 380}",
-                        dataValue = objs.SpectrumData[i].ToString()
+                        dataValue = objs.SpectrumData[i].ToString("E")
                      });
-                    dataRow[$"{i + 380}"] = objs.SpectrumData[i];
-                    //dataRow[$"W{i + 380}"] = objs.SpectrumData[i];
+                    // 与正常工作的 guoxian 版本一致：写入字符串(.ToString("E"))而非裸 double。
+                    dataRow[$"{i + 380}"] = objs.SpectrumData[i].ToString("E");
                 }
 
             }
