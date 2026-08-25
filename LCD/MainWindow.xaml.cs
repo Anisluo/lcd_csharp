@@ -870,6 +870,37 @@ namespace LCD
             dev.ShowDialog();
         }
 
+        // ===== SR3A / CS2000 视场角设置（参照 guoxian 分支移植）=====
+        private void OnBnClickedFdl(object sender, RoutedEventArgs e)
+        {
+            View.ViewangleView dev = new View.ViewangleView();
+            dev.ShowDialog();
+        }
+
+        public static void sr3a_send_fdl_cmd(string cmd)
+        {
+            if (!(Project.testMachine is Ctrl.SR3A sr3))
+            {
+                MessageBox.Show("当前仪器不是 SR3A", "提示");
+                return;
+            }
+            if (sr3.IsOpen == false) sr3.Init();
+            bool st = sr3.SenFdlCmd(cmd);
+            MessageBox.Show(st ? "发送成功" : "发送失败", "提示");
+        }
+
+        public static void cs2000_send_cmd(string cmd)
+        {
+            if (!(Project.testMachine is Ctrl.CS2000 cs))
+            {
+                MessageBox.Show("当前仪器不是 CS2000", "提示");
+                return;
+            }
+            if (cs.IsOpen == false) cs.Init();
+            bool st = cs.SendCmd(cmd);
+            MessageBox.Show(st ? "发送成功" : "发送失败", "提示");
+        }
+
 
         private void OnBnClickedResultFormat(object sender, RoutedEventArgs e)
         {

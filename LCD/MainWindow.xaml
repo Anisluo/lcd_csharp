@@ -41,6 +41,7 @@
             </MenuItem>
             <MenuItem Header="参数（P）">
                 <MenuItem Header="仪器设定" Click="OnBnClickedDevice"></MenuItem>
+                <MenuItem Header="视场角设置" Click="OnBnClickedFdl"></MenuItem>
                 <MenuItem Name="MPcItemMenuItem" Header="平台设定" Click="OnBnClickMPC"></MenuItem>
                 <MenuItem Header="运动模式" Click="OnBnClickMoveStyle"></MenuItem>
                 <MenuItem Header="相机设置" Click="OnBnClickCamera"></MenuItem>

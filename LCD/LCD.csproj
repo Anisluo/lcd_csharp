@@ -265,6 +265,9 @@
     <Compile Include="View\CamView.xaml.cs">
       <DependentUpon>CamView.xaml</DependentUpon>
     </Compile>
+    <Compile Include="View\ViewangleView.xaml.cs">
+      <DependentUpon>ViewangleView.xaml</DependentUpon>
+    </Compile>
     <Compile Include="View\CritView.xaml.cs">
       <DependentUpon>CritView.xaml</DependentUpon>
     </Compile>
@@ -396,6 +399,10 @@
       <Generator>MSBuild:Compile</Generator>
     </Page>
     <Page Include="View\CameraDevice.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="View\ViewangleView.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>

@@ -173,6 +173,29 @@ namespace LCD.Ctrl
             return Result;
         }
 
+        /// <summary>
+        /// 设置 SR3A 视场角：先发 RM 等 OK，再发 FLD1~FLD4（对应 2° / 1° / 0.2° / 0.1°）。
+        /// 参照 guoxian 分支移植；发送方式与本类 RM/D0 ST 保持一致。
+        /// </summary>
+        public bool SenFdlCmd(string cmd)
+        {
+            if (serialPort == null || !serialPort.IsOpen)
+            {
+                Project.WriteLog("SR3A串口未打开");
+                return false;
+            }
+            RecStr = "";
+            serialPort.SendStr("RM");
+            var _Str = waitString("OK", 2);
+            if (string.IsNullOrEmpty(_Str) || !_Str.Contains("OK"))
+            {
+                Project.WriteLog("视场角设置：收 OK 超时");
+                return false;
+            }
+            RecStr = "";
+            return serialPort.SendStr(cmd);
+        }
+
         private string signStr { get; set; } = "OK";
         private bool RecWait { get; set; }
         private string RecStr { get; set; } = "";

@@ -3,7 +3,16 @@
 > 约定：每次改动都在此记录——**日期 / 改了什么 / 为什么**，随提交一起推送。
 > 仓库级 / 跨分支变更见 `main` 分支的 `CHANGELOG.md`。
 
-## 2026-08-25（续 2）
+## 2026-08-25（续 3）
+- **移植 SR-3A 视场角设置功能**（参照 guoxian，对齐其结构但只新增、不动 suqian 现有路径）：
+  - 新增视场角弹窗 `View/ViewangleView.xaml(.cs)`（FDL 2 / 1 / 0.2 / 0.1 四档 + 关闭），
+    去掉 guoxian 的多语言绑定改用中文；机型枚举无 SR5A，仅按 SR3A / CS2000 启用。
+  - `Ctrl/SR3A.cs` 新增 `SenFdlCmd(cmd)`：先发 RM 等 OK，再发 `FLD1~FLD4`（2°/1°/0.2°/0.1°）。
+  - `Ctrl/CS2000.cs` 新增 `SendCmd(cmd)`（直发指令，供 CS2000 视场角用）。
+  - `MainWindow.xaml.cs` 新增 `OnBnClickedFdl`（打开弹窗）+ 静态 `sr3a_send_fdl_cmd` /
+    `cs2000_send_cmd`；`MainWindow.xaml` 在“参数（P）”菜单加“视场角设置”入口。
+  - 已编译通过；因本机无硬件（电机报警等 Win32 模态框阻塞 UI 线程）无法自动弹窗截图，
+    需在真机上从“参数→视场角设置”点档位、对 SR3A 发 FLD 指令验证。
 - **新增 mockDev 硬件仿真工具**（新项目 `mockDev/`，WPF/.NET 4.8）：在无硬件机器上模拟
   LCD 所需的**串口仪器**，让 LCD 能识别/通信/取数。
   - 配合开源虚拟串口 **com0com**：mockDev 用 `setupc.exe` **自动创建**虚拟串口对、

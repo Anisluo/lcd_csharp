@@ -47,6 +47,16 @@ namespace LCD.Ctrl
             if (mycs2000 == null) { mycs2000 = new CS2000(); }
             return mycs2000;
         }
+
+        /// <summary>
+        /// 直接向 CS2000 发送指令（视场角等）。参照 guoxian 分支移植。
+        /// </summary>
+        public bool SendCmd(string cmd)
+        {
+            if (serialPort == null || !serialPort.IsOpen)
+                return false;
+            return serialPort.SendStr(cmd);
+        }
         //private new SerialPort serialPort;
 
         private CS2000()
